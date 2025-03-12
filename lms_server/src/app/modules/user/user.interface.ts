@@ -8,8 +8,3 @@ export type TUser = {
   isDeleted: boolean;
   userRole: "admin" | "user" | "instructor";
 };
-
-export type Tlogin = {
-  email: string;
-  password: string;
-};

@@ -15,7 +15,27 @@ const createUser = catchAsync(async (req, res) => {
   });
 });
 
+// ! for login
+const loginUser = catchAsync(async (req, res) => {
+  const result = await authServices.signInFromDb(req.body);
+
+  const { token, userData } = result;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const modifiedUser = userData.toObject() as any;
+  delete modifiedUser.password;
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "User logged in successfully ",
+    data: modifiedUser,
+    token: token,
+  });
+});
+
 //
 export const authControllers = {
   createUser,
+  loginUser,
 };
