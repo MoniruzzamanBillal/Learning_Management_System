@@ -19,7 +19,16 @@ const addCourse = async (payload: TCourse) => {
   return result;
 };
 
+// ! for getting all course data
+const getAllCourses = async () => {
+  const result = await courseModel
+    .find()
+    .populate("instructor", " name email profilePicture ");
+  return result;
+};
+
 //
 export const courseServices = {
   addCourse,
+  getAllCourses,
 };

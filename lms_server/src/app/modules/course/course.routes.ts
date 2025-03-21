@@ -7,6 +7,9 @@ import { courseController } from "./course.controller";
 
 const router = Router();
 
+// ! for getting all course data
+router.get("/all-courses", courseController.getAllCourses);
+
 // ! for adding new course
 router.post(
   "/add-course",
