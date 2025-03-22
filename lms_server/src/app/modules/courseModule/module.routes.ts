@@ -15,5 +15,8 @@ router.post(
   moduleController.addModule
 );
 
+// ! for getting module data
+router.get("/module-detail/:id", moduleController.getModuleData);
+
 //
 export const moduleRouter = router;

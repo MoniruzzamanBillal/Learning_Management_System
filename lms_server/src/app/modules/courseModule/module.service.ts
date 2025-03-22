@@ -41,8 +41,18 @@ const addModule = async (payload: TModule) => {
 };
 
 // ! for getting module data
+const getModulData = async (moduleId: string) => {
+  const moduleData = await moduleModel.findById(moduleId);
+
+  if (!moduleData) {
+    throw new AppError(httpStatus.BAD_REQUEST, "This module don't exist !!!");
+  }
+
+  return moduleData;
+};
 
 //
 export const moduleServices = {
   addModule,
+  getModulData,
 };
