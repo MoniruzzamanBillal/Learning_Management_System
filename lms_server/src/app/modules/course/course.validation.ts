@@ -4,7 +4,7 @@ import { z } from "zod";
 const objectIdSchema = z
   .string()
   .refine((val) => mongoose.Types.ObjectId.isValid(val), {
-    message: "Invalid onject id !!!",
+    message: "Invalid object id !!!",
   });
 
 // ! for crating course
