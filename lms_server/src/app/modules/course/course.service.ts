@@ -40,9 +40,29 @@ const getSingleCoureData = async (courseId: string) => {
   return result;
 };
 
+// ! for updating course data
+const updateCourseData = async (
+  payload: Partial<TCourse>,
+  courseId: string
+) => {
+  const courseData = await courseModel.findById(courseId);
+
+  if (!courseData) {
+    throw new AppError(httpStatus.BAD_REQUEST, "This Course don't exist!!!");
+  }
+
+  const updatedResult = await courseModel.findByIdAndUpdate(courseId, payload, {
+    new: true,
+    runValidators: true,
+  });
+
+  return updatedResult;
+};
+
 //
 export const courseServices = {
   addCourse,
   getAllCourses,
   getSingleCoureData,
+  updateCourseData,
 };

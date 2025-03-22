@@ -13,13 +13,21 @@ router.get("/all-courses", courseController.getAllCourses);
 // ! for adding new course
 router.post(
   "/add-course",
-  authCheck(UserRole.admin),
+  // authCheck(UserRole.admin),
   validateRequest(courseValidations.crateCourseValidationSchema),
   courseController.createCourse
 );
 
 // ! for getting single corse data
 router.get("/course-detail/:id", courseController.getSingleCourse);
+
+// ! for updating a course
+router.patch(
+  "/update-course/:id",
+  // authCheck(UserRole.admin),
+  validateRequest(courseValidations.updateCourseValidationSchema),
+  courseController.updateCourse
+);
 
 //
 
