@@ -27,8 +27,22 @@ const getAllCourses = async () => {
   return result;
 };
 
+// ! for getting single course data
+const getSingleCoureData = async (courseId: string) => {
+  const result = await courseModel
+    .findById(courseId)
+    .populate("instructor", " name email profilePicture ");
+
+  if (!result) {
+    throw new AppError(httpStatus.BAD_REQUEST, "This Course don't exist!!!");
+  }
+
+  return result;
+};
+
 //
 export const courseServices = {
   addCourse,
   getAllCourses,
+  getSingleCoureData,
 };

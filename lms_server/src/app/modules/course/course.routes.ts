@@ -18,6 +18,9 @@ router.post(
   courseController.createCourse
 );
 
+// ! for getting single corse data
+router.get("/course-detail/:id", courseController.getSingleCourse);
+
 //
 
 export const courseRouter = router;
