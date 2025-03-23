@@ -18,5 +18,12 @@ router.post(
 // ! for getting module data
 router.get("/module-detail/:id", moduleController.getModuleData);
 
+// ! for updating module
+router.patch(
+  "/update-module/:id",
+  // authCheck(UserRole.instructor),
+  moduleController.updateModule
+);
+
 //
 export const moduleRouter = router;

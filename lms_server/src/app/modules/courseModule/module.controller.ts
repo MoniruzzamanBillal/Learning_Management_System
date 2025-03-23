@@ -27,9 +27,22 @@ const getModuleData = catchAsync(async (req, res) => {
   });
 });
 
+// ! for updating module
+const updateModule = catchAsync(async (req, res) => {
+  const result = await moduleServices.updateModule(req?.body, req?.params?.id);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Module updated successfully !!!",
+    data: result,
+  });
+});
+
 //
 
 export const moduleController = {
   addModule,
   getModuleData,
+  updateModule,
 };

@@ -51,8 +51,25 @@ const getModulData = async (moduleId: string) => {
   return moduleData;
 };
 
+// ! for updating module
+const updateModule = async (payload: Partial<TModule>, moduleId: string) => {
+  const moduleData = await moduleModel.findById(moduleId);
+
+  if (!moduleData) {
+    throw new AppError(httpStatus.BAD_REQUEST, "This module don't exist !!!");
+  }
+
+  const updatedData = await moduleModel.findByIdAndUpdate(moduleId, payload, {
+    new: true,
+    runValidators: true,
+  });
+
+  return updatedData;
+};
+
 //
 export const moduleServices = {
   addModule,
   getModulData,
+  updateModule,
 };
