@@ -15,7 +15,20 @@ const addVideo = catchAsync(async (req, res) => {
   });
 });
 
+// ! for getting all video
+const getAllVideo = catchAsync(async (req, res) => {
+  const result = await videoServices.getAllVideo(req?.body?.moduleId);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Video Retrived successfully !!!",
+    data: result,
+  });
+});
+
 //
 export const videoController = {
   addVideo,
+  getAllVideo,
 };

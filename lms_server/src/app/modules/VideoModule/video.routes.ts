@@ -7,6 +7,9 @@ import { videoController } from "./video.controller";
 
 const router = Router();
 
+// ! for getting all video
+router.get("/module-video", videoController.getAllVideo);
+
 // ! for adding a video
 router.post(
   "/add-video",
