@@ -3,6 +3,7 @@ import { Router } from "express";
 import { authRouter } from "../modules/auth/auth.route";
 import { courseRouter } from "../modules/course/course.routes";
 import { moduleRouter } from "../modules/courseModule/module.routes";
+import { videoRouter } from "../modules/VideoModule/video.routes";
 
 const router = Router();
 
@@ -18,6 +19,10 @@ const routeArray = [
   {
     path: "/module",
     route: moduleRouter,
+  },
+  {
+    path: "/video",
+    route: videoRouter,
   },
 ];
 
