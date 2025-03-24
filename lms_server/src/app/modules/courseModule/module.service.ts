@@ -42,7 +42,10 @@ const addModule = async (payload: TModule) => {
 
 // ! for getting module data
 const getModulData = async (moduleId: string) => {
-  const moduleData = await moduleModel.findById(moduleId);
+  const moduleData = await moduleModel
+    .findById(moduleId)
+    .populate("course", "name description ")
+    .populate("videos", "title  videoUrl");
 
   if (!moduleData) {
     throw new AppError(httpStatus.BAD_REQUEST, "This module don't exist !!!");
