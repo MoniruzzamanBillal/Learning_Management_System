@@ -12,6 +12,7 @@ const createModuleValidationSchema = z.object({
   title: z.string().min(1, "Title is required"),
   course: objectIdSchema,
   videos: z.array(objectIdSchema).optional(),
+  instructor: objectIdSchema.optional(),
 });
 
 //

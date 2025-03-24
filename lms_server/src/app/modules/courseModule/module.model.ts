@@ -4,7 +4,12 @@ import { TModule } from "./module.interface";
 const moduleSchema = new Schema<TModule>(
   {
     course: { type: Schema.Types.ObjectId, ref: "Course", required: true },
-    title: { type: String, required: true, unique: true },
+    instructor: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    title: { type: String, required: true },
     videos: [{ type: Schema.Types.ObjectId, ref: "Video" }],
     isDeleted: { type: Boolean, default: false },
   },

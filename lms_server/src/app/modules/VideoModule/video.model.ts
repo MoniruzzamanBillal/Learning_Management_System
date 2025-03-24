@@ -4,7 +4,7 @@ import { TVideo } from "./video.interface";
 const videoSchema = new Schema<TVideo>(
   {
     module: { type: Schema.Types.ObjectId, ref: "Module", required: true },
-    title: { type: String, required: true, unique: true },
+    title: { type: String, required: true },
     instructor: { type: Schema.Types.ObjectId, ref: "User", required: true },
     videoUrl: { type: String, required: true },
     isDeleted: { type: Boolean, default: false },

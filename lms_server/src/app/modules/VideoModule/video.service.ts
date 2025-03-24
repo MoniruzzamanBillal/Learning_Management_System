@@ -19,7 +19,10 @@ const addVideo = async (payload: TVideo) => {
   const instructorData = await userModel.findById(instructor);
 
   if (!instructorData) {
-    throw new AppError(httpStatus.BAD_REQUEST, "This module don't exist !!!");
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "This instructor don't exist !!!"
+    );
   }
 
   const session = await mongoose.startSession();

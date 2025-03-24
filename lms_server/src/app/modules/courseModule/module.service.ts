@@ -4,15 +4,25 @@ import { courseModel } from "../course/course.model";
 import { TModule } from "./module.interface";
 import { moduleModel } from "./module.model";
 import httpStatus from "http-status";
+import { userModel } from "../user/user.model";
 
 // ! for crating a module
 const addModule = async (payload: TModule) => {
-  const { course } = payload;
+  const { course, instructor } = payload;
 
   const courseData = await courseModel.findById(course);
 
   if (!courseData) {
     throw new AppError(httpStatus.BAD_REQUEST, "This Course don't exist!!!");
+  }
+
+  const instructorData = await userModel.findById(instructor);
+
+  if (!instructorData) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "This instructor don't exist !!!"
+    );
   }
 
   const session = await mongoose.startSession();
@@ -45,7 +55,8 @@ const getModulData = async (moduleId: string) => {
   const moduleData = await moduleModel
     .findById(moduleId)
     .populate("course", "name description ")
-    .populate("videos", "title  videoUrl");
+    .populate("videos", "title  videoUrl")
+    .populate("instructor", " name email profilePicture");
 
   if (!moduleData) {
     throw new AppError(httpStatus.BAD_REQUEST, "This module don't exist !!!");
