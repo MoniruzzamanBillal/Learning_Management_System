@@ -39,9 +39,22 @@ const getIndividualvideo = catchAsync(async (req, res) => {
   });
 });
 
+// ! for deleting a video
+const deleteModuleVideo = catchAsync(async (req, res) => {
+  const result = await videoServices.deleteModuleVideo(req?.body);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Video deleted successfully !!!",
+    data: result,
+  });
+});
+
 //
 export const videoController = {
   addVideo,
   getAllVideo,
   getIndividualvideo,
+  deleteModuleVideo,
 };

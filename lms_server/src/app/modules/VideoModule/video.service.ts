@@ -71,6 +71,7 @@ const getSingleVideo = async (payload: {
   const videoData = await videoModel.findOne({
     _id: videoId,
     module: moduleId,
+    isDeleted: false,
   });
 
   if (!videoData) {
@@ -80,6 +81,41 @@ const getSingleVideo = async (payload: {
   return videoData;
 };
 
+// ! for deleting a video
+const deleteModuleVideo = async (payload: {
+  videoId: string;
+  moduleId: string;
+}) => {
+  const { videoId, moduleId } = payload;
+
+  const videoData = await videoModel.findOne({
+    _id: videoId,
+    module: moduleId,
+    isDeleted: false,
+  });
+
+  if (!videoData) {
+    throw new AppError(httpStatus.BAD_REQUEST, "This Video don't exist !!!");
+  }
+
+  const deleteVideo = await videoModel.findOneAndUpdate(
+    {
+      _id: videoId,
+      module: moduleId,
+      isDeleted: false,
+    },
+    { isDeleted: true },
+    { new: true }
+  );
+
+  return deleteVideo;
+};
+
 //
 
-export const videoServices = { addVideo, getAllVideo, getSingleVideo };
+export const videoServices = {
+  addVideo,
+  getAllVideo,
+  getSingleVideo,
+  deleteModuleVideo,
+};

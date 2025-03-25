@@ -21,5 +21,12 @@ router.post(
   videoController.addVideo
 );
 
+// ! for deleting a video
+router.patch(
+  "/delete-video",
+  // authCheck(UserRole.admin, UserRole.instructor),
+  videoController.deleteModuleVideo
+);
+
 //
 export const videoRouter = router;
