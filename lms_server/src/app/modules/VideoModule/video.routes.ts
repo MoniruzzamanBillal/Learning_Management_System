@@ -10,6 +10,9 @@ const router = Router();
 // ! for getting all video
 router.get("/module-video", videoController.getAllVideo);
 
+// ! for getting single vidoo
+router.get("/individual-video", videoController.getIndividualvideo);
+
 // ! for adding a video
 router.post(
   "/add-video",

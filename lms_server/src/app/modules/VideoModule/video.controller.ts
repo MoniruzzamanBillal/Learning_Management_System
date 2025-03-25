@@ -27,8 +27,21 @@ const getAllVideo = catchAsync(async (req, res) => {
   });
 });
 
+// ! for getting single vidoe
+const getIndividualvideo = catchAsync(async (req, res) => {
+  const result = await videoServices.getSingleVideo(req?.body);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Video Retrived successfully !!!",
+    data: result,
+  });
+});
+
 //
 export const videoController = {
   addVideo,
   getAllVideo,
+  getIndividualvideo,
 };

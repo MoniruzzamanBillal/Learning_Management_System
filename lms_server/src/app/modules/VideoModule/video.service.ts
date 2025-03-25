@@ -61,6 +61,25 @@ const getAllVideo = async (moduleId: string) => {
   return allVideo;
 };
 
+// ! for getting individual module video
+const getSingleVideo = async (payload: {
+  videoId: string;
+  moduleId: string;
+}) => {
+  const { videoId, moduleId } = payload;
+
+  const videoData = await videoModel.findOne({
+    _id: videoId,
+    module: moduleId,
+  });
+
+  if (!videoData) {
+    throw new AppError(httpStatus.BAD_REQUEST, "This Video don't exist !!!");
+  }
+
+  return videoData;
+};
+
 //
 
-export const videoServices = { addVideo, getAllVideo };
+export const videoServices = { addVideo, getAllVideo, getSingleVideo };
