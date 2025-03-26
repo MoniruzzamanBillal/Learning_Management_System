@@ -111,6 +111,22 @@ const deleteModuleVideo = async (payload: {
   return deleteVideo;
 };
 
+// ! for updating a video
+const updateVideo = async (payload: Partial<TVideo>, videoId: string) => {
+  const videoData = await videoModel.findById(videoId);
+
+  if (!videoData) {
+    throw new AppError(httpStatus.BAD_REQUEST, "This Video don't exist !!!");
+  }
+
+  const updatedData = await videoModel.findByIdAndUpdate(videoId, payload, {
+    new: true,
+    runValidators: true,
+  });
+
+  return updatedData;
+};
+
 //
 
 export const videoServices = {
@@ -118,4 +134,5 @@ export const videoServices = {
   getAllVideo,
   getSingleVideo,
   deleteModuleVideo,
+  updateVideo,
 };

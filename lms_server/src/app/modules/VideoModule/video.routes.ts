@@ -28,5 +28,12 @@ router.patch(
   videoController.deleteModuleVideo
 );
 
+// ! for updating  a video
+router.patch(
+  "/update-video/:id",
+  // authCheck(UserRole.admin, UserRole.instructor),
+  videoController.updateVideo
+);
+
 //
 export const videoRouter = router;

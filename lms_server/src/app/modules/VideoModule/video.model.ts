@@ -17,11 +17,6 @@ videoSchema.pre("find", async function (next) {
   next();
 });
 
-videoSchema.pre("find", async function (next) {
-  this.find({ isDeleted: { $ne: true } });
-  next();
-});
-
 videoSchema.pre("findOne", async function (next) {
   this.find({ isDeleted: { $ne: true } });
   next();

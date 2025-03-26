@@ -51,10 +51,23 @@ const deleteModuleVideo = catchAsync(async (req, res) => {
   });
 });
 
+// ! for updating a video
+const updateVideo = catchAsync(async (req, res) => {
+  const result = await videoServices.updateVideo(req?.body, req?.params?.id);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Video updated successfully !!!",
+    data: result,
+  });
+});
+
 //
 export const videoController = {
   addVideo,
   getAllVideo,
   getIndividualvideo,
   deleteModuleVideo,
+  updateVideo,
 };
