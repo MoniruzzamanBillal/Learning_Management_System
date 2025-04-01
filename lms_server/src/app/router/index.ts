@@ -5,6 +5,7 @@ import { courseRouter } from "../modules/course/course.routes";
 import { moduleRouter } from "../modules/courseModule/module.routes";
 import { videoRouter } from "../modules/VideoModule/video.routes";
 import { courseEnrollmentRouter } from "../modules/CourseEnrollment/CourseEnrollment.routes";
+import { paymentRoute } from "../modules/payment/payment.routes";
 
 const router = Router();
 
@@ -28,6 +29,10 @@ const routeArray = [
   {
     path: "/enroll",
     route: courseEnrollmentRouter,
+  },
+  {
+    path: "/pay",
+    route: paymentRoute,
   },
 ];
 
