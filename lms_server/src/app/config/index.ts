@@ -16,4 +16,7 @@ export default {
   nodemailer_host: process.env.NODEMAILER_HOST,
   nodemailer_sender: process.env.NODEMAILER_SENDER,
   nodemailer_password: process.env.NODEMAILER_Password,
+
+  STORE_ID: process.env.STORE_ID,
+  STORE_PASSWORD: process.env.STORE_PASSWORD,
 };
