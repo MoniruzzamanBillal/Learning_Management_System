@@ -19,4 +19,9 @@ export default {
 
   STORE_ID: process.env.STORE_ID,
   STORE_PASSWORD: process.env.STORE_PASSWORD,
+  SUCCESS_URL: process.env.SUCCESS_URL,
+  FAIL_URL: process.env.FAIL_URL,
+  CANCEL_URL: process.env.CANCEL_URL,
+  SSL_PAYMENT_URL: process.env.SSL_PAYMENT_URL,
+  SSL_VALIDATION_URL: process.env.SSL_VALIDATION_URL,
 };

@@ -5,7 +5,7 @@ import { courseEnrollmentService } from "./CourseEnrollment.service";
 
 // ! for enrolling into a course
 const enrollInCourse = catchAsync(async (req, res) => {
-  const result = await courseEnrollmentService.enrollInCourse();
+  const result = await courseEnrollmentService.enrollInCourse(req?.body);
 
   sendResponse(res, {
     statusCode: httpStatus.CREATED,
