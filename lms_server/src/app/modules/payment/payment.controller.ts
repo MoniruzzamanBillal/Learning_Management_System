@@ -12,7 +12,18 @@ const payCourse = catchAsync(async (req, res) => {
   });
 });
 
+// ! for validating payment
+const validatePayment = catchAsync(async (req, res) => {
+  sendResponse(res, {
+    statusCode: httpStatus.CREATED,
+    success: true,
+    message: "Payment Validate successfully !!!",
+    data: "result",
+  });
+});
+
 //
 export const paymentController = {
   payCourse,
+  validatePayment,
 };

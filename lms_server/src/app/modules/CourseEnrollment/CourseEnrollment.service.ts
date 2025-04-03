@@ -22,9 +22,6 @@ const enrollInCourse = async (payload: { user: string; course: string }) => {
     throw new AppError(httpStatus.BAD_REQUEST, "This module don't exist !!!");
   }
 
-  console.log(userData);
-  console.log(courseData);
-
   const transactionId = `TXN-${Date.now()}`;
 
   const paymentData = {
@@ -32,7 +29,6 @@ const enrollInCourse = async (payload: { user: string; course: string }) => {
     transactionId,
     productName: courseData?.name,
     productCategory: courseData?.category,
-
     userName: userData?.name,
     userEmail: userData?.email,
   };
