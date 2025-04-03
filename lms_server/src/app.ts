@@ -5,6 +5,7 @@ import morgan from "morgan";
 import globalErrorHandler from "./app/middleware/globalErrorHandler";
 import { MainRouter } from "./app/router";
 import cookieParser from "cookie-parser";
+import bodyParser from "body-parser";
 import httpStatus from "http-status";
 
 const app: Application = express();
@@ -13,6 +14,7 @@ app.use(express.json());
 app.use(cors());
 app.use(morgan("dev"));
 app.use(cookieParser());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // ! rouutes
 app.use("/api", MainRouter);

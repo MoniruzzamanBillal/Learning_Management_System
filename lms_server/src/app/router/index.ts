@@ -31,7 +31,7 @@ const routeArray = [
     route: courseEnrollmentRouter,
   },
   {
-    path: "/pay",
+    path: "/payment",
     route: paymentRoute,
   },
 ];

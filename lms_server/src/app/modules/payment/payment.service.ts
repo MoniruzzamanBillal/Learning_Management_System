@@ -33,5 +33,25 @@ const validatePayment = async (payload: any) => {
   //
 };
 
+// ! after successfully payment
+const successfullyPayment = async (payload) => {
+  // VALID
+  const { tran_id, status } = payload;
+
+  if (status !== "VALID") {
+    throw new AppError(httpStatus.BAD_REQUEST, "Payment Failed !!!");
+  }
+
+  const updatedPaymentResult = await paymentModel.findOneAndUpdate(
+    { transactionId: tran_id },
+    { paymentStatus: PAYMENTSTATUS.Completed },
+    { new: true, runValidators: true }
+  );
+
+  return updatedPaymentResult;
+
+  //
+};
+
 //
-export const paymentServices = { validatePayment };
+export const paymentServices = { validatePayment, successfullyPayment };

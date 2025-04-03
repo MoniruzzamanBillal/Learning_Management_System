@@ -9,7 +9,6 @@ const paymentSchema = new Schema<TPayment>(
     CourseEnrollment: {
       type: Schema.Types.ObjectId,
       ref: "CourseEnrollment",
-      required: true,
     },
     paymentStatus: {
       type: String,

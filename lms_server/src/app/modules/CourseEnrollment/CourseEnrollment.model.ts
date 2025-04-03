@@ -16,7 +16,6 @@ const courseEnrollmentSchema = new Schema<TEnrollment>(
     },
     Payment: {
       type: Schema.Types.ObjectId,
-      required: true,
       ref: "Payment",
     },
     completed: {
