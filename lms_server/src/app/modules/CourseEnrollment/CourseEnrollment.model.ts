@@ -17,6 +17,7 @@ const courseEnrollmentSchema = new Schema<TEnrollment>(
     Payment: {
       type: Schema.Types.ObjectId,
       ref: "Payment",
+      required: true,
     },
     completed: {
       type: Boolean,

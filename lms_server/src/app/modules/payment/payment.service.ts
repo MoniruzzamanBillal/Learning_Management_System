@@ -48,6 +48,8 @@ const successfullyPayment = async (payload) => {
     { new: true, runValidators: true }
   );
 
+  console.log(updatedPaymentResult?._id);
+
   return updatedPaymentResult;
 
   //

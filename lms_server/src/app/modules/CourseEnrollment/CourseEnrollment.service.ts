@@ -43,7 +43,7 @@ const enrollInCourse = async (payload: { user: string; course: string }) => {
     const courseEnrollmentData = {
       user,
       course,
-      payment: paymentRecord[0]?._id,
+      Payment: paymentRecord[0]?._id,
     };
 
     // * create course enrollment record
