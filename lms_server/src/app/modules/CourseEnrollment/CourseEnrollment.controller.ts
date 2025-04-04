@@ -15,7 +15,26 @@ const enrollInCourse = catchAsync(async (req, res) => {
   });
 });
 
+// ! for getting my enroll course data
+const getMyCourseEnrollData = catchAsync(async (req, res) => {
+  console.log(req?.params?.id);
+  console.log(req?.user?.userId);
+
+  const result = await courseEnrollmentService.getUserEnrolledCourse(
+    req?.user?.userId,
+    req?.params?.id
+  );
+
+  sendResponse(res, {
+    statusCode: httpStatus.CREATED,
+    success: true,
+    message: "Enrolled Course retrived successfully!!!",
+    data: result,
+  });
+});
+
 //
 export const CourseEnrollmentController = {
   enrollInCourse,
+  getMyCourseEnrollData,
 };

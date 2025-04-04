@@ -17,12 +17,12 @@ const moduleSchema = new Schema<TModule>(
 );
 
 moduleSchema.pre("find", async function (next) {
-  this.find({ isdeleted: { $ne: true } });
+  this.where({ isDeleted: false });
   next();
 });
 
 moduleSchema.pre("findOne", async function (next) {
-  this.find({ isdeleted: { $ne: true } });
+  this.where({ isDeleted: false });
   next();
 });
 

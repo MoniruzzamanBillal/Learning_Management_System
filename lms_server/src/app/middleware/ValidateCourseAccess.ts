@@ -9,9 +9,6 @@ const ValidateCourseAccess = catchAsync(async (req, res, next) => {
   const userId = req?.user?.userId;
   const courseId = req?.params?.id;
 
-  console.log("user id in validate course access = ", userId);
-  console.log("course id in validate course access = ", courseId);
-
   const enrollment = await courseEnrollmentModel.findOne({
     user: userId,
     course: courseId,

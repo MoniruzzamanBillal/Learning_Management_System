@@ -98,7 +98,14 @@ const enrollInCourse = async (payload: { user: string; course: string }) => {
   //
 };
 
+// ! get user enrolled course data
+const getUserEnrolledCourse = async (userId: string, courseId: string) => {
+  console.log(userId);
+  console.log(courseId);
+};
+
 //
 export const courseEnrollmentService = {
   enrollInCourse,
+  getUserEnrolledCourse,
 };

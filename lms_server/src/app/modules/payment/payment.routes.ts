@@ -13,11 +13,6 @@ router.post("pay-course", paymentController.payCourse);
 router.post("/success", paymentController.successfullyPayment);
 router.post("/fail", paymentController.failPayment);
 
-// router.post("/fail", (req, res) => {
-//   console.log("Payment Failed:", req.body);
-//   res.json({ message: "Payment Failed", data: req.body });
-// });
-
 router.post("/cancel", (req, res) => {
   console.log("Payment Canceled:", req.body);
   res.json({ message: "Payment Canceled", data: req.body });
