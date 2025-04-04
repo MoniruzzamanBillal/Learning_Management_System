@@ -22,6 +22,7 @@ const paymentSchema = new Schema<TPayment>(
       type: String,
       required: true,
     },
+    isDeleted: { type: Boolean, default: false },
   },
   { timestamps: true }
 );

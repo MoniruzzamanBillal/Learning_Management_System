@@ -8,7 +8,6 @@ const courseEnrollmentSchema = new Schema<TEnrollment>(
       required: true,
       ref: "User",
     },
-
     course: {
       type: Schema.Types.ObjectId,
       required: true,
@@ -23,6 +22,7 @@ const courseEnrollmentSchema = new Schema<TEnrollment>(
       type: Boolean,
       default: false,
     },
+    isDeleted: { type: Boolean, default: false },
   },
   { timestamps: true }
 );

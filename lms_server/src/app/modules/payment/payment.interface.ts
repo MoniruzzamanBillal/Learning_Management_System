@@ -8,4 +8,5 @@ export type TPayment = {
   paymentStatus: keyof typeof PAYMENTSTATUS;
   amount: number;
   transactionId: string;
+  isDeleted?: boolean;
 };

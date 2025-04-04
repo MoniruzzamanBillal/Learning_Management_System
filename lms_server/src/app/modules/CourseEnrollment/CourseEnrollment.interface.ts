@@ -5,4 +5,5 @@ export type TEnrollment = {
   course: ObjectId;
   Payment: ObjectId;
   completed: boolean;
+  isDeleted?: boolean;
 };
