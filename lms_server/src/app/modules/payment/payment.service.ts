@@ -4,6 +4,8 @@ import httpStatus from "http-status";
 import config from "../../config";
 import { paymentModel } from "./payment.model";
 import { PAYMENTSTATUS } from "./payment.constant";
+import mongoose from "mongoose";
+import { courseEnrollmentModel } from "../CourseEnrollment/CourseEnrollment.model";
 
 // ! for validating payment
 const validatePayment = async (payload: any) => {
@@ -35,7 +37,6 @@ const validatePayment = async (payload: any) => {
 
 // ! after successfully payment
 const successfullyPayment = async (payload) => {
-  // VALID
   const { tran_id, status } = payload;
 
   if (status !== "VALID") {
@@ -48,12 +49,56 @@ const successfullyPayment = async (payload) => {
     { new: true, runValidators: true }
   );
 
-  console.log(updatedPaymentResult?._id);
-
   return updatedPaymentResult;
 
   //
 };
 
+// ! for fail paymnet
+const failPayment = async (payload) => {
+  const { tran_id, status } = payload;
+
+  if (status === "FAILED") {
+    //
+
+    const session = await mongoose.startSession();
+
+    try {
+      session.startTransaction();
+
+      const updatedPaymentData = await paymentModel.findOneAndUpdate(
+        { transactionId: tran_id, paymentStatus: PAYMENTSTATUS.Pending },
+        { isDeleted: true },
+        { new: true, runValidators: true, session }
+      );
+
+      const courseEnrollmentData = await courseEnrollmentModel.findOneAndUpdate(
+        { Payment: updatedPaymentData?._id },
+        { isDeleted: true },
+        { new: true, runValidators: true, session }
+      );
+
+      await session.commitTransaction();
+      await session.endSession();
+
+      return courseEnrollmentData;
+    } catch (error: any) {
+      await session.abortTransaction();
+      await session.endSession();
+
+      console.log(error);
+      throw new Error(error);
+    }
+
+    //
+  }
+
+  //
+};
+
 //
-export const paymentServices = { validatePayment, successfullyPayment };
+export const paymentServices = {
+  validatePayment,
+  successfullyPayment,
+  failPayment,
+};

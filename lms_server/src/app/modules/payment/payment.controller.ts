@@ -40,9 +40,19 @@ const successfullyPayment = catchAsync(async (req, res) => {
   }
 });
 
+// ! after fail payment
+const failPayment = catchAsync(async (req, res) => {
+  const result = await paymentServices.failPayment(req?.body);
+
+  if (result) {
+    return res.redirect(`${redirectURL}/courseEnroll-fail`);
+  }
+});
+
 //
 export const paymentController = {
   payCourse,
   validatePayment,
   successfullyPayment,
+  failPayment,
 };
