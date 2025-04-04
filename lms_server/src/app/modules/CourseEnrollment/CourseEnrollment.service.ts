@@ -26,6 +26,7 @@ const enrollInCourse = async (payload: { user: string; course: string }) => {
   const previousEnrolledData = await courseEnrollmentModel.findOne({
     user,
     course,
+    isDeleted: false,
   });
 
   if (previousEnrolledData) {
