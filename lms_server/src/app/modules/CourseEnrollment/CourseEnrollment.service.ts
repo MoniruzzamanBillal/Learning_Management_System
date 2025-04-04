@@ -23,6 +23,18 @@ const enrollInCourse = async (payload: { user: string; course: string }) => {
     throw new AppError(httpStatus.BAD_REQUEST, "This module don't exist !!!");
   }
 
+  const previousEnrolledData = await courseEnrollmentModel.findOne({
+    user,
+    course,
+  });
+
+  if (previousEnrolledData) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "This course is already enrolled by the user !!!"
+    );
+  }
+
   const session = await mongoose.startSession();
 
   try {
