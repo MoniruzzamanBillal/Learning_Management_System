@@ -100,8 +100,17 @@ const enrollInCourse = async (payload: { user: string; course: string }) => {
 
 // ! get user enrolled course data
 const getUserEnrolledCourse = async (userId: string, courseId: string) => {
-  console.log(userId);
-  console.log(courseId);
+  const result = await courseEnrollmentModel
+    .findOne({ user: userId, course: courseId, isDeleted: false })
+    .populate({
+      path: "course",
+      populate: {
+        path: "modules",
+        model: "Module",
+      },
+    });
+
+  return result;
 };
 
 //
