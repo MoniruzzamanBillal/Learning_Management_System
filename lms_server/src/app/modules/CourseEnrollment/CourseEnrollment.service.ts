@@ -6,6 +6,7 @@ import { sslServices } from "../SSL/SSL.service";
 import mongoose from "mongoose";
 import { paymentModel } from "../payment/payment.model";
 import { courseEnrollmentModel } from "./CourseEnrollment.model";
+import { moduleModel } from "../courseModule/module.model";
 
 // ! for enrolling into a course
 const enrollInCourse = async (payload: { user: string; course: string }) => {
@@ -113,8 +114,32 @@ const getUserEnrolledCourse = async (userId: string, courseId: string) => {
   return result;
 };
 
+// ! get module data for enrolled course
+const getModuleDataEnrlledCourse = async (userId: string, courseId: string) => {
+  const previousEnrolledData = await courseEnrollmentModel.findOne({
+    user: userId,
+    course: courseId,
+    isDeleted: false,
+  });
+
+  if (!previousEnrolledData) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "You have no access of this course content!!!"
+    );
+  }
+
+  const moduleData = await moduleModel.findOne({
+    course: courseId,
+    isDeleted: false,
+  });
+
+  return moduleData;
+};
+
 //
 export const courseEnrollmentService = {
   enrollInCourse,
   getUserEnrolledCourse,
+  getModuleDataEnrlledCourse,
 };

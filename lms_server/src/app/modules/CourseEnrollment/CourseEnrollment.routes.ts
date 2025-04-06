@@ -21,5 +21,13 @@ router.get(
   CourseEnrollmentController.getMyCourseEnrollData
 );
 
+// ! for getting module data for enrolled course
+router.get(
+  "/my-enrolled-course-modules/:id",
+  authCheck(UserRole.user),
+  ValidateCourseAccess,
+  CourseEnrollmentController.getModuleDataEnrlledCourse
+);
+
 //
 export const courseEnrollmentRouter = router;

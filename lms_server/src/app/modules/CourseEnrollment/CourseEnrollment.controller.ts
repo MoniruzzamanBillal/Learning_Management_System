@@ -33,8 +33,24 @@ const getMyCourseEnrollData = catchAsync(async (req, res) => {
   });
 });
 
+// ! for getting module data for enrolled course
+const getModuleDataEnrlledCourse = catchAsync(async (req, res) => {
+  const result = await courseEnrollmentService.getModuleDataEnrlledCourse(
+    req?.user?.userId,
+    req?.params?.id
+  );
+
+  sendResponse(res, {
+    statusCode: httpStatus.CREATED,
+    success: true,
+    message: "Enrolled Course retrived successfully!!!",
+    data: result,
+  });
+});
+
 //
 export const CourseEnrollmentController = {
   enrollInCourse,
   getMyCourseEnrollData,
+  getModuleDataEnrlledCourse,
 };
