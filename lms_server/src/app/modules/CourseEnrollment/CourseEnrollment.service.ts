@@ -7,6 +7,7 @@ import mongoose from "mongoose";
 import { paymentModel } from "../payment/payment.model";
 import { courseEnrollmentModel } from "./CourseEnrollment.model";
 import { moduleModel } from "../courseModule/module.model";
+import { path } from "path";
 
 // ! for enrolling into a course
 const enrollInCourse = async (payload: { user: string; course: string }) => {
@@ -129,10 +130,15 @@ const getModuleDataEnrlledCourse = async (userId: string, courseId: string) => {
     );
   }
 
-  const moduleData = await moduleModel.find({
-    course: courseId,
-    isDeleted: false,
-  });
+  const moduleData = await moduleModel
+    .find({
+      course: courseId,
+      isDeleted: false,
+    })
+    .populate({
+      path: "videos",
+      model: "Video",
+    });
 
   return moduleData;
 };
