@@ -129,7 +129,7 @@ const getModuleDataEnrlledCourse = async (userId: string, courseId: string) => {
     );
   }
 
-  const moduleData = await moduleModel.findOne({
+  const moduleData = await moduleModel.find({
     course: courseId,
     isDeleted: false,
   });
