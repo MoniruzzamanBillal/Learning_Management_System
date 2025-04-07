@@ -139,7 +139,9 @@ const getModuleDataEnrlledCourse = async (userId: string, courseId: string) => {
     .populate({
       path: "videos",
       model: "Video",
-    });
+      select: " _id module title videoUrl ",
+    })
+    .select(" _id course title videos ");
 
   return moduleData;
 };
