@@ -107,11 +107,14 @@ const getUserEnrolledCourse = async (userId: string, courseId: string) => {
     .findOne({ user: userId, course: courseId, isDeleted: false })
     .populate({
       path: "course",
+      select: " _id name category modules ",
       populate: {
         path: "modules",
         model: "Module",
+        select: "_id course title videos",
       },
-    });
+    })
+    .select(" _id user course Payment completed ");
 
   return result;
 };
