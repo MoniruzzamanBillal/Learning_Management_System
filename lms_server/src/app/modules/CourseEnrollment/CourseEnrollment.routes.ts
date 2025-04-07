@@ -29,5 +29,12 @@ router.get(
   CourseEnrollmentController.getModuleDataEnrlledCourse
 );
 
+// ! for getting video for enrolled course
+router.get(
+  "/my-enrolled-course-videos/:id",
+  authCheck(UserRole.user),
+  CourseEnrollmentController.getVideoDataEnrlledCourse
+);
+
 //
 export const courseEnrollmentRouter = router;

@@ -48,9 +48,24 @@ const getModuleDataEnrlledCourse = catchAsync(async (req, res) => {
   });
 });
 
+// ! for getting video data for enrolled course
+const getVideoDataEnrlledCourse = catchAsync(async (req, res) => {
+  const result = await courseEnrollmentService.getVideoDataEnrlledCourse(
+    req?.params?.id
+  );
+
+  sendResponse(res, {
+    statusCode: httpStatus.CREATED,
+    success: true,
+    message: "Video retrived successfully!!!",
+    data: result,
+  });
+});
+
 //
 export const CourseEnrollmentController = {
   enrollInCourse,
   getMyCourseEnrollData,
   getModuleDataEnrlledCourse,
+  getVideoDataEnrlledCourse,
 };

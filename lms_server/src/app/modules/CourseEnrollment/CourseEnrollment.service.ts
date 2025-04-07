@@ -8,6 +8,7 @@ import { paymentModel } from "../payment/payment.model";
 import { courseEnrollmentModel } from "./CourseEnrollment.model";
 import { moduleModel } from "../courseModule/module.model";
 import { path } from "path";
+import { videoModel } from "../VideoModule/video.model";
 
 // ! for enrolling into a course
 const enrollInCourse = async (payload: { user: string; course: string }) => {
@@ -143,9 +144,24 @@ const getModuleDataEnrlledCourse = async (userId: string, courseId: string) => {
   return moduleData;
 };
 
+// ! get video data for enrolled course
+const getVideoDataEnrlledCourse = async (videoId: string) => {
+  const videoData = await videoModel.findById(videoId);
+
+  if (!videoData) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "Your requested content don't exists!!!"
+    );
+  }
+
+  return videoData;
+};
+
 //
 export const courseEnrollmentService = {
   enrollInCourse,
   getUserEnrolledCourse,
   getModuleDataEnrlledCourse,
+  getVideoDataEnrlledCourse,
 };
