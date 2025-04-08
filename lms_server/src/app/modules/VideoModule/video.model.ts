@@ -1,5 +1,6 @@
 import { model, Schema } from "mongoose";
 import { TVideo } from "./video.interface";
+import { videoStatus } from "./video.constants";
 
 const videoSchema = new Schema<TVideo>(
   {
@@ -7,18 +8,24 @@ const videoSchema = new Schema<TVideo>(
     title: { type: String, required: true },
     instructor: { type: Schema.Types.ObjectId, ref: "User", required: true },
     videoUrl: { type: String, required: true },
+    videoOrder: { type: Number, required: true },
+    videoStatus: {
+      type: String,
+      enum: Object.values(videoStatus),
+    },
+
     isDeleted: { type: Boolean, default: false },
   },
   { timestamps: true }
 );
 
 videoSchema.pre("find", async function (next) {
-  this.find({ isDeleted: { $ne: true } });
+  this.where({ isDeleted: false });
   next();
 });
 
 videoSchema.pre("findOne", async function (next) {
-  this.find({ isDeleted: { $ne: true } });
+  this.where({ isDeleted: false });
   next();
 });
 
