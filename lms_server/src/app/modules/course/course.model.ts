@@ -8,10 +8,12 @@ const courseSchema = new Schema<TCourse>(
     price: { type: Number, required: true },
     category: { type: String, required: true },
     published: { type: Boolean, default: false },
-    instructor: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-    },
+    instructor: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
     modules: [
       {
         type: Schema.Types.ObjectId,
