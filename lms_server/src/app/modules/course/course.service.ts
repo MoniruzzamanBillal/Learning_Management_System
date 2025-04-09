@@ -33,7 +33,6 @@ const getAllCourses = async () => {
     .populate("instructors", " name email profilePicture ");
   return result;
 };
-// { published: true }
 
 // ! for getting single course data
 const getSingleCoureData = async (courseId: string) => {
@@ -67,10 +66,35 @@ const updateCourseData = async (
   return updatedResult;
 };
 
+// ! for publishing a course
+const publishCourse = async (courseId: string) => {
+  const courseData = await courseModel.findById(courseId);
+
+  if (!courseData) {
+    throw new AppError(httpStatus.BAD_REQUEST, "This Course don't exist!!!");
+  }
+
+  if (courseData?.published) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "This Course is already published !!!"
+    );
+  }
+
+  const result = await courseModel.findByIdAndUpdate(
+    courseId,
+    { published: true },
+    { new: true }
+  );
+
+  return result;
+};
+
 //
 export const courseServices = {
   addCourse,
   getAllCourses,
   getSingleCoureData,
   updateCourseData,
+  publishCourse,
 };

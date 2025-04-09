@@ -29,6 +29,13 @@ router.patch(
   courseController.updateCourse
 );
 
+// ! for publishing a course
+router.patch(
+  "/publish-course/:id",
+  authCheck(UserRole.admin),
+  courseController.publishCourse
+);
+
 //
 
 export const courseRouter = router;

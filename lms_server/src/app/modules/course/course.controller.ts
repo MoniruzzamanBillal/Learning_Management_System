@@ -54,10 +54,23 @@ const updateCourse = catchAsync(async (req, res) => {
   });
 });
 
+// ! for publishing a course
+const publishCourse = catchAsync(async (req, res) => {
+  const result = await courseServices.publishCourse(req?.params?.id);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Course published successfully !!!",
+    data: result,
+  });
+});
+
 //
 export const courseController = {
   createCourse,
   getAllCourses,
   getSingleCourse,
   updateCourse,
+  publishCourse,
 };
