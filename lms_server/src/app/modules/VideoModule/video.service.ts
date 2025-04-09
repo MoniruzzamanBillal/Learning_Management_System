@@ -5,12 +5,13 @@ import { TVideo } from "./video.interface";
 import httpStatus from "http-status";
 import { videoModel } from "./video.model";
 import mongoose from "mongoose";
+import { videoStatus } from "./video.constants";
 
 // ! for adding a video
-const addVideo = async (payload: TVideo) => {
+const addVideo = async (payload: TVideo, videoUrl: string) => {
   const { module, instructor } = payload;
 
-  const moduleData = await moduleModel.findById(module);
+  const moduleData = await moduleModel.findOne({ _id: module, instructor });
 
   if (!moduleData) {
     throw new AppError(httpStatus.BAD_REQUEST, "This module don't exist !!!");
@@ -24,6 +25,13 @@ const addVideo = async (payload: TVideo) => {
       "This instructor don't exist !!!"
     );
   }
+
+  const videoCount = await videoModel.countDocuments({ module });
+  const Status = videoCount === 0 ? videoStatus.unlocked : videoStatus.locked;
+
+  payload.videoUrl = videoUrl;
+  payload.videoStatus = Status;
+  payload.videoOrder = videoCount;
 
   const session = await mongoose.startSession();
 

@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { NextFunction, Request, Response, Router } from "express";
 import { UserRole } from "../user/user.constants";
 import authCheck from "../../middleware/authCheck";
 import validateRequest from "../../middleware/validateRequest";
@@ -19,6 +19,12 @@ router.get("/individual-video", videoController.getIndividualvideo);
 router.post(
   "/add-video",
   //   authCheck(UserRole.admin, UserRole.instructor),
+  uploadVideo.single("video"),
+  (req: Request, res: Response, next: NextFunction) => {
+    req.body = JSON.parse(req?.body?.data);
+
+    next();
+  },
   validateRequest(videoValidationSchemas.addVideoValidationSchema),
   videoController.addVideo
 );

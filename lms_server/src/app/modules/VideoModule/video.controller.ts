@@ -2,11 +2,12 @@ import httpStatus from "http-status";
 import catchAsync from "../../util/catchAsync";
 import sendResponse from "../../util/sendResponse";
 import { videoServices } from "./video.service";
-import { path } from "path";
 
 // ! for adding a video
 const addVideo = catchAsync(async (req, res) => {
-  const result = await videoServices.addVideo(req.body);
+  const videoUrl = req?.file?.path as string;
+
+  const result = await videoServices.addVideo(req.body, videoUrl);
 
   sendResponse(res, {
     statusCode: httpStatus.CREATED,
@@ -66,6 +67,7 @@ const updateVideo = catchAsync(async (req, res) => {
 
 // ! testing video upload
 const testVideoUpload = catchAsync(async (req, res) => {
+  console.log(req.file);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
