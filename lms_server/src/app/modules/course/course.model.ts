@@ -8,7 +8,7 @@ const courseSchema = new Schema<TCourse>(
     price: { type: Number, required: true },
     category: { type: String, required: true },
     published: { type: Boolean, default: false },
-    instructor: [
+    instructors: [
       {
         type: Schema.Types.ObjectId,
         ref: "User",

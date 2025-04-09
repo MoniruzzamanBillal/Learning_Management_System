@@ -13,7 +13,7 @@ router.get("/all-courses", courseController.getAllCourses);
 // ! for adding new course
 router.post(
   "/add-course",
-  // authCheck(UserRole.admin),
+  authCheck(UserRole.admin),
   validateRequest(courseValidations.crateCourseValidationSchema),
   courseController.createCourse
 );

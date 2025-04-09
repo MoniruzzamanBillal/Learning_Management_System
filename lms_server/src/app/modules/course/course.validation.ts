@@ -13,7 +13,7 @@ const crateCourseValidationSchema = z.object({
   description: z.string().min(1, "Description is required"),
   price: z.number().nonnegative("Price must be a non-negative number"),
   category: z.string().min(1, "Category is required"),
-  instructor: objectIdSchema.optional(),
+  instructors: z.array(objectIdSchema).optional(),
   modules: z.array(objectIdSchema).optional(),
 });
 

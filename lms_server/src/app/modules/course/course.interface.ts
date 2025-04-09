@@ -6,6 +6,6 @@ export type TCourse = {
   price: number;
   category: string;
   published: boolean;
-  instructor?: ObjectId[];
+  instructors: ObjectId[];
   modules?: ObjectId[];
 };
