@@ -63,6 +63,18 @@ const updateVideo = catchAsync(async (req, res) => {
   });
 });
 
+// ! testing video upload
+const testVideoUpload = catchAsync(async (req, res) => {
+  console.log(req.file);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Video updated successfully !!!",
+    data: req.file,
+  });
+});
+
 //
 export const videoController = {
   addVideo,
@@ -70,4 +82,5 @@ export const videoController = {
   getIndividualvideo,
   deleteModuleVideo,
   updateVideo,
+  testVideoUpload,
 };
