@@ -30,6 +30,13 @@ router.post(
   videoController.testVideoUpload
 );
 
+// ! testing multiple video upload
+router.post(
+  "/add-video3",
+  uploadVideo.array("video", 10),
+  videoController.uploadMultipleVideo
+);
+
 // ! for deleting a video
 router.patch(
   "/delete-video",
