@@ -29,16 +29,17 @@ const addCourse = async (payload: TCourse) => {
 // ! for getting all course data
 const getAllCourses = async () => {
   const result = await courseModel
-    .find()
-    .populate("instructor", " name email profilePicture ");
+    .find({ published: true })
+    .populate("instructors", " name email profilePicture ");
   return result;
 };
+// { published: true }
 
 // ! for getting single course data
 const getSingleCoureData = async (courseId: string) => {
   const result = await courseModel
-    .findById(courseId)
-    .populate("instructor", " name email profilePicture ");
+    .findOne({ _id: courseId, published: true })
+    .populate("instructors", " name email profilePicture ");
 
   if (!result) {
     throw new AppError(httpStatus.BAD_REQUEST, "This Course don't exist!!!");
