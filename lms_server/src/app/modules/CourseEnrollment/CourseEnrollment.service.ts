@@ -18,13 +18,20 @@ const enrollInCourse = async (payload: { user: string; course: string }) => {
   const userData = await userModel.findById(user);
 
   if (!userData) {
-    throw new AppError(httpStatus.BAD_REQUEST, "This module don't exist !!!");
+    throw new AppError(httpStatus.BAD_REQUEST, "This user don't exist !!!");
   }
 
   const courseData = await courseModel.findById(course);
 
   if (!courseData) {
-    throw new AppError(httpStatus.BAD_REQUEST, "This module don't exist !!!");
+    throw new AppError(httpStatus.BAD_REQUEST, "This course don't exist !!!");
+  }
+
+  if (!courseData?.published) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "This course is not published yet!!!"
+    );
   }
 
   const previousEnrolledData = await courseEnrollmentModel.findOne({
