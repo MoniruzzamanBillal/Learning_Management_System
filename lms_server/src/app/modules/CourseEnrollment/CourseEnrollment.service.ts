@@ -7,7 +7,6 @@ import mongoose from "mongoose";
 import { paymentModel } from "../payment/payment.model";
 import { courseEnrollmentModel } from "./CourseEnrollment.model";
 import { moduleModel } from "../courseModule/module.model";
-import { path } from "path";
 import { videoModel } from "../VideoModule/video.model";
 import { videoStatus } from "../VideoModule/video.constants";
 
@@ -171,11 +170,66 @@ const getVideoDataEnrlledCourse = async (videoId: string) => {
   return videoData;
 };
 
+// ! watch video
+const watchVideo = async (videoId: string) => {
+  const videoData = await videoModel.findOne({
+    _id: videoId,
+    isDeleted: false,
+  });
+
+  if (!videoData) {
+    throw new AppError(httpStatus.BAD_REQUEST, "This Video don't exist !!!");
+  }
+
+  if (videoData?.videoStatus === videoStatus.locked) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "This video is locked , complete previous video to unlock this video !!!"
+    );
+  }
+
+  const session = await mongoose.startSession();
+
+  try {
+    session.startTransaction();
+
+    const updatedVideoData = await videoModel.findByIdAndUpdate(
+      videoId,
+      { videoStatus: videoStatus.watched },
+      { new: true, session }
+    );
+
+    const nextVideo = await videoModel.findOne({
+      module: videoData?.module,
+      videoOrder: videoData?.videoOrder + 1,
+    });
+
+    if (nextVideo) {
+      await videoModel.findByIdAndUpdate(
+        nextVideo?._id,
+        { videoStatus: videoStatus.unlocked },
+        { session }
+      );
+    }
+
+    await session.commitTransaction();
+
+    await session.endSession();
+    return updatedVideoData;
+  } catch (error: any) {
+    await session.abortTransaction();
+    await session.endSession();
+    console.log(error);
+
+    throw new Error(error);
+  }
+};
+
 //
 export const courseEnrollmentService = {
   enrollInCourse,
   getUserEnrolledCourse,
   getModuleDataEnrlledCourse,
   getVideoDataEnrlledCourse,
-  // watchVideo,
+  watchVideo,
 };
