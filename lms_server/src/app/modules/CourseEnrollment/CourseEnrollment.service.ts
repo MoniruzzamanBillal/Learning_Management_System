@@ -9,6 +9,7 @@ import { courseEnrollmentModel } from "./CourseEnrollment.model";
 import { moduleModel } from "../courseModule/module.model";
 import { path } from "path";
 import { videoModel } from "../VideoModule/video.model";
+import { videoStatus } from "../VideoModule/video.constants";
 
 // ! for enrolling into a course
 const enrollInCourse = async (payload: { user: string; course: string }) => {
@@ -169,4 +170,5 @@ export const courseEnrollmentService = {
   getUserEnrolledCourse,
   getModuleDataEnrlledCourse,
   getVideoDataEnrlledCourse,
+  // watchVideo,
 };

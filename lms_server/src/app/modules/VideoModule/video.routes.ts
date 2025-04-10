@@ -5,7 +5,6 @@ import validateRequest from "../../middleware/validateRequest";
 import { videoValidationSchemas } from "./videol.validation";
 import { videoController } from "./video.controller";
 import { uploadVideo } from "../../util/VideoUpload";
-import { uploadVideo } from "./../../util/VideoUpload";
 
 const router = Router();
 
@@ -53,7 +52,13 @@ router.patch(
 // ! for updating  a video
 router.patch(
   "/update-video/:id",
-  // authCheck(UserRole.admin, UserRole.instructor),
+  authCheck(UserRole.admin, UserRole.instructor),
+  uploadVideo.single("video"),
+  (req: Request, res: Response, next: NextFunction) => {
+    req.body = JSON.parse(req?.body?.data);
+
+    next();
+  },
   videoController.updateVideo
 );
 
