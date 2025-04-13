@@ -4,8 +4,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@radix-ui/react-label";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { useLogInMutation } from "@/redux/features/auth/auth.api";
 
 const Login = () => {
+  const [logIn, { isLoading }] = useLogInMutation();
+
   const {
     register,
     handleSubmit,
@@ -16,6 +19,8 @@ const Login = () => {
   const handleLogin = (data: FormData) => {
     console.log(data);
     console.log("login !!!");
+
+    const { email, password } = data;
   };
 
   return (
