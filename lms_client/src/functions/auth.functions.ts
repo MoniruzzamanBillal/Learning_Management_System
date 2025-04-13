@@ -22,12 +22,12 @@ export const authLogin = async (payload: TLoginPayload, logInFunction: any) => {
       });
     }
 
-    if (result?.success) {
-      const token = result?.token;
+    if (result?.data?.success) {
+      const token = result?.data?.token;
 
       const user = verifyToken(token) as TUser;
 
-      toast.success(result?.message, { id: toastId, duration: 1400 });
+      toast.success(result?.data?.message, { id: toastId, duration: 1400 });
 
       return { user, token };
     }

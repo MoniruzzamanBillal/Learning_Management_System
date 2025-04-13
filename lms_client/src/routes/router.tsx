@@ -2,7 +2,7 @@ import App from "@/App";
 
 import { createBrowserRouter } from "react-router-dom";
 
-import { Login, Register } from "@/pages";
+import { HomePage, Login, Register } from "@/pages";
 
 const router = createBrowserRouter([
   {
@@ -16,6 +16,10 @@ const router = createBrowserRouter([
       {
         path: "/sign-up",
         element: <Register />,
+      },
+      {
+        path: "/",
+        element: <HomePage />,
       },
     ],
   },
