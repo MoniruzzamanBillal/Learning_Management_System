@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { TLoginPayload } from "@/types/auth.types";
+import { TLoginPayload, TRegistrationPayload } from "@/types/auth.types";
 import { TUser } from "@/types/globalTypes";
 import { verifyToken } from "@/utils/verifyToken";
 import { toast } from "sonner";
@@ -39,3 +39,35 @@ export const authLogin = async (payload: TLoginPayload, logInFunction: any) => {
 };
 
 // ! for register
+export const registerUser = async (
+  payload: TRegistrationPayload,
+  registerFun: any
+) => {
+  const toastId = toast.loading("Registering a user.....");
+
+  try {
+    const result = await registerFun(payload);
+
+    // * if there is error
+    if (result?.error) {
+      const errorMsg = (result?.error as any)?.data?.errorMessages[0]?.message;
+
+      toast.error(errorMsg, {
+        id: toastId,
+        duration: 1400,
+      });
+
+      return;
+    }
+
+    if (result?.data?.success) {
+      return result?.data;
+    }
+  } catch (error) {
+    toast.error("Something went wrong while reistering a user !! ", {
+      id: toastId,
+      duration: 1400,
+    });
+    console.log(error);
+  }
+};
