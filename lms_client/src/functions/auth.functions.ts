@@ -39,10 +39,7 @@ export const authLogin = async (payload: TLoginPayload, logInFunction: any) => {
 };
 
 // ! for register
-export const registerUser = async (
-  payload: TRegistrationPayload,
-  registerFun: any
-) => {
+export const registerUser = async (payload: any, registerFun: any) => {
   const toastId = toast.loading("Registering a user.....");
 
   try {
@@ -50,7 +47,7 @@ export const registerUser = async (
 
     // * if there is error
     if (result?.error) {
-      const errorMsg = (result?.error as any)?.data?.errorMessages[0]?.message;
+      const errorMsg = (result?.error as any)?.data?.message;
 
       toast.error(errorMsg, {
         id: toastId,
@@ -61,6 +58,11 @@ export const registerUser = async (
     }
 
     if (result?.data?.success) {
+      toast.success(result?.data?.message, {
+        id: toastId,
+        duration: 1400,
+      });
+
       return result?.data;
     }
   } catch (error) {

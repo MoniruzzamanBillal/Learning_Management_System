@@ -49,14 +49,13 @@ userSchema.pre("save", async function (next) {
 });
 
 userSchema.pre("find", async function (next) {
-  this.find({ isDeleted: { $ne: true } });
-
+  this.where({ isDeleted: false });
   next();
 });
 
 userSchema.pre("findOne", async function (next) {
-  this.find({ isDeleted: { $ne: true } });
-
+  // this.find({ isDeleted: { $ne: true } });
+  this.where({ isDeleted: false });
   next();
 });
 
