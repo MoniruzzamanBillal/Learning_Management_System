@@ -1,12 +1,11 @@
 import { Outlet } from "react-router-dom";
+import NavBar from "../shared/NavBar";
 
 export const MainLayout = () => {
   return (
     <div className="MainLayoutContainer  ">
       {/* nav starts  */}
-      <div className="navContainer   ">
-        <h1>nav bar </h1>
-      </div>
+      <NavBar />
       {/* nav ends */}
 
       {/* child component  */}

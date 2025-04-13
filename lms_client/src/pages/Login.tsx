@@ -24,9 +24,6 @@ const Login = () => {
 
   // ! for login
   const handleLogin = async (data: TLoginPayload) => {
-    console.log(data);
-    console.log("login !!!");
-
     const result = await authLogin(data, logIn);
 
     if (result) {
