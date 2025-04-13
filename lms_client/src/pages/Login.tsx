@@ -5,6 +5,7 @@ import { Label } from "@radix-ui/react-label";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useLogInMutation } from "@/redux/features/auth/auth.api";
+import { authLogin } from "@/functions/auth.functions";
 
 const Login = () => {
   const [logIn, { isLoading }] = useLogInMutation();
@@ -16,11 +17,11 @@ const Login = () => {
   } = useForm();
 
   // ! for login
-  const handleLogin = (data: FormData) => {
+  const handleLogin = async (data: FormData) => {
     console.log(data);
     console.log("login !!!");
 
-    const { email, password } = data;
+    const result = await authLogin(data, logIn);
   };
 
   return (

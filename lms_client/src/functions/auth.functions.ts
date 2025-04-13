@@ -1,13 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+import { TLoginPayload } from "@/types/auth.types";
 import { TUser } from "@/types/globalTypes";
 import { verifyToken } from "@/utils/verifyToken";
 import { toast } from "sonner";
-
-type TLoginPayload = {
-  email: string;
-  password: string;
-};
 
 // ! for login
 export const authLogin = async (payload: TLoginPayload, logInFunction: any) => {
