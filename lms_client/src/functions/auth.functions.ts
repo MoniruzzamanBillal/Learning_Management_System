@@ -37,3 +37,5 @@ export const authLogin = async (payload: TLoginPayload, logInFunction: any) => {
     console.log(error);
   }
 };
+
+// ! for register
