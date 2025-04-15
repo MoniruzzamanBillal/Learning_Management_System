@@ -9,6 +9,8 @@ import { courseEnrollmentModel } from "./CourseEnrollment.model";
 import { moduleModel } from "../courseModule/module.model";
 import { videoModel } from "../VideoModule/video.model";
 import { videoStatus } from "../VideoModule/video.constants";
+import { videoProgressStatus } from "../VideoProgress/VideoProgress.constants";
+import { videoProgressModel } from "../VideoProgress/VideoProgress.model";
 
 // ! for enrolling into a course
 const enrollInCourse = async (payload: { user: string; course: string }) => {
@@ -81,6 +83,28 @@ const enrollInCourse = async (payload: { user: string; course: string }) => {
       { CourseEnrollment: courseEnrollmentRecord[0]?._id },
       { session }
     );
+
+    // * create video progress data
+    const videoDatas = await videoModel
+      .find({ isDeleted: false })
+      .populate({
+        path: "module",
+        match: { course },
+      })
+      .sort({ videoOrder: 1 });
+
+    const videoProgressData = videoDatas?.map((video, index) => ({
+      user,
+      course,
+      module: video?.module?._id?.toString(),
+      video: video?._id?.toString(),
+      videoStatus:
+        index === 0
+          ? videoProgressStatus?.unlocked
+          : videoProgressStatus?.locked,
+    }));
+
+    await videoProgressModel.insertMany(videoProgressData, { session });
 
     const paymentRequestData = {
       price: courseData?.price,
