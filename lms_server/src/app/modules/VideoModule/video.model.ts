@@ -1,6 +1,5 @@
 import { model, Schema } from "mongoose";
 import { TVideo } from "./video.interface";
-import { videoStatus } from "./video.constants";
 
 const videoSchema = new Schema<TVideo>(
   {
@@ -9,10 +8,6 @@ const videoSchema = new Schema<TVideo>(
     instructor: { type: Schema.Types.ObjectId, ref: "User", required: true },
     videoUrl: { type: String, required: true },
     videoOrder: { type: Number, required: true },
-    videoStatus: {
-      type: String,
-      enum: Object.values(videoStatus),
-    },
 
     isDeleted: { type: Boolean, default: false },
   },

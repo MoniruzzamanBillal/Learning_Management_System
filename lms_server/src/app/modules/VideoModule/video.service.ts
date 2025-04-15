@@ -27,10 +27,8 @@ const addVideo = async (payload: TVideo, videoUrl: string) => {
   }
 
   const videoCount = await videoModel.countDocuments({ module });
-  const Status = videoCount === 0 ? videoStatus.unlocked : videoStatus.locked;
 
   payload.videoUrl = videoUrl;
-  payload.videoStatus = Status;
   payload.videoOrder = videoCount;
 
   const session = await mongoose.startSession();
@@ -125,8 +123,6 @@ const updateVideo = async (
   videoId: string,
   videoUrl: string
 ) => {
-  console.log("video url in update video = ", videoUrl);
-
   const videoData = await videoModel.findById(videoId);
 
   if (!videoData) {

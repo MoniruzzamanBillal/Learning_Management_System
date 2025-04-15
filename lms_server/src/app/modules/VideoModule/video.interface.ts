@@ -1,5 +1,4 @@
 import { ObjectId } from "mongoose";
-import { videoStatus } from "./video.constants";
 
 export type TVideo = {
   module: ObjectId;
@@ -7,6 +6,5 @@ export type TVideo = {
   videoUrl: string;
   instructor: ObjectId;
   videoOrder: number;
-  videoStatus: keyof typeof videoStatus;
   isDeleted?: boolean;
 };
