@@ -3,7 +3,14 @@ import { userModel } from "./user.model";
 
 // ! for getting all instructor
 const getAllInstructor = async () => {
-  console.log("  ");
+  const result = await userModel
+    .find({
+      userRole: UserRole?.instructor,
+      isDeleted: false,
+    })
+    .select(" _id name email profilePicture  ");
+
+  return result;
 };
 
 //

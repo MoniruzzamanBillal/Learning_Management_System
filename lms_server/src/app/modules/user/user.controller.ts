@@ -6,7 +6,12 @@ import { userServices } from "./user.service";
 const getAllInstructor = catchAsync(async (req, res) => {
   const result = await userServices.getAllInstructor();
 
-  console.log("  ");
+  sendResponse(res, {
+    statusCode: httpStatus.CREATED,
+    success: true,
+    message: "All instructor retrived successfully !!!",
+    data: result,
+  });
 });
 
 //
