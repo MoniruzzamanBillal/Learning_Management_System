@@ -1,9 +1,10 @@
+import ShowTablePage from "@/components/TestingTable/ShowTablePage";
 import { Button } from "@/components/ui/button";
 
 const ManageCourse = () => {
   return (
     <div className="ManageCourseContainer">
-      <div className="manageCourseWrapper bg-gray-100 border border-gray-300  shadow rounded-md p-3 ">
+      <div className="manageCourseWrapper bg-gray-100/90 border border-gray-300  shadow rounded-md p-3 ">
         <h3 className="brand text-2xl font-medium mb-4 "> Manage Course </h3>
 
         <Button
@@ -14,6 +15,10 @@ const ManageCourse = () => {
         >
           Add Course
         </Button>
+
+        <div className="tableSection">
+          <ShowTablePage />
+        </div>
       </div>
     </div>
   );
