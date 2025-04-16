@@ -249,6 +249,24 @@ const watchVideo = async (videoId: string) => {
   }
 };
 
+// ! for tracking course progress
+const courseProgress = async (courseId: string, userId: string) => {
+  const totalContent = await videoProgressModel.countDocuments({
+    user: userId,
+    course: courseId,
+  });
+
+  const watchedVideo = await videoProgressModel.countDocuments({
+    user: userId,
+    course: courseId,
+    videoStatus: videoProgressStatus?.watched,
+  });
+
+  const progressPercentage = Math.round((watchedVideo / totalContent) * 100);
+
+  return progressPercentage;
+};
+
 //
 export const courseEnrollmentService = {
   enrollInCourse,
@@ -256,4 +274,5 @@ export const courseEnrollmentService = {
   getModuleDataEnrlledCourse,
   getVideoDataEnrlledCourse,
   watchVideo,
+  courseProgress,
 };
