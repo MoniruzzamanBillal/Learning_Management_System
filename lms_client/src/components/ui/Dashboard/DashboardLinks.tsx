@@ -5,17 +5,6 @@ import { CiBookmark } from "react-icons/ci";
 import { useGetUser } from "@/utils/sharedFunction";
 import { userRoleConts } from "@/utils/constants";
 
-const LinkItem = ({ link }: { link: TDashboardLinks }) => {
-  return (
-    <NavLink to={link.path}>
-      <div className="linksContainer flex items-center gap-x-1  my-6 ">
-        {link.icon}
-        <p>{link.name}</p>
-      </div>
-    </NavLink>
-  );
-};
-
 const DashboardLinks = () => {
   const userInfo = useGetUser();
 
@@ -60,6 +49,17 @@ const DashboardLinks = () => {
     <div>
       {links && links?.map((item) => <LinkItem key={item?.name} link={item} />)}
     </div>
+  );
+};
+
+const LinkItem = ({ link }: { link: TDashboardLinks }) => {
+  return (
+    <NavLink to={link.path}>
+      <div className="linksContainer flex items-center gap-x-1  my-6  hover:text-prime100 ">
+        {link.icon}
+        <p>{link.name}</p>
+      </div>
+    </NavLink>
   );
 };
 

@@ -6,10 +6,15 @@ import { moduleRouter } from "../modules/courseModule/module.routes";
 import { videoRouter } from "../modules/VideoModule/video.routes";
 import { courseEnrollmentRouter } from "../modules/CourseEnrollment/CourseEnrollment.routes";
 import { paymentRoute } from "../modules/payment/payment.routes";
+import { userRouter } from "../modules/user/user.route";
 
 const router = Router();
 
 const routeArray = [
+  {
+    path: "/user",
+    route: userRouter,
+  },
   {
     path: "/auth",
     route: authRouter,

@@ -16,7 +16,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="bg-gray-100 border border-gray-300 rounded-md p-4 sticky top-[5.5rem] shadow-md  ">
+    <div className="bg-gray-100 border border-gray-300 rounded-md p-4 sticky top-[5.2rem] shadow-md  ">
       <div className="flex items-center space-x-2 border-b-4 border-prime50 pb-2 print:hidden">
         <Link to="/dashboard" className="flex items-center gap-2">
           <span className="inline-block p-2 rounded-full bg-slate-200 cursor-pointe">

@@ -2,7 +2,7 @@ import App from "@/App";
 
 import { createBrowserRouter } from "react-router-dom";
 
-import { HomePage, Login, ManageCourse, Register } from "@/pages";
+import { AddCourse, HomePage, Login, ManageCourse, Register } from "@/pages";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 
 const router = createBrowserRouter([
@@ -33,6 +33,10 @@ const router = createBrowserRouter([
           {
             path: "/dashboard/admin/manage-course",
             element: <ManageCourse />,
+          },
+          {
+            path: "/dashboard/admin/add-course",
+            element: <AddCourse />,
           },
         ],
       },
