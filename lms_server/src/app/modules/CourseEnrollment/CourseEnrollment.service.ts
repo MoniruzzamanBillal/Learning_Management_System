@@ -180,22 +180,8 @@ const getModuleDataEnrlledCourse = async (userId: string, courseId: string) => {
   return moduleData;
 };
 
-// ! get video data for enrolled course
-const getVideoDataEnrlledCourse = async (videoId: string) => {
-  const videoData = await videoModel.findById(videoId);
-
-  if (!videoData) {
-    throw new AppError(
-      httpStatus.BAD_REQUEST,
-      "Your requested content don't exists!!!"
-    );
-  }
-
-  return videoData;
-};
-
 // ! watch video
-const watchVideo = async (videoId: string) => {
+const watchVideo = async (videoId: string, userId: string) => {
   const videoData = await videoModel.findOne({
     _id: videoId,
     isDeleted: false,
@@ -205,7 +191,19 @@ const watchVideo = async (videoId: string) => {
     throw new AppError(httpStatus.BAD_REQUEST, "This Video don't exist !!!");
   }
 
-  if (videoData?.videoStatus === videoStatus.locked) {
+  const currentProgressData = await videoProgressModel.findOne({
+    user: userId,
+    video: videoId,
+  });
+
+  if (!currentProgressData) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "Video progress not found for this user!"
+    );
+  }
+
+  if (currentProgressData?.videoStatus === videoProgressStatus?.locked) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
       "This video is locked , complete previous video to unlock this video !!!"
@@ -217,11 +215,11 @@ const watchVideo = async (videoId: string) => {
   try {
     session.startTransaction();
 
-    const updatedVideoData = await videoModel.findByIdAndUpdate(
-      videoId,
-      { videoStatus: videoStatus.watched },
-      { new: true, session }
-    );
+    // * update current video status to watched
+    currentProgressData.videoStatus = videoProgressStatus?.watched;
+    await currentProgressData.save({ session });
+
+    // * Find next video by order
 
     const nextVideo = await videoModel.findOne({
       module: videoData?.module,
@@ -229,9 +227,9 @@ const watchVideo = async (videoId: string) => {
     });
 
     if (nextVideo) {
-      await videoModel.findByIdAndUpdate(
-        nextVideo?._id,
-        { videoStatus: videoStatus.unlocked },
+      await videoProgressModel.findOneAndUpdate(
+        { user: userId, video: nextVideo?._id?.toString() },
+        { videoStatus: videoProgressStatus?.unlocked },
         { session }
       );
     }
@@ -239,7 +237,6 @@ const watchVideo = async (videoId: string) => {
     await session.commitTransaction();
 
     await session.endSession();
-    return updatedVideoData;
   } catch (error: any) {
     await session.abortTransaction();
     await session.endSession();
@@ -272,7 +269,6 @@ export const courseEnrollmentService = {
   enrollInCourse,
   getUserEnrolledCourse,
   getModuleDataEnrlledCourse,
-  getVideoDataEnrlledCourse,
   watchVideo,
   courseProgressPercentage,
 };

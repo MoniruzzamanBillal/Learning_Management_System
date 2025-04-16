@@ -38,7 +38,7 @@ router.get(
 
 // ! for getting course progress percentage
 router.get(
-  "/my-course-progress/:id",
+  "/my-course-progress/:courseId",
   authCheck(UserRole.user),
   CourseEnrollmentController.courseProgressPercentage
 );

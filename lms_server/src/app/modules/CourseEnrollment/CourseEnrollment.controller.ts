@@ -47,7 +47,10 @@ const getModuleDataEnrlledCourse = catchAsync(async (req, res) => {
 
 // ! for getting video data for enrolled course
 const getVideoDataEnrlledCourse = catchAsync(async (req, res) => {
-  const result = await courseEnrollmentService.watchVideo(req?.params?.id);
+  const result = await courseEnrollmentService.watchVideo(
+    req?.params?.id,
+    req?.user?.userId
+  );
 
   sendResponse(res, {
     statusCode: httpStatus.CREATED,

@@ -6,8 +6,6 @@ import httpStatus from "http-status";
 import { videoModel } from "./video.model";
 import mongoose from "mongoose";
 import { courseEnrollmentModel } from "../CourseEnrollment/CourseEnrollment.model";
-import { videoProgressStatus } from "../VideoProgress/VideoProgress.constants";
-import { videoProgressModel } from "../VideoProgress/VideoProgress.model";
 import { addVideoCoursePublish } from "../VideoProgress/videoProgress.functions";
 import { TEnrolledCourseUsers } from "../VideoProgress/VideoProgress.interface";
 
