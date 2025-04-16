@@ -8,3 +8,10 @@ export type TVideoProgress = {
   video: ObjectId;
   videoStatus: keyof typeof videoProgressStatus;
 };
+
+export type TEnrolledCourseUsers = {
+  _id: ObjectId;
+  user: ObjectId;
+  course: ObjectId;
+  completed: boolean;
+};

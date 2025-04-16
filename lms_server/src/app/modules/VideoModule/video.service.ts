@@ -9,6 +9,7 @@ import { courseEnrollmentModel } from "../CourseEnrollment/CourseEnrollment.mode
 import { videoProgressStatus } from "../VideoProgress/VideoProgress.constants";
 import { videoProgressModel } from "../VideoProgress/VideoProgress.model";
 import { addVideoCoursePublish } from "../VideoProgress/videoProgress.functions";
+import { TEnrolledCourseUsers } from "../VideoProgress/VideoProgress.interface";
 
 // ! for adding a video
 const addVideo = async (payload: TVideo, videoUrl: string) => {
@@ -18,10 +19,13 @@ const addVideo = async (payload: TVideo, videoUrl: string) => {
     .findOne({ _id: module, instructor })
     .populate("course", " _id published");
 
-  // console.log("module data from add video = ", moduleData);
+  const courseInfo = moduleData?.course as unknown as {
+    _id: string;
+    published: boolean;
+  };
 
-  const courseId = moduleData?.course?._id?.toString();
-  const coursePublished = moduleData?.course?.published;
+  const courseId = courseInfo?._id?.toString();
+  const coursePublished = courseInfo?.published;
 
   if (!moduleData) {
     throw new AppError(httpStatus.BAD_REQUEST, "This module don't exist !!!");
@@ -41,9 +45,10 @@ const addVideo = async (payload: TVideo, videoUrl: string) => {
   payload.videoUrl = videoUrl;
   payload.videoOrder = videoCount;
 
-  const enrolledCourseUsers = await courseEnrollmentModel.find({
-    course: courseId,
-  });
+  const enrolledCourseUsers: TEnrolledCourseUsers[] =
+    await courseEnrollmentModel.find({
+      course: courseId,
+    });
 
   const session = await mongoose.startSession();
 
@@ -62,14 +67,14 @@ const addVideo = async (payload: TVideo, videoUrl: string) => {
 
     // * insert new video in video progress if course is pulished
     if (coursePublished) {
-      await addVideoCoursePublish(
+      await addVideoCoursePublish({
         enrolledCourseUsers,
         courseId,
-        videoData[0]?._id,
+        videoId: videoData[0]?._id?.toString(),
         videoCount,
-        module,
-        session
-      );
+        moduleId: module?.toString(),
+        session,
+      });
     }
 
     await session.commitTransaction();
