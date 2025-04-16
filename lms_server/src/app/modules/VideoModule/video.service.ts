@@ -5,13 +5,22 @@ import { TVideo } from "./video.interface";
 import httpStatus from "http-status";
 import { videoModel } from "./video.model";
 import mongoose from "mongoose";
-import { videoStatus } from "./video.constants";
+import { courseEnrollmentModel } from "../CourseEnrollment/CourseEnrollment.model";
+import { videoProgressStatus } from "../VideoProgress/VideoProgress.constants";
+import { videoProgressModel } from "../VideoProgress/VideoProgress.model";
 
 // ! for adding a video
 const addVideo = async (payload: TVideo, videoUrl: string) => {
   const { module, instructor } = payload;
 
-  const moduleData = await moduleModel.findOne({ _id: module, instructor });
+  const moduleData = await moduleModel
+    .findOne({ _id: module, instructor })
+    .populate("course", " _id published");
+
+  // console.log("module data from add video = ", moduleData);
+
+  const courseId = moduleData?.course?._id?.toString();
+  const coursePublished = moduleData?.course?.published;
 
   if (!moduleData) {
     throw new AppError(httpStatus.BAD_REQUEST, "This module don't exist !!!");
@@ -31,18 +40,40 @@ const addVideo = async (payload: TVideo, videoUrl: string) => {
   payload.videoUrl = videoUrl;
   payload.videoOrder = videoCount;
 
+  const enrolledCourseUsers = await courseEnrollmentModel.find({
+    course: courseId,
+  });
+
   const session = await mongoose.startSession();
 
   try {
     session.startTransaction();
 
+    // * create new video
     const videoData = await videoModel.create([payload], { session });
 
+    // * update module data with new video reference
     await moduleModel.findByIdAndUpdate(
       module,
       { $push: { videos: videoData[0]?._id } },
       { session }
     );
+
+    // * insert new video in video progress if module is pulished
+    if (coursePublished) {
+      const videoProgressPayload = enrolledCourseUsers?.map((enrollment) => ({
+        user: enrollment?.user?.toString(),
+        course: courseId,
+        module,
+        video: videoData[0]?._id,
+        videoStatus:
+          videoCount === 0
+            ? videoProgressStatus?.unlocked
+            : videoProgressStatus?.locked,
+      }));
+
+      await videoProgressModel.insertMany(videoProgressPayload, { session });
+    }
 
     await session.commitTransaction();
     return videoData;
@@ -52,6 +83,8 @@ const addVideo = async (payload: TVideo, videoUrl: string) => {
     await session.endSession();
     throw new Error(error);
   }
+
+  //
 };
 
 // ! for getting all the module video
