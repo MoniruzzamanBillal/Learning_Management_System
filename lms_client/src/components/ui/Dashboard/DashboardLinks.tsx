@@ -41,6 +41,21 @@ const DashboardLinks = () => {
     ];
   }
 
+  if (userInfo?.userRole === userRoleConts?.admin) {
+    links = [
+      {
+        name: "Home",
+        path: "/",
+        icon: <CiBookmark className="text-xl font-bold" />,
+      },
+      {
+        name: "Manage Courses",
+        path: "/dashboard/admin/manage-course",
+        icon: <CiBookmark className="text-xl font-bold" />,
+      },
+    ];
+  }
+
   return (
     <div>
       {links && links?.map((item) => <LinkItem key={item?.name} link={item} />)}

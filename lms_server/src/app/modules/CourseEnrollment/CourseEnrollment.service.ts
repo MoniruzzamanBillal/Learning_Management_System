@@ -8,7 +8,6 @@ import { paymentModel } from "../payment/payment.model";
 import { courseEnrollmentModel } from "./CourseEnrollment.model";
 import { moduleModel } from "../courseModule/module.model";
 import { videoModel } from "../VideoModule/video.model";
-import { videoStatus } from "../VideoModule/video.constants";
 import { videoProgressStatus } from "../VideoProgress/VideoProgress.constants";
 import { videoProgressModel } from "../VideoProgress/VideoProgress.model";
 
@@ -96,7 +95,8 @@ const enrollInCourse = async (payload: { user: string; course: string }) => {
     const videoProgressData = videoDatas?.map((video, index) => ({
       user,
       course,
-      module: video?.module?._id?.toString(),
+      // module: video?.module?._id?.toString(),
+      module: (video?.module as unknown as { _id: string })?._id.toString(),
       video: video?._id?.toString(),
       videoStatus:
         index === 0
