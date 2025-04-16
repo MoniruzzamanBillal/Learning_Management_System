@@ -8,6 +8,7 @@ import mongoose from "mongoose";
 import { courseEnrollmentModel } from "../CourseEnrollment/CourseEnrollment.model";
 import { videoProgressStatus } from "../VideoProgress/VideoProgress.constants";
 import { videoProgressModel } from "../VideoProgress/VideoProgress.model";
+import { addVideoCoursePublish } from "../VideoProgress/videoProgress.functions";
 
 // ! for adding a video
 const addVideo = async (payload: TVideo, videoUrl: string) => {
@@ -59,20 +60,16 @@ const addVideo = async (payload: TVideo, videoUrl: string) => {
       { session }
     );
 
-    // * insert new video in video progress if module is pulished
+    // * insert new video in video progress if course is pulished
     if (coursePublished) {
-      const videoProgressPayload = enrolledCourseUsers?.map((enrollment) => ({
-        user: enrollment?.user?.toString(),
-        course: courseId,
+      await addVideoCoursePublish(
+        enrolledCourseUsers,
+        courseId,
+        videoData[0]?._id,
+        videoCount,
         module,
-        video: videoData[0]?._id,
-        videoStatus:
-          videoCount === 0
-            ? videoProgressStatus?.unlocked
-            : videoProgressStatus?.locked,
-      }));
-
-      await videoProgressModel.insertMany(videoProgressPayload, { session });
+        session
+      );
     }
 
     await session.commitTransaction();
