@@ -36,5 +36,12 @@ router.get(
   CourseEnrollmentController.getVideoDataEnrlledCourse
 );
 
+// ! for getting course progress percentage
+router.get(
+  "/my-course-progress/:id",
+  authCheck(UserRole.user),
+  CourseEnrollmentController.courseProgressPercentage
+);
+
 //
 export const courseEnrollmentRouter = router;

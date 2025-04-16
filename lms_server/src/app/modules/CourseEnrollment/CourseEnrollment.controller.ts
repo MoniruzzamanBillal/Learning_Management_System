@@ -57,10 +57,26 @@ const getVideoDataEnrlledCourse = catchAsync(async (req, res) => {
   });
 });
 
+// ! for getting course progress percentage
+const courseProgressPercentage = catchAsync(async (req, res) => {
+  const result = await courseEnrollmentService.courseProgressPercentage(
+    req?.params?.id,
+    req?.user?.userId
+  );
+
+  sendResponse(res, {
+    statusCode: httpStatus.CREATED,
+    success: true,
+    message: "Course progress result retrived successfully!!!",
+    data: result,
+  });
+});
+
 //
 export const CourseEnrollmentController = {
   enrollInCourse,
   getMyCourseEnrollData,
   getModuleDataEnrlledCourse,
   getVideoDataEnrlledCourse,
+  courseProgressPercentage,
 };

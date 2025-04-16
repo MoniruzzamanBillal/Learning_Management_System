@@ -250,7 +250,7 @@ const watchVideo = async (videoId: string) => {
 };
 
 // ! for tracking course progress
-const courseProgress = async (courseId: string, userId: string) => {
+const courseProgressPercentage = async (courseId: string, userId: string) => {
   const totalContent = await videoProgressModel.countDocuments({
     user: userId,
     course: courseId,
@@ -274,5 +274,5 @@ export const courseEnrollmentService = {
   getModuleDataEnrlledCourse,
   getVideoDataEnrlledCourse,
   watchVideo,
-  courseProgress,
+  courseProgressPercentage,
 };
