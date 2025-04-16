@@ -63,7 +63,7 @@ const getVideoDataEnrlledCourse = catchAsync(async (req, res) => {
 // ! for getting course progress percentage
 const courseProgressPercentage = catchAsync(async (req, res) => {
   const result = await courseEnrollmentService.courseProgressPercentage(
-    req?.params?.id,
+    req?.params?.courseId,
     req?.user?.userId
   );
 
