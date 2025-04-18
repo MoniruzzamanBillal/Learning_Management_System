@@ -34,8 +34,6 @@ const courseColumns: ColumnDef<TDataprops>[] = [
   {
     accessorKey: "price",
     header: ({ column }) => {
-      console.log(column);
-
       return (
         <Button
           variant="ghost"

@@ -42,6 +42,21 @@ const DashboardLinks = () => {
         path: "/dashboard/admin/manage-course",
         icon: <CiBookmark className="text-xl font-bold" />,
       },
+      {
+        name: "Manage Modules",
+        path: "/dashboard/admin/manage-modules",
+        icon: <CiBookmark className="text-xl font-bold" />,
+      },
+      {
+        name: "Manage Videos",
+        path: "/dashboard/admin/manage-videos",
+        icon: <CiBookmark className="text-xl font-bold" />,
+      },
+      {
+        name: " Enrollment & Progress",
+        path: "/dashboard/admin/manage-videos",
+        icon: <CiBookmark className="text-xl font-bold" />,
+      },
     ];
   }
 
