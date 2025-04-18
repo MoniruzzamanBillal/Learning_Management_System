@@ -1,5 +1,6 @@
-import ShowTablePage from "@/components/TestingTable/ShowTablePage";
+import { dummyCourseData } from "@/components/TestingTable/DummyData";
 import { Button } from "@/components/ui/button";
+import { courseColumns, ManageCourseTable } from "@/components/ui/ManageCourse";
 import { useNavigate } from "react-router-dom";
 
 const ManageCourse = () => {
@@ -17,8 +18,9 @@ const ManageCourse = () => {
           Add Course
         </Button>
 
-        <div className="tableSection">
-          <ShowTablePage />
+        {/* table section  */}
+        <div className="Tablecontainer mx-auto py-10">
+          <ManageCourseTable columns={courseColumns} data={dummyCourseData} />
         </div>
       </div>
     </div>

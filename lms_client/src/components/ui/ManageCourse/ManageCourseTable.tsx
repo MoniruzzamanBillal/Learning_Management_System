@@ -4,8 +4,11 @@ import {
   getCoreRowModel,
   useReactTable,
   getPaginationRowModel,
+  SortingState,
+  getSortedRowModel,
 } from "@tanstack/react-table";
 
+import { useState } from "react";
 import {
   Table,
   TableBody,
@@ -13,18 +16,20 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "../ui/table";
-import { Button } from "../ui/button";
+} from "../table";
+import { Button } from "../button";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 }
 
-const DataTable = <TData, TValue>({
+const ManageCourseTable = <TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) => {
+  const [sorting, setSorting] = useState<SortingState>([]);
+
   const table = useReactTable({
     data,
     columns,
@@ -32,14 +37,19 @@ const DataTable = <TData, TValue>({
     getPaginationRowModel: getPaginationRowModel(),
     initialState: {
       pagination: {
-        pageSize: 6,
+        pageSize: 5,
       },
+    },
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
+    state: {
+      sorting,
     },
   });
 
   return (
-    <div className="rounded-md border bg-gray-50 ">
-      <Table>
+    <div className="rounded-md  bg-gray-50 border  border-gray-200 ">
+      <Table className="  ">
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
@@ -104,4 +114,4 @@ const DataTable = <TData, TValue>({
   );
 };
 
-export default DataTable;
+export default ManageCourseTable;
