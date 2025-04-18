@@ -3,7 +3,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useAddNewCourseMutation } from "@/redux/features/course/course.api";
-
+import { courseSchemas } from "@/schemas/Course.schemas";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, Controller } from "react-hook-form";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
@@ -32,7 +33,9 @@ const AddCourse = () => {
     handleSubmit,
     control,
     formState: { errors, isSubmitting },
-  } = useForm();
+  } = useForm({
+    resolver: zodResolver(courseSchemas.addCourseValidationSchema),
+  });
 
   // ! for adding new course
   const handleAddNewCourse = async (data) => {
@@ -101,6 +104,7 @@ const AddCourse = () => {
                 onWheel={(e) => (e.target as HTMLInputElement).blur()}
                 placeholder="Enter Course Price "
                 {...register("price", {
+                  valueAsNumber: true,
                   required: "Course Price is required !!!",
                 })}
               />
