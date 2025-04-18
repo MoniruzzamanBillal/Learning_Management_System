@@ -1,3 +1,9 @@
+import {
+  manageModuleColumns,
+  ManageModuleTable,
+} from "@/components/ui/admin/manageModule";
+import { modulesDummyData } from "@/utils/DummyData";
+
 const ManageModule = () => {
   return (
     <div className="ManageModuleContainer">
@@ -7,7 +13,10 @@ const ManageModule = () => {
 
         {/* table section  */}
         <div className="Tablecontainer mx-auto py-10">
-          <h1>table sectin </h1>
+          <ManageModuleTable
+            columns={manageModuleColumns}
+            data={modulesDummyData}
+          />
         </div>
       </div>
     </div>
