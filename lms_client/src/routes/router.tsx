@@ -2,9 +2,9 @@ import App from "@/App";
 
 import { createBrowserRouter } from "react-router-dom";
 
-import { AddCourse, HomePage, Login, Register } from "@/pages";
+import { HomePage, Login, Register } from "@/pages";
 import DashboardLayout from "@/components/layout/DashboardLayout";
-import { ManageCourse, ManageModule } from "@/pages/Dashboard/admin";
+import { adminRoutes } from "./AdminRoutes";
 
 const router = createBrowserRouter([
   {
@@ -31,18 +31,11 @@ const router = createBrowserRouter([
             path: "/dashboard",
             element: <p>Dashboard !!!!</p>,
           },
-          {
-            path: "/dashboard/admin/manage-course",
-            element: <ManageCourse />,
-          },
-          {
-            path: "/dashboard/admin/add-course",
-            element: <AddCourse />,
-          },
-          {
-            path: "/dashboard/admin/manage-modules",
-            element: <ManageModule />,
-          },
+
+          // * admin routes
+          ...adminRoutes,
+
+          //
         ],
       },
     ],
