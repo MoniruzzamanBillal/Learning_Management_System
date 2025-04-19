@@ -2,7 +2,8 @@ import { TDataprops } from "@/components/TestingTable/DummyData";
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "../button";
 
-import { MoreHorizontal, ArrowUpDown } from "lucide-react";
+import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { Link } from "react-router-dom";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -64,8 +65,10 @@ const courseColumns: ColumnDef<TDataprops>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem onClick={() => console.log(rowData)}>
-              View Details
+            <DropdownMenuItem>
+              <Link to={"/dashboard/admin/course-detail/1234"}>
+                View Details
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => console.log(rowData?.id)}>

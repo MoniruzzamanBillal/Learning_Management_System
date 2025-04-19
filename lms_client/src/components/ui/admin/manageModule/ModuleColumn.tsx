@@ -1,6 +1,8 @@
 import { CourseModule } from "@/utils/DummyData";
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Button } from "../../button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,7 +11,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../../dropdown-menu";
-import { Button } from "../../button";
 
 const manageModuleColumns: ColumnDef<CourseModule>[] = [
   {
@@ -35,8 +36,10 @@ const manageModuleColumns: ColumnDef<CourseModule>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem onClick={() => console.log(rowData)}>
-              View Details
+            <DropdownMenuItem>
+              <Link to={"/dashboard/admin/module-detail/1234"}>
+                View Details
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => console.log(rowData?.id)}>

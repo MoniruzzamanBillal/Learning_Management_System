@@ -3,6 +3,7 @@ import {
   CourseDetail,
   ManageCourse,
   ManageModule,
+  ModuleDetail,
 } from "@/pages/Dashboard/admin";
 
 export const adminRoutes = [
@@ -15,11 +16,15 @@ export const adminRoutes = [
     element: <AddCourse />,
   },
   {
+    path: "/dashboard/admin/course-detail/:id",
+    element: <CourseDetail />,
+  },
+  {
     path: "/dashboard/admin/manage-modules",
     element: <ManageModule />,
   },
   {
-    path: "/dashboard/admin/course-detail/:id",
-    element: <CourseDetail />,
+    path: "/dashboard/admin/module-detail/:id",
+    element: <ModuleDetail />,
   },
 ];
