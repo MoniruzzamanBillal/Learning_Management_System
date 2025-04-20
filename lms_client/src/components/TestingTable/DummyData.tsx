@@ -147,3 +147,83 @@ export const dummyEnrollmentData: TEnrollmentDummyData[] = [
     enrolledStudents: 32,
   },
 ];
+
+export type TInstructorDummyData = {
+  id: string;
+  name: string;
+  email: string;
+  profilePicture: string;
+};
+
+export const dummyInstructorData: TInstructorDummyData[] = [
+  {
+    id: "k7l8m9n0",
+    name: "Alice Johnson",
+    email: "alice.johnson@example.com",
+    profilePicture:
+      "https://res.cloudinary.com/drmkqpdex/image/upload/v1741693865/user%201.jpg",
+  },
+  {
+    id: "a1b2c3d4",
+    name: "Bob Smith",
+    email: "bob.smith@example.com",
+    profilePicture:
+      "https://res.cloudinary.com/drmkqpdex/image/upload/v1741693865/user%201.jpg",
+  },
+  {
+    id: "e5f6g7h8",
+    name: "Catherine Lee",
+    email: "catherine.lee@example.com",
+    profilePicture:
+      "https://res.cloudinary.com/drmkqpdex/image/upload/v1741693865/user%201.jpg",
+  },
+  {
+    id: "i9j0k1l2",
+    name: "David Brown",
+    email: "david.brown@example.com",
+    profilePicture:
+      "https://res.cloudinary.com/drmkqpdex/image/upload/v1741693865/user%201.jpg",
+  },
+  {
+    id: "m3n4o5p6",
+    name: "Eva Green",
+    email: "eva.green@example.com",
+    profilePicture:
+      "https://res.cloudinary.com/drmkqpdex/image/upload/v1741693865/user%201.jpg",
+  },
+  {
+    id: "q7r8s9t0",
+    name: "Frank Harris",
+    email: "frank.harris@example.com",
+    profilePicture:
+      "https://res.cloudinary.com/drmkqpdex/image/upload/v1741693865/user%201.jpg",
+  },
+  {
+    id: "u1v2w3x4",
+    name: "Grace Kim",
+    email: "grace.kim@example.com",
+    profilePicture:
+      "https://res.cloudinary.com/drmkqpdex/image/upload/v1741693865/user%201.jpg",
+  },
+  {
+    id: "y5z6a7b8",
+    name: "Henry Adams",
+    email: "henry.adams@example.com",
+    profilePicture:
+      "https://res.cloudinary.com/drmkqpdex/image/upload/v1741693865/user%201.jpg",
+  },
+  {
+    id: "c9d0e1f2",
+    name: "Isabella Moore",
+    email: "isabella.moore@example.com",
+    profilePicture:
+      "https://res.cloudinary.com/drmkqpdex/image/upload/v1741693865/user%201.jpg",
+  },
+  {
+    id: "g3h4i5j6",
+    name: "Jack Wilson",
+    email: "jack.wilson@example.com",
+    profilePicture:
+      "https://res.cloudinary.com/drmkqpdex/image/upload/v1741693865/user%201.jpg",
+  },
+];

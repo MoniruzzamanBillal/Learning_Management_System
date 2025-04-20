@@ -1,3 +1,8 @@
+import { dummyInstructorData } from "@/components/TestingTable/DummyData";
+import {
+  InstructorColumn,
+  ManageInstructorTable,
+} from "@/components/ui/admin/ManageInstructor";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 
@@ -21,7 +26,10 @@ const ManageInstructors = () => {
 
         {/* table section  */}
         <div className="Tablecontainer mx-auto py-10">
-          <h1>manage instructors table</h1>
+          <ManageInstructorTable
+            columns={InstructorColumn}
+            data={dummyInstructorData}
+          />
         </div>
       </div>
     </div>
