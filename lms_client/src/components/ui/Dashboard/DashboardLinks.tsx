@@ -1,9 +1,9 @@
 import { TDashboardLinks } from "@/types/globalTypes";
-import { NavLink } from "react-router-dom";
 import { CiBookmark } from "react-icons/ci";
+import { NavLink } from "react-router-dom";
 
-import { useGetUser } from "@/utils/sharedFunction";
 import { userRoleConts } from "@/utils/constants";
+import { useGetUser } from "@/utils/sharedFunction";
 
 const DashboardLinks = () => {
   const userInfo = useGetUser();
@@ -48,13 +48,8 @@ const DashboardLinks = () => {
         icon: <CiBookmark className="text-xl font-bold" />,
       },
       {
-        name: "Manage Videos",
-        path: "/dashboard/admin/manage-videos",
-        icon: <CiBookmark className="text-xl font-bold" />,
-      },
-      {
-        name: " Enrollment & Progress",
-        path: "/dashboard/admin/manage-videos",
+        name: " Enrollment ",
+        path: "/dashboard/admin/enroll-courses",
         icon: <CiBookmark className="text-xl font-bold" />,
       },
     ];

@@ -1,6 +1,7 @@
 import { AddCourse } from "@/pages";
 import {
   CourseDetail,
+  Enrollment,
   ManageCourse,
   ManageModule,
   ModuleDetail,
@@ -26,5 +27,9 @@ export const adminRoutes = [
   {
     path: "/dashboard/admin/module-detail/:id",
     element: <ModuleDetail />,
+  },
+  {
+    path: "/dashboard/admin/enroll-courses",
+    element: <Enrollment />,
   },
 ];

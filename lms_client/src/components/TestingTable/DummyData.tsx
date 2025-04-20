@@ -78,3 +78,72 @@ export const dummyCourseData: TDataprops[] = [
     published: false,
   },
 ];
+
+export type TEnrollmentDummyData = {
+  id: string;
+  courseName: string;
+  enrolledStudents: number;
+};
+
+export const dummyEnrollmentData: TEnrollmentDummyData[] = [
+  {
+    id: "k7l8m9n0",
+    courseName: "Frontend Development",
+    enrolledStudents: 30,
+  },
+  {
+    id: "a1b2c3d4",
+    courseName: "Backend Development",
+    enrolledStudents: 25,
+  },
+  {
+    id: "e5f6g7h8",
+    courseName: "Full Stack Web Development",
+    enrolledStudents: 40,
+  },
+  {
+    id: "i9j0k1l2",
+    courseName: "React for Beginners",
+    enrolledStudents: 22,
+  },
+  {
+    id: "m3n4o5p6",
+    courseName: "Node.js Essentials",
+    enrolledStudents: 18,
+  },
+  {
+    id: "q7r8s9t0",
+    courseName: "MongoDB Mastery",
+    enrolledStudents: 15,
+  },
+  {
+    id: "u1v2w3x4",
+    courseName: "CSS and Tailwind",
+    enrolledStudents: 28,
+  },
+  {
+    id: "y5z6a7b8",
+    courseName: "JavaScript Advanced Concepts",
+    enrolledStudents: 35,
+  },
+  {
+    id: "c9d0e1f2",
+    courseName: "TypeScript Fundamentals",
+    enrolledStudents: 20,
+  },
+  {
+    id: "g3h4i5j6",
+    courseName: "Express.js Deep Dive",
+    enrolledStudents: 17,
+  },
+  {
+    id: "k7l8m9n1",
+    courseName: "API Development with REST",
+    enrolledStudents: 27,
+  },
+  {
+    id: "o2p3q4r5",
+    courseName: "Next.js Crash Course",
+    enrolledStudents: 32,
+  },
+];

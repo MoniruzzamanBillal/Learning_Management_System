@@ -2,13 +2,14 @@ import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
-  useReactTable,
   getPaginationRowModel,
-  SortingState,
   getSortedRowModel,
+  SortingState,
+  useReactTable,
 } from "@tanstack/react-table";
 
 import { useState } from "react";
+import { Button } from "../button";
 import {
   Table,
   TableBody,
@@ -17,7 +18,6 @@ import {
   TableHeader,
   TableRow,
 } from "../table";
-import { Button } from "../button";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -55,7 +55,10 @@ const ManageCourseTable = <TData, TValue>({
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 return (
-                  <TableHead key={header.id}>
+                  <TableHead
+                    key={header.id}
+                    className=" text-gray-800 text-center "
+                  >
                     {header.isPlaceholder
                       ? null
                       : flexRender(

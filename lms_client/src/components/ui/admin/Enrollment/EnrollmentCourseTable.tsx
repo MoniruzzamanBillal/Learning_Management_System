@@ -3,8 +3,11 @@ import {
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
+  getSortedRowModel,
+  SortingState,
   useReactTable,
 } from "@tanstack/react-table";
+import { useState } from "react";
 import { Button } from "../../button";
 import {
   Table,
@@ -20,10 +23,12 @@ interface DataTableProps<TData, TValue> {
   data: TData[];
 }
 
-const ManageModuleTable = <TData, TValue>({
+const EnrollmentCourseTable = <TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) => {
+  const [sorting, setSorting] = useState<SortingState>([]);
+
   const table = useReactTable({
     data,
     columns,
@@ -33,6 +38,11 @@ const ManageModuleTable = <TData, TValue>({
       pagination: {
         pageSize: 5,
       },
+    },
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
+    state: {
+      sorting,
     },
   });
 
@@ -67,30 +77,11 @@ const ManageModuleTable = <TData, TValue>({
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
               >
-                {row.getVisibleCells().map((cell) => {
-                  const cellValue = cell.getValue();
-
-                  return (
-                    <>
-                      <TableCell key={cell.id}>
-                        {typeof cellValue === "string" ? (
-                          cellValue
-                        ) : Array.isArray(cellValue) ? (
-                          <ul className="list-disc pl-4">
-                            {cellValue?.map((cellItem, index) => (
-                              <li key={index}>{cellItem?.name}</li>
-                            ))}
-                          </ul>
-                        ) : (
-                          flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
-                          )
-                        )}
-                      </TableCell>
-                    </>
-                  );
-                })}
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </TableCell>
+                ))}
               </TableRow>
             ))
           ) : (
@@ -125,4 +116,4 @@ const ManageModuleTable = <TData, TValue>({
   );
 };
 
-export default ManageModuleTable;
+export default EnrollmentCourseTable;
