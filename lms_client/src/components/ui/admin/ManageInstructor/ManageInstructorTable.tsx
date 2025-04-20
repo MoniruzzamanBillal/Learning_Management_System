@@ -78,11 +78,26 @@ const ManageInstructorTable = <TData, TValue>({
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
               >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
+                {row.getVisibleCells().map((cell) => {
+                  const columnKey = cell?.column?.id;
+
+                  return (
+                    <TableCell key={cell.id}>
+                      {columnKey === "profilePicture" ? (
+                        <img
+                          className=" size-[4.5rem]  m-auto rounded-md "
+                          src={cell?.getValue() as string}
+                          alt="profilePicture"
+                        />
+                      ) : (
+                        flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )
+                      )}
+                    </TableCell>
+                  );
+                })}
               </TableRow>
             ))
           ) : (
