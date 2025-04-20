@@ -1,6 +1,6 @@
 import { TDataprops } from "@/components/TestingTable/DummyData";
 import { ColumnDef } from "@tanstack/react-table";
-import { Button } from "../button";
+import { Button } from "../../button";
 
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -11,9 +11,9 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "../dropdown-menu";
+} from "../../dropdown-menu";
 
-const courseColumns: ColumnDef<TDataprops>[] = [
+const CourseColumns: ColumnDef<TDataprops>[] = [
   {
     accessorKey: "name",
     header: ({ column }) => {
@@ -83,4 +83,4 @@ const courseColumns: ColumnDef<TDataprops>[] = [
   },
 ];
 
-export default courseColumns;
+export default CourseColumns;

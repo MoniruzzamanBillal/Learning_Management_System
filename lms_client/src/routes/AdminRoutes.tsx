@@ -3,11 +3,16 @@ import {
   CourseDetail,
   Enrollment,
   ManageCourse,
+  ManageInstructors,
   ManageModule,
   ModuleDetail,
 } from "@/pages/Dashboard/admin";
 
 export const adminRoutes = [
+  {
+    path: "/dashboard/admin/manage-instructor",
+    element: <ManageInstructors />,
+  },
   {
     path: "/dashboard/admin/manage-course",
     element: <ManageCourse />,
