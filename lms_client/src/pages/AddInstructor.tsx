@@ -1,9 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 const AddInstructor = () => {
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+
   const {
     register,
     handleSubmit,
@@ -14,6 +17,8 @@ const AddInstructor = () => {
   const handleAddInstructor = async (data) => {
     console.log("new instructor ");
     console.log(data);
+
+    console.log("image file = ", data?.image[0]);
   };
 
   return (
@@ -57,6 +62,33 @@ const AddInstructor = () => {
                 <span className="text-red-600 text-sm">
                   {errors?.email?.message as string}
                 </span>
+              )}
+            </div>
+
+            {/* profile image  */}
+            <div className="imageContainer flex flex-col gap-y-1">
+              <Label htmlFor="image">Profile Image (Optional)</Label>
+              <Input
+                id="image"
+                type="file"
+                {...register("image")}
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    const previewUrl = URL.createObjectURL(file);
+                    setImagePreview(previewUrl);
+                  } else {
+                    setImagePreview(null);
+                  }
+                }}
+              />
+
+              {imagePreview && (
+                <img
+                  src={imagePreview}
+                  alt="Preview"
+                  className="mt-2 w-32 h-32 object-cover rounded-md border"
+                />
               )}
             </div>
 
