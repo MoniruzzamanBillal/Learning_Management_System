@@ -100,7 +100,6 @@ const AddInstructor = () => {
                   register("image").ref(e);
                   imageInputRef.current = e;
                 }}
-                // ref={imageInputRef}
                 onChange={(e) => {
                   const file = e.target.files?.[0];
                   if (file) {

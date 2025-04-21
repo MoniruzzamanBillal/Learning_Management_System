@@ -4,26 +4,57 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { registerUser } from "@/functions/auth.functions";
 import { useUserRegistrationMutation } from "@/redux/features/auth/auth.api";
-import { TRegistrationPayload } from "@/types/auth.types";
+import { userRegistrationSchema, userSchemas } from "@/schemas/User.schemas";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Label } from "@radix-ui/react-label";
+import { X } from "lucide-react";
+import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
+import { z } from "zod";
 
 const Register = () => {
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const imageInputRef = useRef<HTMLInputElement | null>(null);
+
   const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm();
+  } = useForm({
+    resolver: zodResolver(userSchemas?.userRegistrationSchema),
+  });
 
   const [userRegistration, { isLoading }] = useUserRegistrationMutation();
 
+  // ! for removing a image after select image
+  const handleRemoveImage = () => {
+    setImagePreview(null);
+    if (imageInputRef?.current) {
+      imageInputRef.current.value = "";
+    }
+  };
+
+  type registerUserType = Partial<z.infer<typeof userRegistrationSchema>>;
+
   //   ! for registration
-  const handleRegistration = async (data: TRegistrationPayload) => {
+  const handleRegistration = async (data: registerUserType) => {
+    const imageFile = data?.image?.[0];
+
+    const payload = {
+      name: data?.name,
+      email: data?.email,
+      password: data?.password,
+    };
+
     const formData = new FormData();
 
-    formData.append("data", JSON.stringify(data));
+    if (imageFile) {
+      formData.append("profileImg", imageFile);
+    }
+
+    formData.append("data", JSON.stringify(payload));
 
     const result = await registerUser(formData, userRegistration);
 
@@ -79,6 +110,46 @@ const Register = () => {
                   <span className="text-red-600 text-sm">
                     {errors.email.message as string}
                   </span>
+                )}
+              </div>
+
+              {/* profile image  */}
+              <div className="imageContainer flex flex-col gap-y-1">
+                <Label htmlFor="image">Profile Image (Optional)</Label>
+                <Input
+                  id="image"
+                  type="file"
+                  {...register("image")}
+                  ref={(e) => {
+                    register("image").ref(e);
+                    imageInputRef.current = e;
+                  }}
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      const previewUrl = URL.createObjectURL(file);
+                      setImagePreview(previewUrl);
+                    } else {
+                      setImagePreview(null);
+                    }
+                  }}
+                />
+
+                {imagePreview && (
+                  <div className="relative mt-2 w-fit">
+                    <img
+                      src={imagePreview}
+                      alt="Preview"
+                      className="w-32 h-32 object-cover rounded-md border"
+                    />
+                    <button
+                      type="button"
+                      onClick={handleRemoveImage}
+                      className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600"
+                    >
+                      <X />
+                    </button>
+                  </div>
                 )}
               </div>
 
