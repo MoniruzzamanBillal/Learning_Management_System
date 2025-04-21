@@ -1,18 +1,24 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { addInstructorSchema, userSchemas } from "@/schemas/User.schemas";
+import { userRoleConts } from "@/utils/constants";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { X } from "lucide-react";
 import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 const AddInstructor = () => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const imageInputRef = useRef<HTMLInputElement>(null);
-
+  const imageInputRef = useRef<HTMLInputElement | null>(null);
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm();
+  } = useForm({
+    resolver: zodResolver(userSchemas?.addInstructorSchema),
+  });
 
   // ! for removing a image after select image
   const handleRemoveImage = () => {
@@ -22,12 +28,21 @@ const AddInstructor = () => {
     }
   };
 
+  type AddInstructorFormData = Partial<z.infer<typeof addInstructorSchema>>;
   // ! for adding new instructor
-  const handleAddInstructor = async (data) => {
-    console.log("new instructor ");
-    console.log(data);
+  const handleAddInstructor = async (data: AddInstructorFormData) => {
+    const imageFile = data?.image?.[0];
 
-    console.log("image file = ", data?.image[0]);
+    console.log("image file = ", imageFile);
+
+    const payload = {
+      name: data?.name,
+      email: data?.email,
+      password: data?.password,
+      userRole: userRoleConts?.instructor,
+    };
+
+    console.log(payload);
   };
 
   return (
@@ -81,7 +96,11 @@ const AddInstructor = () => {
                 id="image"
                 type="file"
                 {...register("image")}
-                ref={imageInputRef}
+                ref={(e) => {
+                  register("image").ref(e);
+                  imageInputRef.current = e;
+                }}
+                // ref={imageInputRef}
                 onChange={(e) => {
                   const file = e.target.files?.[0];
                   if (file) {
@@ -105,7 +124,7 @@ const AddInstructor = () => {
                     onClick={handleRemoveImage}
                     className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600"
                   >
-                    ✕
+                    <X />
                   </button>
                 </div>
               )}
