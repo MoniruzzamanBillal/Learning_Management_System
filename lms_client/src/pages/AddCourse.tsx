@@ -5,7 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useAddNewCourseMutation } from "@/redux/features/course/course.api";
 import { courseSchemas } from "@/schemas/Course.schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, Controller } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 
@@ -34,7 +34,7 @@ const AddCourse = () => {
     control,
     formState: { errors, isSubmitting },
   } = useForm({
-    resolver: zodResolver(courseSchemas.addCourseValidationSchema),
+    resolver: zodResolver(courseSchemas?.addCourseValidationSchema),
   });
 
   // ! for adding new course

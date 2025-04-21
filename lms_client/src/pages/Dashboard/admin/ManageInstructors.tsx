@@ -18,7 +18,7 @@ const ManageInstructors = () => {
         </h3>
 
         <Button
-          onClick={() => navigate("/dashboard/admin/manage-instructor")}
+          onClick={() => navigate("/dashboard/admin/add-instructor")}
           className="mb-4 bg-prime100 hover:bg-prime100 cursor-pointer"
         >
           Add Instructors

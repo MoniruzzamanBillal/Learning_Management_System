@@ -1,4 +1,4 @@
-import { AddCourse } from "@/pages";
+import { AddCourse, AddInstructor } from "@/pages";
 import {
   CourseDetail,
   Enrollment,
@@ -12,6 +12,10 @@ export const adminRoutes = [
   {
     path: "/dashboard/admin/manage-instructor",
     element: <ManageInstructors />,
+  },
+  {
+    path: "/dashboard/admin/add-instructor",
+    element: <AddInstructor />,
   },
   {
     path: "/dashboard/admin/manage-course",
