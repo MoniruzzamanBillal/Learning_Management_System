@@ -1,17 +1,26 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 
 const AddInstructor = () => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const imageInputRef = useRef<HTMLInputElement>(null);
 
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm();
+
+  // ! for removing a image after select image
+  const handleRemoveImage = () => {
+    setImagePreview(null);
+    if (imageInputRef?.current) {
+      imageInputRef.current.value = "";
+    }
+  };
 
   // ! for adding new instructor
   const handleAddInstructor = async (data) => {
@@ -72,6 +81,7 @@ const AddInstructor = () => {
                 id="image"
                 type="file"
                 {...register("image")}
+                ref={imageInputRef}
                 onChange={(e) => {
                   const file = e.target.files?.[0];
                   if (file) {
@@ -84,11 +94,20 @@ const AddInstructor = () => {
               />
 
               {imagePreview && (
-                <img
-                  src={imagePreview}
-                  alt="Preview"
-                  className="mt-2 w-32 h-32 object-cover rounded-md border"
-                />
+                <div className="relative mt-2 w-fit">
+                  <img
+                    src={imagePreview}
+                    alt="Preview"
+                    className="w-32 h-32 object-cover rounded-md border"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleRemoveImage}
+                    className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600"
+                  >
+                    ✕
+                  </button>
+                </div>
               )}
             </div>
 
