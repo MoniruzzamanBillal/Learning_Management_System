@@ -36,6 +36,17 @@ const Register = () => {
     }
   };
 
+  // ! for changing the image preview url
+  const changeImagePreviewUrl = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const imageFile = e?.target?.files?.[0];
+    if (imageFile) {
+      const previewUrl = URL.createObjectURL(imageFile);
+      setImagePreview(previewUrl);
+    } else {
+      setImagePreview(null);
+    }
+  };
+
   type registerUserType = Partial<z.infer<typeof userRegistrationSchema>>;
 
   //   ! for registration
@@ -124,15 +135,7 @@ const Register = () => {
                     register("image").ref(e);
                     imageInputRef.current = e;
                   }}
-                  onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (file) {
-                      const previewUrl = URL.createObjectURL(file);
-                      setImagePreview(previewUrl);
-                    } else {
-                      setImagePreview(null);
-                    }
-                  }}
+                  onChange={(e) => changeImagePreviewUrl(e)}
                 />
 
                 {imagePreview && (

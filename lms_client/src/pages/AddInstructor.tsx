@@ -28,6 +28,17 @@ const AddInstructor = () => {
     }
   };
 
+  // ! for changing the image preview url
+  const changeImagePreviewUrl = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const imageFile = e?.target?.files?.[0];
+    if (imageFile) {
+      const previewUrl = URL.createObjectURL(imageFile);
+      setImagePreview(previewUrl);
+    } else {
+      setImagePreview(null);
+    }
+  };
+
   type AddInstructorFormData = Partial<z.infer<typeof addInstructorSchema>>;
   // ! for adding new instructor
   const handleAddInstructor = async (data: AddInstructorFormData) => {
@@ -100,15 +111,7 @@ const AddInstructor = () => {
                   register("image").ref(e);
                   imageInputRef.current = e;
                 }}
-                onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  if (file) {
-                    const previewUrl = URL.createObjectURL(file);
-                    setImagePreview(previewUrl);
-                  } else {
-                    setImagePreview(null);
-                  }
-                }}
+                onChange={(e) => changeImagePreviewUrl(e)}
               />
 
               {imagePreview && (
