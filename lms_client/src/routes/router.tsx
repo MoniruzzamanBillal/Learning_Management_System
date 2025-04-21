@@ -2,9 +2,10 @@ import App from "@/App";
 
 import { createBrowserRouter } from "react-router-dom";
 
-import { HomePage, Login, Register } from "@/pages";
 import DashboardLayout from "@/components/layout/DashboardLayout";
+import { HomePage, Login, Register } from "@/pages";
 import { adminRoutes } from "./AdminRoutes";
+import { InstructorRoutes } from "./InstructorRoutes";
 
 const router = createBrowserRouter([
   {
@@ -34,6 +35,9 @@ const router = createBrowserRouter([
 
           // * admin routes
           ...adminRoutes,
+
+          // * instructor routes
+          ...InstructorRoutes,
 
           //
         ],
