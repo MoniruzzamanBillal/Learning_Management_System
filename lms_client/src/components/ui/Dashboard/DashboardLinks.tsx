@@ -1,10 +1,11 @@
 import { TDashboardLinks } from "@/types/globalTypes";
-import { CiBookmark } from "react-icons/ci";
 import { NavLink } from "react-router-dom";
 
 import { userRoleConts } from "@/utils/constants";
 import { useGetUser } from "@/utils/sharedFunction";
 import { adminLinks } from "./AdminLinks";
+import { InstructorLinks } from "./InstructorLinks";
+import { UserLinks } from "./UserLinks";
 
 const DashboardLinks = () => {
   const userInfo = useGetUser();
@@ -12,27 +13,14 @@ const DashboardLinks = () => {
   let links;
 
   if (userInfo?.userRole === userRoleConts.user) {
-    links = [
-      {
-        name: "Home",
-        path: "/",
-        icon: <CiBookmark className="text-xl font-bold" />,
-      },
-      {
-        name: "Profile",
-        path: "/",
-        icon: <CiBookmark className="text-xl font-bold" />,
-      },
-      {
-        name: "My Courses",
-        path: "/",
-        icon: <CiBookmark className="text-xl font-bold" />,
-      },
-    ];
+    links = UserLinks;
   }
 
   if (userInfo?.userRole === userRoleConts?.admin) {
     links = adminLinks;
+  }
+  if (userInfo?.userRole === userRoleConts?.instructor) {
+    links = InstructorLinks;
   }
 
   return (

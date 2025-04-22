@@ -1,6 +1,8 @@
+import { ManageAssignCourse } from "@/pages/Dashboard/instructor";
+
 export const InstructorRoutes = [
   {
-    path: "/dashboard/instructor",
-    element: <h1>hello </h1>,
+    path: "/dashboard/instructor/assign-courses",
+    element: <ManageAssignCourse />,
   },
 ];

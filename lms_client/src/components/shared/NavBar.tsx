@@ -1,10 +1,10 @@
+import { useGetUser } from "@/utils/sharedFunction";
+import { useState } from "react";
 import { LuUser } from "react-icons/lu";
 import { RiCloseFill, RiMenu3Fill } from "react-icons/ri";
 import { Link } from "react-router-dom";
-import { useState } from "react";
-import { useGetUser } from "@/utils/sharedFunction";
-import Wrapper from "./Wrapper";
 import { Button } from "../ui/button";
+import Wrapper from "./Wrapper";
 
 const Links = [
   { name: "Home", link: "/" },
@@ -30,7 +30,7 @@ const NavBar = () => {
           <Link to={"/"}>
             <div className=" text-2xl cursor-pointer flex items-center  gap-x-1">
               <p className="  text-2xl sm:text-2xl md:text-xl lg:text-3xl font-bold font-headingFont ">
-                LMS
+                MATS <span className=" text-prime50 ">Academy</span>
               </p>
             </div>
           </Link>
