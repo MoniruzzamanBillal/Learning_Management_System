@@ -227,3 +227,41 @@ export const dummyInstructorData: TInstructorDummyData[] = [
       "https://res.cloudinary.com/drmkqpdex/image/upload/v1741693865/user%201.jpg",
   },
 ];
+
+export type TdummyManageAssignCourse = {
+  id: string;
+  name: string;
+  category: string;
+  courseCover: string;
+};
+
+export const dummyManageAssignCourse: TdummyManageAssignCourse[] = [
+  {
+    id: "a1b2c3d4",
+    name: "Mastering Frontend Development",
+    category: "Web Development",
+    courseCover:
+      "https://res.cloudinary.com/dupxfufq9/image/upload/v1745295971/Mastering%20Frontend%20Development%20with%20js%20batch%201.jpg",
+  },
+  {
+    id: "e5f6g7h8",
+    name: "Introduction to Python Programming",
+    category: "Programming",
+    courseCover:
+      "https://res.cloudinary.com/dupxfufq9/image/upload/v1745295971/Mastering%20Frontend%20Development%20with%20js%20batch%201.jpg",
+  },
+  {
+    id: "i9j0k1l2",
+    name: "Data Science Bootcamp",
+    category: "Data Science",
+    courseCover:
+      "https://res.cloudinary.com/dupxfufq9/image/upload/v1745295971/Mastering%20Frontend%20Development%20with%20js%20batch%201.jpg",
+  },
+  {
+    id: "m3n4o5p6",
+    name: "UI/UX Design Essentials",
+    category: "Design",
+    courseCover:
+      "https://res.cloudinary.com/dupxfufq9/image/upload/v1745295971/Mastering%20Frontend%20Development%20with%20js%20batch%201.jpg",
+  },
+];

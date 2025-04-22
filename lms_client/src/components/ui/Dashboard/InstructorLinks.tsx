@@ -16,4 +16,9 @@ export const InstructorLinks = [
     path: "/dashboard/instructor/assign-courses",
     icon: <CiBookmark className="text-xl font-bold" />,
   },
+  {
+    name: "Manage Modules",
+    path: "/dashboard/instructor/manage-module",
+    icon: <CiBookmark className="text-xl font-bold" />,
+  },
 ];
