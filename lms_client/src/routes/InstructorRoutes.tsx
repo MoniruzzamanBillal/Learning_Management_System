@@ -1,4 +1,8 @@
-import { ManageAssignCourse, ManageModule } from "@/pages/Dashboard/instructor";
+import {
+  ManageAssignCourse,
+  ManageModule,
+  ManageVideo,
+} from "@/pages/Dashboard/instructor";
 
 export const InstructorRoutes = [
   {
@@ -8,5 +12,9 @@ export const InstructorRoutes = [
   {
     path: "/dashboard/instructor/manage-module",
     element: <ManageModule />,
+  },
+  {
+    path: "/dashboard/instructor/manage-video",
+    element: <ManageVideo />,
   },
 ];

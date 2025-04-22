@@ -21,4 +21,9 @@ export const InstructorLinks = [
     path: "/dashboard/instructor/manage-module",
     icon: <CiBookmark className="text-xl font-bold" />,
   },
+  {
+    name: "Manage Videos",
+    path: "/dashboard/instructor/manage-video",
+    icon: <CiBookmark className="text-xl font-bold" />,
+  },
 ];
