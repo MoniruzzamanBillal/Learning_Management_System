@@ -1,3 +1,9 @@
+import { dummyManageModule } from "@/components/TestingTable/DummyData";
+import {
+  ManageModuleColumn,
+  ManageModuleTable,
+} from "@/components/ui/instructor/ManageModule";
+
 const ManageModule = () => {
   return (
     <div className="ManageModuleContainer">
@@ -6,11 +12,10 @@ const ManageModule = () => {
 
         {/* table section  */}
         <div className="Tablecontainer mx-auto py-10">
-          <h1>table section </h1>
-          {/* <ManageCourseTable
-            columns={ManageCourseColumn}
-            data={dummyManageAssignCourse}
-          /> */}
+          <ManageModuleTable
+            columns={ManageModuleColumn}
+            data={dummyManageModule}
+          />
         </div>
       </div>
     </div>
