@@ -1,15 +1,15 @@
 import Wrapper from "@/components/shared/Wrapper";
+import { FormSubmitLoading } from "@/components/ui";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@radix-ui/react-label";
-import { Link, useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
-import { useLogInMutation } from "@/redux/features/auth/auth.api";
 import { authLogin } from "@/functions/auth.functions";
-import { TLoginPayload } from "@/types/auth.types";
-import { useAppDispatch } from "@/redux/hook";
+import { useLogInMutation } from "@/redux/features/auth/auth.api";
 import { setUser } from "@/redux/features/auth/auth.slice";
-import { FormSubmitLoading } from "@/components/ui";
+import { useAppDispatch } from "@/redux/hook";
+import { TLoginPayload } from "@/types/auth.types";
+import { Label } from "@radix-ui/react-label";
+import { useForm } from "react-hook-form";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
   const navigate = useNavigate();
