@@ -3,8 +3,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useAddNewCourseMutation } from "@/redux/features/course/course.api";
-import { courseSchemas } from "@/schemas/Course.schemas";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { X } from "lucide-react";
+import { useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
@@ -26,6 +26,9 @@ const categoryOptions = [
 ];
 
 const AddCourse = () => {
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const imageInputRef = useRef<HTMLInputElement | null>(null);
+
   const [addNewCourse, { isLoading }] = useAddNewCourseMutation();
 
   const {
@@ -34,8 +37,27 @@ const AddCourse = () => {
     control,
     formState: { errors, isSubmitting },
   } = useForm({
-    resolver: zodResolver(courseSchemas?.addCourseValidationSchema),
+    // resolver: zodResolver(courseSchemas?.addCourseValidationSchema),
   });
+
+  // ! for changing the image preview url
+  const changeImagePreviewUrl = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const imageFile = e?.target?.files?.[0];
+    if (imageFile) {
+      const previewUrl = URL.createObjectURL(imageFile);
+      setImagePreview(previewUrl);
+    } else {
+      setImagePreview(null);
+    }
+  };
+
+  // ! for removing a image after select image
+  const handleRemoveImage = () => {
+    setImagePreview(null);
+    if (imageInputRef?.current) {
+      imageInputRef.current.value = "";
+    }
+  };
 
   // ! for adding new course
   const handleAddNewCourse = async (data) => {
@@ -44,11 +66,17 @@ const AddCourse = () => {
 
     const formData = new FormData();
 
+    const imageFile = data?.image?.[0];
+
+    if (imageFile) {
+      formData.append("courseCover", imageFile);
+    }
+
     formData.append("data", JSON.stringify(data));
 
-    const result = await addNewCourse(formData);
+    // const result = await addNewCourse(formData);
 
-    console.log(result);
+    // console.log(result);
   };
 
   return (
@@ -80,6 +108,37 @@ const AddCourse = () => {
                 <span className="text-red-600 text-sm">
                   {errors?.name?.message as string}
                 </span>
+              )}
+            </div>
+
+            <div className="imageContainer flex flex-col gap-y-1">
+              <Label htmlFor="image">Course Cover Image </Label>
+              <Input
+                id="image"
+                type="file"
+                {...register("image")}
+                ref={(e) => {
+                  register("image").ref(e);
+                  imageInputRef.current = e;
+                }}
+                onChange={(e) => changeImagePreviewUrl(e)}
+              />
+
+              {imagePreview && (
+                <div className="relative mt-2 w-fit">
+                  <img
+                    src={imagePreview}
+                    alt="Preview"
+                    className="w-32 h-32 object-cover rounded-md border"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleRemoveImage}
+                    className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600"
+                  >
+                    <X />
+                  </button>
+                </div>
               )}
             </div>
 
