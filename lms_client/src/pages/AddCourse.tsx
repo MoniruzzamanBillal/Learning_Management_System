@@ -41,6 +41,14 @@ const AddCourse = () => {
   const handleAddNewCourse = async (data) => {
     console.log("new course ");
     console.log(data);
+
+    const formData = new FormData();
+
+    formData.append("data", JSON.stringify(data));
+
+    const result = await addNewCourse(formData);
+
+    console.log(result);
   };
 
   return (

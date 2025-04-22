@@ -1,11 +1,11 @@
 import axios from "axios";
-import AppError from "../../Error/AppError";
 import httpStatus from "http-status";
-import config from "../../config";
-import { paymentModel } from "./payment.model";
-import { PAYMENTSTATUS } from "./payment.constant";
 import mongoose from "mongoose";
+import config from "../../config";
+import AppError from "../../Error/AppError";
 import { courseEnrollmentModel } from "../CourseEnrollment/CourseEnrollment.model";
+import { PAYMENTSTATUS } from "./payment.constant";
+import { paymentModel } from "./payment.model";
 
 // ! for validating payment
 const validatePayment = async (payload: any) => {

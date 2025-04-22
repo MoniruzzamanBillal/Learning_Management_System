@@ -1,9 +1,10 @@
-import { Router } from "express";
+import { NextFunction, Request, Response, Router } from "express";
 import authCheck from "../../middleware/authCheck";
-import { UserRole } from "../user/user.constants";
 import validateRequest from "../../middleware/validateRequest";
-import { courseValidations } from "./course.validation";
+import { upload } from "../../util/SendImageCloudinary";
+import { UserRole } from "../user/user.constants";
 import { courseController } from "./course.controller";
+import { courseValidations } from "./course.validation";
 
 const router = Router();
 
@@ -14,6 +15,12 @@ router.get("/all-courses", courseController.getAllCourses);
 router.post(
   "/add-course",
   authCheck(UserRole.admin),
+  upload.single("courseCover"),
+  (req: Request, res: Response, next: NextFunction) => {
+    req.body = JSON.parse(req.body?.data);
+
+    next();
+  },
   validateRequest(courseValidations.crateCourseValidationSchema),
   courseController.createCourse
 );
@@ -32,7 +39,7 @@ router.patch(
 // ! for publishing a course
 router.patch(
   "/publish-course/:id",
-  authCheck(UserRole.admin),
+  // authCheck(UserRole.admin),
   courseController.publishCourse
 );
 

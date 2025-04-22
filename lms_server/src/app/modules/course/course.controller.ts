@@ -1,11 +1,11 @@
+import httpStatus from "http-status";
 import catchAsync from "../../util/catchAsync";
 import sendResponse from "../../util/sendResponse";
 import { courseServices } from "./course.service";
-import httpStatus from "http-status";
 
 // ! for crating a course
 const createCourse = catchAsync(async (req, res) => {
-  const result = await courseServices.addCourse(req.body);
+  const result = await courseServices.addCourse(req?.body, req?.file);
 
   sendResponse(res, {
     statusCode: httpStatus.CREATED,

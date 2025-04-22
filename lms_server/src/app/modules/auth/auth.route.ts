@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response, Router } from "express";
 import validateRequest from "../../middleware/validateRequest";
+import { upload } from "../../util/SendImageCloudinary";
 import { userValidationSchemas } from "../user/user.validation";
 import { authControllers } from "./auth.controller";
-import { upload } from "../../util/SendImageCloudinary";
 import { authValidations } from "./auth.validation";
 
 const router = Router();

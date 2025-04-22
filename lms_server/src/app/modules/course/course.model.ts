@@ -8,6 +8,9 @@ const courseSchema = new Schema<TCourse>(
     price: { type: Number, required: true },
     category: { type: String, required: true },
     published: { type: Boolean, default: false },
+    courseCover: {
+      type: String,
+    },
     instructors: [
       {
         type: Schema.Types.ObjectId,

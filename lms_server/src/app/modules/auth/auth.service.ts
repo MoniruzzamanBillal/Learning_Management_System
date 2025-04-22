@@ -1,11 +1,11 @@
+import bcrypt from "bcrypt";
+import httpStatus from "http-status";
+import config from "../../config";
 import AppError from "../../Error/AppError";
 import { SendImageCloudinary } from "../../util/SendImageCloudinary";
 import { TUser } from "../user/user.interface";
 import { userModel } from "../user/user.model";
-import httpStatus from "http-status";
-import bcrypt from "bcrypt";
 import { createToken } from "./auth.util";
-import config from "../../config";
 
 // ! crate user
 const createUserIntoDB = async (payload: Partial<TUser>, file: any) => {

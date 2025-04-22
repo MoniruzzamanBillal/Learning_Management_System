@@ -1,15 +1,16 @@
-import { userModel } from "../user/user.model";
-import AppError from "../../Error/AppError";
 import httpStatus from "http-status";
-import { courseModel } from "../course/course.model";
-import { sslServices } from "../SSL/SSL.service";
 import mongoose from "mongoose";
-import { paymentModel } from "../payment/payment.model";
-import { courseEnrollmentModel } from "./CourseEnrollment.model";
+import AppError from "../../Error/AppError";
+import { courseModel } from "../course/course.model";
 import { moduleModel } from "../courseModule/module.model";
+import { paymentModel } from "../payment/payment.model";
+import { sslServices } from "../SSL/SSL.service";
+
+import { userModel } from "../user/user.model";
 import { videoModel } from "../VideoModule/video.model";
 import { videoProgressStatus } from "../VideoProgress/VideoProgress.constants";
 import { videoProgressModel } from "../VideoProgress/VideoProgress.model";
+import { courseEnrollmentModel } from "./CourseEnrollment.model";
 
 // ! for enrolling into a course
 const enrollInCourse = async (payload: { user: string; course: string }) => {

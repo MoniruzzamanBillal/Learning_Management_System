@@ -1,12 +1,26 @@
+import httpStatus from "http-status";
 import AppError from "../../Error/AppError";
+import { SendImageCloudinary } from "../../util/SendImageCloudinary";
 import { userModel } from "../user/user.model";
 import { TCourse } from "./course.interface";
-import httpStatus from "http-status";
 import { courseModel } from "./course.model";
 
 // ! for crating a course
-const addCourse = async (payload: TCourse) => {
+const addCourse = async (payload: TCourse, file: any) => {
   const { instructors } = payload;
+
+  if (file) {
+    const name = (payload?.name as string).trim();
+    const path = (file?.path as string).trim();
+
+    const cloudinaryResponse = await SendImageCloudinary(
+      path as string,
+      name as string
+    );
+
+    const courseCover = cloudinaryResponse?.secure_url as string;
+    payload.courseCover = courseCover;
+  }
 
   await Promise.all(
     instructors?.map(async (instructor) => {
