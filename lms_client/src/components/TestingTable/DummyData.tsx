@@ -265,3 +265,43 @@ export const dummyManageAssignCourse: TdummyManageAssignCourse[] = [
       "https://res.cloudinary.com/dupxfufq9/image/upload/v1745295971/Mastering%20Frontend%20Development%20with%20js%20batch%201.jpg",
   },
 ];
+
+export type TManageModule = {
+  id: string;
+  moduleName: string;
+  courseName: string;
+  videos: number;
+};
+
+export const dummyManageModule: TManageModule[] = [
+  {
+    id: "m3n4o5p6",
+    moduleName: "Introduction to HTML",
+    courseName: "Mastering Frontend Development",
+    videos: 4,
+  },
+  {
+    id: "a1b2c3d4",
+    moduleName: "CSS Basics and Styling",
+    courseName: "Mastering Frontend Development",
+    videos: 6,
+  },
+  {
+    id: "e5f6g7h8",
+    moduleName: "JavaScript Fundamentals",
+    courseName: "Mastering Frontend Development",
+    videos: 8,
+  },
+  {
+    id: "i9j0k1l2",
+    moduleName: "Responsive Design",
+    courseName: "Mastering Frontend Development",
+    videos: 5,
+  },
+  {
+    id: "q7r8s9t0",
+    moduleName: "Project: Build a Portfolio",
+    courseName: "Mastering Frontend Development",
+    videos: 3,
+  },
+];
