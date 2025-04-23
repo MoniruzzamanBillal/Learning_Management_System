@@ -1,4 +1,5 @@
 import {
+  AddModule,
   AssignCourseDetail,
   InstructorModule,
   InstructorVideoDetail,
@@ -23,6 +24,10 @@ export const InstructorRoutes = [
   {
     path: "/dashboard/instructor/module-detail/:moduleId",
     element: <InstructorModule />,
+  },
+  {
+    path: "/dashboard/instructor/add-module",
+    element: <AddModule />,
   },
   {
     path: "/dashboard/instructor/manage-video",

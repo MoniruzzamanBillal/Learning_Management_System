@@ -4,3 +4,4 @@ export { default as InstructorVideoDetail } from "./InstructorVideoDetail";
 export { default as ManageAssignCourse } from "./ManageAssignCourse";
 export { default as ManageModule } from "./ManageModule";
 export { default as ManageVideo } from "./ManageVideo";
+export { default as AddModule } from "./AddModule";

@@ -4,7 +4,7 @@ import {
   ManageModuleColumn,
   ManageModuleTable,
 } from "@/components/ui/instructor/ManageModule";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 const AssignCourseDetail = () => {
   const { courseId } = useParams();
@@ -40,9 +40,11 @@ const AssignCourseDetail = () => {
 
           {/* add  button section  */}
           <div className=" rightSection btnSection   ">
-            <Button className=" bg-prime100 hover:bg-prime200 ">
-              Add New Module
-            </Button>
+            <Link to={"/dashboard/instructor/add-module"}>
+              <Button className=" bg-prime100 hover:bg-prime200 ">
+                Add New Module
+              </Button>
+            </Link>
           </div>
 
           {/*  */}
