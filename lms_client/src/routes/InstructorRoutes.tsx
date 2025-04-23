@@ -1,6 +1,7 @@
 import {
   AssignCourseDetail,
   InstructorModule,
+  InstructorVideoDetail,
   ManageAssignCourse,
   ManageModule,
   ManageVideo,
@@ -26,5 +27,9 @@ export const InstructorRoutes = [
   {
     path: "/dashboard/instructor/manage-video",
     element: <ManageVideo />,
+  },
+  {
+    path: "/dashboard/instructor/video-detail/:videoId",
+    element: <InstructorVideoDetail />,
   },
 ];

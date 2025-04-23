@@ -59,7 +59,7 @@ const ManageVideoColumn: ColumnDef<TManageVideo>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem>
-              <Link to={`/dashboard/instructor/module-detail/${rowData?.id}`}>
+              <Link to={`/dashboard/instructor/video-detail/${rowData?.id}`}>
                 View Details
               </Link>
             </DropdownMenuItem>

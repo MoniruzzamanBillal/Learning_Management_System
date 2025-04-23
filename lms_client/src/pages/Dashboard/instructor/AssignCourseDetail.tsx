@@ -13,7 +13,7 @@ const AssignCourseDetail = () => {
 
   return (
     <div className="AssignCourseDetailContainer">
-      <div className="AssignCourseDetailWrapper bg-gray-100 border border-gray-300  shadow rounded-md p-4">
+      <div className="AssignCourseDetailWrapper bg-gray-100 border border-gray-300  shadow rounded-md p-4 ">
         <h3 className="brand text-2xl font-medium mb-6 underline  ">
           Course Detail :
         </h3>
@@ -27,7 +27,7 @@ const AssignCourseDetail = () => {
             </p>
 
             {/* course published */}
-            <p className="courseName">
+            <p className="coursePublished">
               <span className=" font-bold ">Course Published : </span> false
             </p>
 
