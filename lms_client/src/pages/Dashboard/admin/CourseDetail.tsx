@@ -5,7 +5,7 @@ const CourseDetail = () => {
 
   return (
     <div className="CourseDetailContainer">
-      <div className="CourseDetailWrapper bg-gray-100 border border-gray-300  shadow rounded-md p-4">
+      <div className="CourseDetailWrapper bg-gray-100 border border-gray-300  shadow rounded-md p-3 ">
         <h3 className="brand text-3xl font-medium mb-4 underline  ">
           Course Detail :
         </h3>
