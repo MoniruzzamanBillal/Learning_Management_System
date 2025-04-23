@@ -1,10 +1,10 @@
+import httpStatus from "http-status";
 import mongoose from "mongoose";
 import AppError from "../../Error/AppError";
 import { courseModel } from "../course/course.model";
+import { userModel } from "../user/user.model";
 import { TModule } from "./module.interface";
 import { moduleModel } from "./module.model";
-import httpStatus from "http-status";
-import { userModel } from "../user/user.model";
 
 // ! for crating a module
 const addModule = async (payload: TModule) => {
@@ -14,6 +14,13 @@ const addModule = async (payload: TModule) => {
 
   if (!courseData) {
     throw new AppError(httpStatus.BAD_REQUEST, "This Course don't exist!!!");
+  }
+
+  if (courseData?.published) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "This Course is already published , you can't add new module !!!!"
+    );
   }
 
   const instructorData = await userModel.findById(instructor);
