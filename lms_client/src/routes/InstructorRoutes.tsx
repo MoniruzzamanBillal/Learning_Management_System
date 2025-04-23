@@ -1,4 +1,5 @@
 import {
+  AssignCourseDetail,
   InstructorModule,
   ManageAssignCourse,
   ManageModule,
@@ -9,6 +10,10 @@ export const InstructorRoutes = [
   {
     path: "/dashboard/instructor/assign-courses",
     element: <ManageAssignCourse />,
+  },
+  {
+    path: "/dashboard/instructor/assign-course-detail/:courseId",
+    element: <AssignCourseDetail />,
   },
   {
     path: "/dashboard/instructor/manage-module",

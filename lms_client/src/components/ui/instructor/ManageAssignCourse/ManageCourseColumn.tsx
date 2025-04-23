@@ -62,7 +62,11 @@ const ManageCourseColumn: ColumnDef<TdummyManageAssignCourse>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem>
-              <Link to={"/"}>View Details</Link>
+              <Link
+                to={`/dashboard/instructor/assign-course-detail/${rowData?.id}`}
+              >
+                View Details
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => console.log(rowData?.id)}>
