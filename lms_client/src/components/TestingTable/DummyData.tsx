@@ -305,3 +305,52 @@ export const dummyManageModule: TManageModule[] = [
     videos: 3,
   },
 ];
+
+export type TManageVideo = {
+  id: string;
+  moduleName: string;
+  videoTitle: string;
+};
+
+export const dummyManageVideo: TManageVideo[] = [
+  {
+    id: "v1a2b3c4",
+    moduleName: "Introduction to HTML",
+    videoTitle: "HTML Structure",
+  },
+  {
+    id: "v5d6e7f8",
+    moduleName: "Introduction to HTML",
+    videoTitle: "Basic HTML Tags",
+  },
+  {
+    id: "v9g0h1i2",
+    moduleName: "CSS Basics and Styling",
+    videoTitle: "CSS Selectors",
+  },
+  {
+    id: "v3j4k5l6",
+    moduleName: "CSS Basics and Styling",
+    videoTitle: "CSS Box Model",
+  },
+  {
+    id: "v7m8n9o0",
+    moduleName: "JavaScript Fundamentals",
+    videoTitle: "Variables and Data Types",
+  },
+  {
+    id: "v1p2q3r4",
+    moduleName: "JavaScript Fundamentals",
+    videoTitle: "Functions and Scope",
+  },
+  {
+    id: "v5s6t7u8",
+    moduleName: "Responsive Design",
+    videoTitle: "Media Queries",
+  },
+  {
+    id: "v9v0w1x2",
+    moduleName: "Responsive Design",
+    videoTitle: "Flexbox & Grid Layouts",
+  },
+];

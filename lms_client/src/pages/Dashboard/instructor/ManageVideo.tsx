@@ -1,3 +1,9 @@
+import { dummyManageVideo } from "@/components/TestingTable/DummyData";
+import {
+  ManageVideoColumn,
+  ManageVideoTable,
+} from "@/components/ui/instructor/ManageVideo";
+
 const ManageVideo = () => {
   return (
     <div className="ManageVideoContainer">
@@ -6,11 +12,10 @@ const ManageVideo = () => {
 
         {/* table section  */}
         <div className="Tablecontainer mx-auto py-10">
-          <h1>table section </h1>
-          {/* <ManageModuleTable
-            columns={ManageModuleColumn}
-            data={dummyManageModule}
-          /> */}
+          <ManageVideoTable
+            columns={ManageVideoColumn}
+            data={dummyManageVideo}
+          />
         </div>
       </div>
     </div>
