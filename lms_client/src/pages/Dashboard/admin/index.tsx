@@ -4,3 +4,6 @@ export { default as ManageCourse } from "./ManageCourse";
 export { default as ManageInstructors } from "./ManageInstructors";
 export { default as ManageModule } from "./ManageModule";
 export { default as ModuleDetail } from "./ModuleDetail";
+
+export { default as AddCourse } from "./AddCourse";
+export { default as AddInstructor } from "./AddInstructor";

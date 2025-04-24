@@ -2,7 +2,6 @@ import { FormSubmitLoading } from "@/components/ui";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { useAddNewCourseMutation } from "@/redux/features/course/course.api";
 import {
   addCourseValidationSchema,
@@ -12,9 +11,26 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { X } from "lucide-react";
 import { useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import ReactQuill from "react-quill";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import { z } from "zod";
+
+import "react-quill/dist/quill.snow.css";
+
+const modules = {
+  toolbar: [
+    [{ header: [1, 2, 3, 4, false] }],
+    [{ font: [] }],
+    ["bold", "italic", "underline", "strike"],
+    [
+      { list: "ordered" },
+      { list: "bullet" },
+      { indent: "-1" },
+      { indent: "+1" },
+    ],
+  ],
+};
 
 const animatedComponents = makeAnimated();
 
@@ -91,9 +107,11 @@ const AddCourse = () => {
 
     formData.append("data", JSON.stringify(payload));
 
-    const result = await addNewCourse(formData);
+    console.log(payload);
 
-    console.log(result);
+    // const result = await addNewCourse(formData);
+
+    // console.log(result);
   };
 
   return (
@@ -131,6 +149,7 @@ const AddCourse = () => {
                 )}
               </div>
 
+              {/* image field  */}
               <div className="imageContainer flex flex-col gap-y-1">
                 <Label htmlFor="image">Course Cover Image </Label>
                 <Input
@@ -163,16 +182,25 @@ const AddCourse = () => {
               </div>
 
               {/* description field  */}
-              <div className="descriptionContainer flex flex-col gap-y-1.5">
+              <div className="descriptionContainer flex flex-col gap-y-1.5 h-[22rem]  ">
                 <Label htmlFor="description">Course Description </Label>
-                <Textarea
-                  id="description"
-                  className="  "
-                  placeholder="Enter Course Description "
-                  {...register("description", {
-                    required: "Course Description is required !!!",
-                  })}
+
+                <Controller
+                  name="description"
+                  control={control}
+                  defaultValue=""
+                  rules={{ required: "Course Description is required" }}
+                  render={({ field }) => (
+                    <ReactQuill
+                      theme="snow"
+                      value={field.value}
+                      onChange={field.onChange}
+                      className="h-full w-full font-medium"
+                      modules={modules}
+                    />
+                  )}
                 />
+
                 {errors?.description && (
                   <span className="text-red-600 text-sm">
                     {errors?.description?.message as string}
@@ -182,7 +210,7 @@ const AddCourse = () => {
 
               {/* price  */}
 
-              <div className="priceContainer flex flex-col gap-y-1.5">
+              <div className="priceContainer flex flex-col gap-y-1.5 pt-[3rem] ">
                 <Label htmlFor="price">Course Price</Label>
                 <Input
                   id="price"

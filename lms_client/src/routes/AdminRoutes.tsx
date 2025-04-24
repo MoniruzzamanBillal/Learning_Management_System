@@ -1,5 +1,6 @@
-import { AddCourse, AddInstructor } from "@/pages";
 import {
+  AddCourse,
+  AddInstructor,
   CourseDetail,
   Enrollment,
   ManageCourse,
