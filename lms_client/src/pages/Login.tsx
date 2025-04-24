@@ -20,7 +20,7 @@ const Login = () => {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm();
+  } = useForm<TLoginPayload>();
 
   // ! for login
   const handleLogin = async (data: TLoginPayload) => {

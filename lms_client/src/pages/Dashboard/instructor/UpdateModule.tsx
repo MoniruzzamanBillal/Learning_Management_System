@@ -44,7 +44,7 @@ const UpdateModule = () => {
         </h1>
 
         {/* add module form  */}
-        <div className="addModuleForm p-1 w-[95%] xsm:w-[85%] sm:w-[78%] md:w-[70%] xmd:w-[65%] lg:w-[55%] m-auto">
+        <div className="addModuleForm p-1 w-[98%] xsm:w-[92%] sm:w-[85%] md:w-[80%] xmd:w-[75%] lg:w-[65%] m-auto ">
           <form
             onSubmit={handleSubmit(handleUpdateModule)}
             className=" flex flex-col gap-y-4 "
