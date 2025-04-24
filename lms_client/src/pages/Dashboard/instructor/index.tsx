@@ -5,3 +5,4 @@ export { default as ManageAssignCourse } from "./ManageAssignCourse";
 export { default as ManageModule } from "./ManageModule";
 export { default as ManageVideo } from "./ManageVideo";
 export { default as AddModule } from "./AddModule";
+export { default as UpdateModule } from "./UpdateModule";

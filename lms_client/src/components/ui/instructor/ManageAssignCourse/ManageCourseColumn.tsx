@@ -69,8 +69,11 @@ const ManageCourseColumn: ColumnDef<TdummyManageAssignCourse>[] = [
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => console.log(rowData?.id)}>
-              Add New Module
+
+            <DropdownMenuItem>
+              <Link to={`/dashboard/instructor/add-module`}>
+                Add New Module
+              </Link>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

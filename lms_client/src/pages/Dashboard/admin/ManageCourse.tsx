@@ -17,7 +17,7 @@ const ManageCourse = () => {
 
         <Button
           onClick={() => navigate("/dashboard/admin/add-course")}
-          className="mb-4 bg-prime100 hover:bg-prime100 cursor-pointer"
+          className="mb-4 bg-prime100 hover:bg-prime200 cursor-pointer"
         >
           Add Course
         </Button>

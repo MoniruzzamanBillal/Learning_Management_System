@@ -5,7 +5,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 const InstructorModule = () => {
   const { moduleId } = useParams();
@@ -48,9 +48,12 @@ const InstructorModule = () => {
 
           {/* add , update button section  */}
           <div className=" rightSection btnSection  flex justify-between  gap-x-3 ">
-            <Button className=" bg-prime100 hover:bg-prime200 ">
-              Update Module
-            </Button>
+            <Link to={`/dashboard/instructor/update-module/${moduleId}`}>
+              <Button className=" bg-prime100 hover:bg-prime200 ">
+                Update Module
+              </Button>
+            </Link>
+
             {/*  */}
             <Button className=" bg-green-700/95 hover:bg-green-800/95 ">
               Add New Video

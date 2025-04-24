@@ -80,7 +80,9 @@ const ManageModuleColumn: ColumnDef<TManageModule>[] = [
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <Link to={"/"}>Update Module</Link>
+              <Link to={`/dashboard/instructor/update-module/${rowData?.id}`}>
+                Update Module
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => console.log(rowData?.id)}>

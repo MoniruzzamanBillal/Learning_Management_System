@@ -1,0 +1,121 @@
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Controller, useForm } from "react-hook-form";
+import { useParams } from "react-router-dom";
+import Select from "react-select";
+
+const courseOptions = [
+  { value: "react", label: "React" },
+  { value: "node", label: "Node.js" },
+  { value: "next", label: "Next.js" },
+  { value: "mongo", label: "MongoDB" },
+];
+
+type TModuleFormData = {
+  course: string;
+  title: string;
+};
+
+const UpdateModule = () => {
+  const { moduleId } = useParams();
+
+  console.log("module id = ", moduleId);
+
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors, isSubmitting },
+  } = useForm<TModuleFormData>();
+
+  // ! for updating new module
+  const handleUpdateModule = async (data: TModuleFormData) => {
+    console.log("Update  module ");
+
+    console.log(data);
+  };
+
+  return (
+    <div className="UpdateModuleContainer py-8 bg-gray-100 border border-gray-300 p-3 shadow rounded-md">
+      <div className="UpdateModuleWrapper">
+        <h1 className="mb-8 px-3 xsm:px-4 sm:px-5 md:px-6 font-bold text-2xl md:text-3xl text-center">
+          Update Module
+        </h1>
+
+        {/* add module form  */}
+        <div className="addModuleForm p-1 w-[95%] xsm:w-[85%] sm:w-[78%] md:w-[70%] xmd:w-[65%] lg:w-[55%] m-auto">
+          <form
+            onSubmit={handleSubmit(handleUpdateModule)}
+            className=" flex flex-col gap-y-4 "
+          >
+            {/* course name  */}
+            <div className="courseContainer flex flex-col gap-y-1.5">
+              <Label htmlFor="course">Course Name </Label>
+              <Controller
+                name="course"
+                control={control}
+                rules={{ required: "Select one Course" }}
+                render={({ field }) => (
+                  <Select
+                    {...field}
+                    options={courseOptions}
+                    value={courseOptions?.find(
+                      (option) => option?.value === field?.value
+                    )}
+                    onChange={(selectedOption) =>
+                      field.onChange(selectedOption?.value)
+                    }
+                    className="react-select-container"
+                    classNamePrefix="react-select"
+                    placeholder="Select a course"
+                  />
+                )}
+              />
+
+              {errors?.course && (
+                <span className="text-red-600 text-sm">
+                  {errors?.course?.message as string}
+                </span>
+              )}
+            </div>
+
+            {/* module title  */}
+            <div className="titleContainer flex flex-col gap-y-1.5">
+              <Label htmlFor="title">Course Name </Label>
+              <Input
+                id="title"
+                type="text"
+                className="  "
+                placeholder="Enter Course Name "
+                {...register("title", {
+                  required: "Module Name is required !!!",
+                })}
+              />
+              {errors?.title && (
+                <span className="text-red-600 text-sm">
+                  {errors?.title?.message as string}
+                </span>
+              )}
+            </div>
+
+            <Button
+              disabled={isSubmitting}
+              className={`px-3 xsm:px-4 sm:px-5 md:px-6 font-semibold text-xs sm:text-sm md:text-base  active:scale-95 duration-500  bg-prime50 hover:bg-prime100 ${
+                isSubmitting
+                  ? " cursor-not-allowed bg-gray-600 "
+                  : "bg-prime50 hover:bg-prime100  "
+              }   `}
+            >
+              {isSubmitting ? "Updating Module..." : "Update Module "}
+            </Button>
+          </form>
+        </div>
+
+        {/*  */}
+      </div>
+    </div>
+  );
+};
+
+export default UpdateModule;
