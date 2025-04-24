@@ -14,8 +14,8 @@ const InstructorVideoDetail = () => {
         </h3>
 
         {/* video detail body  */}
-        <div className="videoDetailBody  flex justify-between  ">
-          <div className="bodyLeft text-lg flex flex-col gap-y-2">
+        <div className="videoDetailBody    ">
+          <div className=" text-lg flex flex-col gap-y-2">
             {/* course name  */}
             <p className="courseName">
               <span className=" font-bold ">Course name : </span> mastering web
@@ -43,13 +43,6 @@ const InstructorVideoDetail = () => {
             <p className="videoName">
               <span className=" font-bold ">Video Title : </span>HTML FORM
             </p>
-          </div>
-
-          {/* add  button section  */}
-          <div className=" rightSection btnSection   ">
-            <Button className=" bg-prime100 hover:bg-prime200 ">
-              Add New Video
-            </Button>
           </div>
         </div>
 

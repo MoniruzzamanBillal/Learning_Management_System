@@ -2,8 +2,8 @@
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit",
-    "source.fixAll.tslint": "explicit"
-    // "source.organizeImports": "explicit"
+    "source.fixAll.tslint": "explicit",
+    "source.organizeImports": "explicit"
   },
   "css.lint.unknownAtRules": "ignore",
   "cSpell.words": ["CGPA", "lucide", "Ninish", "Routinefeedback", "tailwindcss"]

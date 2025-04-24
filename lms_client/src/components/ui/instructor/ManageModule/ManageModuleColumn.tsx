@@ -86,7 +86,9 @@ const ManageModuleColumn: ColumnDef<TManageModule>[] = [
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => console.log(rowData?.id)}>
-              Add New Video
+              <Link to={`/dashboard/instructor/add-video/${rowData?.id}`}>
+                Add New Video
+              </Link>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
