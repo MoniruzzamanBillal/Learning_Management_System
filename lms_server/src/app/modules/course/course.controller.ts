@@ -42,7 +42,8 @@ const getSingleCourse = catchAsync(async (req, res) => {
 // ! for updating a course
 const updateCourse = catchAsync(async (req, res) => {
   const result = await courseServices.updateCourseData(
-    req.body,
+    req?.body,
+    req?.file,
     req?.params?.id
   );
 

@@ -31,7 +31,13 @@ router.get("/course-detail/:id", courseController.getSingleCourse);
 // ! for updating a course
 router.patch(
   "/update-course/:id",
+  upload.single("courseCover"),
   // authCheck(UserRole.admin),
+  (req: Request, res: Response, next: NextFunction) => {
+    req.body = JSON.parse(req.body?.data);
+
+    next();
+  },
   validateRequest(courseValidations.updateCourseValidationSchema),
   courseController.updateCourse
 );

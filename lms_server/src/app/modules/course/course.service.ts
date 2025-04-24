@@ -64,12 +64,26 @@ const getSingleCoureData = async (courseId: string) => {
 // ! for updating course data
 const updateCourseData = async (
   payload: Partial<TCourse>,
+  file: any,
   courseId: string
 ) => {
   const courseData = await courseModel.findById(courseId);
 
   if (!courseData) {
     throw new AppError(httpStatus.BAD_REQUEST, "This Course don't exist!!!");
+  }
+
+  if (file) {
+    const name = (payload?.name as string).trim();
+    const path = (file?.path as string).trim();
+
+    const cloudinaryResponse = await SendImageCloudinary(
+      path as string,
+      name as string
+    );
+
+    const courseCover = cloudinaryResponse?.secure_url as string;
+    payload.courseCover = courseCover;
   }
 
   const updatedResult = await courseModel.findByIdAndUpdate(courseId, payload, {
