@@ -82,14 +82,14 @@ const UpdateModule = () => {
 
             {/* module title  */}
             <div className="titleContainer flex flex-col gap-y-1.5">
-              <Label htmlFor="title">Course Name </Label>
+              <Label htmlFor="title">Module Title </Label>
               <Input
                 id="title"
                 type="text"
                 className="  "
-                placeholder="Enter Course Name "
+                placeholder="Enter Module Title "
                 {...register("title", {
-                  required: "Module Name is required !!!",
+                  required: "Module Title is required !!!",
                 })}
               />
               {errors?.title && (

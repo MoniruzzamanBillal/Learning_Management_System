@@ -1,10 +1,18 @@
+import DeleteModal from "@/components/shared/DeleteModal";
 import { Button } from "@/components/ui/button";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+
+const alertMessage =
+  " This action cannot be undone. This will permanently delete the Video .";
 
 const InstructorVideoDetail = () => {
   const { videoId } = useParams();
 
-  console.log("video id = ", videoId);
+  // ! for handling video delete
+  const handleDeleteVideo = async (videoId: string) => {
+    console.log("video deleted !!!!");
+    console.log("vide id = ", videoId);
+  };
 
   return (
     <div className="InstructorVideoDetailContainer">
@@ -57,13 +65,22 @@ const InstructorVideoDetail = () => {
           </div>
 
           <div className="btnSection  flex   gap-x-3 py-4 ">
-            <Button className=" bg-green-700/95 hover:bg-green-800/95 ">
-              Update Video
-            </Button>
+            <Link to={`/dashboard/instructor/update-video/${videoId}`}>
+              <Button className=" bg-green-700/95 hover:bg-green-800/95 ">
+                Update Video
+              </Button>
+            </Link>
+
             {/*  */}
-            <Button className="  bg-red-600 hover:bg-red-700 ">
-              Delete Video
-            </Button>
+
+            <div className="deleteButton">
+              <DeleteModal
+                id={videoId as string}
+                alertMessage={alertMessage}
+                handleDeleteFunction={handleDeleteVideo}
+                btnText=" Delete Video"
+              />
+            </div>
           </div>
         </div>
 
