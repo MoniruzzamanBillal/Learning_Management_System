@@ -65,7 +65,9 @@ const ManageVideoColumn: ColumnDef<TManageVideo>[] = [
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <Link to={"/"}>Update Video</Link>
+              <Link to={`/dashboard/instructor/update-video/${rowData?.id}`}>
+                Update Video
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => console.log(rowData?.id)}>

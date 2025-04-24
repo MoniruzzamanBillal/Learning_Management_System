@@ -55,9 +55,11 @@ const InstructorModule = () => {
             </Link>
 
             {/*  */}
-            <Button className=" bg-green-700/95 hover:bg-green-800/95 ">
-              Add New Video
-            </Button>
+            <Link to={`/dashboard/instructor/add-video/${moduleId}`}>
+              <Button className=" bg-green-700/95 hover:bg-green-800/95 ">
+                Add New Video
+              </Button>
+            </Link>
 
             {/*  */}
           </div>
@@ -81,9 +83,11 @@ const InstructorModule = () => {
                     <h1>video </h1>
                   </div>
                   <div className="btnSection  flex   gap-x-3 py-4 ">
-                    <Button className=" bg-green-700/95 hover:bg-green-800/95 ">
-                      Update Video
-                    </Button>
+                    <Link to={`/dashboard/instructor/update-video/:videoId`}>
+                      <Button className=" bg-green-700/95 hover:bg-green-800/95 ">
+                        Update Video
+                      </Button>
+                    </Link>
                     {/*  */}
                     <Button className="  bg-red-600 hover:bg-red-700 ">
                       Delete Video

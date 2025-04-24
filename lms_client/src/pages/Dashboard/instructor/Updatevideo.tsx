@@ -1,58 +1,37 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { TAddVideo } from "@/types/video.types";
-import { useGetUser } from "@/utils/sharedFunction";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 
-const AddVideo = () => {
-  const { moduleId } = useParams();
-  const userInfo = useGetUser();
+const Updatevideo = () => {
+  const { videoId } = useParams();
 
-  //   console.log("user info = ", userInfo);
-  //   console.log("user id = ", userInfo?.userId);
-  //   console.log("module id = ", moduleId);
+  console.log("video id = ", videoId);
 
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<TAddVideo>();
+  } = useForm();
 
-  //   ! for adding new video
-  const handleAddVideo = async (data: TAddVideo) => {
-    console.log("new video = ");
-    const payload = {
-      module: moduleId,
-      instructor: userInfo?.userId,
-      title: data?.title,
-    };
-
-    const videoFile = data?.video[0];
-
-    console.log(payload);
-    console.log(videoFile);
-
-    const formData = new FormData();
-
-    formData.append("data", JSON.stringify(payload));
-    formData.append("video", videoFile);
-
-    //
+  //   ! for updating video
+  const handleUpdateVideo = async (data) => {
+    console.log("update video ");
+    console.log(data);
   };
 
   return (
-    <div className="AddVideoContainer py-8 bg-gray-100 border border-gray-300 p-3 shadow rounded-md">
-      <div className="AddVideoWrapper">
+    <div className="UpdatevideoContainer py-8 bg-gray-100 border border-gray-300 p-3 shadow rounded-md">
+      <div className="UpdatevideoWrapper">
         <h1 className="mb-8 px-3 xsm:px-4 sm:px-5 md:px-6 font-bold text-2xl md:text-3xl text-center">
-          Add Video
+          Update Video
         </h1>
 
-        {/* add video form  */}
-        <div className="addModuleForm p-1 w-[98%] xsm:w-[92%] sm:w-[85%] md:w-[80%] xmd:w-[75%] lg:w-[65%] m-auto ">
+        {/* update video form  */}
+        <div className="updateVideoForm p-1 w-[98%] xsm:w-[92%] sm:w-[85%] md:w-[80%] xmd:w-[75%] lg:w-[65%] m-auto">
           <form
-            onSubmit={handleSubmit(handleAddVideo)}
+            onSubmit={handleSubmit(handleUpdateVideo)}
             className=" flex flex-col gap-y-4 "
           >
             {/* video title  */}
@@ -101,7 +80,7 @@ const AddVideo = () => {
                   : "bg-prime50 hover:bg-prime100  "
               }   `}
             >
-              {isSubmitting ? "Adding New Video..." : "Add Video "}
+              {isSubmitting ? "Updating video..." : "Update Video "}
             </Button>
           </form>
         </div>
@@ -112,4 +91,4 @@ const AddVideo = () => {
   );
 };
 
-export default AddVideo;
+export default Updatevideo;
