@@ -48,6 +48,14 @@ const getAllCourses = async () => {
   return result;
 };
 
+// ! for getting all course data ,admin manage course
+const getAllCoursesForAdmin = async () => {
+  const result = await courseModel
+    .find()
+    .populate("instructors", " name email profilePicture _id ");
+  return result;
+};
+
 // ! for getting single course data
 const getSingleCoureData = async (courseId: string) => {
   const result = await courseModel
@@ -138,4 +146,5 @@ export const courseServices = {
   updateCourseData,
   publishCourse,
   getCourseDetailsForAdmin,
+  getAllCoursesForAdmin,
 };
