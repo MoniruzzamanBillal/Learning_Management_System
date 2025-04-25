@@ -118,14 +118,14 @@ const AddCourse = () => {
     <>
       {isLoading && <FormSubmitLoading />}
 
-      <div className="AddCourseContainer py-8 bg-gray-100 border border-gray-300 p-3 shadow rounded-md">
+      <div className="AddCourseContainer py-8 bg-gray-100 border border-gray-300 p-3 shadow rounded-md ">
         <div className="addCourseWrapper">
           <h1 className="mb-8 px-3 xsm:px-4 sm:px-5 md:px-6 font-bold text-2xl md:text-3xl text-center">
             Add Course
           </h1>
 
           {/* add course form  */}
-          <div className="addCourseForm p-1 w-[98%] xsm:w-[92%] sm:w-[85%] md:w-[80%] xmd:w-[75%] lg:w-[65%] m-auto ">
+          <div className="addCourseForm p-1 w-[98%] xsm:w-[92%]  m-auto ">
             <form
               onSubmit={handleSubmit(handleAddNewCourse)}
               className=" flex flex-col gap-y-4 "
@@ -195,7 +195,7 @@ const AddCourse = () => {
                       theme="snow"
                       value={field.value}
                       onChange={field.onChange}
-                      className="h-full w-full font-medium"
+                      className="h-full w-full font-medium bg-white "
                       modules={modules}
                     />
                   )}
@@ -210,7 +210,7 @@ const AddCourse = () => {
 
               {/* price  */}
 
-              <div className="priceContainer flex flex-col gap-y-1.5 pt-[3rem] ">
+              <div className="priceContainer flex flex-col gap-y-1.5 mt-[4rem] ">
                 <Label htmlFor="price">Course Price</Label>
                 <Input
                   id="price"

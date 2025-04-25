@@ -71,11 +71,11 @@ const CourseColumns: ColumnDef<TDataprops>[] = [
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => console.log(rowData?.id)}>
-              Update{" "}
+            <DropdownMenuItem>
+              <Link to={`/dashboard/admin/update-course/${rowData?.id}`}>
+                Update Course
+              </Link>
             </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>Assign Instructors</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

@@ -7,6 +7,7 @@ import {
   ManageInstructors,
   ManageModule,
   ModuleDetail,
+  UpdateCourse,
 } from "@/pages/Dashboard/admin";
 
 export const adminRoutes = [
@@ -25,6 +26,10 @@ export const adminRoutes = [
   {
     path: "/dashboard/admin/add-course",
     element: <AddCourse />,
+  },
+  {
+    path: "/dashboard/admin/update-course/:courseId",
+    element: <UpdateCourse />,
   },
   {
     path: "/dashboard/admin/course-detail/:id",
