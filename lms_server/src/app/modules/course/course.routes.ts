@@ -32,7 +32,7 @@ router.get("/course-detail/:id", courseController.getSingleCourse);
 router.patch(
   "/update-course/:id",
   upload.single("courseCover"),
-  // authCheck(UserRole.admin),
+  authCheck(UserRole.admin),
   (req: Request, res: Response, next: NextFunction) => {
     req.body = JSON.parse(req.body?.data);
 
@@ -45,7 +45,7 @@ router.patch(
 // ! for publishing a course
 router.patch(
   "/publish-course/:id",
-  // authCheck(UserRole.admin),
+  authCheck(UserRole.admin),
   courseController.publishCourse
 );
 

@@ -1,13 +1,15 @@
+import httpStatus from "http-status";
+import Jwt, { JwtPayload } from "jsonwebtoken";
 import config from "../config";
 import AppError from "../Error/AppError";
 import { TUserRole } from "../modules/user/user.interface";
 import catchAsync from "../util/catchAsync";
-import httpStatus from "http-status";
-import Jwt, { JwtPayload } from "jsonwebtoken";
 
 const authCheck = (...requiredRoles: TUserRole[]) => {
   return catchAsync(async (req, res, next) => {
     const header = req.headers.authorization;
+
+    console.log(header);
 
     if (!header) {
       return next(
@@ -19,6 +21,8 @@ const authCheck = (...requiredRoles: TUserRole[]) => {
     }
 
     const token = header.split(" ")[1];
+
+    console.log(token);
 
     let decoded: JwtPayload;
     try {

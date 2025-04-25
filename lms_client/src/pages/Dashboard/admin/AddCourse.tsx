@@ -16,6 +16,7 @@ import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import { z } from "zod";
 
+import { useGetAllInstructorQuery } from "@/redux/features/instructor/isntructor.api";
 import "react-quill/dist/quill.snow.css";
 
 const modules = {
@@ -52,7 +53,14 @@ const AddCourse = () => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const imageInputRef = useRef<HTMLInputElement | null>(null);
 
-  const [addNewCourse, { isLoading }] = useAddNewCourseMutation();
+  const { data: instructorData, isLoading: instructorDataLoading } =
+    useGetAllInstructorQuery(undefined);
+
+  const [addNewCourse, { isLoading, isError: instructorDataError }] =
+    useAddNewCourseMutation();
+
+  console.log(instructorData);
+  console.log(instructorDataError);
 
   const {
     register,
@@ -86,9 +94,6 @@ const AddCourse = () => {
 
   // ! for adding new course
   const handleAddNewCourse = async (data: Partial<TAddCourseType>) => {
-    console.log("new course ");
-    console.log(data);
-
     const payload = {
       name: data?.name,
       description: data?.description,
@@ -116,7 +121,7 @@ const AddCourse = () => {
 
   return (
     <>
-      {isLoading && <FormSubmitLoading />}
+      {(isLoading || instructorDataLoading) && <FormSubmitLoading />}
 
       <div className="AddCourseContainer py-8 bg-gray-100 border border-gray-300 p-3 shadow rounded-md ">
         <div className="addCourseWrapper">
