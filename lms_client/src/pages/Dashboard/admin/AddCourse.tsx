@@ -9,15 +9,18 @@ import {
 } from "@/schemas/Course.schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { X } from "lucide-react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import ReactQuill from "react-quill";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import { z } from "zod";
 
+import { addCourseFunction } from "@/functions/course.functions";
 import { useGetAllInstructorQuery } from "@/redux/features/instructor/isntructor.api";
+import { TInstructor } from "@/types/user.types";
 import "react-quill/dist/quill.snow.css";
+import { useNavigate } from "react-router-dom";
 
 const modules = {
   toolbar: [
@@ -35,32 +38,29 @@ const modules = {
 
 const animatedComponents = makeAnimated();
 
-const instructorOptions = [
-  { value: "react", label: "React" },
-  { value: "node", label: "Node.js" },
-  { value: "next", label: "Next.js" },
-  { value: "mongo", label: "MongoDB" },
-];
-
 const categoryOptions = [
-  { value: "react", label: "React" },
-  { value: "node", label: "Node.js" },
-  { value: "next", label: "Next.js" },
-  { value: "mongo", label: "MongoDB" },
+  { value: "React", label: "React" },
+  { value: "Node.js", label: "Node.js" },
+  { value: "Next.js", label: "Next.js" },
+  { value: "MongoDB", label: "MongoDB" },
 ];
 
 const AddCourse = () => {
+  const navigate = useNavigate();
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+
+  const [instructorOptions, setInstructorOptions] =
+    useState<{ value: string; label: string }[]>();
+
   const imageInputRef = useRef<HTMLInputElement | null>(null);
 
   const { data: instructorData, isLoading: instructorDataLoading } =
     useGetAllInstructorQuery(undefined);
 
-  const [addNewCourse, { isLoading, isError: instructorDataError }] =
-    useAddNewCourseMutation();
+  const [addNewCourse, { isLoading }] = useAddNewCourseMutation();
 
-  console.log(instructorData);
-  console.log(instructorDataError);
+  // console.log(instructorData?.data);
+  // console.log(instructorOptions);
 
   const {
     register,
@@ -92,6 +92,10 @@ const AddCourse = () => {
 
   type TAddCourseType = z.infer<typeof addCourseValidationSchema>;
 
+  const handleNavigate = () => {
+    navigate("/dashboard/admin/manage-course");
+  };
+
   // ! for adding new course
   const handleAddNewCourse = async (data: Partial<TAddCourseType>) => {
     const payload = {
@@ -112,12 +116,22 @@ const AddCourse = () => {
 
     formData.append("data", JSON.stringify(payload));
 
-    console.log(payload);
-
-    // const result = await addNewCourse(formData);
-
-    // console.log(result);
+    await addCourseFunction(formData, addNewCourse, handleNavigate);
   };
+
+  // ! useeffect for handling instructor select data option
+  useEffect(() => {
+    if (instructorData?.data) {
+      const instructorOptionsData = instructorData?.data?.map(
+        (instructor: TInstructor) => ({
+          value: instructor?._id,
+          label: instructor?.name,
+        })
+      );
+
+      setInstructorOptions(instructorOptionsData);
+    }
+  }, [instructorData?.data]);
 
   return (
     <>
