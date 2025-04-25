@@ -39,10 +39,14 @@ const modules = {
 const animatedComponents = makeAnimated();
 
 const categoryOptions = [
-  { value: "React", label: "React" },
-  { value: "Node.js", label: "Node.js" },
-  { value: "Next.js", label: "Next.js" },
-  { value: "MongoDB", label: "MongoDB" },
+  { value: "Web Development", label: "Web Development" },
+  { value: "App Development", label: "App Development" },
+  { value: "Software Development", label: "Software Development" },
+  { value: "Cybersecurity", label: "Cybersecurity" },
+  { value: "DevOps", label: "DevOps" },
+  { value: "Cloud Computing", label: "Cloud Computing" },
+  { value: "UI/UX Design", label: "UI/UX Design" },
+  { value: "Blockchain Development", label: "Blockchain Development" },
 ];
 
 const AddCourse = () => {
