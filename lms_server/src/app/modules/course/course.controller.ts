@@ -65,6 +65,9 @@ const getCourseDetailsForAdmin = catchAsync(async (req, res) => {
 
 // ! for updating a course
 const updateCourse = catchAsync(async (req, res) => {
+  console.log("update course = ");
+  console.log(req?.params?.id);
+
   const result = await courseServices.updateCourseData(
     req?.body,
     req?.file,

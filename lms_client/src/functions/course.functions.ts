@@ -42,3 +42,5 @@ export const addCourseFunction = async (
     });
   }
 };
+
+// ! for updating a course

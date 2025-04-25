@@ -13,11 +13,34 @@ const courseApi = baseApi.injectEndpoints({
       },
     }),
 
-    // ! for getting single course
+    // ! for updating course
+    updateCourse: builder.mutation({
+      query: ({ formData, courseId }) => {
+        return {
+          url: `/course/update-course/${courseId}`,
+          method: "PATCH",
+          body: formData,
+        };
+      },
+    }),
+
+    // ! for getting admin single course
+    getCourseDetailsForAdmin: builder.query({
+      query: (courseId: string) => {
+        return {
+          url: `/course/admin-course-detail/${courseId}`,
+          method: "GET",
+        };
+      },
+    }),
 
     //
   }),
 });
 
 //
-export const { useAddNewCourseMutation } = courseApi;
+export const {
+  useAddNewCourseMutation,
+  useUpdateCourseMutation,
+  useGetCourseDetailsForAdminQuery,
+} = courseApi;

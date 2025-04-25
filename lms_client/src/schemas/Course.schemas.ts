@@ -12,7 +12,20 @@ export const addCourseValidationSchema = z.object({
   image: z.any().optional(),
 });
 
+export const updateCourseValidationSchema = z.object({
+  name: z.string().optional(),
+  description: z.string().optional(),
+  price: z
+    .number({ invalid_type_error: "Price must be a number" })
+    .nonnegative("Price must be non-negative")
+    .optional(),
+  category: z.string().optional(),
+  instructors: z.array(z.string()).optional(),
+  image: z.any().optional(),
+});
+
 //
 export const courseSchemas = {
   addCourseValidationSchema,
+  updateCourseValidationSchema,
 };
