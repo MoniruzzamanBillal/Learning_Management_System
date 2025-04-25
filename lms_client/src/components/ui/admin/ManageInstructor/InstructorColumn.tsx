@@ -1,7 +1,16 @@
 import { TInstructorDummyData } from "@/components/TestingTable/DummyData";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown } from "lucide-react";
+import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Button } from "../../button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../../dropdown-menu";
 
 const InstructorColumn: ColumnDef<TInstructorDummyData>[] = [
   {
@@ -35,6 +44,37 @@ const InstructorColumn: ColumnDef<TInstructorDummyData>[] = [
   {
     accessorKey: "profilePicture",
     header: "Profile Image",
+  },
+  {
+    id: "actions",
+    cell: ({ row }) => {
+      const rowData = row?.original;
+
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <span className="sr-only">Open menu</span>
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuItem>
+              <Link to={"/dashboard/admin/instructor-detail/1234"}>
+                View Details
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem>
+              <Link to={`/dashboard/admin/update-instructor/${rowData?.id}`}>
+                Update Instructor
+              </Link>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+    },
   },
 ];
 
