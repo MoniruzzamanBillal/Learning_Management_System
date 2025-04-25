@@ -16,8 +16,11 @@ import {
   useUpdateCourseMutation,
 } from "@/redux/features/course/course.api";
 import { useGetAllInstructorQuery } from "@/redux/features/instructor/isntructor.api";
+import { updateCourseValidationSchema } from "@/schemas/Course.schemas";
 import { TInstructor } from "@/types/user.types";
+import { zodResolver } from "@hookform/resolvers/zod";
 import "react-quill/dist/quill.snow.css";
+import { z } from "zod";
 
 const modules = {
   toolbar: [
@@ -64,8 +67,11 @@ const UpdateCourse = () => {
     register,
     handleSubmit,
     control,
+    reset,
     formState: { errors, isSubmitting },
-  } = useForm();
+  } = useForm({
+    resolver: zodResolver(updateCourseValidationSchema),
+  });
 
   const [updateCourse, { isLoading: courseUpdatingLoading }] =
     useUpdateCourseMutation();
@@ -76,7 +82,7 @@ const UpdateCourse = () => {
   const { data: courseData, isLoading: courseDataLoading } =
     useGetCourseDetailsForAdminQuery(courseId, { skip: !courseId });
 
-  // console.log(courseData?.data);
+  console.log(courseData?.data);
 
   // ! for changing the image preview url
   const changeImagePreviewUrl = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -101,8 +107,10 @@ const UpdateCourse = () => {
     navigate("/dashboard/admin/manage-course");
   };
 
+  type TUpdateCourseType = z.infer<typeof updateCourseValidationSchema>;
+
   //   ! for updating course
-  const handleUpdateCorse = async (data) => {
+  const handleUpdateCorse = async (data: Partial<TUpdateCourseType>) => {
     const payload = {
       name: data?.name,
       description: data?.description,
@@ -144,6 +152,25 @@ const UpdateCourse = () => {
       setInstructorOptions(instructorOptionsData);
     }
   }, [instructorData?.data]);
+
+  // ! useeffect for handling default value
+  useEffect(() => {
+    if (courseData?.data) {
+      const course = courseData.data;
+
+      reset({
+        name: course?.name,
+        description: course?.description,
+        price: course?.price,
+        category: course?.category,
+        instructors: course?.instructors,
+      });
+
+      if (course?.courseCover) {
+        setImagePreview(course.courseCover);
+      }
+    }
+  }, [courseData, reset]);
 
   return (
     <>
