@@ -9,8 +9,6 @@ const authCheck = (...requiredRoles: TUserRole[]) => {
   return catchAsync(async (req, res, next) => {
     const header = req.headers.authorization;
 
-    console.log(header);
-
     if (!header) {
       return next(
         new AppError(
@@ -21,8 +19,6 @@ const authCheck = (...requiredRoles: TUserRole[]) => {
     }
 
     const token = header.split(" ")[1];
-
-    console.log(token);
 
     let decoded: JwtPayload;
     try {

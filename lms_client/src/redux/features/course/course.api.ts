@@ -13,6 +13,8 @@ const courseApi = baseApi.injectEndpoints({
       },
     }),
 
+    // ! for getting single course
+
     //
   }),
 });

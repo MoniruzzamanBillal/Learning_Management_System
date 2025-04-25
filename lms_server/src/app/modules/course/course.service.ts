@@ -52,7 +52,19 @@ const getAllCourses = async () => {
 const getSingleCoureData = async (courseId: string) => {
   const result = await courseModel
     .findOne({ _id: courseId, published: true })
-    .populate("instructors", " name email profilePicture ");
+    .populate("instructors", " name email profilePicture _id ");
+
+  if (!result) {
+    throw new AppError(httpStatus.BAD_REQUEST, "This Course don't exist!!!");
+  }
+
+  return result;
+};
+
+// ! for getting single course data , admin manage course
+const getCourseDetailsForAdmin = async (courseId: string) => {
+  const result = await courseModel.findOne({ _id: courseId });
+  // .populate("instructors", " name email profilePicture _id ");
 
   if (!result) {
     throw new AppError(httpStatus.BAD_REQUEST, "This Course don't exist!!!");
@@ -125,4 +137,5 @@ export const courseServices = {
   getSingleCoureData,
   updateCourseData,
   publishCourse,
+  getCourseDetailsForAdmin,
 };

@@ -39,6 +39,18 @@ const getSingleCourse = catchAsync(async (req, res) => {
   });
 });
 
+// ! for getting single course data , admin manage course
+const getCourseDetailsForAdmin = catchAsync(async (req, res) => {
+  const result = await courseServices.getCourseDetailsForAdmin(req?.params?.id);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Course data retrives successfully !!!",
+    data: result,
+  });
+});
+
 // ! for updating a course
 const updateCourse = catchAsync(async (req, res) => {
   const result = await courseServices.updateCourseData(
@@ -74,4 +86,5 @@ export const courseController = {
   getSingleCourse,
   updateCourse,
   publishCourse,
+  getCourseDetailsForAdmin,
 };

@@ -28,6 +28,12 @@ router.post(
 // ! for getting single corse data
 router.get("/course-detail/:id", courseController.getSingleCourse);
 
+// ! for getting single course data , for admin
+router.get(
+  "/admin-course-detail/:id",
+  courseController.getCourseDetailsForAdmin
+);
+
 // ! for updating a course
 router.patch(
   "/update-course/:id",
