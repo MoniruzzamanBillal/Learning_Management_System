@@ -44,3 +44,44 @@ export const addCourseFunction = async (
 };
 
 // ! for updating a course
+export const updateCourseFunction = async (
+  courseId: string,
+  formData: any,
+  updateCourse: any,
+  navigate: () => void
+) => {
+  const taostId = toast.loading("Updating Course....");
+
+  try {
+    const result = await updateCourse({ formData, courseId });
+
+    //  *  for any  error
+    if (result?.error) {
+      const errorMessage = (result?.error as any)?.data?.message;
+      console.log(errorMessage);
+      toast.error(errorMessage, {
+        id: taostId,
+        duration: 1600,
+      });
+    }
+
+    // * for successful insertion
+    if (result?.data) {
+      const successMsg = result?.data?.message;
+
+      toast.success(successMsg, {
+        id: taostId,
+        duration: 1000,
+      });
+
+      setTimeout(() => {
+        navigate();
+      }, 700);
+    }
+  } catch (error) {
+    console.log(error);
+    toast.error("Something went wrong while updating course !!!", {
+      duration: 1400,
+    });
+  }
+};
