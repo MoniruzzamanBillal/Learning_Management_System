@@ -6,6 +6,7 @@ import { addVideoFunction } from "@/functions/video.functions";
 import { useAddNewVideoMutation } from "@/redux/features/video/video.api";
 import { TAddVideo } from "@/types/video.types";
 import { useGetUser } from "@/utils/sharedFunction";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -15,9 +16,7 @@ const AddVideo = () => {
   const { moduleId } = useParams();
   const userInfo = useGetUser();
 
-  //   console.log("user info = ", userInfo);
-  //   console.log("user id = ", userInfo?.userId);
-  // console.log("module id = ", moduleId);
+  const [videoPreview, setVideoPreview] = useState<string | null>(null);
 
   const [addNewVideo, { isLoading: videoAddingLoading }] =
     useAddNewVideoMutation();
@@ -30,6 +29,18 @@ const AddVideo = () => {
 
   const handleNavigate = () => {
     navigate(`/dashboard/instructor/module-detail/${moduleId}`);
+  };
+
+  // ! for changing the video preview url
+  const handleChangeVideoUrl = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const videFile = e.target?.files?.[0];
+
+    if (videFile) {
+      const previewUrl = URL.createObjectURL(videFile);
+      setVideoPreview(previewUrl);
+    } else {
+      setVideoPreview(null);
+    }
   };
 
   //   ! for adding new video
@@ -98,7 +109,18 @@ const AddVideo = () => {
                   {...register("video", {
                     required: "video is required !!!",
                   })}
+                  onChange={(e) => handleChangeVideoUrl(e)}
                 />
+
+                {videoPreview && (
+                  <div className="videoPreviewContainer mt-4">
+                    <video
+                      src={videoPreview}
+                      controls
+                      className="w-full max-h-[400px] rounded-md"
+                    />
+                  </div>
+                )}
                 {errors?.video && (
                   <span className="text-red-600 text-sm">
                     {errors?.video?.message as string}
