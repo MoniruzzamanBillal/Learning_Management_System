@@ -1,16 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useGetInstructorAssignedCourseQuery } from "@/redux/features/course/course.api";
+import { TCourseData } from "@/types/course.types";
 import { useGetUser } from "@/utils/sharedFunction";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import Select from "react-select";
-
-const courseOptions = [
-  { value: "react", label: "React" },
-  { value: "node", label: "Node.js" },
-  { value: "next", label: "Next.js" },
-  { value: "mongo", label: "MongoDB" },
-];
 
 type TModuleFormData = {
   course: string;
@@ -20,8 +16,22 @@ type TModuleFormData = {
 const AddModule = () => {
   const userInfo = useGetUser();
 
+  const [courseOptions, setCourseOptions] =
+    useState<{ value: string; label: string }[]>();
+
+  if (!userInfo?.userId) {
+    throw new Error("Something went wrong !!!");
+  }
+
   //   console.log("user info = ", userInfo);
   //   console.log("user id = ", userInfo?.userId);
+
+  const { data: instructorAssignedCourses } =
+    useGetInstructorAssignedCourseQuery(userInfo?.userId, {
+      skip: !userInfo?.userId,
+    });
+
+  // console.log(instructorAssignedCourses?.data);
 
   const {
     register,
@@ -41,6 +51,20 @@ const AddModule = () => {
 
     console.log(payload);
   };
+
+  // ! useeffect for handling course select data option
+  useEffect(() => {
+    if (instructorAssignedCourses?.data) {
+      const courseOptionsData = instructorAssignedCourses?.data?.map(
+        (course: TCourseData) => ({
+          value: course?._id,
+          label: course?.name,
+        })
+      );
+
+      setCourseOptions(courseOptionsData);
+    }
+  }, [instructorAssignedCourses?.data]);
 
   return (
     <div className="AddModuleContainer py-8 bg-gray-100 border border-gray-300 p-3 shadow rounded-md">
