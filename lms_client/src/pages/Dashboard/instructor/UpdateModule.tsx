@@ -66,10 +66,6 @@ const UpdateModule = () => {
 
   // ! for updating new module
   const handleUpdateModule = async (data: TModuleFormData) => {
-    console.log("Update  module ");
-
-    console.log(data);
-
     await updateModuleFunction(data, updateModule, moduleId, handleNavigate);
   };
 
