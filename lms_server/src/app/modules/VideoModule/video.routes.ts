@@ -1,18 +1,15 @@
 import { NextFunction, Request, Response, Router } from "express";
-import { UserRole } from "../user/user.constants";
 import authCheck from "../../middleware/authCheck";
 import validateRequest from "../../middleware/validateRequest";
-import { videoValidationSchemas } from "./videol.validation";
-import { videoController } from "./video.controller";
 import { uploadVideo } from "../../util/VideoUpload";
+import { UserRole } from "../user/user.constants";
+import { videoController } from "./video.controller";
+import { videoValidationSchemas } from "./videol.validation";
 
 const router = Router();
 
 // ! for getting all video
 router.get("/module-video", videoController.getAllVideo);
-
-// ! for getting single vidoo
-router.get("/individual-video", videoController.getIndividualvideo);
 
 // ! for adding a video
 router.post(
@@ -48,6 +45,9 @@ router.patch(
   // authCheck(UserRole.admin, UserRole.instructor),
   videoController.deleteModuleVideo
 );
+
+// ! for getting single vidoo
+router.get("/individual-video/:videoId", videoController.getIndividualvideo);
 
 // ! for updating  a video
 router.patch(

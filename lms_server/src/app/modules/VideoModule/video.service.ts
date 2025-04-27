@@ -1,13 +1,13 @@
+import httpStatus from "http-status";
+import mongoose from "mongoose";
 import AppError from "../../Error/AppError";
+import { courseEnrollmentModel } from "../CourseEnrollment/CourseEnrollment.model";
 import { moduleModel } from "../courseModule/module.model";
 import { userModel } from "../user/user.model";
-import { TVideo } from "./video.interface";
-import httpStatus from "http-status";
-import { videoModel } from "./video.model";
-import mongoose from "mongoose";
-import { courseEnrollmentModel } from "../CourseEnrollment/CourseEnrollment.model";
 import { addVideoCoursePublish } from "../VideoProgress/videoProgress.functions";
 import { TEnrolledCourseUsers } from "../VideoProgress/VideoProgress.interface";
+import { TVideo } from "./video.interface";
+import { videoModel } from "./video.model";
 
 // ! for adding a video
 const addVideo = async (payload: TVideo, videoUrl: string) => {
@@ -101,15 +101,10 @@ const getAllVideo = async (moduleId: string) => {
 };
 
 // ! for getting individual module video
-const getSingleVideo = async (payload: {
-  videoId: string;
-  moduleId: string;
-}) => {
-  const { videoId, moduleId } = payload;
-
+const getSingleVideo = async (videoId: string) => {
   const videoData = await videoModel.findOne({
     _id: videoId,
-    module: moduleId,
+
     isDeleted: false,
   });
 

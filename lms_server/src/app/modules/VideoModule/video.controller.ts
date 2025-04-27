@@ -31,7 +31,7 @@ const getAllVideo = catchAsync(async (req, res) => {
 
 // ! for getting single vidoe
 const getIndividualvideo = catchAsync(async (req, res) => {
-  const result = await videoServices.getSingleVideo(req?.body);
+  const result = await videoServices.getSingleVideo(req?.params?.videoId);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
