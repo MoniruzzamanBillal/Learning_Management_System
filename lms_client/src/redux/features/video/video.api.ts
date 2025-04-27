@@ -15,9 +15,20 @@ const videoApi = baseApi.injectEndpoints({
       },
     }),
 
+    // ! for updating video
+    updateVideo: builder.mutation({
+      query: ({ formData, videoId }) => {
+        return {
+          url: `/video/update-video/${videoId}`,
+          method: "PATCH",
+          body: formData,
+        };
+      },
+    }),
+
     //
   }),
 });
 
 //
-export const { useAddNewVideoMutation } = videoApi;
+export const { useAddNewVideoMutation, useUpdateVideoMutation } = videoApi;

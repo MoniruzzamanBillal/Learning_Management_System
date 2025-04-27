@@ -7,7 +7,9 @@ import { useParams } from "react-router-dom";
 const Updatevideo = () => {
   const { videoId } = useParams();
 
-  console.log("video id = ", videoId);
+  if (!videoId) {
+    throw new Error("Something went wrong !!!");
+  }
 
   const {
     register,
