@@ -21,7 +21,7 @@ const InstructorModule = () => {
       skip: !moduleId,
     });
 
-  console.log(moduleData?.data);
+  // console.log(moduleData?.data);
 
   return (
     <>

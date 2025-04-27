@@ -51,6 +51,7 @@ const categoryOptions = [
 
 const AddCourse = () => {
   const navigate = useNavigate();
+
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   const [instructorOptions, setInstructorOptions] =
