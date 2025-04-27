@@ -56,6 +56,20 @@ const getAllCoursesForAdmin = async () => {
   return result;
 };
 
+// ! for getting instructor assign courses
+const getInstructorsAssignCourses = async (instructorId: string) => {
+  const courseData = await courseModel.find({ instructors: instructorId });
+
+  if (!courseData) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "Instructor don't assigned for any courses  !!!"
+    );
+  }
+
+  return courseData;
+};
+
 // ! for getting single course data
 const getSingleCoureData = async (courseId: string) => {
   const result = await courseModel
@@ -147,4 +161,5 @@ export const courseServices = {
   publishCourse,
   getCourseDetailsForAdmin,
   getAllCoursesForAdmin,
+  getInstructorsAssignCourses,
 };

@@ -28,7 +28,7 @@ router.post(
   courseController.createCourse
 );
 
-// ! for getting single corse data
+// ! for getting single course data
 router.get("/course-detail/:id", courseController.getSingleCourse);
 
 // ! for getting single course data , for admin
@@ -36,6 +36,13 @@ router.get(
   "/admin-course-detail/:id",
   authCheck(UserRole.admin),
   courseController.getCourseDetailsForAdmin
+);
+
+// ! for getting instructor assigned courses
+router.get(
+  "/instructor-courses/:instructorId",
+  authCheck(UserRole.instructor),
+  courseController.getInstructorsAssignCourses
 );
 
 // ! for updating a course

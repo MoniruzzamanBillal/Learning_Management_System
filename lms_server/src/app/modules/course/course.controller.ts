@@ -51,6 +51,20 @@ const getSingleCourse = catchAsync(async (req, res) => {
   });
 });
 
+// ! for getting instructor assign courses
+const getInstructorsAssignCourses = catchAsync(async (req, res) => {
+  const result = await courseServices.getInstructorsAssignCourses(
+    req?.params?.instructorId
+  );
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Instructor assigned Course data retrives successfully !!!",
+    data: result,
+  });
+});
+
 // ! for getting single course data , admin manage course
 const getCourseDetailsForAdmin = catchAsync(async (req, res) => {
   const result = await courseServices.getCourseDetailsForAdmin(req?.params?.id);
@@ -65,9 +79,6 @@ const getCourseDetailsForAdmin = catchAsync(async (req, res) => {
 
 // ! for updating a course
 const updateCourse = catchAsync(async (req, res) => {
-  console.log("update course = ");
-  console.log(req?.params?.id);
-
   const result = await courseServices.updateCourseData(
     req?.body,
     req?.file,
@@ -103,4 +114,5 @@ export const courseController = {
   publishCourse,
   getCourseDetailsForAdmin,
   getAllCoursesForAdmin,
+  getInstructorsAssignCourses,
 };
