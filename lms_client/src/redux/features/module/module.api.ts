@@ -29,7 +29,7 @@ const moduleApi = baseApi.injectEndpoints({
     getSingleModuleData: builder.query({
       query: (moduleId) => {
         return {
-          url: `/module/update-module/${moduleId}`,
+          url: `/module/module-detail/${moduleId}`,
           method: "GET",
         };
       },
