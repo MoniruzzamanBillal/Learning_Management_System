@@ -1,16 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useGetInstructorAssignedCourseQuery } from "@/redux/features/course/course.api";
+import { useUpdateModuleMutation } from "@/redux/features/module/module.api";
+import { TCourseData } from "@/types/course.types";
+import { useGetUser } from "@/utils/sharedFunction";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Select from "react-select";
-
-const courseOptions = [
-  { value: "react", label: "React" },
-  { value: "node", label: "Node.js" },
-  { value: "next", label: "Next.js" },
-  { value: "mongo", label: "MongoDB" },
-];
 
 type TModuleFormData = {
   course: string;
@@ -19,8 +17,30 @@ type TModuleFormData = {
 
 const UpdateModule = () => {
   const { moduleId } = useParams();
+  const userInfo = useGetUser();
 
-  console.log("module id = ", moduleId);
+  const navigate = useNavigate();
+
+  if (!userInfo?.userId) {
+    throw new Error("Something went wrong !!!");
+  }
+
+  if (!moduleId) {
+    throw new Error("Something went wrong !!!");
+  }
+
+  const {
+    data: instructorAssignedCourses,
+    isLoading: fetchingCourseDataLoading,
+  } = useGetInstructorAssignedCourseQuery(userInfo?.userId, {
+    skip: !userInfo?.userId,
+  });
+
+  const [courseOptions, setCourseOptions] =
+    useState<{ value: string; label: string }[]>();
+
+  const [updateModule, { isLoading: moduleUpdatingLoading }] =
+    useUpdateModuleMutation();
 
   const {
     register,
@@ -29,12 +49,30 @@ const UpdateModule = () => {
     formState: { errors, isSubmitting },
   } = useForm<TModuleFormData>();
 
+  const handleNavigate = () => {
+    navigate("/dashboard/instructor/manage-module");
+  };
+
   // ! for updating new module
   const handleUpdateModule = async (data: TModuleFormData) => {
     console.log("Update  module ");
 
     console.log(data);
   };
+
+  // ! useeffect for handling course select data option
+  useEffect(() => {
+    if (instructorAssignedCourses?.data) {
+      const courseOptionsData = instructorAssignedCourses?.data?.map(
+        (course: TCourseData) => ({
+          value: course?._id,
+          label: course?.name,
+        })
+      );
+
+      setCourseOptions(courseOptionsData);
+    }
+  }, [instructorAssignedCourses?.data]);
 
   return (
     <div className="UpdateModuleContainer py-8 bg-gray-100 border border-gray-300 p-3 shadow rounded-md">

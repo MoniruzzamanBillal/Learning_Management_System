@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { UserRole } from "../user/user.constants";
-import validateRequest from "../../middleware/validateRequest";
-import { moduleValidations } from "./module.validation";
 import authCheck from "../../middleware/authCheck";
+import validateRequest from "../../middleware/validateRequest";
+import { UserRole } from "../user/user.constants";
 import { moduleController } from "./module.controller";
+import { moduleValidations } from "./module.validation";
 
 const router = Router();
 
@@ -20,8 +20,8 @@ router.get("/module-detail/:id", moduleController.getModuleData);
 
 // ! for updating module
 router.patch(
-  "/update-module/:id",
-  // authCheck(UserRole.instructor),
+  "/update-module/:moduleId",
+  authCheck(UserRole.instructor),
   moduleController.updateModule
 );
 

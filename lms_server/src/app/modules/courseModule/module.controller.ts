@@ -1,7 +1,7 @@
+import httpStatus from "http-status";
 import catchAsync from "../../util/catchAsync";
 import sendResponse from "../../util/sendResponse";
 import { moduleServices } from "./module.service";
-import httpStatus from "http-status";
 
 // ! for adding a module
 const addModule = catchAsync(async (req, res) => {
@@ -29,7 +29,10 @@ const getModuleData = catchAsync(async (req, res) => {
 
 // ! for updating module
 const updateModule = catchAsync(async (req, res) => {
-  const result = await moduleServices.updateModule(req?.body, req?.params?.id);
+  const result = await moduleServices.updateModule(
+    req?.body,
+    req?.params?.moduleId
+  );
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
