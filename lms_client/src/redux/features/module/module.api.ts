@@ -14,9 +14,20 @@ const moduleApi = baseApi.injectEndpoints({
       },
     }),
 
+    // ! for updating module
+    updateModule: builder.mutation({
+      query: ({ payload, moduleId }) => {
+        return {
+          url: `/module/update-module/${moduleId}`,
+          method: "PATCH",
+          body: payload,
+        };
+      },
+    }),
+
     //
   }),
 });
 
 //
-export const { useAddModuleMutation } = moduleApi;
+export const { useAddModuleMutation, useUpdateModuleMutation } = moduleApi;

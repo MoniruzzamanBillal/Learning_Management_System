@@ -57,14 +57,10 @@ const AddModule = () => {
 
   // ! for adding  new module
   const handleAddNewModule = async (data: TModuleFormData) => {
-    console.log("add new module ");
-
     const payload = {
       ...data,
       instructor: userInfo?.userId,
     };
-
-    console.log(payload);
 
     await addModuleFunction(payload, addModule, handleNavigate);
   };
