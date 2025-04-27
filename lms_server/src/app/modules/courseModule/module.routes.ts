@@ -16,7 +16,7 @@ router.post(
 );
 
 // ! for getting module data
-router.get("/module-detail/:id", moduleController.getModuleData);
+router.get("/module-detail/:moduleId", moduleController.getModuleData);
 
 // ! for updating module
 router.patch(

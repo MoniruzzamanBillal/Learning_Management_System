@@ -25,9 +25,23 @@ const moduleApi = baseApi.injectEndpoints({
       },
     }),
 
+    // ! for getting single module data
+    getSingleModuleData: builder.query({
+      query: (moduleId) => {
+        return {
+          url: `/module/update-module/${moduleId}`,
+          method: "GET",
+        };
+      },
+    }),
+
     //
   }),
 });
 
 //
-export const { useAddModuleMutation, useUpdateModuleMutation } = moduleApi;
+export const {
+  useAddModuleMutation,
+  useUpdateModuleMutation,
+  useGetSingleModuleDataQuery,
+} = moduleApi;

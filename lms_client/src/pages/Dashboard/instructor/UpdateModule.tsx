@@ -74,6 +74,8 @@ const UpdateModule = () => {
     }
   }, [instructorAssignedCourses?.data]);
 
+  // ! for handling default value
+
   return (
     <div className="UpdateModuleContainer py-8 bg-gray-100 border border-gray-300 p-3 shadow rounded-md">
       <div className="UpdateModuleWrapper">

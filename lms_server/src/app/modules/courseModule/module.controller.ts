@@ -17,7 +17,7 @@ const addModule = catchAsync(async (req, res) => {
 
 // ! for getting module data
 const getModuleData = catchAsync(async (req, res) => {
-  const result = await moduleServices.getModulData(req?.params?.id);
+  const result = await moduleServices.getModulData(req?.params?.moduleId);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
