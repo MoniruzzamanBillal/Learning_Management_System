@@ -42,3 +42,46 @@ export const addVideoFunction = async (
     });
   }
 };
+
+// ! for update video
+export const updateVideoFunction = async (
+  formData: any,
+  updateVideo: any,
+  videoId: string,
+  navigate: () => void
+) => {
+  const taostId = toast.loading("Updating Video....");
+
+  try {
+    const result = await updateVideo({ formData, videoId });
+
+    //  *  for any  error
+    if (result?.error) {
+      const errorMessage = (result?.error as any)?.data?.message;
+      console.log(errorMessage);
+      toast.error(errorMessage, {
+        id: taostId,
+        duration: 1400,
+      });
+    }
+
+    // * for successful insertion
+    if (result?.data) {
+      const successMsg = result?.data?.message;
+
+      toast.success(successMsg, {
+        id: taostId,
+        duration: 1000,
+      });
+
+      setTimeout(() => {
+        navigate();
+      }, 700);
+    }
+  } catch (error) {
+    console.log(error);
+    toast.error("Something went wrong while updating video !!!", {
+      duration: 1400,
+    });
+  }
+};
