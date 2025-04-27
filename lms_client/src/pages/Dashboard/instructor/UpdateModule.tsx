@@ -2,6 +2,7 @@ import { FormSubmitLoading } from "@/components/ui";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { updateModuleFunction } from "@/functions/module.function";
 import { useGetInstructorAssignedCourseQuery } from "@/redux/features/course/course.api";
 import {
   useGetSingleModuleDataQuery,
@@ -68,6 +69,8 @@ const UpdateModule = () => {
     console.log("Update  module ");
 
     console.log(data);
+
+    await updateModuleFunction(data, updateModule, moduleId, handleNavigate);
   };
 
   // ! useeffect for handling course select data option
@@ -84,7 +87,7 @@ const UpdateModule = () => {
     }
   }, [instructorAssignedCourses?.data]);
 
-  console.log(moduleData?.data);
+  // console.log(moduleData?.data);
   // ! useeffect for handling default value
   useEffect(() => {
     if (moduleData?.data) {
