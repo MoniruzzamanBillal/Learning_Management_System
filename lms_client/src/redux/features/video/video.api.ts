@@ -26,9 +26,23 @@ const videoApi = baseApi.injectEndpoints({
       },
     }),
 
+    // ! for getting individual video
+    getSingleVideo: builder.query({
+      query: (videoId: string) => {
+        return {
+          url: `/video/individual-video/${videoId}`,
+          method: "GET",
+        };
+      },
+    }),
+
     //
   }),
 });
 
 //
-export const { useAddNewVideoMutation, useUpdateVideoMutation } = videoApi;
+export const {
+  useAddNewVideoMutation,
+  useUpdateVideoMutation,
+  useGetSingleVideoQuery,
+} = videoApi;
