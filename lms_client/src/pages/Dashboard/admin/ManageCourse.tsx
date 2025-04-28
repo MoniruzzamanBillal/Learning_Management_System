@@ -1,14 +1,19 @@
-import { dummyCourseData } from "@/components/TestingTable/DummyData";
 import {
   CourseColumns,
   ManageCourseTable,
 } from "@/components/ui/admin/ManageCourse";
 import { Button } from "@/components/ui/button";
+import { useGetAllCourseAdminQuery } from "@/redux/features/course/course.api";
 
 import { useNavigate } from "react-router-dom";
 
 const ManageCourse = () => {
   const navigate = useNavigate();
+
+  const { data: allCourseData, isLoading: courseDataLoading } =
+    useGetAllCourseAdminQuery(undefined);
+
+  console.log(allCourseData?.data);
 
   return (
     <div className="ManageCourseContainer">
@@ -24,7 +29,10 @@ const ManageCourse = () => {
 
         {/* table section  */}
         <div className="Tablecontainer mx-auto py-10">
-          <ManageCourseTable columns={CourseColumns} data={dummyCourseData} />
+          <ManageCourseTable
+            columns={CourseColumns}
+            data={allCourseData?.data}
+          />
         </div>
       </div>
     </div>

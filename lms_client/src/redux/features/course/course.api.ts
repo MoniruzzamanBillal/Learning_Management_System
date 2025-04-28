@@ -44,6 +44,16 @@ const courseApi = baseApi.injectEndpoints({
       },
     }),
 
+    // ! for getting all admin course
+    getAllCourseAdmin: builder.query({
+      query: () => {
+        return {
+          url: `/course/admin-all-courses`,
+          method: "GET",
+        };
+      },
+    }),
+
     //
   }),
 });
@@ -54,4 +64,5 @@ export const {
   useUpdateCourseMutation,
   useGetCourseDetailsForAdminQuery,
   useGetInstructorAssignedCourseQuery,
+  useGetAllCourseAdminQuery,
 } = courseApi;

@@ -12,7 +12,11 @@ const router = Router();
 router.get("/all-courses", courseController.getAllCourses);
 
 // ! for getting all course data for admin
-router.get("/admin-all-courses", courseController.getAllCoursesForAdmin);
+router.get(
+  "/admin-all-courses",
+  // authCheck(UserRole.admin),
+  courseController.getAllCoursesForAdmin
+);
 
 // ! for adding new course
 router.post(

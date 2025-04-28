@@ -48,7 +48,33 @@ const CourseColumns: ColumnDef<TDataprops>[] = [
   },
   {
     accessorKey: "published",
-    header: "Published",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Published
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+
+    cell: ({ row }) => {
+      const isPublished = row.getValue("published");
+
+      return (
+        <span
+          className={
+            isPublished
+              ? "text-green-600 font-semibold"
+              : "text-red-600 font-semibold"
+          }
+        >
+          {isPublished ? "Published" : "Unpublished"}
+        </span>
+      );
+    },
   },
   {
     id: "actions",
