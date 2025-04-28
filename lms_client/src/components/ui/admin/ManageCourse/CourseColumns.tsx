@@ -1,7 +1,7 @@
-import { TDataprops } from "@/components/TestingTable/DummyData";
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "../../button";
 
+import { TCourseData } from "@/types/course.types";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Link } from "react-router-dom";
 import {
@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "../../dropdown-menu";
 
-const CourseColumns: ColumnDef<TDataprops>[] = [
+const CourseColumns: ColumnDef<TCourseData>[] = [
   {
     accessorKey: "name",
     header: ({ column }) => {
@@ -81,6 +81,8 @@ const CourseColumns: ColumnDef<TDataprops>[] = [
     cell: ({ row }) => {
       const rowData = row.original;
 
+      console.log(rowData);
+
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -92,13 +94,13 @@ const CourseColumns: ColumnDef<TDataprops>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem>
-              <Link to={"/dashboard/admin/course-detail/1234"}>
+              <Link to={`/dashboard/admin/course-detail/${rowData?._id}`}>
                 View Details
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <Link to={`/dashboard/admin/update-course/${rowData?.id}`}>
+              <Link to={`/dashboard/admin/update-course/${rowData?._id}`}>
                 Update Course
               </Link>
             </DropdownMenuItem>

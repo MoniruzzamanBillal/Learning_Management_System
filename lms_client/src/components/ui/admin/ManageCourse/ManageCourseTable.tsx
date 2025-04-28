@@ -51,15 +51,15 @@ const ManageCourseTable = <TData, TValue>({
     <div className="rounded-md  bg-gray-50 border  border-gray-200 ">
       <Table className="  ">
         <TableHeader>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
+          {table?.getHeaderGroups()?.map((headerGroup) => (
+            <TableRow key={headerGroup?.id}>
+              {headerGroup?.headers?.map((header) => {
                 return (
                   <TableHead
                     key={header.id}
                     className=" text-gray-800 text-center "
                   >
-                    {header.isPlaceholder
+                    {header?.isPlaceholder
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
@@ -72,13 +72,13 @@ const ManageCourseTable = <TData, TValue>({
           ))}
         </TableHeader>
         <TableBody>
-          {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
+          {table?.getRowModel()?.rows?.length ? (
+            table?.getRowModel()?.rows?.map((row) => (
               <TableRow
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
               >
-                {row.getVisibleCells().map((cell) => (
+                {row?.getVisibleCells()?.map((cell) => (
                   <TableCell key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
