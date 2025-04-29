@@ -18,6 +18,13 @@ router.get(
   courseController.getAllCoursesForAdmin
 );
 
+// ! for getting all course data for admin and instructor
+router.get(
+  "/all-courses-modules",
+  // authCheck(UserRole.admin, UserRole?.instructor),
+  courseController.getAllCoursesWithModules
+);
+
 // ! for adding new course
 router.post(
   "/add-course",

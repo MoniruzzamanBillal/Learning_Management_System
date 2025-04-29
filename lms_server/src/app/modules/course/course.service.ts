@@ -56,6 +56,15 @@ const getAllCoursesForAdmin = async () => {
   return result;
 };
 
+// ! for getting all course data with module ( admin and instructor )
+const getAllCoursesWithModules = async () => {
+  const result = await courseModel
+    .find()
+    .populate("instructors", " name email profilePicture _id ")
+    .populate("modules", " -__v -updatedAt -createdAt ");
+  return result;
+};
+
 // ! for getting instructor assign courses
 const getInstructorsAssignCourses = async (instructorId: string) => {
   const courseData = await courseModel.find({ instructors: instructorId });
@@ -162,4 +171,5 @@ export const courseServices = {
   getCourseDetailsForAdmin,
   getAllCoursesForAdmin,
   getInstructorsAssignCourses,
+  getAllCoursesWithModules,
 };

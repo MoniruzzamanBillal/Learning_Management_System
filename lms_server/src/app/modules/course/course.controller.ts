@@ -39,6 +39,18 @@ const getAllCoursesForAdmin = catchAsync(async (req, res) => {
   });
 });
 
+// ! for getting all course data with module ( admin and instructor )
+const getAllCoursesWithModules = catchAsync(async (req, res) => {
+  const result = await courseServices.getAllCoursesWithModules();
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Course data retrives successfully !!!",
+    data: result,
+  });
+});
+
 // ! for getting single course
 const getSingleCourse = catchAsync(async (req, res) => {
   const result = await courseServices.getSingleCoureData(req?.params?.id);
@@ -115,4 +127,5 @@ export const courseController = {
   getCourseDetailsForAdmin,
   getAllCoursesForAdmin,
   getInstructorsAssignCourses,
+  getAllCoursesWithModules,
 };
