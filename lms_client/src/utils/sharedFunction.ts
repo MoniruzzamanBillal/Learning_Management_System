@@ -1,6 +1,6 @@
 import { useAppSelector } from "@/redux/hook";
-import { verifyToken } from "./verifyToken";
 import { TUser } from "@/types/globalTypes";
+import { verifyToken } from "./verifyToken";
 
 export const useGetUser = () => {
   const { user } = useAppSelector((state) => state.auth);

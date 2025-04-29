@@ -52,7 +52,7 @@ const AddModule = () => {
   } = useForm<TModuleFormData>();
 
   const handleNavigate = () => {
-    navigate("/dashboard/instructor/manage-module");
+    navigate(-1);
   };
 
   // ! for adding  new module
