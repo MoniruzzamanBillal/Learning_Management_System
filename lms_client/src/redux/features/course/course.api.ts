@@ -11,6 +11,7 @@ const courseApi = baseApi.injectEndpoints({
           body: payload,
         };
       },
+      invalidatesTags: ["fetchAdminCourse"],
     }),
 
     // ! for updating course
@@ -22,6 +23,7 @@ const courseApi = baseApi.injectEndpoints({
           body: formData,
         };
       },
+      invalidatesTags: ["fetchAdminCourse"],
     }),
 
     // ! for getting admin single course
@@ -52,6 +54,7 @@ const courseApi = baseApi.injectEndpoints({
           method: "GET",
         };
       },
+      providesTags: ["fetchAdminCourse"],
     }),
 
     //

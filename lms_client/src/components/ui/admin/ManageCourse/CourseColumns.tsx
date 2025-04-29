@@ -81,7 +81,7 @@ const CourseColumns: ColumnDef<TCourseData>[] = [
     cell: ({ row }) => {
       const rowData = row.original;
 
-      console.log(rowData);
+      // console.log(rowData);
 
       return (
         <DropdownMenu>
