@@ -15,6 +15,18 @@ const addModule = catchAsync(async (req, res) => {
   });
 });
 
+// ! for getting all module data
+const getAllModuleData = catchAsync(async (req, res) => {
+  const result = await moduleServices.getAllModuleData();
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "All Module Retrived successfully !!!",
+    data: result,
+  });
+});
+
 // ! for getting module data
 const getModuleData = catchAsync(async (req, res) => {
   const result = await moduleServices.getModulData(req?.params?.moduleId);
@@ -48,4 +60,5 @@ export const moduleController = {
   addModule,
   getModuleData,
   updateModule,
+  getAllModuleData,
 };

@@ -7,6 +7,9 @@ import { moduleValidations } from "./module.validation";
 
 const router = Router();
 
+// ! for getting all module
+router.get("/all-module", moduleController.getAllModuleData);
+
 // ! for adding a module
 router.post(
   "/add-module",

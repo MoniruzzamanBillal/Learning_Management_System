@@ -57,6 +57,15 @@ const addModule = async (payload: TModule) => {
   }
 };
 
+// ! for getting all module
+const getAllModuleData = async () => {
+  const moduleData = await moduleModel
+    .find({ isDeleted: false })
+    .populate("course", " _id name  ");
+
+  return moduleData;
+};
+
 // ! for getting module data
 const getModulData = async (moduleId: string) => {
   const moduleData = await moduleModel
@@ -93,4 +102,5 @@ export const moduleServices = {
   addModule,
   getModulData,
   updateModule,
+  getAllModuleData,
 };
