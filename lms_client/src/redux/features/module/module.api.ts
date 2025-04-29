@@ -3,6 +3,18 @@ import { baseApi } from "@/redux/api/baseApi";
 const moduleApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     //
+
+    // ! for getting all module data
+
+    allModule: builder.query({
+      query: () => {
+        return {
+          url: "/module/all-module",
+          method: "GET",
+        };
+      },
+    }),
+
     // ! for adding a module
     addModule: builder.mutation({
       query: (payload) => {
@@ -44,4 +56,5 @@ export const {
   useAddModuleMutation,
   useUpdateModuleMutation,
   useGetSingleModuleDataQuery,
+  useAllModuleQuery,
 } = moduleApi;

@@ -2,9 +2,6 @@
 import { flexRender } from "@tanstack/react-table";
 
 export const renderModuleCell = (cellValue: any, cell: any) => {
-  console.log(cellValue);
-  console.log(cell);
-
   if (typeof cellValue === "string") {
     return cellValue;
   }

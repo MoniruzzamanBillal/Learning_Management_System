@@ -1,7 +1,12 @@
-export type TModule = {
-  course: string;
+export type TModuleData<
+  TCourse = string,
+  TInstructor = string,
+  TVideo = string
+> = {
+  _id: string;
+  course: TCourse;
   title: string;
-  videos?: string[];
-  instructor?: string[];
+  videos?: TVideo[];
+  instructor?: TInstructor[];
   isDeleted?: boolean;
 };

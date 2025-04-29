@@ -3,8 +3,11 @@ import {
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
+  getSortedRowModel,
+  SortingState,
   useReactTable,
 } from "@tanstack/react-table";
+import { useState } from "react";
 import { Button } from "../../button";
 import {
   Table,
@@ -14,7 +17,6 @@ import {
   TableHeader,
   TableRow,
 } from "../../table";
-import { renderModuleCell } from "./RenderModuleCell";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -25,15 +27,24 @@ const ManageModuleTable = <TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) => {
+  const [sorting, setSorting] = useState<SortingState>([]);
+
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
+
     initialState: {
       pagination: {
         pageSize: 5,
       },
+    },
+    state: {
+      sorting,
     },
   });
 
@@ -68,17 +79,11 @@ const ManageModuleTable = <TData, TValue>({
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
               >
-                {row.getVisibleCells().map((cell) => {
-                  const cellValue = cell.getValue();
-
-                  return (
-                    <>
-                      <TableCell key={cell.id}>
-                        {renderModuleCell(cellValue, cell)}
-                      </TableCell>
-                    </>
-                  );
-                })}
+                {row?.getVisibleCells()?.map((cell) => (
+                  <TableCell key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </TableCell>
+                ))}
               </TableRow>
             ))
           ) : (

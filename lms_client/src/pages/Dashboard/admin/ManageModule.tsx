@@ -3,13 +3,13 @@ import {
   manageModuleColumns,
   ManageModuleTable,
 } from "@/components/ui/admin/manageModule";
-import { useGetAllCourseWithModuleQuery } from "@/redux/features/course/course.api";
+import { useAllModuleQuery } from "@/redux/features/module/module.api";
 
 const ManageModule = () => {
   const { data: moduleDataWithCourse, isLoading } =
-    useGetAllCourseWithModuleQuery(undefined);
+    useAllModuleQuery(undefined);
 
-  // console.log(moduleDataWithCourse?.data);
+  console.log(moduleDataWithCourse?.data);
 
   return (
     <>
