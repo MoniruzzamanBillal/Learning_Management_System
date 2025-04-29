@@ -14,6 +14,7 @@ import {
   TableHeader,
   TableRow,
 } from "../../table";
+import { renderModuleCell } from "./RenderModuleCell";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -73,20 +74,7 @@ const ManageModuleTable = <TData, TValue>({
                   return (
                     <>
                       <TableCell key={cell.id}>
-                        {typeof cellValue === "string" ? (
-                          cellValue
-                        ) : Array.isArray(cellValue) ? (
-                          <ul className="list-disc pl-4">
-                            {cellValue?.map((cellItem, index) => (
-                              <li key={index}>{cellItem?.name}</li>
-                            ))}
-                          </ul>
-                        ) : (
-                          flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
-                          )
-                        )}
+                        {renderModuleCell(cellValue, cell)}
                       </TableCell>
                     </>
                   );

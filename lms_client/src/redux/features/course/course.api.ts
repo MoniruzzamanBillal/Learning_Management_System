@@ -57,6 +57,17 @@ const courseApi = baseApi.injectEndpoints({
       providesTags: ["fetchAdminCourse"],
     }),
 
+    // ! for getting course for admin and instructors
+    getAllCourseWithModule: builder.query({
+      query: () => {
+        return {
+          url: `/course/all-courses-modules`,
+          method: "GET",
+        };
+      },
+      providesTags: ["fetchAllCourseWithModule"],
+    }),
+
     //
   }),
 });
@@ -68,4 +79,5 @@ export const {
   useGetCourseDetailsForAdminQuery,
   useGetInstructorAssignedCourseQuery,
   useGetAllCourseAdminQuery,
+  useGetAllCourseWithModuleQuery,
 } = courseApi;

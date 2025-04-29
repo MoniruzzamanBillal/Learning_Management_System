@@ -1,4 +1,6 @@
-import { CourseModule } from "@/utils/DummyData";
+import { TCourseData } from "@/types/course.types";
+import { TUser } from "@/types/globalTypes";
+import { TModule } from "@/types/module.types";
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -12,9 +14,9 @@ import {
   DropdownMenuTrigger,
 } from "../../dropdown-menu";
 
-const manageModuleColumns: ColumnDef<CourseModule>[] = [
+const manageModuleColumns: ColumnDef<TCourseData<TUser, TModule>>[] = [
   {
-    accessorKey: "course",
+    accessorKey: "name",
     header: "Course",
   },
   {
@@ -42,7 +44,7 @@ const manageModuleColumns: ColumnDef<CourseModule>[] = [
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => console.log(rowData?.id)}>
+            <DropdownMenuItem onClick={() => console.log(rowData?._id)}>
               Update{" "}
             </DropdownMenuItem>
             <DropdownMenuSeparator />

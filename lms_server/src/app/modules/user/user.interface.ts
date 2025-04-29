@@ -6,5 +6,5 @@ export type TUser = {
   password: string;
   profilePicture?: string;
   isDeleted: boolean;
-  userRole: "admin" | "user" | "instructor";
+  userRole: TUserRole;
 };
