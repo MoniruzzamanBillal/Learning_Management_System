@@ -77,7 +77,7 @@ const ManageCourseColumn: ColumnDef<TCourseData>[] = [
             <DropdownMenuSeparator />
 
             <DropdownMenuItem>
-              <Link to={`/dashboard/instructor/add-module`}>
+              <Link to={`/dashboard/instructor/add-module/${rowData?._id}`}>
                 Add New Module
               </Link>
             </DropdownMenuItem>
