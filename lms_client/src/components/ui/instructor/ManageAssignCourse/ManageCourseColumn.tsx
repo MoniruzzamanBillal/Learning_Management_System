@@ -16,6 +16,7 @@ type TCourseData = {
   name: string;
   category: string;
   courseCover: string;
+  published: boolean;
 };
 
 const ManageCourseColumn: ColumnDef<TCourseData>[] = [
@@ -49,6 +50,23 @@ const ManageCourseColumn: ColumnDef<TCourseData>[] = [
     },
   },
   {
+    accessorKey: "published",
+    header: "Status",
+    cell: ({ getValue }) => {
+      const isPublished = getValue();
+
+      return (
+        <span
+          className={` font-semibold ${
+            isPublished ? "text-green-600" : "text-red-600"
+          } `}
+        >
+          {isPublished ? "Published" : "Unpublished"}
+        </span>
+      );
+    },
+  },
+  {
     accessorKey: "courseCover",
     header: "Cover Image",
   },
@@ -56,6 +74,8 @@ const ManageCourseColumn: ColumnDef<TCourseData>[] = [
     id: "actions",
     cell: ({ row }) => {
       const rowData = row.original;
+
+      const isPublished = rowData?.published;
 
       return (
         <DropdownMenu>
@@ -76,11 +96,13 @@ const ManageCourseColumn: ColumnDef<TCourseData>[] = [
             </DropdownMenuItem>
             <DropdownMenuSeparator />
 
-            <DropdownMenuItem>
-              <Link to={`/dashboard/instructor/add-module/${rowData?._id}`}>
-                Add New Module
-              </Link>
-            </DropdownMenuItem>
+            {!isPublished && (
+              <DropdownMenuItem>
+                <Link to={`/dashboard/instructor/add-module/${rowData?._id}`}>
+                  Add New Module
+                </Link>
+              </DropdownMenuItem>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
       );

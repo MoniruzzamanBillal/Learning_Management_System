@@ -69,7 +69,7 @@ const getAllCoursesWithModules = async () => {
 const getInstructorsAssignCourses = async (instructorId: string) => {
   const courseData = await courseModel
     .find({ instructors: instructorId })
-    .select(" category courseCover name _id ");
+    .select(" category courseCover name _id published ");
 
   if (!courseData) {
     throw new AppError(

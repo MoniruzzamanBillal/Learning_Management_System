@@ -16,7 +16,7 @@ const ManageAssignCourse = () => {
   const { data: isntructorAssignedCourses, isLoading } =
     useGetInstructorAssignedCourseQuery(user?.userId, { skip: !user?.userId });
 
-  console.log(isntructorAssignedCourses?.data);
+  // console.log(isntructorAssignedCourses?.data);
 
   return (
     <>
