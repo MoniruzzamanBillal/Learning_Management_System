@@ -1,4 +1,3 @@
-import { TdummyManageAssignCourse } from "@/components/TestingTable/DummyData";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -12,7 +11,14 @@ import {
   DropdownMenuTrigger,
 } from "../../dropdown-menu";
 
-const ManageCourseColumn: ColumnDef<TdummyManageAssignCourse>[] = [
+type TCourseData = {
+  _id: string;
+  name: string;
+  category: string;
+  courseCover: string;
+};
+
+const ManageCourseColumn: ColumnDef<TCourseData>[] = [
   {
     accessorKey: "name",
     header: ({ column }) => {
@@ -63,7 +69,7 @@ const ManageCourseColumn: ColumnDef<TdummyManageAssignCourse>[] = [
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem>
               <Link
-                to={`/dashboard/instructor/assign-course-detail/${rowData?.id}`}
+                to={`/dashboard/instructor/assign-course-detail/${rowData?._id}`}
               >
                 View Details
               </Link>

@@ -1,5 +1,4 @@
 import TableDataLoading from "@/components/shared/TableLoading";
-import { dummyManageAssignCourse } from "@/components/TestingTable/DummyData";
 import {
   ManageCourseColumn,
   ManageCourseTable,
@@ -17,8 +16,6 @@ const ManageAssignCourse = () => {
   const { data: isntructorAssignedCourses, isLoading } =
     useGetInstructorAssignedCourseQuery(user?.userId, { skip: !user?.userId });
 
-  console.log(isntructorAssignedCourses?.data);
-
   return (
     <>
       {isLoading && <TableDataLoading />}
@@ -31,12 +28,14 @@ const ManageAssignCourse = () => {
           </h3>
 
           {/* table section  */}
-          <div className="Tablecontainer mx-auto py-10">
-            <ManageCourseTable
-              columns={ManageCourseColumn}
-              data={dummyManageAssignCourse}
-            />
-          </div>
+          {isntructorAssignedCourses?.data && (
+            <div className="Tablecontainer mx-auto py-10">
+              <ManageCourseTable
+                columns={ManageCourseColumn}
+                data={isntructorAssignedCourses?.data}
+              />
+            </div>
+          )}
         </div>
       </div>
     </>
