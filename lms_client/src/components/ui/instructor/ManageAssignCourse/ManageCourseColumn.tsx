@@ -98,7 +98,9 @@ const ManageCourseColumn: ColumnDef<TCourseData>[] = [
 
             {!isPublished && (
               <DropdownMenuItem>
-                <Link to={`/dashboard/instructor/add-module/${rowData?._id}`}>
+                <Link
+                  to={`/dashboard/instructor/add-module?courseId=${rowData?._id}`}
+                >
                   Add New Module
                 </Link>
               </DropdownMenuItem>

@@ -9,7 +9,7 @@ import { TCourseData } from "@/types/course.types";
 import { useGetUser } from "@/utils/sharedFunction";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Select from "react-select";
 
 type TModuleFormData = {
@@ -18,7 +18,13 @@ type TModuleFormData = {
 };
 
 const AddModule = () => {
-  const { courseId } = useParams();
+  const [searchParams] = useSearchParams();
+
+  const courseId = searchParams.get("courseId");
+
+  console.log("param in course id = ", courseId);
+
+  // const { courseId } = useParams();
 
   const userInfo = useGetUser();
 
@@ -82,6 +88,7 @@ const AddModule = () => {
     }
   }, [instructorAssignedCourses?.data]);
 
+  // ! for handling course name , if course id given as search params
   useEffect(() => {
     if (courseId) {
       reset({
