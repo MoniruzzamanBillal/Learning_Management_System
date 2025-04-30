@@ -41,7 +41,6 @@ const ManageModuleColumn: ColumnDef<TModule>[] = [
       );
     },
   },
-
   {
     accessorKey: "course.published",
     header: "Course Status",

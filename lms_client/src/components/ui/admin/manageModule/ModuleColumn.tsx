@@ -29,6 +29,22 @@ const manageModuleColumns: ColumnDef<TModuleData<TCourseData>>[] = [
     },
   },
   {
+    accessorKey: "course.published",
+    header: "Course Status",
+    cell: ({ getValue }) => {
+      const isPublished = getValue();
+      return (
+        <span
+          className={` font-semibold ${
+            isPublished ? "text-green-600" : "text-red-600"
+          } `}
+        >
+          {isPublished ? "Published" : "Unpublished"}
+        </span>
+      );
+    },
+  },
+  {
     accessorKey: "title",
     header: ({ column }) => {
       return (
@@ -36,10 +52,29 @@ const manageModuleColumns: ColumnDef<TModuleData<TCourseData>>[] = [
           variant={"ghost"}
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Module
+          Module Title
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
+    },
+  },
+  {
+    accessorKey: "videos",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Videos
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ getValue }) => {
+      const videoData = getValue() as string[];
+
+      return <span> {videoData?.length} </span>;
     },
   },
   {
@@ -47,7 +82,7 @@ const manageModuleColumns: ColumnDef<TModuleData<TCourseData>>[] = [
     cell: ({ row }) => {
       const rowData = row?.original;
 
-      console.log(rowData);
+      // console.log(rowData);
 
       return (
         <DropdownMenu>
