@@ -28,10 +28,6 @@ export const InstructorRoutes = [
     path: "/dashboard/instructor/module-detail/:moduleId",
     element: <InstructorModule />,
   },
-  // {
-  //   path: "/dashboard/instructor/add-module/:courseId",
-  //   element: <AddModule />,
-  // },
   {
     path: "/dashboard/instructor/add-module",
     element: <AddModule />,

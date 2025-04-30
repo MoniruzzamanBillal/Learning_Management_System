@@ -5,7 +5,6 @@ const moduleApi = baseApi.injectEndpoints({
     //
 
     // ! for getting all module data
-
     allModule: builder.query({
       query: () => {
         return {

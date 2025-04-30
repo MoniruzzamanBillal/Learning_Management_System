@@ -22,10 +22,6 @@ const AddModule = () => {
 
   const courseId = searchParams.get("courseId");
 
-  console.log("param in course id = ", courseId);
-
-  // const { courseId } = useParams();
-
   const userInfo = useGetUser();
 
   const navigate = useNavigate();
@@ -36,9 +32,6 @@ const AddModule = () => {
   if (!userInfo?.userId) {
     throw new Error("Something went wrong !!!");
   }
-
-  //   console.log("user info = ", userInfo);
-  //   console.log("user id = ", userInfo?.userId);
 
   const {
     data: instructorAssignedCourses,

@@ -61,7 +61,7 @@ const addModule = async (payload: TModule) => {
 const getAllModuleData = async () => {
   const moduleData = await moduleModel
     .find({ isDeleted: false })
-    .populate("course", " _id name  ");
+    .populate("course", " _id name published ");
 
   return moduleData;
 };

@@ -1,4 +1,3 @@
-import { TManageModule } from "@/components/TestingTable/DummyData";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -12,9 +11,24 @@ import {
   DropdownMenuTrigger,
 } from "../../dropdown-menu";
 
-const ManageModuleColumn: ColumnDef<TManageModule>[] = [
+export type TModule = {
+  _id: string;
+  title: string;
+  course: {
+    _id: string;
+    name: string;
+    published: boolean;
+  };
+  instructor: string;
+  videos: string[];
+  createdAt: string;
+  updatedAt: string;
+  isDeleted: boolean;
+};
+
+const ManageModuleColumn: ColumnDef<TModule>[] = [
   {
-    accessorKey: "courseName",
+    accessorKey: "course.name",
     header: ({ column }) => {
       return (
         <Button
@@ -29,7 +43,24 @@ const ManageModuleColumn: ColumnDef<TManageModule>[] = [
   },
 
   {
-    accessorKey: "moduleName",
+    accessorKey: "course.published",
+    header: "Course Status",
+    cell: ({ getValue }) => {
+      const isPublished = getValue();
+      return (
+        <span
+          className={` font-semibold ${
+            isPublished ? "text-green-600" : "text-red-600"
+          } `}
+        >
+          {isPublished ? "Published" : "Unpublished"}
+        </span>
+      );
+    },
+  },
+
+  {
+    accessorKey: "title",
     header: ({ column }) => {
       return (
         <Button
@@ -56,6 +87,11 @@ const ManageModuleColumn: ColumnDef<TManageModule>[] = [
         </Button>
       );
     },
+    cell: ({ getValue }) => {
+      const videoData = getValue() as string[];
+
+      return <span> {videoData?.length} </span>;
+    },
   },
 
   {
@@ -74,19 +110,19 @@ const ManageModuleColumn: ColumnDef<TManageModule>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem>
-              <Link to={`/dashboard/instructor/module-detail/${rowData?.id}`}>
+              <Link to={`/dashboard/instructor/module-detail/${rowData?._id}`}>
                 View Details
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <Link to={`/dashboard/instructor/update-module/${rowData?.id}`}>
+              <Link to={`/dashboard/instructor/update-module/${rowData?._id}`}>
                 Update Module
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => console.log(rowData?.id)}>
-              <Link to={`/dashboard/instructor/add-video/${rowData?.id}`}>
+            <DropdownMenuItem onClick={() => console.log(rowData?._id)}>
+              <Link to={`/dashboard/instructor/add-video/${rowData?._id}`}>
                 Add New Video
               </Link>
             </DropdownMenuItem>

@@ -9,7 +9,7 @@ const ManageModule = () => {
   const { data: moduleDataWithCourse, isLoading } =
     useAllModuleQuery(undefined);
 
-  console.log(moduleDataWithCourse?.data);
+  // console.log(moduleDataWithCourse?.data);
 
   return (
     <>
