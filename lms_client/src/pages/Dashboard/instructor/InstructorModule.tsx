@@ -7,7 +7,16 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { useGetSingleModuleDataQuery } from "@/redux/features/module/module.api";
+
 import { Link, useNavigate, useParams } from "react-router-dom";
+
+import "plyr/dist/plyr.css";
+
+type TVideo = {
+  _id: string;
+  title: string;
+  videoUrl: string;
+};
 
 const InstructorModule = () => {
   let content = null;
@@ -25,7 +34,7 @@ const InstructorModule = () => {
     });
 
   console.log(moduleData?.data?.videos);
-  console.log(moduleData?.data?.videos?.length);
+  // console.log(moduleData?.data?.videos?.length);
   // console.log(moduleData?.data?.course?.published);
 
   // ! for no video data
@@ -39,30 +48,35 @@ const InstructorModule = () => {
     content = (
       <div className="videoDetails">
         <Accordion type="single" collapsible className="w-full">
+          {moduleData?.data?.videos &&
+            moduleData?.data?.videos?.map((videoData: TVideo) => (
+              <AccordionItem value={videoData?._id}>
+                <AccordionTrigger> {videoData?.title} : </AccordionTrigger>
+                <AccordionContent>
+                  <div className="videoPreviewContainer mt-4">
+                    <video
+                      src={videoData?.videoUrl}
+                      controls
+                      className="w-full max-h-[26rem] rounded-md"
+                    />
+                  </div>
+                  <div className="btnSection  flex   gap-x-3 py-4 ">
+                    <Link to={`/dashboard/instructor/update-video/:videoId`}>
+                      <Button className=" bg-green-700/95 hover:bg-green-800/95 ">
+                        Update Video
+                      </Button>
+                    </Link>
+                    {/*  */}
+                    <Button className="  bg-red-600 hover:bg-red-700 ">
+                      Delete Video
+                    </Button>
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+
           {/*  */}
-          <AccordionItem value="item-1">
-            <AccordionTrigger>Video Title : </AccordionTrigger>
-            <AccordionContent>
-              <div className="videoContent  ">
-                <h1>video </h1>
-                <h1>video </h1>
-                <h1>video </h1>
-                <h1>video </h1>
-                <h1>video </h1>
-              </div>
-              <div className="btnSection  flex   gap-x-3 py-4 ">
-                <Link to={`/dashboard/instructor/update-video/:videoId`}>
-                  <Button className=" bg-green-700/95 hover:bg-green-800/95 ">
-                    Update Video
-                  </Button>
-                </Link>
-                {/*  */}
-                <Button className="  bg-red-600 hover:bg-red-700 ">
-                  Delete Video
-                </Button>
-              </div>
-            </AccordionContent>
-          </AccordionItem>
+
           {/*  */}
         </Accordion>
       </div>

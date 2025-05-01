@@ -136,7 +136,7 @@ const Updatevideo = () => {
                     <video
                       src={videoPreview}
                       controls
-                      className="w-full max-h-[400px] rounded-md"
+                      className="w-full max-h-[26rem] rounded-md"
                     />
                   </div>
                 )}
