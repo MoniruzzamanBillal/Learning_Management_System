@@ -36,6 +36,16 @@ const courseApi = baseApi.injectEndpoints({
       },
     }),
 
+    // ! for getting instructor single course detail
+    getCourseDetailsForInstructor: builder.query({
+      query: (courseId: string) => {
+        return {
+          url: `/course/instructor-course-detail/${courseId}`,
+          method: "GET",
+        };
+      },
+    }),
+
     // ! for getting instructor assigned courses
     getInstructorAssignedCourse: builder.query({
       query: (instructorId: string) => {
@@ -80,4 +90,5 @@ export const {
   useGetInstructorAssignedCourseQuery,
   useGetAllCourseAdminQuery,
   useGetAllCourseWithModuleQuery,
+  useGetCourseDetailsForInstructorQuery,
 } = courseApi;

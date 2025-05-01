@@ -39,6 +39,20 @@ const getModuleData = catchAsync(async (req, res) => {
   });
 });
 
+// ! get module data based on course id
+const getModuleFromCourseId = catchAsync(async (req, res) => {
+  const result = await moduleServices.getModuleFromCourseId(
+    req?.params?.courseId
+  );
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Data retrived successfully !!!",
+    data: result,
+  });
+});
+
 // ! for updating module
 const updateModule = catchAsync(async (req, res) => {
   const result = await moduleServices.updateModule(
@@ -61,4 +75,5 @@ export const moduleController = {
   getModuleData,
   updateModule,
   getAllModuleData,
+  getModuleFromCourseId,
 };

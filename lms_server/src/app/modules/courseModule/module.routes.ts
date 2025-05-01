@@ -21,6 +21,12 @@ router.post(
 // ! for getting module data
 router.get("/module-detail/:moduleId", moduleController.getModuleData);
 
+// ! get module data based on course id
+router.get(
+  "/course-module-detail/:courseId",
+  moduleController.getModuleFromCourseId
+);
+
 // ! for updating module
 router.patch(
   "/update-module/:moduleId",

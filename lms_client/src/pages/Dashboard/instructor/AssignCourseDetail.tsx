@@ -4,19 +4,28 @@ import {
   ManageModuleColumn,
   ManageModuleTable,
 } from "@/components/ui/instructor/ManageModule";
+import { useGetCourseDetailsForInstructorQuery } from "@/redux/features/course/course.api";
 import { useAllModuleQuery } from "@/redux/features/module/module.api";
 import { Link, useParams } from "react-router-dom";
 
 const AssignCourseDetail = () => {
   const { courseId } = useParams();
 
-  console.log("course id = ", courseId);
+  if (!courseId) {
+    throw new Error("Something went wrong !!!");
+  }
 
-  const { data: moduleDataWithCourse, isLoading } =
-    useAllModuleQuery(undefined);
+  const { data: moduleDataWithCourse } = useAllModuleQuery(undefined);
+
+  const { data: courseDetailWithModule, isLoading } =
+    useGetCourseDetailsForInstructorQuery(courseId, { skip: !courseId });
+
+  console.log(courseDetailWithModule?.data);
 
   return (
     <>
+      {isLoading && <TableDataLoading />}
+
       <div className="AssignCourseDetailContainer">
         <div className="AssignCourseDetailWrapper bg-gray-100 border border-gray-300  shadow rounded-md p-4 ">
           <h3 className="brand text-2xl font-medium mb-6 underline  ">
@@ -60,8 +69,6 @@ const AssignCourseDetail = () => {
             <h3 className="brand text-xl font-medium  underline  ">
               Modules :
             </h3>
-
-            {isLoading && <TableDataLoading />}
 
             {/* table section  */}
             {moduleDataWithCourse?.data && (

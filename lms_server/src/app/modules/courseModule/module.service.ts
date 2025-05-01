@@ -66,6 +66,26 @@ const getAllModuleData = async () => {
   return moduleData;
 };
 
+// ! get module data based on course id
+const getModuleFromCourseId = async (courseId: string) => {
+  const courseData = await courseModel.findById(courseId);
+
+  if (!courseData) {
+    throw new AppError(httpStatus.BAD_REQUEST, "This Course don't exist!!!");
+  }
+
+  if (courseData?.published) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "This Course is already published , you can't add new module !!!!"
+    );
+  }
+
+  const result = await moduleModel.find({ course: courseId });
+
+  return result;
+};
+
 // ! for getting module data
 const getModulData = async (moduleId: string) => {
   const moduleData = await moduleModel
@@ -103,4 +123,5 @@ export const moduleServices = {
   getModulData,
   updateModule,
   getAllModuleData,
+  getModuleFromCourseId,
 };

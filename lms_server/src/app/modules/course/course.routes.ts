@@ -52,7 +52,7 @@ router.get(
 // ! for getting single course data , for instructor
 router.get(
   "/instructor-course-detail/:courseId",
-  // authCheck(UserRole.instructor),
+  authCheck(UserRole.instructor),
   courseController.getCourseDetailForInstructor
 );
 
