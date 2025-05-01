@@ -11,6 +11,8 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 
 import { deleteVideoFunction } from "@/functions/video.functions";
 import { useDeleteVideoMutation } from "@/redux/features/video/video.api";
+import { userRoleConts } from "@/utils/constants";
+import { GetUserRole } from "@/utils/sharedFunction";
 import MuxPlayer from "@mux/mux-player-react";
 
 type TVideo = {
@@ -20,6 +22,8 @@ type TVideo = {
 };
 
 const InstructorModule = () => {
+  const userRole = GetUserRole();
+
   let content = null;
   const navigate = useNavigate();
 
@@ -91,22 +95,27 @@ const InstructorModule = () => {
                     />
                   </div>
 
-                  <div className="btnSection  flex   gap-x-3 py-4 ">
-                    <Link
-                      to={`/dashboard/instructor/update-video/${videoData?._id}`}
-                    >
-                      <Button className=" bg-green-700/95 hover:bg-green-800/95 ">
-                        Update Video
-                      </Button>
-                    </Link>
-                    {/*  */}
-                    <Button
-                      disabled={moduleData?.data?.course?.published}
-                      onClick={() => handleDeleteVideo(videoData)}
-                      className="  bg-red-600 hover:bg-red-700 "
-                    >
-                      Delete Video
-                    </Button>
+                  <div className="btnSection   py-4 ">
+                    {userRole === userRoleConts?.instructor && (
+                      <div className="btnGroup flex   gap-x-3">
+                        <Link
+                          to={`/dashboard/instructor/update-video/${videoData?._id}`}
+                        >
+                          <Button className=" bg-green-700/95 hover:bg-green-800/95 ">
+                            Update Video
+                          </Button>
+                        </Link>
+
+                        {/*  */}
+                        <Button
+                          disabled={moduleData?.data?.course?.published}
+                          onClick={() => handleDeleteVideo(videoData)}
+                          className="  bg-red-600 hover:bg-red-700 "
+                        >
+                          Delete Video
+                        </Button>
+                      </div>
+                    )}
                   </div>
                 </AccordionContent>
               </AccordionItem>
@@ -165,29 +174,35 @@ const InstructorModule = () => {
             </div>
 
             {/* add , update button section  */}
-            <div className=" rightSection btnSection  flex justify-between  gap-x-3 ">
-              <Button
-                disabled={moduleData?.data?.course?.published}
-                className=" bg-prime100 hover:bg-prime200 "
-                onClick={() =>
-                  navigate(`/dashboard/instructor/update-module/${moduleId}`)
-                }
-              >
-                Update Module
-              </Button>
+            <div className="rightBtnSection">
+              {userRole === userRoleConts?.instructor && (
+                <div className=" btnSection  flex justify-between  gap-x-3 ">
+                  <Button
+                    disabled={moduleData?.data?.course?.published}
+                    className=" bg-prime100 hover:bg-prime200 "
+                    onClick={() =>
+                      navigate(
+                        `/dashboard/instructor/update-module/${moduleId}`
+                      )
+                    }
+                  >
+                    Update Module
+                  </Button>
 
-              {/*  */}
-              <Button
-                disabled={moduleData?.data?.course?.published}
-                className=" bg-green-700/95 hover:bg-green-800/95 "
-                onClick={() =>
-                  navigate(`/dashboard/instructor/add-video/${moduleId}`)
-                }
-              >
-                Add New Video
-              </Button>
+                  {/*  */}
+                  <Button
+                    disabled={moduleData?.data?.course?.published}
+                    className=" bg-green-700/95 hover:bg-green-800/95 "
+                    onClick={() =>
+                      navigate(`/dashboard/instructor/add-video/${moduleId}`)
+                    }
+                  >
+                    Add New Video
+                  </Button>
 
-              {/*  */}
+                  {/*  */}
+                </div>
+              )}
             </div>
           </div>
 

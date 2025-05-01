@@ -29,7 +29,7 @@ const CourseDetail = () => {
   const { data: courseData, isLoading: courseDataLoading } =
     useGetCourseDetailsForAdminQuery(courseId, { skip: !courseId });
 
-  console.log(courseData?.data);
+  // console.log(courseData?.data);
 
   return (
     <>
@@ -136,12 +136,14 @@ const CourseDetail = () => {
                 Instructors :
               </h1>
 
-              <div className="TableContainer mx-auto mt-2">
-                <InstructorTable
-                  columns={InstructorColumn}
-                  data={courseData?.data?.instructors}
-                />
-              </div>
+              {courseData?.data?.instructors && (
+                <div className="TableContainer mx-auto mt-2">
+                  <InstructorTable
+                    columns={InstructorColumn}
+                    data={courseData?.data?.instructors}
+                  />
+                </div>
+              )}
             </div>
 
             {/* module table  */}
@@ -150,12 +152,14 @@ const CourseDetail = () => {
                 Modules :
               </h1>
 
-              <div className="TableContainer mx-auto mt-2">
-                <CourseDetailModuleTable
-                  columns={CourseDetailModuleColumn}
-                  data={courseData?.data?.modules}
-                />
-              </div>
+              {courseData?.data?.modules && (
+                <div className="TableContainer mx-auto mt-2">
+                  <CourseDetailModuleTable
+                    columns={CourseDetailModuleColumn}
+                    data={courseData?.data?.modules}
+                  />
+                </div>
+              )}
             </div>
 
             {/*  */}
