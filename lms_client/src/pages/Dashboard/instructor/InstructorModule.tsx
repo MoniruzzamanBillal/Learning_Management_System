@@ -7,10 +7,10 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { useGetSingleModuleDataQuery } from "@/redux/features/module/module.api";
-
 import { Link, useNavigate, useParams } from "react-router-dom";
 
-import "plyr/dist/plyr.css";
+import "@mux/mux-player-react";
+import MuxPlayer from "@mux/mux-player-react";
 
 type TVideo = {
   _id: string;
@@ -54,12 +54,21 @@ const InstructorModule = () => {
                 <AccordionTrigger> {videoData?.title} : </AccordionTrigger>
                 <AccordionContent>
                   <div className="videoPreviewContainer mt-4">
-                    <video
-                      src={videoData?.videoUrl}
-                      controls
-                      className="w-full max-h-[26rem] rounded-md"
+                    <MuxPlayer
+                      playbackId=""
+                      streamType="on-demand"
+                      src={videoData.videoUrl}
+                      className="rounded-md"
+                      autoPlay={false}
+                      style={{ width: "100%", height: "26rem" }}
+                      metadata={{
+                        video_title: `${videoData?.title}`,
+                      }}
+                      forwardSeekOffset={5}
+                      backwardSeekOffset={5}
                     />
                   </div>
+
                   <div className="btnSection  flex   gap-x-3 py-4 ">
                     <Link to={`/dashboard/instructor/update-video/:videoId`}>
                       <Button className=" bg-green-700/95 hover:bg-green-800/95 ">
