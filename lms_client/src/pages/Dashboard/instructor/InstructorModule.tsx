@@ -33,6 +33,16 @@ const InstructorModule = () => {
       refetchOnMountOrArgChange: true,
     });
 
+  // ! for deletig video
+  const handleDeleteVideo = async (videoData: TVideo) => {
+    const payload = {
+      videoId: videoData?._id,
+      moduleId,
+    };
+
+    console.log("delete video = ", payload);
+  };
+
   // console.log(moduleData?.data?.videos);
   // console.log(moduleData?.data?.videos?.length);
   // console.log(moduleData?.data?.course?.published);
@@ -78,7 +88,11 @@ const InstructorModule = () => {
                       </Button>
                     </Link>
                     {/*  */}
-                    <Button className="  bg-red-600 hover:bg-red-700 ">
+                    <Button
+                      disabled={moduleData?.data?.course?.published}
+                      onClick={() => handleDeleteVideo(videoData)}
+                      className="  bg-red-600 hover:bg-red-700 "
+                    >
                       Delete Video
                     </Button>
                   </div>
