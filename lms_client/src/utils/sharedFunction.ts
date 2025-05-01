@@ -25,7 +25,7 @@ export const GetUserRole = () => {
 export const handleToastResponse = (
   result: any,
   toastId: string | number,
-  navigate: () => void
+  navigate?: () => void
 ) => {
   if (result?.error) {
     const errorMessage = (result?.error as any)?.data?.message;
@@ -44,8 +44,12 @@ export const handleToastResponse = (
       duration: 1000,
     });
 
-    setTimeout(() => {
-      navigate();
-    }, 700);
+    if (navigate) {
+      setTimeout(() => {
+        navigate();
+      }, 700);
+    }
+
+    return result;
   }
 };

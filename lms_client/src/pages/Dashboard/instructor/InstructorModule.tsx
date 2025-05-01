@@ -9,6 +9,8 @@ import { Button } from "@/components/ui/button";
 import { useGetSingleModuleDataQuery } from "@/redux/features/module/module.api";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
+import { deleteVideoFunction } from "@/functions/video.functions";
+import { useDeleteVideoMutation } from "@/redux/features/video/video.api";
 import MuxPlayer from "@mux/mux-player-react";
 
 type TVideo = {
@@ -27,11 +29,17 @@ const InstructorModule = () => {
     throw new Error("Something went wrong !!!");
   }
 
-  const { data: moduleData, isLoading: moduleDataLoading } =
-    useGetSingleModuleDataQuery(moduleId, {
-      skip: !moduleId,
-      refetchOnMountOrArgChange: true,
-    });
+  const {
+    data: moduleData,
+    isLoading: moduleDataLoading,
+    refetch: moduleDataRefetch,
+  } = useGetSingleModuleDataQuery(moduleId, {
+    skip: !moduleId,
+    refetchOnMountOrArgChange: true,
+  });
+
+  const [deleteVideo, { isLoading: videoDeletingLoading }] =
+    useDeleteVideoMutation();
 
   // ! for deletig video
   const handleDeleteVideo = async (videoData: TVideo) => {
@@ -40,7 +48,11 @@ const InstructorModule = () => {
       moduleId,
     };
 
-    console.log("delete video = ", payload);
+    const result = await deleteVideoFunction(payload, deleteVideo);
+
+    if (result?.data?.success) {
+      moduleDataRefetch();
+    }
   };
 
   // console.log(moduleData?.data?.videos);
@@ -99,10 +111,6 @@ const InstructorModule = () => {
                 </AccordionContent>
               </AccordionItem>
             ))}
-
-          {/*  */}
-
-          {/*  */}
         </Accordion>
       </div>
     );
@@ -110,7 +118,7 @@ const InstructorModule = () => {
 
   return (
     <>
-      {moduleDataLoading && <FormSubmitLoading />}
+      {(videoDeletingLoading || moduleDataLoading) && <FormSubmitLoading />}
 
       <div className="InstructorModuleContainer">
         <div className="InstructorModuleWrapper bg-gray-100 border border-gray-300  shadow rounded-md p-4 ">

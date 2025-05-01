@@ -42,3 +42,20 @@ export const updateVideoFunction = async (
     });
   }
 };
+
+// ! for delete video
+export const deleteVideoFunction = async (payload: any, deleteVideo: any) => {
+  const taostId = toast.loading("Deleting Video....");
+
+  try {
+    const result = await deleteVideo(payload);
+
+    const responseResult = handleToastResponse(result, taostId);
+    return responseResult;
+  } catch (error) {
+    console.log(error);
+    toast.error("Something went wrong while Deleting video !!!", {
+      duration: 1400,
+    });
+  }
+};
