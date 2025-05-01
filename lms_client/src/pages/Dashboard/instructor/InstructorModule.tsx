@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button";
 import { useGetSingleModuleDataQuery } from "@/redux/features/module/module.api";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
-import "@mux/mux-player-react";
 import MuxPlayer from "@mux/mux-player-react";
 
 type TVideo = {

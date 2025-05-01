@@ -6,6 +6,7 @@ import { addVideoFunction } from "@/functions/video.functions";
 import { useAddNewVideoMutation } from "@/redux/features/video/video.api";
 import { TAddVideo } from "@/types/video.types";
 import { useGetUser } from "@/utils/sharedFunction";
+import MuxPlayer from "@mux/mux-player-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
@@ -114,10 +115,15 @@ const AddVideo = () => {
 
                 {videoPreview && (
                   <div className="videoPreviewContainer mt-4">
-                    <video
+                    <MuxPlayer
+                      playbackId=""
+                      streamType="on-demand"
                       src={videoPreview}
-                      controls
-                      className="w-full max-h-[26rem] rounded-md"
+                      className="rounded-md"
+                      autoPlay={false}
+                      style={{ width: "100%", height: "26rem" }}
+                      forwardSeekOffset={5}
+                      backwardSeekOffset={5}
                     />
                   </div>
                 )}
