@@ -79,7 +79,23 @@ const getInstructorsAssignCourses = catchAsync(async (req, res) => {
 
 // ! for getting single course data , admin manage course
 const getCourseDetailsForAdmin = catchAsync(async (req, res) => {
-  const result = await courseServices.getCourseDetailsForAdmin(req?.params?.id);
+  const result = await courseServices.getCourseDetailsForAdmin(
+    req?.params?.courseId
+  );
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Course data retrives successfully !!!",
+    data: result,
+  });
+});
+
+// ! get course detail for instructor
+const getCourseDetailForInstructor = catchAsync(async (req, res) => {
+  const result = await courseServices.getCourseDetailForInstructor(
+    req?.params?.courseId
+  );
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -128,4 +144,5 @@ export const courseController = {
   getAllCoursesForAdmin,
   getInstructorsAssignCourses,
   getAllCoursesWithModules,
+  getCourseDetailForInstructor,
 };

@@ -106,6 +106,21 @@ const getCourseDetailsForAdmin = async (courseId: string) => {
   return result;
 };
 
+// ! course detail for instructor
+const getCourseDetailForInstructor = async (courseId: string) => {
+  const result = await courseModel
+    .findOne({ _id: courseId })
+    .populate("modules", " _id instructor title videos ")
+    .select(" _id name category published ");
+  // .populate("instructors", " name email profilePicture _id ");
+
+  if (!result) {
+    throw new AppError(httpStatus.BAD_REQUEST, "This Course don't exist!!!");
+  }
+
+  return result;
+};
+
 // ! for updating course data
 const updateCourseData = async (
   payload: Partial<TCourse>,
@@ -174,4 +189,5 @@ export const courseServices = {
   getAllCoursesForAdmin,
   getInstructorsAssignCourses,
   getAllCoursesWithModules,
+  getCourseDetailForInstructor,
 };

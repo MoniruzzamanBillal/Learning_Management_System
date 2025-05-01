@@ -1,9 +1,10 @@
-import { dummyManageModule } from "@/components/TestingTable/DummyData";
+import TableDataLoading from "@/components/shared/TableLoading";
 import { Button } from "@/components/ui/button";
 import {
   ManageModuleColumn,
   ManageModuleTable,
 } from "@/components/ui/instructor/ManageModule";
+import { useAllModuleQuery } from "@/redux/features/module/module.api";
 import { Link, useParams } from "react-router-dom";
 
 const AssignCourseDetail = () => {
@@ -11,61 +12,72 @@ const AssignCourseDetail = () => {
 
   console.log("course id = ", courseId);
 
+  const { data: moduleDataWithCourse, isLoading } =
+    useAllModuleQuery(undefined);
+
   return (
-    <div className="AssignCourseDetailContainer">
-      <div className="AssignCourseDetailWrapper bg-gray-100 border border-gray-300  shadow rounded-md p-4 ">
-        <h3 className="brand text-2xl font-medium mb-6 underline  ">
-          Course Detail :
-        </h3>
+    <>
+      <div className="AssignCourseDetailContainer">
+        <div className="AssignCourseDetailWrapper bg-gray-100 border border-gray-300  shadow rounded-md p-4 ">
+          <h3 className="brand text-2xl font-medium mb-6 underline  ">
+            Course Detail :
+          </h3>
 
-        <div className="courseDetailBody  flex justify-between  ">
-          <div className="bodyLeft text-lg flex flex-col gap-y-2">
-            {/* course name  */}
-            <p className="courseName">
-              <span className=" font-bold ">Course name : </span> Mastering
-              Frontend Development with js
-            </p>
+          <div className="courseDetailBody  flex justify-between  ">
+            <div className="bodyLeft text-lg flex flex-col gap-y-2">
+              {/* course name  */}
+              <p className="courseName">
+                <span className=" font-bold ">Course name : </span> Mastering
+                Frontend Development with js
+              </p>
 
-            {/* course published */}
-            <p className="coursePublished">
-              <span className=" font-bold ">Course Published : </span> false
-            </p>
+              {/* course published */}
+              <p className="coursePublished">
+                <span className=" font-bold ">Course Published : </span> false
+              </p>
 
-            {/* course category  */}
-            <p className="courseCategory">
-              <span className=" font-bold ">Course category : </span> Web
-              Development
-            </p>
+              {/* course category  */}
+              <p className="courseCategory">
+                <span className=" font-bold ">Course category : </span> Web
+                Development
+              </p>
+            </div>
+
+            {/* add  button section  */}
+            <div className=" rightSection btnSection   ">
+              <Link to={"/dashboard/instructor/add-module"}>
+                <Button className=" bg-prime100 hover:bg-prime200 ">
+                  Add New Module
+                </Button>
+              </Link>
+            </div>
+
+            {/*  */}
           </div>
 
-          {/* add  button section  */}
-          <div className=" rightSection btnSection   ">
-            <Link to={"/dashboard/instructor/add-module"}>
-              <Button className=" bg-prime100 hover:bg-prime200 ">
-                Add New Module
-              </Button>
-            </Link>
+          {/* module section  */}
+          <div className="moduleSection mt-8 ">
+            <h3 className="brand text-xl font-medium  underline  ">
+              Modules :
+            </h3>
+
+            {isLoading && <TableDataLoading />}
+
+            {/* table section  */}
+            {moduleDataWithCourse?.data && (
+              <div className="Tablecontainer mx-auto py-10">
+                <ManageModuleTable
+                  columns={ManageModuleColumn}
+                  data={moduleDataWithCourse?.data}
+                />
+              </div>
+            )}
           </div>
 
           {/*  */}
         </div>
-
-        {/* module section  */}
-        <div className="moduleSection mt-8 ">
-          <h3 className="brand text-xl font-medium  underline  ">Modules :</h3>
-
-          {/* table section  */}
-          <div className="Tablecontainer mx-auto py-10">
-            <ManageModuleTable
-              columns={ManageModuleColumn}
-              data={dummyManageModule}
-            />
-          </div>
-        </div>
-
-        {/*  */}
       </div>
-    </div>
+    </>
   );
 };
 

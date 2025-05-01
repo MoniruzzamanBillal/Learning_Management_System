@@ -44,9 +44,16 @@ router.get("/course-detail/:id", courseController.getSingleCourse);
 
 // ! for getting single course data , for admin
 router.get(
-  "/admin-course-detail/:id",
+  "/admin-course-detail/:courseId",
   authCheck(UserRole.admin),
   courseController.getCourseDetailsForAdmin
+);
+
+// ! for getting single course data , for instructor
+router.get(
+  "/instructor-course-detail/:courseId",
+  // authCheck(UserRole.instructor),
+  courseController.getCourseDetailForInstructor
 );
 
 // ! for getting instructor assigned courses
