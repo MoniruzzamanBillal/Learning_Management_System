@@ -10,6 +10,7 @@ import { useGetSingleModuleDataQuery } from "@/redux/features/module/module.api"
 import { Link, useNavigate, useParams } from "react-router-dom";
 
 const InstructorModule = () => {
+  let content = null;
   const navigate = useNavigate();
 
   const { moduleId } = useParams();
@@ -23,8 +24,50 @@ const InstructorModule = () => {
       skip: !moduleId,
     });
 
-  // console.log(moduleData?.data);
+  console.log(moduleData?.data?.videos);
+  console.log(moduleData?.data?.videos?.length);
   // console.log(moduleData?.data?.course?.published);
+
+  // ! for no video data
+  if (!moduleData?.data?.videos?.length) {
+    content = (
+      <p className=" mt-4 text-lg text-red-600 font-semibold ">
+        No Video found for this module !!!
+      </p>
+    );
+  } else {
+    content = (
+      <div className="videoDetails">
+        <Accordion type="single" collapsible className="w-full">
+          {/*  */}
+          <AccordionItem value="item-1">
+            <AccordionTrigger>Video Title : </AccordionTrigger>
+            <AccordionContent>
+              <div className="videoContent  ">
+                <h1>video </h1>
+                <h1>video </h1>
+                <h1>video </h1>
+                <h1>video </h1>
+                <h1>video </h1>
+              </div>
+              <div className="btnSection  flex   gap-x-3 py-4 ">
+                <Link to={`/dashboard/instructor/update-video/:videoId`}>
+                  <Button className=" bg-green-700/95 hover:bg-green-800/95 ">
+                    Update Video
+                  </Button>
+                </Link>
+                {/*  */}
+                <Button className="  bg-red-600 hover:bg-red-700 ">
+                  Delete Video
+                </Button>
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+          {/*  */}
+        </Accordion>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -107,35 +150,7 @@ const InstructorModule = () => {
               Videos :
             </h3>
 
-            <div className="videoDetails">
-              <Accordion type="single" collapsible className="w-full">
-                {/*  */}
-                <AccordionItem value="item-1">
-                  <AccordionTrigger>Video Title : </AccordionTrigger>
-                  <AccordionContent>
-                    <div className="videoContent  ">
-                      <h1>video </h1>
-                      <h1>video </h1>
-                      <h1>video </h1>
-                      <h1>video </h1>
-                      <h1>video </h1>
-                    </div>
-                    <div className="btnSection  flex   gap-x-3 py-4 ">
-                      <Link to={`/dashboard/instructor/update-video/:videoId`}>
-                        <Button className=" bg-green-700/95 hover:bg-green-800/95 ">
-                          Update Video
-                        </Button>
-                      </Link>
-                      {/*  */}
-                      <Button className="  bg-red-600 hover:bg-red-700 ">
-                        Delete Video
-                      </Button>
-                    </div>
-                  </AccordionContent>
-                </AccordionItem>
-                {/*  */}
-              </Accordion>
-            </div>
+            {content}
           </div>
 
           {/*  */}
