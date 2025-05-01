@@ -21,7 +21,10 @@ const AssignCourseDetail = () => {
     useGetCourseDetailsForInstructorQuery(courseId, { skip: !courseId });
 
   const { data: courseDetailWithModule, isLoading: moduleDataLoading } =
-    useGetModuleFromCourseIdQuery(courseId, { skip: !courseId });
+    useGetModuleFromCourseIdQuery(courseId, {
+      skip: !courseId,
+      refetchOnMountOrArgChange: true,
+    });
 
   // console.log(courseDetail?.data);
   // console.log(courseDetailWithModule?.data);

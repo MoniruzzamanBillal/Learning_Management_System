@@ -1,8 +1,8 @@
 import { Router } from "express";
 import authCheck from "../../middleware/authCheck";
+import ValidateCourseAccess from "../../middleware/ValidateCourseAccess";
 import { UserRole } from "../user/user.constants";
 import { CourseEnrollmentController } from "./CourseEnrollment.controller";
-import ValidateCourseAccess from "../../middleware/ValidateCourseAccess";
 
 const router = Router();
 
