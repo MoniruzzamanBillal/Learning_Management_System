@@ -5,6 +5,10 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import {
+  InstructorColumn,
+  InstructorTable,
+} from "@/components/ui/admin/courseDetail";
 import { Button } from "@/components/ui/button";
 import { useGetCourseDetailsForAdminQuery } from "@/redux/features/course/course.api";
 import { useNavigate, useParams } from "react-router-dom";
@@ -23,7 +27,7 @@ const CourseDetail = () => {
   const { data: courseData, isLoading: courseDataLoading } =
     useGetCourseDetailsForAdminQuery(courseId, { skip: !courseId });
 
-  // console.log(courseData?.data);
+  console.log(courseData?.data);
 
   return (
     <>
@@ -120,45 +124,41 @@ const CourseDetail = () => {
                 </Accordion>
               </div>
 
-              {/* instructors table  */}
-              <div className="instructorsTable pt-8 ">
-                <h1 className=" font-medium text-xl mb-2 underline ">
-                  Instructors :
-                </h1>
-                <div className="instructorsTable">
-                  <table className="w-full">
-                    <thead>
-                      <tr>
-                        <th> Name</th>
-                        <th> Email </th>
-                        <th> profilePicture </th>
-                      </tr>
-                    </thead>
-                    {/* <tbody>{content}</tbody> */}
-                  </table>
-                </div>
-              </div>
-
-              {/* module table  */}
-              <div className="modulesTable pt-8 ">
-                <h1 className=" font-medium text-xl mb-2 underline ">
-                  Modules :
-                </h1>
-                <div className="modulesTable">
-                  <table className="w-full">
-                    <thead>
-                      <tr>
-                        <th> Title</th>
-                        <th> Videos </th>
-                        <th> Action </th>
-                      </tr>
-                    </thead>
-                    {/* <tbody>{content}</tbody> */}
-                  </table>
-                </div>
-              </div>
-
               {/*  */}
+            </div>
+
+            {/* table section  */}
+            {/* instructors table  */}
+            <div className="instructorsTable pt-8 ">
+              <h1 className=" font-medium text-xl mb-2 underline ">
+                Instructors :
+              </h1>
+
+              <div className="Tablecontainer mx-auto py-10">
+                <InstructorTable
+                  columns={InstructorColumn}
+                  data={courseData?.data?.instructors}
+                />
+              </div>
+            </div>
+
+            {/* module table  */}
+            <div className="modulesTable pt-8 ">
+              <h1 className=" font-medium text-xl mb-2 underline ">
+                Modules :
+              </h1>
+              <div className="modulesTable">
+                <table className="w-full">
+                  <thead>
+                    <tr>
+                      <th> Title</th>
+                      <th> Videos </th>
+                      <th> Action </th>
+                    </tr>
+                  </thead>
+                  {/* <tbody>{content}</tbody> */}
+                </table>
+              </div>
             </div>
 
             {/*  */}

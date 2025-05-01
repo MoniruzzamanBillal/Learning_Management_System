@@ -96,8 +96,10 @@ const getSingleCoureData = async (courseId: string) => {
 
 // ! for getting single course data , admin manage course
 const getCourseDetailsForAdmin = async (courseId: string) => {
-  const result = await courseModel.findOne({ _id: courseId });
-  // .populate("instructors", " name email profilePicture _id ");
+  const result = await courseModel
+    .findOne({ _id: courseId })
+    .populate("instructors", " name email profilePicture _id ")
+    .populate("modules", "_id course title videos instructor ");
 
   if (!result) {
     throw new AppError(httpStatus.BAD_REQUEST, "This Course don't exist!!!");
