@@ -9,7 +9,6 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../../dropdown-menu";
 
@@ -95,13 +94,10 @@ const manageModuleColumns: ColumnDef<TModuleData<TCourseData>>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem>
-              <Link to={`/dashboard/admin/module-detail/${rowData?._id}`}>
+              <Link to={`/dashboard/instructor/module-detail/${rowData?._id}`}>
                 View Details
               </Link>
             </DropdownMenuItem>
-
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>Delete Module</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
