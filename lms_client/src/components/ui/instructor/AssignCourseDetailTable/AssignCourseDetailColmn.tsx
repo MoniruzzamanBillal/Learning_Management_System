@@ -84,6 +84,8 @@ const AssignCourseDetailColmn: ColumnDef<TModule>[] = [
     cell: ({ row }) => {
       const rowData = row.original;
 
+      // console.log(rowData?.course?.published);
+
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -100,17 +102,25 @@ const AssignCourseDetailColmn: ColumnDef<TModule>[] = [
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <Link to={`/dashboard/instructor/update-module/${rowData?._id}`}>
-                Update Module
-              </Link>
-            </DropdownMenuItem>
+
+            {!rowData?.course?.published && (
+              <DropdownMenuItem>
+                <Link
+                  to={`/dashboard/instructor/update-module/${rowData?._id}`}
+                >
+                  Update Module
+                </Link>
+              </DropdownMenuItem>
+            )}
+
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => console.log(rowData?._id)}>
-              <Link to={`/dashboard/instructor/add-video/${rowData?._id}`}>
-                Add New Video
-              </Link>
-            </DropdownMenuItem>
+            {!rowData?.course?.published && (
+              <DropdownMenuItem onClick={() => console.log(rowData?._id)}>
+                <Link to={`/dashboard/instructor/add-video/${rowData?._id}`}>
+                  Add New Video
+                </Link>
+              </DropdownMenuItem>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
       );
