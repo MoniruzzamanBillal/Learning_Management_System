@@ -99,11 +99,13 @@ const CourseColumns: ColumnDef<TCourseData>[] = [
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <Link to={`/dashboard/admin/update-course/${rowData?._id}`}>
-                Update Course
-              </Link>
-            </DropdownMenuItem>
+            {!rowData?.published && (
+              <DropdownMenuItem>
+                <Link to={`/dashboard/admin/update-course/${rowData?._id}`}>
+                  Update Course
+                </Link>
+              </DropdownMenuItem>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
       );

@@ -32,7 +32,7 @@ export const adminRoutes = [
     element: <UpdateCourse />,
   },
   {
-    path: "/dashboard/admin/course-detail/:id",
+    path: "/dashboard/admin/course-detail/:courseId",
     element: <CourseDetail />,
   },
   {

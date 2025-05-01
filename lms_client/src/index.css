@@ -93,3 +93,13 @@ table th {
 .active {
   color: #009b94;
 }
+
+.courseDetail ul,
+.courseDetail li,
+.courseDetail h1,
+.courseDetail ol,
+.courseDetail p {
+  all: revert !important;
+  margin: 0 !important;
+  padding: revert !important;
+}

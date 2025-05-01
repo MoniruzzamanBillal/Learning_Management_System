@@ -82,7 +82,7 @@ const UpdateCourse = () => {
   const { data: courseData, isLoading: courseDataLoading } =
     useGetCourseDetailsForAdminQuery(courseId, { skip: !courseId });
 
-  console.log(courseData?.data);
+  // console.log(courseData?.data);
 
   // ! for changing the image preview url
   const changeImagePreviewUrl = (e: React.ChangeEvent<HTMLInputElement>) => {
