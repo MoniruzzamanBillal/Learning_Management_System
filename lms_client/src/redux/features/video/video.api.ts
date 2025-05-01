@@ -36,6 +36,17 @@ const videoApi = baseApi.injectEndpoints({
       },
     }),
 
+    // ! for deleting video
+    deleteVideo: builder.mutation({
+      query: (payload) => {
+        return {
+          url: "/video/delete-video",
+          method: "PATCH",
+          body: payload,
+        };
+      },
+    }),
+
     //
   }),
 });
@@ -45,4 +56,5 @@ export const {
   useAddNewVideoMutation,
   useUpdateVideoMutation,
   useGetSingleVideoQuery,
+  useDeleteVideoMutation,
 } = videoApi;

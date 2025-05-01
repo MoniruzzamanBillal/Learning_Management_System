@@ -42,7 +42,7 @@ router.post(
 // ! for deleting a video
 router.patch(
   "/delete-video",
-  // authCheck(UserRole.admin, UserRole.instructor),
+  authCheck(UserRole.admin, UserRole.instructor),
   videoController.deleteModuleVideo
 );
 
