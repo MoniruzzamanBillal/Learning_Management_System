@@ -70,12 +70,12 @@ const AddModule = () => {
   // ! useeffect for handling course select data option
   useEffect(() => {
     if (instructorAssignedCourses?.data) {
-      const courseOptionsData = instructorAssignedCourses?.data?.map(
-        (course: TCourseData) => ({
+      const courseOptionsData = instructorAssignedCourses?.data
+        ?.filter((course: TCourseData) => !course?.published)
+        ?.map((course: TCourseData) => ({
           value: course?._id,
           label: course?.name,
-        })
-      );
+        }));
 
       setCourseOptions(courseOptionsData);
     }
