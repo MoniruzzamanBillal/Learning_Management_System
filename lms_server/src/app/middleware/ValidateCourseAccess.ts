@@ -1,13 +1,13 @@
+import httpStatus from "http-status";
 import AppError from "../Error/AppError";
 import { courseEnrollmentModel } from "../modules/CourseEnrollment/CourseEnrollment.model";
 import { PAYMENTSTATUS } from "../modules/payment/payment.constant";
 import { paymentModel } from "../modules/payment/payment.model";
 import catchAsync from "../util/catchAsync";
-import httpStatus from "http-status";
 
 const ValidateCourseAccess = catchAsync(async (req, res, next) => {
   const userId = req?.user?.userId;
-  const courseId = req?.params?.id;
+  const courseId = req?.params?.courseId;
 
   const enrollment = await courseEnrollmentModel.findOne({
     user: userId,

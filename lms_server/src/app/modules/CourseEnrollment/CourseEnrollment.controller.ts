@@ -19,7 +19,7 @@ const enrollInCourse = catchAsync(async (req, res) => {
 const getMyCourseEnrollData = catchAsync(async (req, res) => {
   const result = await courseEnrollmentService.getUserEnrolledCourse(
     req?.user?.userId,
-    req?.params?.id
+    req?.params?.courseId
   );
 
   sendResponse(res, {

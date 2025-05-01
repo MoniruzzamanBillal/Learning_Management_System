@@ -9,13 +9,13 @@ const router = Router();
 // ! for enrolling into a course
 router.post(
   "/enroll-course",
-  //   authCheck(UserRole.user),
+  authCheck(UserRole.user),
   CourseEnrollmentController.enrollInCourse
 );
 
 // ! for getting enrolled course data
 router.get(
-  "/my-enrolled-course/:id",
+  "/my-enrolled-course/:courseId",
   authCheck(UserRole.user),
   ValidateCourseAccess,
   CourseEnrollmentController.getMyCourseEnrollData
