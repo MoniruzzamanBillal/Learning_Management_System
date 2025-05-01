@@ -12,6 +12,7 @@ const moduleApi = baseApi.injectEndpoints({
           method: "GET",
         };
       },
+      providesTags: ["allModule"],
     }),
 
     // ! for adding a module
@@ -23,7 +24,7 @@ const moduleApi = baseApi.injectEndpoints({
           body: payload,
         };
       },
-      invalidatesTags: ["getModuleFromCourseId"],
+      invalidatesTags: ["getModuleFromCourseId", "allModule"],
     }),
 
     // ! for updating module

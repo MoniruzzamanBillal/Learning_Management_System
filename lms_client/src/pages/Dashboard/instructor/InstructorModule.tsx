@@ -21,7 +21,7 @@ const InstructorModule = () => {
       skip: !moduleId,
     });
 
-  // console.log(moduleData?.data);
+  console.log(moduleData?.data);
 
   return (
     <>
@@ -38,25 +38,36 @@ const InstructorModule = () => {
             <div className="bodyLeft text-lg flex flex-col gap-y-2">
               {/* course name  */}
               <p className="courseName">
-                <span className=" font-bold ">Course name : </span> Mastering
-                Frontend Development with js
+                <span className=" font-bold ">Course name : </span>{" "}
+                {moduleData?.data?.course?.name}
               </p>
 
               {/* course published */}
-              <p className="courseName">
-                <span className=" font-bold ">Course Published : </span> false
+              <p className="coursePublished">
+                <span className={` font-bold  `}>Course Published : </span>{" "}
+                <span
+                  className={` ${
+                    moduleData?.data?.course?.published
+                      ? "text-green-600 "
+                      : "text-red-600 "
+                  } `}
+                >
+                  {moduleData?.data?.course?.published
+                    ? "Published "
+                    : "Unpublished "}
+                </span>
               </p>
 
               {/* course category  */}
               <p className="courseCategory">
-                <span className=" font-bold ">Course category : </span> Web
-                Development
+                <span className=" font-bold ">Course category : </span>{" "}
+                {moduleData?.data?.course?.category}
               </p>
 
               {/* module name  */}
               <p className="moduleName">
-                <span className=" font-bold ">Module name : </span> Introduction
-                to Html
+                <span className=" font-bold ">Module name : </span>{" "}
+                {moduleData?.data?.title}
               </p>
             </div>
 
@@ -80,8 +91,10 @@ const InstructorModule = () => {
           </div>
 
           {/* video section  */}
-          <div className="videoSection mt-8 ">
-            <h3 className="brand text-xl font-medium  underline  ">Videos :</h3>
+          <div className="videoSection mt-10 ">
+            <h3 className="brand text-2xl font-medium  underline  ">
+              Videos :
+            </h3>
 
             <div className="videoDetails">
               <Accordion type="single" collapsible className="w-full">

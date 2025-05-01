@@ -23,5 +23,6 @@ export const baseApi = createApi({
     "fetchAdminCourse",
     "fetchAllCourseWithModule",
     "getModuleFromCourseId",
+    "allModule",
   ],
 });
