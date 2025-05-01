@@ -19,5 +19,9 @@ export const baseApi = createApi({
   reducerPath: "baseApi",
   baseQuery: baseQuery,
   endpoints: () => ({}),
-  tagTypes: ["fetchAdminCourse", "fetchAllCourseWithModule"],
+  tagTypes: [
+    "fetchAdminCourse",
+    "fetchAllCourseWithModule",
+    "getModuleFromCourseId",
+  ],
 });

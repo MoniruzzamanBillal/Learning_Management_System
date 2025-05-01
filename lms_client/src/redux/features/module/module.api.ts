@@ -23,6 +23,7 @@ const moduleApi = baseApi.injectEndpoints({
           body: payload,
         };
       },
+      invalidatesTags: ["getModuleFromCourseId"],
     }),
 
     // ! for updating module
@@ -46,7 +47,7 @@ const moduleApi = baseApi.injectEndpoints({
       },
     }),
 
-    // ! for getting module data based on module id
+    // ! for getting module data based on course id
     getModuleFromCourseId: builder.query({
       query: (courseId) => {
         return {
@@ -54,6 +55,7 @@ const moduleApi = baseApi.injectEndpoints({
           method: "GET",
         };
       },
+      providesTags: ["getModuleFromCourseId"],
     }),
 
     //
