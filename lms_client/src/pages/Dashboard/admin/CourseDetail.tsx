@@ -12,7 +12,11 @@ import {
   InstructorTable,
 } from "@/components/ui/admin/courseDetail";
 import { Button } from "@/components/ui/button";
-import { useGetCourseDetailsForAdminQuery } from "@/redux/features/course/course.api";
+import { publishCourseFunction } from "@/functions/course.functions";
+import {
+  useGetCourseDetailsForAdminQuery,
+  usePublishCourseMutation,
+} from "@/redux/features/course/course.api";
 import { useNavigate, useParams } from "react-router-dom";
 
 const CourseDetail = () => {
@@ -26,10 +30,27 @@ const CourseDetail = () => {
     throw new Error("Something went wrong !!!!");
   }
 
-  const { data: courseData, isLoading: courseDataLoading } =
-    useGetCourseDetailsForAdminQuery(courseId, { skip: !courseId });
+  const [publishCourse, { isLoading: coursepublishingLoading }] =
+    usePublishCourseMutation();
+
+  const {
+    data: courseData,
+    isLoading: courseDataLoading,
+    refetch: courseDataRefetch,
+  } = useGetCourseDetailsForAdminQuery(courseId, {
+    skip: !courseId,
+  });
 
   // console.log(courseData?.data);
+
+  // ! for publishing a course
+  const publishAdminCourse = async () => {
+    const result = await publishCourseFunction(courseId, publishCourse);
+
+    if (result?.data?.success) {
+      courseDataRefetch();
+    }
+  };
 
   return (
     <>
@@ -51,7 +72,19 @@ const CourseDetail = () => {
                 </h1>
               </div>
 
-              <div className=" rightSection btnSection   ">
+              <div className=" rightSection btnSection flex justify-between items-center gap-x-4  ">
+                {!courseData?.data?.published && (
+                  <Button
+                    disabled={coursepublishingLoading}
+                    className=" bg-prime100 hover:bg-prime200 "
+                    onClick={() => publishAdminCourse()}
+                  >
+                    {coursepublishingLoading
+                      ? "Publishing course..."
+                      : " Publish Course"}
+                  </Button>
+                )}
+
                 <Button
                   disabled={courseData?.data?.published}
                   onClick={() =>
@@ -62,7 +95,7 @@ const CourseDetail = () => {
                   className={`    ${
                     courseData?.data?.published
                       ? "bg-gray-700  "
-                      : " bg-prime100 hover:bg-prime200"
+                      : " bg-green-600 hover:bg-green-700"
                   } `}
                 >
                   Update Course

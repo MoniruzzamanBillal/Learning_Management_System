@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { handleToastResponse } from "@/utils/sharedFunction";
 import { toast } from "sonner";
 
 // ! for adding course
@@ -12,29 +13,7 @@ export const addCourseFunction = async (
   try {
     const result = await addCourse(formData);
 
-    //  *  for any  error
-    if (result?.error) {
-      const errorMessage = (result?.error as any)?.data?.message;
-      console.log(errorMessage);
-      toast.error(errorMessage, {
-        id: taostId,
-        duration: 1400,
-      });
-    }
-
-    // * for successful insertion
-    if (result?.data) {
-      const successMsg = result?.data?.message;
-
-      toast.success(successMsg, {
-        id: taostId,
-        duration: 1000,
-      });
-
-      setTimeout(() => {
-        navigate();
-      }, 700);
-    }
+    await handleToastResponse(result, taostId, navigate);
   } catch (error) {
     console.log(error);
     toast.error("Something went wrong while adding course !!!", {
@@ -55,32 +34,29 @@ export const updateCourseFunction = async (
   try {
     const result = await updateCourse({ formData, courseId });
 
-    //  *  for any  error
-    if (result?.error) {
-      const errorMessage = (result?.error as any)?.data?.message;
-      console.log(errorMessage);
-      toast.error(errorMessage, {
-        id: taostId,
-        duration: 1600,
-      });
-    }
-
-    // * for successful insertion
-    if (result?.data) {
-      const successMsg = result?.data?.message;
-
-      toast.success(successMsg, {
-        id: taostId,
-        duration: 1000,
-      });
-
-      setTimeout(() => {
-        navigate();
-      }, 700);
-    }
+    await handleToastResponse(result, taostId, navigate);
   } catch (error) {
     console.log(error);
     toast.error("Something went wrong while updating course !!!", {
+      duration: 1400,
+    });
+  }
+};
+
+// ! for publishing a course
+export const publishCourseFunction = async (
+  courseId: string,
+  publishCourse: any
+) => {
+  const taostId = toast.loading("Publishing Course....");
+
+  try {
+    const result = await publishCourse(courseId);
+    const response = await handleToastResponse(result, taostId);
+    return response;
+  } catch (error) {
+    console.log(error);
+    toast.error("Something went wrong while publishing course !!!", {
       duration: 1400,
     });
   }

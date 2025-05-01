@@ -78,6 +78,16 @@ const courseApi = baseApi.injectEndpoints({
       providesTags: ["fetchAllCourseWithModule"],
     }),
 
+    // ! for publishing a course
+    publishCourse: builder.mutation({
+      query: (courseId: string) => {
+        return {
+          url: `/course/publish-course/${courseId}`,
+          method: "PATCH",
+        };
+      },
+    }),
+
     //
   }),
 });
@@ -91,4 +101,5 @@ export const {
   useGetAllCourseAdminQuery,
   useGetAllCourseWithModuleQuery,
   useGetCourseDetailsForInstructorQuery,
+  usePublishCourseMutation,
 } = courseApi;
