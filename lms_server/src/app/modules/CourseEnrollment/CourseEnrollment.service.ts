@@ -84,19 +84,20 @@ const enrollInCourse = async (payload: { user: string; course: string }) => {
       { session }
     );
 
+    const modules = await moduleModel
+      .find({ isDeleted: false, course })
+      .select("_id");
+
+    const moduleIds = modules.map((m) => m?._id?.toString());
+
     // * create video progress data
     const videoDatas = await videoModel
-      .find({ isDeleted: false })
-      .populate({
-        path: "module",
-        match: { course },
-      })
+      .find({ isDeleted: false, module: { $in: moduleIds } })
       .sort({ videoOrder: 1 });
 
     const videoProgressData = videoDatas?.map((video, index) => ({
       user,
       course,
-      // module: video?.module?._id?.toString(),
       module: (video?.module as unknown as { _id: string })?._id.toString(),
       video: video?._id?.toString(),
       videoStatus:
@@ -104,6 +105,8 @@ const enrollInCourse = async (payload: { user: string; course: string }) => {
           ? videoProgressStatus?.unlocked
           : videoProgressStatus?.locked,
     }));
+
+    // console.log(videoProgressData);
 
     await videoProgressModel.insertMany(videoProgressData, { session });
 
