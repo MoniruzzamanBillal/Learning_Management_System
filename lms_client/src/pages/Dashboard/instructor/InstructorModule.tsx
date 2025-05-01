@@ -30,9 +30,10 @@ const InstructorModule = () => {
   const { data: moduleData, isLoading: moduleDataLoading } =
     useGetSingleModuleDataQuery(moduleId, {
       skip: !moduleId,
+      refetchOnMountOrArgChange: true,
     });
 
-  console.log(moduleData?.data?.videos);
+  // console.log(moduleData?.data?.videos);
   // console.log(moduleData?.data?.videos?.length);
   // console.log(moduleData?.data?.course?.published);
 
@@ -69,7 +70,9 @@ const InstructorModule = () => {
                   </div>
 
                   <div className="btnSection  flex   gap-x-3 py-4 ">
-                    <Link to={`/dashboard/instructor/update-video/:videoId`}>
+                    <Link
+                      to={`/dashboard/instructor/update-video/${videoData?._id}`}
+                    >
                       <Button className=" bg-green-700/95 hover:bg-green-800/95 ">
                         Update Video
                       </Button>
