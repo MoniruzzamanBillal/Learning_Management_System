@@ -28,7 +28,7 @@ const AddVideo = () => {
   } = useForm<TAddVideo>();
 
   const handleNavigate = () => {
-    navigate(`/dashboard/instructor/module-detail/${moduleId}`);
+    navigate(-1);
   };
 
   // ! for changing the video preview url

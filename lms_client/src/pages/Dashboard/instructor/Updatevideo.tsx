@@ -39,7 +39,7 @@ const Updatevideo = () => {
   } = useForm<TUpdateVideo>();
 
   const handleNavigate = () => {
-    navigate(`/dashboard/instructor/manage-video`);
+    navigate(-1);
   };
 
   // ! for changing the video preview url

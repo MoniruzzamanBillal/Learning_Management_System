@@ -104,7 +104,7 @@ const UpdateCourse = () => {
   };
 
   const handleNavigate = () => {
-    navigate("/dashboard/admin/manage-course");
+    navigate(-1);
   };
 
   type TUpdateCourseType = z.infer<typeof updateCourseValidationSchema>;

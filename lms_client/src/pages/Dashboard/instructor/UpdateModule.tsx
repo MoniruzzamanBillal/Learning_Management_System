@@ -61,7 +61,7 @@ const UpdateModule = () => {
   } = useForm<TModuleFormData>();
 
   const handleNavigate = () => {
-    navigate("/dashboard/instructor/manage-module");
+    navigate(-1);
   };
 
   // ! for updating new module

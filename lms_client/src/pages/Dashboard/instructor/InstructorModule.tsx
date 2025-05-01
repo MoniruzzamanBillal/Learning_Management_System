@@ -7,9 +7,11 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { useGetSingleModuleDataQuery } from "@/redux/features/module/module.api";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 const InstructorModule = () => {
+  const navigate = useNavigate();
+
   const { moduleId } = useParams();
 
   if (!moduleId) {
@@ -21,7 +23,8 @@ const InstructorModule = () => {
       skip: !moduleId,
     });
 
-  console.log(moduleData?.data);
+  // console.log(moduleData?.data);
+  // console.log(moduleData?.data?.course?.published);
 
   return (
     <>
@@ -60,31 +63,39 @@ const InstructorModule = () => {
 
               {/* course category  */}
               <p className="courseCategory">
-                <span className=" font-bold ">Course category : </span>{" "}
+                <span className=" font-bold ">Course category : </span>
                 {moduleData?.data?.course?.category}
               </p>
 
               {/* module name  */}
               <p className="moduleName">
-                <span className=" font-bold ">Module name : </span>{" "}
+                <span className=" font-bold ">Module name : </span>
                 {moduleData?.data?.title}
               </p>
             </div>
 
             {/* add , update button section  */}
             <div className=" rightSection btnSection  flex justify-between  gap-x-3 ">
-              <Link to={`/dashboard/instructor/update-module/${moduleId}`}>
-                <Button className=" bg-prime100 hover:bg-prime200 ">
-                  Update Module
-                </Button>
-              </Link>
+              <Button
+                disabled={moduleData?.data?.course?.published}
+                className=" bg-prime100 hover:bg-prime200 "
+                onClick={() =>
+                  navigate(`/dashboard/instructor/update-module/${moduleId}`)
+                }
+              >
+                Update Module
+              </Button>
 
               {/*  */}
-              <Link to={`/dashboard/instructor/add-video/${moduleId}`}>
-                <Button className=" bg-green-700/95 hover:bg-green-800/95 ">
-                  Add New Video
-                </Button>
-              </Link>
+              <Button
+                disabled={moduleData?.data?.course?.published}
+                className=" bg-green-700/95 hover:bg-green-800/95 "
+                onClick={() =>
+                  navigate(`/dashboard/instructor/add-video/${moduleId}`)
+                }
+              >
+                Add New Video
+              </Button>
 
               {/*  */}
             </div>

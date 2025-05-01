@@ -85,7 +85,7 @@ const getModuleFromCourseId = async (courseId: string) => {
 const getModulData = async (moduleId: string) => {
   const moduleData = await moduleModel
     .findById(moduleId)
-    .populate("course", "name description category ")
+    .populate("course", "name description category published ")
     .populate("videos", "title  videoUrl")
     .populate("instructor", " name email profilePicture");
 
