@@ -46,6 +46,16 @@ const moduleApi = baseApi.injectEndpoints({
       },
     }),
 
+    // ! for getting module data based on module id
+    getModuleFromCourseId: builder.query({
+      query: (courseId) => {
+        return {
+          url: `/module/course-module-detail/${courseId}`,
+          method: "GET",
+        };
+      },
+    }),
+
     //
   }),
 });
@@ -56,4 +66,5 @@ export const {
   useUpdateModuleMutation,
   useGetSingleModuleDataQuery,
   useAllModuleQuery,
+  useGetModuleFromCourseIdQuery,
 } = moduleApi;

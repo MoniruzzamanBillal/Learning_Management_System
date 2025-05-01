@@ -1,11 +1,11 @@
 import TableDataLoading from "@/components/shared/TableLoading";
 import { Button } from "@/components/ui/button";
 import {
-  ManageModuleColumn,
-  ManageModuleTable,
-} from "@/components/ui/instructor/ManageModule";
+  AssignCourseDetailColmn,
+  AssignCourseDetailTable,
+} from "@/components/ui/instructor/AssignCourseDetailTable";
 import { useGetCourseDetailsForInstructorQuery } from "@/redux/features/course/course.api";
-import { useAllModuleQuery } from "@/redux/features/module/module.api";
+import { useGetModuleFromCourseIdQuery } from "@/redux/features/module/module.api";
 import { Link, useParams } from "react-router-dom";
 
 const AssignCourseDetail = () => {
@@ -15,16 +15,18 @@ const AssignCourseDetail = () => {
     throw new Error("Something went wrong !!!");
   }
 
-  const { data: moduleDataWithCourse } = useAllModuleQuery(undefined);
-
-  const { data: courseDetailWithModule, isLoading } =
+  const { data: courseDetail, isLoading: courseDetailLoading } =
     useGetCourseDetailsForInstructorQuery(courseId, { skip: !courseId });
 
+  const { data: courseDetailWithModule, isLoading: moduleDataLoading } =
+    useGetModuleFromCourseIdQuery(courseId, { skip: !courseId });
+
+  // console.log(courseDetail?.data);
   console.log(courseDetailWithModule?.data);
 
   return (
     <>
-      {isLoading && <TableDataLoading />}
+      {moduleDataLoading && <TableDataLoading />}
 
       <div className="AssignCourseDetailContainer">
         <div className="AssignCourseDetailWrapper bg-gray-100 border border-gray-300  shadow rounded-md p-4 ">
@@ -71,11 +73,11 @@ const AssignCourseDetail = () => {
             </h3>
 
             {/* table section  */}
-            {moduleDataWithCourse?.data && (
+            {courseDetailWithModule?.data && (
               <div className="Tablecontainer mx-auto py-10">
-                <ManageModuleTable
-                  columns={ManageModuleColumn}
-                  data={moduleDataWithCourse?.data}
+                <AssignCourseDetailTable
+                  columns={AssignCourseDetailColmn}
+                  data={courseDetailWithModule?.data}
                 />
               </div>
             )}

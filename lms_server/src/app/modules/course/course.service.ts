@@ -110,8 +110,7 @@ const getCourseDetailsForAdmin = async (courseId: string) => {
 const getCourseDetailForInstructor = async (courseId: string) => {
   const result = await courseModel
     .findOne({ _id: courseId })
-    .populate("modules", " _id instructor title videos ")
-    .select(" _id name category published ");
+    .select(" _id name category published modules ");
   // .populate("instructors", " name email profilePicture _id ");
 
   if (!result) {

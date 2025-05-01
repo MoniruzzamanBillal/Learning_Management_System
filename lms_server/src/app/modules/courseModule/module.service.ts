@@ -74,14 +74,9 @@ const getModuleFromCourseId = async (courseId: string) => {
     throw new AppError(httpStatus.BAD_REQUEST, "This Course don't exist!!!");
   }
 
-  if (courseData?.published) {
-    throw new AppError(
-      httpStatus.BAD_REQUEST,
-      "This Course is already published , you can't add new module !!!!"
-    );
-  }
-
-  const result = await moduleModel.find({ course: courseId });
+  const result = await moduleModel
+    .find({ course: courseId })
+    .populate("course", " _id name published ");
 
   return result;
 };
