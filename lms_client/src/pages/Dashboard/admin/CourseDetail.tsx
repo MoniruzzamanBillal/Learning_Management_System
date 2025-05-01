@@ -6,6 +6,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import {
+  CourseDetailModuleColumn,
+  CourseDetailModuleTable,
   InstructorColumn,
   InstructorTable,
 } from "@/components/ui/admin/courseDetail";
@@ -134,7 +136,7 @@ const CourseDetail = () => {
                 Instructors :
               </h1>
 
-              <div className="Tablecontainer mx-auto py-10">
+              <div className="TableContainer mx-auto mt-2">
                 <InstructorTable
                   columns={InstructorColumn}
                   data={courseData?.data?.instructors}
@@ -147,17 +149,12 @@ const CourseDetail = () => {
               <h1 className=" font-medium text-xl mb-2 underline ">
                 Modules :
               </h1>
-              <div className="modulesTable">
-                <table className="w-full">
-                  <thead>
-                    <tr>
-                      <th> Title</th>
-                      <th> Videos </th>
-                      <th> Action </th>
-                    </tr>
-                  </thead>
-                  {/* <tbody>{content}</tbody> */}
-                </table>
+
+              <div className="TableContainer mx-auto mt-2">
+                <CourseDetailModuleTable
+                  columns={CourseDetailModuleColumn}
+                  data={courseData?.data?.modules}
+                />
               </div>
             </div>
 
