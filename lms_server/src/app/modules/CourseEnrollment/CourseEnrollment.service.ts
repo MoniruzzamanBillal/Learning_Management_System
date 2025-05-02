@@ -139,7 +139,20 @@ const enrollInCourse = async (payload: { user: string; course: string }) => {
   //
 };
 
-// ! get user enrolled course data
+// ! for getting all user enrolled course
+const getAllUserEnrolledCourse = async (userId: string) => {
+  const result = await courseEnrollmentModel
+    .find({
+      user: userId,
+      isDeleted: false,
+    })
+    .populate("course", " _id name category courseCover ")
+    .select(" -Payment -isDeleted -createdAt -updatedAt -__v ");
+
+  return result;
+};
+
+// ! get user single enrolled  course data
 const getUserEnrolledCourse = async (userId: string, courseId: string) => {
   const result = await courseEnrollmentModel
     .findOne({ user: userId, course: courseId, isDeleted: false })
@@ -318,4 +331,5 @@ export const courseEnrollmentService = {
   watchVideo,
   courseProgressPercentage,
   enrollmentsPerCourse,
+  getAllUserEnrolledCourse,
 };

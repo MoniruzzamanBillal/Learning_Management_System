@@ -6,6 +6,7 @@ import DashboardLayout from "@/components/layout/DashboardLayout";
 import { HomePage, Login, Register } from "@/pages";
 import { adminRoutes } from "./AdminRoutes";
 import { InstructorRoutes } from "./InstructorRoutes";
+import { userRoutes } from "./UserRoutes";
 
 const router = createBrowserRouter([
   {
@@ -38,6 +39,9 @@ const router = createBrowserRouter([
 
           // * instructor routes
           ...InstructorRoutes,
+
+          // * user routes
+          ...userRoutes,
 
           //
         ],

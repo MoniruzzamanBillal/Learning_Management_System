@@ -20,7 +20,14 @@ router.post(
   CourseEnrollmentController.enrollInCourse
 );
 
-// ! for getting enrolled course data
+// ! for getting all user's enrolled course
+router.get(
+  "/user-all-enrolled-couses",
+  authCheck(UserRole.user),
+  CourseEnrollmentController.getAllUserEnrolledCourse
+);
+
+// ! for getting user single enrolled course data
 router.get(
   "/my-enrolled-course/:courseId",
   authCheck(UserRole.user),

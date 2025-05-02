@@ -11,7 +11,7 @@ const ManageInstructors = () => {
 
   return (
     <div className="ManageInstructorsContainer">
-      <div className="ManageInstructorsWrapper bg-gray-100/90 border border-gray-300  shadow rounded-md p-3">
+      <div className="ManageInstructorsWrapper bg-gray-100/90 border border-gray-300  shadow rounded-md p-3 ">
         <h3 className="brand text-2xl font-medium mb-4 ">Manage Instructors</h3>
 
         <Button

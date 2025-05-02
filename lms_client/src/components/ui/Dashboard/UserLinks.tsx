@@ -13,7 +13,7 @@ export const UserLinks = [
   },
   {
     name: "My Courses",
-    path: "/",
+    path: "/dashboard/user/my-enrolled-courses",
     icon: <CiBookmark className="text-xl font-bold" />,
   },
 ];
