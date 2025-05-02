@@ -3,9 +3,9 @@ import mongoose from "mongoose";
 import AppError from "../../Error/AppError";
 import { courseModel } from "../course/course.model";
 import { moduleModel } from "../courseModule/module.model";
+
 import { paymentModel } from "../payment/payment.model";
 import { sslServices } from "../SSL/SSL.service";
-
 import { userModel } from "../user/user.model";
 import { videoModel } from "../VideoModule/video.model";
 import { videoProgressStatus } from "../VideoProgress/VideoProgress.constants";
@@ -95,19 +95,22 @@ const enrollInCourse = async (payload: { user: string; course: string }) => {
       .find({ isDeleted: false, module: { $in: moduleIds } })
       .sort({ videoOrder: 1 });
 
-    const videoProgressData = videoDatas?.map((video, index) => ({
+    // console.log(videoDatas);
+
+    const videoProgressData = videoDatas?.map((video) => ({
       user,
       course,
       module: (video?.module as unknown as { _id: string })?._id.toString(),
       video: video?._id?.toString(),
       videoStatus:
-        index === 0
+        video?.videoOrder === 0
           ? videoProgressStatus?.unlocked
           : videoProgressStatus?.locked,
     }));
 
     // console.log(videoProgressData);
 
+    // * create video progress record
     await videoProgressModel.insertMany(videoProgressData, { session });
 
     const paymentRequestData = {
