@@ -1,11 +1,15 @@
 import TableDataLoading from "@/components/shared/TableLoading";
+import {
+  EnrolledCourseColumn,
+  EnrolledCourseTable,
+} from "@/components/ui/user/table/EnrolledCourseTable";
 import { useGetAllUserEnrolledCoursesQuery } from "@/redux/features/enrollment/enrollment.api";
 
 const MyEnrolledCourses = () => {
   const { data: allEnrolledCourse, isLoading } =
     useGetAllUserEnrolledCoursesQuery(undefined);
 
-  console.log(allEnrolledCourse?.data);
+  // console.log(allEnrolledCourse?.data);
 
   return (
     <div className="MyCoursesContainer">
@@ -17,10 +21,14 @@ const MyEnrolledCourses = () => {
         {isLoading && <TableDataLoading />}
 
         <div className="enrolledCourseData">
-          <h1>my enrolled courses </h1>
-          <h1>my enrolled courses </h1>
-          <h1>my enrolled courses </h1>
-          <h1>my enrolled courses </h1>
+          {allEnrolledCourse?.data && (
+            <div className="Tablecontainer mx-auto py-10">
+              <EnrolledCourseTable
+                columns={EnrolledCourseColumn}
+                data={allEnrolledCourse?.data}
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>

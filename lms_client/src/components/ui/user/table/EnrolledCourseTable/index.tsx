@@ -1,1 +1,2 @@
-// export { default as ManageModuleTable } from "./ManageModuleTable";
+export { default as EnrolledCourseColumn } from "./EnrolledCourseColumn";
+export { default as EnrolledCourseTable } from "./EnrolledCourseTable";
