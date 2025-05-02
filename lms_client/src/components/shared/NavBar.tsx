@@ -1,3 +1,4 @@
+import { userRoleConts } from "@/utils/constants";
 import { useGetUser } from "@/utils/sharedFunction";
 import { useState } from "react";
 import { LuUser } from "react-icons/lu";
@@ -75,6 +76,16 @@ const NavBar = () => {
                 </Link>
               </li>
             ))}
+
+          {userInfo?.userRole === userRoleConts.user && (
+            <Link
+              to={"/my-courses"}
+              className=" hover:text-prime50 duration-500  "
+              onClick={() => setOpen(false)}
+            >
+              My Courses
+            </Link>
+          )}
 
           <div className="buttonSection  md:ml-5 lg:ml-8  flex  items-center gap-x-0.5  ">
             {!userInfo ? (
