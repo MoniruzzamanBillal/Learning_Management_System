@@ -88,6 +88,16 @@ const courseApi = baseApi.injectEndpoints({
       },
     }),
 
+    // ! for getting enrollment info for each course
+    getEnrollmentInfo: builder.query({
+      query: () => {
+        return {
+          url: `/course/enrollment-data`,
+          method: "GET",
+        };
+      },
+    }),
+
     //
   }),
 });
@@ -102,4 +112,5 @@ export const {
   useGetAllCourseWithModuleQuery,
   useGetCourseDetailsForInstructorQuery,
   usePublishCourseMutation,
+  useGetEnrollmentInfoQuery,
 } = courseApi;

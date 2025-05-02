@@ -7,7 +7,11 @@ import { CourseEnrollmentController } from "./CourseEnrollment.controller";
 const router = Router();
 
 // ! for getting enrollment course info
-router.get("/enrollment-data", CourseEnrollmentController.enrollmentsPerCourse);
+router.get(
+  "/enrollment-data",
+  authCheck(UserRole.admin),
+  CourseEnrollmentController.enrollmentsPerCourse
+);
 
 // ! for enrolling into a course
 router.post(
