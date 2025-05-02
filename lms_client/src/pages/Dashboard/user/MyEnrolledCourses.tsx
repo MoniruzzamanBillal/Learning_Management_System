@@ -1,10 +1,20 @@
+import TableDataLoading from "@/components/shared/TableLoading";
+import { useGetAllUserEnrolledCoursesQuery } from "@/redux/features/enrollment/enrollment.api";
+
 const MyEnrolledCourses = () => {
+  const { data: allEnrolledCourse, isLoading } =
+    useGetAllUserEnrolledCoursesQuery(undefined);
+
+  console.log(allEnrolledCourse?.data);
+
   return (
     <div className="MyCoursesContainer">
       <div className="MyCoursesWrapper bg-gray-100/90 border border-gray-300  shadow rounded-md p-3">
         <h3 className="brand text-2xl font-medium mb-4 ">
           My Enrolled Courses
         </h3>
+
+        {isLoading && <TableDataLoading />}
 
         <div className="enrolledCourseData">
           <h1>my enrolled courses </h1>
