@@ -12,10 +12,21 @@ const enrollmentApi = baseApi.injectEndpoints({
       },
     }),
 
+    // ! for getting all user enrolled course
+    getAllUserEnrolledCourses: builder.query({
+      query: () => {
+        return {
+          url: `/enroll/user-all-enrolled-couses`,
+          method: "GET",
+        };
+      },
+    }),
+
     //
   }),
 });
 
 //
 
-export const { useGetEnrollmentInfoQuery } = enrollmentApi;
+export const { useGetEnrollmentInfoQuery, useGetAllUserEnrolledCoursesQuery } =
+  enrollmentApi;
