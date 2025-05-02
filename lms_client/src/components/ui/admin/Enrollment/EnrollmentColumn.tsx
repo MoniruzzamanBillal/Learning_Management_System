@@ -1,12 +1,17 @@
-import { TEnrollmentDummyData } from "@/components/TestingTable/DummyData";
 import { ColumnDef } from "@tanstack/react-table";
 
 import { ArrowUpDown } from "lucide-react";
 import { Button } from "../../button";
 
-const EnrollmentStudentsColumn: ColumnDef<TEnrollmentDummyData>[] = [
+type TCourseEnrollmentSummary = {
+  courseId: string;
+  courseTitle: string;
+  totalEnrollments: number;
+};
+
+const EnrollmentStudentsColumn: ColumnDef<TCourseEnrollmentSummary>[] = [
   {
-    accessorKey: "courseName",
+    accessorKey: "courseTitle",
     header: ({ column }) => {
       return (
         <Button
@@ -20,7 +25,7 @@ const EnrollmentStudentsColumn: ColumnDef<TEnrollmentDummyData>[] = [
     },
   },
   {
-    accessorKey: "enrolledStudents",
+    accessorKey: "totalEnrollments",
     header: ({ column }) => {
       return (
         <Button
