@@ -1,0 +1,887 @@
+{
+	"info": {
+		"_postman_id": "946afc6d-b545-4a1e-bd6f-1cabe1ac12f4",
+		"name": "LMS_system",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "31252728"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "Register user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "data",
+									"value": "{\n  \"name\": \"Monir\",\n  \"email\": \"abc@d.com\",\n  \"password\": \"123456\"\n}",
+									"type": "text"
+								},
+								{
+									"key": "profileImg",
+									"type": "file",
+									"src": "/C:/Users/ACER/Downloads/464110390_2476714522536579_4879393298088386535_n.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{BASE_API}}/auth/register",
+							"host": [
+								"{{BASE_API}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"instructor2@gmail.com\",\r\n    \"password\": \"123456\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_API}}/auth/login",
+							"host": [
+								"{{BASE_API}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "course",
+			"item": [
+				{
+					"name": "add new course",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2RjZWM4OTU0MTBkOWRmMjdlZWNlNjEiLCJ1c2VyUm9sZSI6ImFkbWluIiwiaWF0IjoxNzQ1MjkzODIyLCJleHAiOjE3NDcwMjE4MjJ9.W4iOmO7G0SXXjH8BlJzcfB5iAo60ckJgyzsNMyn9Xm4",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "data",
+									"value": "{\n  \"name\": \"Mastering Frontend Development with js batch 1\",\n  \"description\": \"A complete guide to modern frontend development, covering HTML, CSS, JavaScript, React, and more.\",\n  \"price\": 200,\n  \"category\": \"Web Development\",\n  \"instructors\": [\"67dcebede2a31f35e669a5df\", \"67dcec525410d9df27eece5f\"]\n}\n",
+									"type": "text"
+								},
+								{
+									"key": "courseCover",
+									"type": "file",
+									"src": "/C:/Users/ACER/Downloads/f8c821c5-4365-477c-96f5-46a78a035f83.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{BASE_API}}/course/add-course",
+							"host": [
+								"{{BASE_API}}"
+							],
+							"path": [
+								"course",
+								"add-course"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update course",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2RjZWM4OTU0MTBkOWRmMjdlZWNlNjEiLCJ1c2VyUm9sZSI6ImFkbWluIiwiaWF0IjoxNzQyNTMzMDA2LCJleHAiOjE3NDQyNjEwMDZ9.E5PF6YxL4otoBGgnvp2NqLYV8Ycu83bx918ZDqQ08Tg",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "data",
+									"value": "{\n  \"name\": \"Mastering Frontend Development with js batch 1 update test \",\n  \"price\": 200\n\n}\n",
+									"type": "text"
+								},
+								{
+									"key": "courseCover",
+									"type": "file",
+									"src": "/C:/Users/ACER/Downloads/Screenshot 2025-04-24 063421.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{BASE_API}}/course/update-course/68071acb01ebcb97d5d1d7f5",
+							"host": [
+								"{{BASE_API}}"
+							],
+							"path": [
+								"course",
+								"update-course",
+								"68071acb01ebcb97d5d1d7f5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all courses",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_API}}/course/all-courses",
+							"host": [
+								"{{BASE_API}}"
+							],
+							"path": [
+								"course",
+								"all-courses"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all courses for admin",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_API}}/course/admin-all-courses",
+							"host": [
+								"{{BASE_API}}"
+							],
+							"path": [
+								"course",
+								"admin-all-courses"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all courses for admin and instructor with module info",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_API}}/course/all-courses-modules",
+							"host": [
+								"{{BASE_API}}"
+							],
+							"path": [
+								"course",
+								"all-courses-modules"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get single course",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_API}}/course/course-detail/680b8fdd08c2b4cd5ac263e3",
+							"host": [
+								"{{BASE_API}}"
+							],
+							"path": [
+								"course",
+								"course-detail",
+								"680b8fdd08c2b4cd5ac263e3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get single course data for admin",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2RjZWM4OTU0MTBkOWRmMjdlZWNlNjEiLCJ1c2VyUm9sZSI6ImFkbWluIiwiaWF0IjoxNzQ1MjkzODIyLCJleHAiOjE3NDcwMjE4MjJ9.W4iOmO7G0SXXjH8BlJzcfB5iAo60ckJgyzsNMyn9Xm4",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_API}}/course/admin-course-detail/680b8fdd08c2b4cd5ac263e3",
+							"host": [
+								"{{BASE_API}}"
+							],
+							"path": [
+								"course",
+								"admin-course-detail",
+								"680b8fdd08c2b4cd5ac263e3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get single course data for instrucror",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{BASE_API}}/course/instructor-course-detail/680b8fdd08c2b4cd5ac263e3",
+							"host": [
+								"{{BASE_API}}"
+							],
+							"path": [
+								"course",
+								"instructor-course-detail",
+								"680b8fdd08c2b4cd5ac263e3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get instructor assign courses",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2RjZWJlZGUyYTMxZjM1ZTY2OWE1ZGYiLCJ1c2VyUm9sZSI6Imluc3RydWN0b3IiLCJpYXQiOjE3NDUyOTM5MjAsImV4cCI6MTc0NzAyMTkyMH0.JJvpamS6r9JpZmIofJk24T7P1MoRf7NOseaYkvdWfpI",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_API}}/course/instructor-courses/67dcebede2a31f35e669a5df",
+							"host": [
+								"{{BASE_API}}"
+							],
+							"path": [
+								"course",
+								"instructor-courses",
+								"67dcebede2a31f35e669a5df"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "publish course",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2RjZWM4OTU0MTBkOWRmMjdlZWNlNjEiLCJ1c2VyUm9sZSI6ImFkbWluIiwiaWF0IjoxNzQyNTMzMDA2LCJleHAiOjE3NDQyNjEwMDZ9.E5PF6YxL4otoBGgnvp2NqLYV8Ycu83bx918ZDqQ08Tg",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_API}}/course/publish-course/67f5ed7b6feae26b9840219c",
+							"host": [
+								"{{BASE_API}}"
+							],
+							"path": [
+								"course",
+								"publish-course",
+								"67f5ed7b6feae26b9840219c"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "module",
+			"item": [
+				{
+					"name": "add Module",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"course\": \"68071acb01ebcb97d5d1d7f5\",\r\n    \"title\": \"introduction to HTML 2\",\r\n    \"instructor\": \"67dcebede2a31f35e669a5df\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_API}}/module/add-module",
+							"host": [
+								"{{BASE_API}}"
+							],
+							"path": [
+								"module",
+								"add-module"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get module detail",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_API}}/module/module-detail/67e0e020f8ce7c377743a001",
+							"host": [
+								"{{BASE_API}}"
+							],
+							"path": [
+								"module",
+								"module-detail",
+								"67e0e020f8ce7c377743a001"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update module",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"introduction to html 2.0\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_API}}/module/update-module/67de4ce5e28c78fecee94237",
+							"host": [
+								"{{BASE_API}}"
+							],
+							"path": [
+								"module",
+								"update-module",
+								"67de4ce5e28c78fecee94237"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all module data",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_API}}/module/all-module",
+							"host": [
+								"{{BASE_API}}"
+							],
+							"path": [
+								"module",
+								"all-module"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get module data based on course id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_API}}/module/course-module-detail/68071acb01ebcb97d5d1d7f5",
+							"host": [
+								"{{BASE_API}}"
+							],
+							"path": [
+								"module",
+								"course-module-detail",
+								"68071acb01ebcb97d5d1d7f5"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "video",
+			"item": [
+				{
+					"name": "add new video",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "video",
+									"type": "file",
+									"src": "/C:/Users/ACER/Downloads/AQMjK4jcX-1_hWtzOMs8DqZTnAo4WHoMhRjg1TtPnAmRvnKPAkAAP8y4cNg1cq6bL6Uko04mQeReuRvqonvI5NNE_2.mp4"
+								},
+								{
+									"key": "data",
+									"value": "{\n\"module\": \"6807b0a146c939216951ed47\",\n    \"instructor\": \"67dcebede2a31f35e669a5df\",\n    \"title\": \"Html  FORM\"\n}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{BASE_API}}/video/add-video",
+							"host": [
+								"{{BASE_API}}"
+							],
+							"path": [
+								"video",
+								"add-video"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all module video",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"moduleId\" : \"67e0d04c097b17e3384c7779\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_API}}/video/module-video",
+							"host": [
+								"{{BASE_API}}"
+							],
+							"path": [
+								"video",
+								"module-video"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get individual video",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_API}}/video/individual-video/680df17dc921ad9a89343e4f",
+							"host": [
+								"{{BASE_API}}"
+							],
+							"path": [
+								"video",
+								"individual-video",
+								"680df17dc921ad9a89343e4f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete a vidoe",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"videoId\": \"67e0dd3548749691b4afe88b\",\r\n    \"moduleId\": \"67e0d04c097b17e3384c7779\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_API}}/video/delete-video",
+							"host": [
+								"{{BASE_API}}"
+							],
+							"path": [
+								"video",
+								"delete-video"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update a video",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "video",
+									"type": "file",
+									"src": "/E:/22 pro/FDownloader.net-1215172719898179-(360p).mp4"
+								},
+								{
+									"key": "data",
+									"value": "{\n    \"title\": \"Html Form \"\n}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{BASE_API}}/video/update-video/67f60c0d5c80fc95d11288de",
+							"host": [
+								"{{BASE_API}}"
+							],
+							"path": [
+								"video",
+								"update-video",
+								"67f60c0d5c80fc95d11288de"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "video upload test",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "video",
+									"type": "file",
+									"src": "/E:/22 pro/AQMjK4jcX-1_hWtzOMs8DqZTnAo4WHoMhRjg1TtPnAmRvnKPAkAAP8y4cNg1cq6bL6Uko04mQeReuRvqonvI5NNE.mp4"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{BASE_API}}/video/add-video2",
+							"host": [
+								"{{BASE_API}}"
+							],
+							"path": [
+								"video",
+								"add-video2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "multiple video upload test",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "video",
+									"type": "file",
+									"src": [
+										"/C:/Users/ACER/Downloads/AQOIjc_zb1BGWZ1AfxRbKFBCamL5f5n2IlKjnpBQkj7TKnnluFgZHGF3dM50cfv8MN5Ld-1opPNgjuTIHdtltB5t_2.mp4",
+										"/C:/Users/ACER/Downloads/An9MEJtsvKmJC4vkA7m_GBxQfGOfAL7-Hj6L6YxcL6_9soMwMddWiqhdQITBmNijnjAdJVYZxpyGTmLigcMbeTyg_2.mp4"
+									]
+								}
+							]
+						},
+						"url": {
+							"raw": "{{BASE_API}}/video/add-video3",
+							"host": [
+								"{{BASE_API}}"
+							],
+							"path": [
+								"video",
+								"add-video3"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "courseEnrollment",
+			"item": [
+				{
+					"name": "enroll in course",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2QwMjNhNDFhNGE1NDU1YTc4NDMyYjYiLCJ1c2VyUm9sZSI6InVzZXIiLCJpYXQiOjE3NDUyOTM4OTcsImV4cCI6MTc0NzAyMTg5N30.BaPM4uIJvnC5qKJ2qSB5cprqjcjlpglYnL9JlidnenA",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user\": \"67d023a41a4a5455a78432b6\",\r\n    \"course\": \"68071acb01ebcb97d5d1d7f5\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_API}}/enroll/enroll-course",
+							"host": [
+								"{{BASE_API}}"
+							],
+							"path": [
+								"enroll",
+								"enroll-course"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get user single enrolled course",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2QwMjNhNDFhNGE1NDU1YTc4NDMyYjYiLCJ1c2VyUm9sZSI6InVzZXIiLCJpYXQiOjE3NDUyOTM4OTcsImV4cCI6MTc0NzAyMTg5N30.BaPM4uIJvnC5qKJ2qSB5cprqjcjlpglYnL9JlidnenA",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_API}}/enroll/my-enrolled-course/681051cc5265f916112b34f2",
+							"host": [
+								"{{BASE_API}}"
+							],
+							"path": [
+								"enroll",
+								"my-enrolled-course",
+								"681051cc5265f916112b34f2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all user enrolled course",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2QwMjNhNDFhNGE1NDU1YTc4NDMyYjYiLCJ1c2VyUm9sZSI6InVzZXIiLCJpYXQiOjE3NDUyOTM4OTcsImV4cCI6MTc0NzAyMTg5N30.BaPM4uIJvnC5qKJ2qSB5cprqjcjlpglYnL9JlidnenA",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_API}}/enroll/user-all-enrolled-couses",
+							"host": [
+								"{{BASE_API}}"
+							],
+							"path": [
+								"enroll",
+								"user-all-enrolled-couses"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "for getting enrollment course info",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2RjZWM4OTU0MTBkOWRmMjdlZWNlNjEiLCJ1c2VyUm9sZSI6ImFkbWluIiwiaWF0IjoxNzQ1MjkzODIyLCJleHAiOjE3NDcwMjE4MjJ9.W4iOmO7G0SXXjH8BlJzcfB5iAo60ckJgyzsNMyn9Xm4",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_API}}/enroll/enrollment-data",
+							"host": [
+								"{{BASE_API}}"
+							],
+							"path": [
+								"enroll",
+								"enrollment-data"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get enrolled module data",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2QwMjNhNDFhNGE1NDU1YTc4NDMyYjYiLCJ1c2VyUm9sZSI6InVzZXIiLCJpYXQiOjE3NDI1MzMxMDEsImV4cCI6MTc0NDI2MTEwMX0.aAck0BdOtEsZlFSZ-IIqjbRS9CloFTGFoCsJpbsKlVM",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_API}}/enroll/my-enrolled-course-modules/67de1e78da6249388795b913",
+							"host": [
+								"{{BASE_API}}"
+							],
+							"path": [
+								"enroll",
+								"my-enrolled-course-modules",
+								"67de1e78da6249388795b913"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get enrolled course video data",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2QwMjNhNDFhNGE1NDU1YTc4NDMyYjYiLCJ1c2VyUm9sZSI6InVzZXIiLCJpYXQiOjE3NDQ3ODQwNTMsImV4cCI6MTc0NjUxMjA1M30.5QqJ0kp5yOdgCs-RL7gHuSIpnrIFf8RIH2oJuVHlZYQ",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_API}}/enroll/my-enrolled-course-videos/67fe859b1504f6105990269d",
+							"host": [
+								"{{BASE_API}}"
+							],
+							"path": [
+								"enroll",
+								"my-enrolled-course-videos",
+								"67fe859b1504f6105990269d"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Course progress",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2QwMjNhNDFhNGE1NDU1YTc4NDMyYjYiLCJ1c2VyUm9sZSI6InVzZXIiLCJpYXQiOjE3NDQ3ODQwNTMsImV4cCI6MTc0NjUxMjA1M30.5QqJ0kp5yOdgCs-RL7gHuSIpnrIFf8RIH2oJuVHlZYQ",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_API}}/enroll/my-course-progress/67f551b9acb44a0d2c5b5d00",
+							"host": [
+								"{{BASE_API}}"
+							],
+							"path": [
+								"enroll",
+								"my-course-progress",
+								"67f551b9acb44a0d2c5b5d00"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "payment",
+			"item": []
+		},
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "get all instructors",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2RjZWM4OTU0MTBkOWRmMjdlZWNlNjEiLCJ1c2VyUm9sZSI6ImFkbWluIiwiaWF0IjoxNzQ0ODIwOTc0LCJleHAiOjE3NDY1NDg5NzR9.XhnEBlFt5uejrvN01zYACSkapP5i-QpwW7HdCJgH6pI",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_API}}/user/get-instructors",
+							"host": [
+								"{{BASE_API}}"
+							],
+							"path": [
+								"user",
+								"get-instructors"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
