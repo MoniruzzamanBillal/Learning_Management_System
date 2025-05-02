@@ -271,6 +271,45 @@ const courseProgressPercentage = async (courseId: string, userId: string) => {
   return progressPercentage;
 };
 
+// ! for getting enrolled course info
+const enrollmentsPerCourse = async () => {
+  const result = await courseEnrollmentModel.aggregate([
+    {
+      $match: {
+        isDeleted: false,
+      },
+    },
+    {
+      $group: {
+        _id: "$course",
+        totalEnrollments: { $sum: 1 },
+      },
+    },
+    {
+      $lookup: {
+        from: "courses",
+        localField: "_id",
+        foreignField: "_id",
+        as: "courseInfo",
+      },
+    },
+    {
+      $unwind: "$courseInfo",
+    },
+    {
+      $project: {
+        _id: 0,
+        courseId: "$courseInfo._id",
+        courseTitle: "$courseInfo.name",
+        totalEnrollments: 1,
+      },
+    },
+  ]);
+
+  //
+  return result;
+};
+
 //
 export const courseEnrollmentService = {
   enrollInCourse,
@@ -278,4 +317,5 @@ export const courseEnrollmentService = {
   getModuleDataEnrlledCourse,
   watchVideo,
   courseProgressPercentage,
+  enrollmentsPerCourse,
 };
