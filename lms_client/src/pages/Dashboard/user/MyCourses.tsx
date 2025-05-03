@@ -1,16 +1,16 @@
 import Wrapper from "@/components/shared/Wrapper";
+import MyCourseCard from "@/components/ui/user/MyCourses/MyCourseCard";
 
 const MyCourses = () => {
   return (
-    <div className="MyCoursesContainer">
-      <Wrapper className="MyCoursesWrapper  ">
-        <h3 className="brand text-2xl font-medium mb-4 ">My Courses</h3>
+    <div className="MyCoursesContainer bg-gray-100  ">
+      <Wrapper className="MyCoursesWrapper py-8 ">
+        <h3 className="brand text-3xl font-medium mb-8 ">My Courses</h3>
 
-        <div className="courseCardBody">
-          <h1>course card </h1>
-          <h1>course card </h1>
-          <h1>course card </h1>
-          <h1>course card </h1>
+        <div className="courseCardBody flex flex-col gap-y-8 ">
+          <MyCourseCard />
+          <MyCourseCard />
+          <MyCourseCard />
         </div>
       </Wrapper>
     </div>
