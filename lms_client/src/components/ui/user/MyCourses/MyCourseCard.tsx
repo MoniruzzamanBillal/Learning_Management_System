@@ -4,7 +4,7 @@ import { Progress } from "../../progress";
 const MyCourseCard = () => {
   return (
     <div className="enrolledCourseCard">
-      <div className="enrolledCourseCardWrapper  w-[65%] rounded-md shadow bg-white border border-gray-200 flex justify-between gap-x-5  ">
+      <div className="enrolledCourseCardWrapper  w-[75%] rounded-md shadow bg-white border border-gray-200 flex justify-between gap-x-5  ">
         {/* left course cover section  */}
         <div className="courseLeftCover w-[40%] h-[13rem] rounded-l-md overflow-auto ">
           <img
@@ -16,7 +16,7 @@ const MyCourseCard = () => {
         {/*  */}
 
         {/* course detail section  */}
-        <div className="detailSection rightSection py-2 w-[60%] flex flex-col gap-y-2  ">
+        <div className="detailSection rightSection py-2 w-[60%] flex flex-col gap-y-3  ">
           {/* courseName */}
           <p className=" text-2xl font-medium ">
             Frontend development with js{" "}
