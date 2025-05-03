@@ -139,9 +139,9 @@ const enrollInCourse = async (payload: { user: string; course: string }) => {
   //
 };
 
-// ! for getting all user enrolled course
+// ! for getting all user's enrolled course
 const getAllUserEnrolledCourse = async (userId: string) => {
-  const result = await courseEnrollmentModel
+  const courseEnrolledData = await courseEnrollmentModel
     .find({
       user: userId,
       isDeleted: false,
@@ -149,7 +149,21 @@ const getAllUserEnrolledCourse = async (userId: string) => {
     .populate("course", " _id name category courseCover ")
     .select(" -Payment -isDeleted -createdAt -updatedAt -__v ");
 
-  return result;
+  const progressResult = await Promise.all(
+    courseEnrolledData.map(async (enrollmentData) => {
+      const progressData = await courseProgressPercentage(
+        enrollmentData?.course?._id,
+        userId
+      );
+
+      return {
+        ...enrollmentData.toObject(),
+        courseProgress: progressData,
+      };
+    })
+  );
+
+  return progressResult;
 };
 
 // ! get user single enrolled  course data
