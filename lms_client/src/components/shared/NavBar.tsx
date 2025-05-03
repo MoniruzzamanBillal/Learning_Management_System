@@ -80,7 +80,7 @@ const NavBar = () => {
           {userInfo?.userRole === userRoleConts.user && (
             <Link
               to={"/my-courses"}
-              className=" hover:text-prime50 duration-500  "
+              className=" hover:text-prime50 duration-500 pl-4 font-semibold uppercase "
               onClick={() => setOpen(false)}
             >
               My Courses
