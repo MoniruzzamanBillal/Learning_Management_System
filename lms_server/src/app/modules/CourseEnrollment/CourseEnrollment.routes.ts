@@ -45,7 +45,7 @@ router.get(
 
 // ! for getting video for enrolled course
 router.get(
-  "/my-enrolled-course-videos/:id",
+  "/my-enrolled-course-videos/:videoId",
   authCheck(UserRole.user),
   CourseEnrollmentController.getVideoDataEnrlledCourse
 );

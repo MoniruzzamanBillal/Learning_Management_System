@@ -62,7 +62,7 @@ const getModuleDataEnrlledCourse = catchAsync(async (req, res) => {
 // ! for getting video data for enrolled course
 const getVideoDataEnrlledCourse = catchAsync(async (req, res) => {
   const result = await courseEnrollmentService.watchVideo(
-    req?.params?.id,
+    req?.params?.videoId,
     req?.user?.userId
   );
 

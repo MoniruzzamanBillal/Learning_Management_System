@@ -4,7 +4,8 @@ import { createBrowserRouter } from "react-router-dom";
 
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import { HomePage, Login, Register } from "@/pages";
-import { MyCourses } from "@/pages/Dashboard/user";
+
+import { EnrolledCourseDetail, MyCourses } from "@/pages/user";
 import { adminRoutes } from "./AdminRoutes";
 import { InstructorRoutes } from "./InstructorRoutes";
 import { userRoutes } from "./UserRoutes";
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
       {
         path: "/my-courses",
         element: <MyCourses />,
+      },
+      {
+        path: "/my-enrolled-course-detail/:courseId",
+        element: <EnrolledCourseDetail />,
       },
       {
         path: "/dashboard",

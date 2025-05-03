@@ -5,11 +5,25 @@ import {
 } from "@/components/ui/user/MyCourses";
 import { useGetAllUserEnrolledCoursesQuery } from "@/redux/features/enrollment/enrollment.api";
 
+export type TUserEnrolledCourse = {
+  _id: string;
+  completed: boolean;
+  courseProgress: number;
+  user: string;
+
+  course: {
+    _id: string;
+    name: string;
+    category: string;
+    courseCover: string;
+  };
+};
+
 const MyCourses = () => {
   const { data: userEnrolledCourse, isLoading } =
     useGetAllUserEnrolledCoursesQuery(undefined);
 
-  console.log(userEnrolledCourse?.data);
+  // console.log(userEnrolledCourse?.data);
 
   return (
     <div className="MyCoursesContainer bg-gray-100  ">
@@ -19,9 +33,12 @@ const MyCourses = () => {
         <div className="courseCardBody flex flex-col gap-y-8 ">
           {isLoading && <MyCourseCardSkeleton />}
 
-          <MyCourseCard />
-          <MyCourseCard />
-          <MyCourseCard />
+          {userEnrolledCourse?.data &&
+            userEnrolledCourse?.data?.map(
+              (enrolledCourse: TUserEnrolledCourse) => (
+                <MyCourseCard courseData={enrolledCourse} />
+              )
+            )}
         </div>
       </Wrapper>
     </div>
