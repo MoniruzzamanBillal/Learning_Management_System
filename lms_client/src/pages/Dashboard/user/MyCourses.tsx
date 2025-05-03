@@ -1,5 +1,8 @@
 import Wrapper from "@/components/shared/Wrapper";
-import { MyCourseCard } from "@/components/ui/user/MyCourses";
+import {
+  MyCourseCard,
+  MyCourseCardSkeleton,
+} from "@/components/ui/user/MyCourses";
 import { useGetAllUserEnrolledCoursesQuery } from "@/redux/features/enrollment/enrollment.api";
 
 const MyCourses = () => {
@@ -14,6 +17,8 @@ const MyCourses = () => {
         <h3 className="brand text-3xl font-medium mb-8 ">My Courses</h3>
 
         <div className="courseCardBody flex flex-col gap-y-8 ">
+          {isLoading && <MyCourseCardSkeleton />}
+
           <MyCourseCard />
           <MyCourseCard />
           <MyCourseCard />
