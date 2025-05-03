@@ -1,5 +1,5 @@
 import Wrapper from "@/components/shared/Wrapper";
-import MyCourseCard from "@/components/ui/user/MyCourses/MyCourseCard";
+import { MyCourseCard } from "@/components/ui/user/MyCourses";
 
 const MyCourses = () => {
   return (
