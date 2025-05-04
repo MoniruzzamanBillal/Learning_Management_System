@@ -4,6 +4,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Lock } from "lucide-react";
 
 const ModuleShowData = () => {
   return (
@@ -15,17 +16,16 @@ const ModuleShowData = () => {
             value="item-1"
             className=" bg-prime50/10 rounded-md border shadow p-2 my-2 "
           >
-            <AccordionTrigger className=" text-xl ">
+            <AccordionTrigger className=" text-2xl ">
               Is it accessible?{" "}
             </AccordionTrigger>
 
-            <AccordionContent className="  pl-2 font-medium ">
-              Yes. It adheres to the WAI-ARIA design pattern.
+            <AccordionContent className=" text-lg py-3 pl-5 font-medium border-y border-y-gray-300 flex items-center gap-x-2 cursor-pointer  ">
+              <Lock />
+              <p>Yes. It adheres to the WAI-ARIA design pattern.</p>
             </AccordionContent>
 
-            <AccordionContent className="  pl-2 font-medium ">
-              Yes. It adheres to the WAI-ARIA design pattern.
-            </AccordionContent>
+            {/*  */}
           </AccordionItem>
 
           {/*  */}
