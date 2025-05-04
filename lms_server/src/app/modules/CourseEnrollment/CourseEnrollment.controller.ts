@@ -48,7 +48,7 @@ const getAllUserEnrolledCourse = catchAsync(async (req, res) => {
 const getModuleDataEnrlledCourse = catchAsync(async (req, res) => {
   const result = await courseEnrollmentService.getModuleDataEnrlledCourse(
     req?.user?.userId,
-    req?.params?.id
+    req?.params?.courseId
   );
 
   sendResponse(res, {
@@ -94,9 +94,24 @@ const enrollmentsPerCourse = catchAsync(async (req, res) => {
   const result = await courseEnrollmentService.enrollmentsPerCourse();
 
   sendResponse(res, {
-    statusCode: httpStatus.CREATED,
+    statusCode: httpStatus.OK,
     success: true,
     message: "Course Enrollment data retrived successfully!!!",
+    data: result,
+  });
+});
+
+// ! based on module id , find video data for enrolled user
+const getUserEnrolledModuleVideos = catchAsync(async (req, res) => {
+  const result = await courseEnrollmentService.getUserEnrolledModuleVideos(
+    req?.params?.moduleId,
+    req?.user?.userId
+  );
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Course Enrollment Video data retrived successfully!!!",
     data: result,
   });
 });
@@ -110,4 +125,5 @@ export const CourseEnrollmentController = {
   courseProgressPercentage,
   enrollmentsPerCourse,
   getAllUserEnrolledCourse,
+  getUserEnrolledModuleVideos,
 };

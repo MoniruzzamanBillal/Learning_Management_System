@@ -177,11 +177,6 @@ const getUserEnrolledCourse = async (userId: string, courseId: string) => {
         path: "modules",
         model: "Module",
         select: "_id course title videos",
-        populate: {
-          path: "videos",
-          model: "Video",
-          select: "_id title ",
-        },
       },
     })
     .select(" _id user course Payment completed ");
@@ -342,6 +337,21 @@ const enrollmentsPerCourse = async () => {
   return result;
 };
 
+// ! based on module id , find video data for enrolled user
+const getUserEnrolledModuleVideos = async (
+  moduleId: string,
+  userId: string
+) => {
+  const videoData = await videoProgressModel
+    .find({
+      module: moduleId,
+      user: userId,
+    })
+    .select(" video videoStatus ");
+
+  return videoData;
+};
+
 //
 export const courseEnrollmentService = {
   enrollInCourse,
@@ -351,4 +361,5 @@ export const courseEnrollmentService = {
   courseProgressPercentage,
   enrollmentsPerCourse,
   getAllUserEnrolledCourse,
+  getUserEnrolledModuleVideos,
 };

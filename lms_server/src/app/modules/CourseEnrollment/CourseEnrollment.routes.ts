@@ -37,7 +37,7 @@ router.get(
 
 // ! for getting module data for enrolled course
 router.get(
-  "/my-enrolled-course-modules/:id",
+  "/my-enrolled-course-modules/:courseId",
   authCheck(UserRole.user),
   ValidateCourseAccess,
   CourseEnrollmentController.getModuleDataEnrlledCourse
@@ -55,6 +55,13 @@ router.get(
   "/my-course-progress/:courseId",
   authCheck(UserRole.user),
   CourseEnrollmentController.courseProgressPercentage
+);
+
+// ! based on module id , find video data for enrolled user
+router.get(
+  "/module-videos/:moduleId",
+  authCheck(UserRole.user),
+  CourseEnrollmentController.getUserEnrolledModuleVideos
 );
 
 //

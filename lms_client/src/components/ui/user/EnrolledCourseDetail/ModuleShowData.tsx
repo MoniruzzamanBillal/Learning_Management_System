@@ -6,11 +6,13 @@ import {
 } from "@/components/ui/accordion";
 import { Lock } from "lucide-react";
 
+type TVideo = { _id: string; title: string };
+
 type TModuleType = {
   _id: string;
   course: string;
   title: string;
-  videos: { _id: string; title: string }[];
+  videos: TVideo[];
 };
 
 type TProps = {
@@ -21,8 +23,9 @@ const ModuleShowData = ({ modules }: TProps) => {
   console.log(modules);
 
   // ! for getting module video , after clicking a module name
-  const handleClickModule = async () => {
+  const handleClickModule = async (module: TModuleType) => {
     console.log("module clicked !!!");
+    console.log(module);
   };
 
   return (
@@ -37,17 +40,22 @@ const ModuleShowData = ({ modules }: TProps) => {
                 value={module?._id}
                 className=" bg-prime50/10 rounded-md border shadow p-2 my-5 "
               >
+                {/* module name  */}
                 <AccordionTrigger
                   className=" text-xl "
-                  onClick={() => handleClickModule()}
+                  onClick={() => handleClickModule(module)}
                 >
                   {module?.title}
                 </AccordionTrigger>
 
-                <AccordionContent className=" text-lg py-3 pl-4 font-medium border-y border-y-gray-300 flex items-center gap-x-2 cursor-pointer  ">
-                  <Lock />
-                  <p>Yes. It adheres to the WAI-ARIA design pattern.</p>
-                </AccordionContent>
+                {/* video name  */}
+                {module?.videos &&
+                  module?.videos?.map((video: TVideo) => (
+                    <AccordionContent className=" text-lg py-3 pl-4 font-medium border-y border-y-gray-300 flex items-center gap-x-2 cursor-pointer  ">
+                      <Lock />
+                      <p> {video?.title} </p>
+                    </AccordionContent>
+                  ))}
 
                 {/*  */}
               </AccordionItem>
