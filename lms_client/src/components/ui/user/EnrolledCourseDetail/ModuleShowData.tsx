@@ -53,7 +53,8 @@ const ModuleShowData = ({ modules }) => {
                   module?.videos?.map((video: TVideo) => (
                     <AccordionContent className=" text-lg py-3 pl-4 font-medium border-y border-y-gray-300 flex items-center gap-x-2 cursor-pointer  ">
                       <Lock />
-                      <p> {video?.title} </p>
+                      {/* <p> {video?.title} </p> */}
+                      <p>video title </p>
                     </AccordionContent>
                   ))}
 

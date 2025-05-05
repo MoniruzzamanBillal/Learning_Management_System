@@ -1,5 +1,7 @@
 import Wrapper from "@/components/shared/Wrapper";
 import { Button } from "@/components/ui/button";
+import { ModuleShowData } from "@/components/ui/user/EnrolledCourseDetail";
+import { useGetUserEnrolledCourseDetailQuery } from "@/redux/features/enrollment/enrollment.api";
 import MuxPlayer from "@mux/mux-player-react";
 import { useParams } from "react-router-dom";
 
@@ -11,8 +13,11 @@ const EnrolledCourseDetail = () => {
 
   // console.log("course id = ", courseId);
 
-  // console.log(enrolledCourseData);
-  // console.log(enrolledCourseData?.course?.modules);
+  const { data: enrolledCourseData, isLoading } =
+    useGetUserEnrolledCourseDetailQuery(courseId, { skip: !courseId });
+
+  // console.log(enrolledCourseData?.data);
+  console.log(enrolledCourseData?.data?.course?.modules);
 
   return (
     <div className="EnrolledCourseDetailContainer   bg-gray-100 min-h-screen ">
@@ -42,9 +47,7 @@ const EnrolledCourseDetail = () => {
 
         {/* right module section  */}
         <div className="rightSection w-[40%]  ">
-          {/* <ModuleShowData modules={enrolledCourseData?.course?.modules} /> */}
-          <h1>module detail </h1>
-          <h1>module detail </h1>
+          <ModuleShowData modules={enrolledCourseData?.data?.course?.modules} />
         </div>
         {/*  */}
       </Wrapper>
