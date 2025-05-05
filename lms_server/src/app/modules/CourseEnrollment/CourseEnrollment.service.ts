@@ -347,7 +347,8 @@ const getUserEnrolledModuleVideos = async (
       module: moduleId,
       user: userId,
     })
-    .select(" video videoStatus ");
+    .populate("video", " _id title ")
+    .select("  _id  videoStatus ");
 
   return videoData;
 };

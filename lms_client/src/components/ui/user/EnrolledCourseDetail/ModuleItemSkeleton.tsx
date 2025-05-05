@@ -6,6 +6,7 @@ const ModuleItemSkeleton = () => {
       <div className="space-y-4">
         <Skeleton className="h-5  bg-gray-300" />
         <Skeleton className="h-5  bg-gray-300" />
+        <Skeleton className="h-5  bg-gray-300" />
       </div>
     </div>
   );

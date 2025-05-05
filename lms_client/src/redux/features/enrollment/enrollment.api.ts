@@ -32,6 +32,16 @@ const enrollmentApi = baseApi.injectEndpoints({
       },
     }),
 
+    // ! based on module id , find video data for enrolled user
+    getEnrolledCourseVideoModuleId: builder.query({
+      query: (moduleId) => {
+        return {
+          url: `/enroll/module-videos/${moduleId}`,
+          method: "GET",
+        };
+      },
+    }),
+
     //
   }),
 });
@@ -42,4 +52,5 @@ export const {
   useGetEnrollmentInfoQuery,
   useGetAllUserEnrolledCoursesQuery,
   useGetUserEnrolledCourseDetailQuery,
+  useLazyGetEnrolledCourseVideoModuleIdQuery,
 } = enrollmentApi;
