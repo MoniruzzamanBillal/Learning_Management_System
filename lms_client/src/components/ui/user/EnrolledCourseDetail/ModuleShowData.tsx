@@ -4,7 +4,10 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { useLazyGetEnrolledCourseVideoModuleIdQuery } from "@/redux/features/enrollment/enrollment.api";
+import {
+  useLazyGetEnrolledCourseVideoModuleIdQuery,
+  useLazyGetEnrolledCourseVideoQuery,
+} from "@/redux/features/enrollment/enrollment.api";
 import { videoProgressStatusConsts } from "@/utils/constants";
 import { CircleCheckBig, Lock } from "lucide-react";
 import { useState } from "react";
@@ -31,7 +34,10 @@ type TProps = {
 const ModuleShowData = ({ modules }: TProps) => {
   const [videoData, setVideoData] = useState<TModuleVideo[] | null>(null);
 
-  const [trigger, { isLoading }] = useLazyGetEnrolledCourseVideoModuleIdQuery();
+  const [getModuleVideos, { isLoading }] =
+    useLazyGetEnrolledCourseVideoModuleIdQuery();
+  const [getVideoData, { isLoading: videoDataFetchLoading }] =
+    useLazyGetEnrolledCourseVideoQuery();
 
   // console.log(modules);
 
@@ -40,7 +46,7 @@ const ModuleShowData = ({ modules }: TProps) => {
     console.log("module id = ", module?._id);
 
     try {
-      const result = await trigger(module?._id, true);
+      const result = await getModuleVideos(module?._id, true);
 
       // console.log(result?.data?.data);
 
@@ -55,6 +61,14 @@ const ModuleShowData = ({ modules }: TProps) => {
   // ! for getting video data
   const handleGetVideo = async (video: TVideo) => {
     console.log("video id = ", video?._id);
+
+    try {
+      const result = await getVideoData(video?._id);
+
+      console.log(result?.data);
+    } catch (error) {
+      console.error("Failed to fetch  video", error);
+    }
   };
 
   // console.log(videoData);

@@ -271,6 +271,8 @@ const watchVideo = async (videoId: string, userId: string) => {
     await session.commitTransaction();
 
     await session.endSession();
+
+    return videoData;
   } catch (error: any) {
     await session.abortTransaction();
     await session.endSession();
