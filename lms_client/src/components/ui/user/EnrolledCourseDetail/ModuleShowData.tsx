@@ -9,7 +9,7 @@ import {
   useLazyGetEnrolledCourseVideoQuery,
 } from "@/redux/features/enrollment/enrollment.api";
 import { videoProgressStatusConsts } from "@/utils/constants";
-import { CircleCheckBig, Lock } from "lucide-react";
+import { CircleCheckBig, Lock, LockOpen } from "lucide-react";
 import { useState } from "react";
 import ModuleItemSkeleton from "./ModuleItemSkeleton";
 
@@ -112,10 +112,18 @@ const ModuleShowData = ({ modules }: TProps) => {
                   videoData?.map((video: TModuleVideo) => (
                     <AccordionContent className=" text-lg py-3 pl-4 font-medium border-y border-y-gray-300 flex items-center gap-x-2 cursor-pointer  ">
                       {video?.videoStatus ===
-                      videoProgressStatusConsts?.locked ? (
+                        videoProgressStatusConsts?.locked && (
                         <Lock className=" text-red-600 font-bold " />
-                      ) : (
+                      )}
+
+                      {video?.videoStatus ===
+                        videoProgressStatusConsts?.watched && (
                         <CircleCheckBig className=" text-green-700 font-bold " />
+                      )}
+
+                      {video?.videoStatus ===
+                        videoProgressStatusConsts?.unlocked && (
+                        <LockOpen className="  font-bold " />
                       )}
 
                       <p onClick={() => handleGetVideo(video?.video)}>
