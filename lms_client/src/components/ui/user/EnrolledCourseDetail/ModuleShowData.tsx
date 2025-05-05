@@ -5,6 +5,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { useLazyGetEnrolledCourseVideoModuleIdQuery } from "@/redux/features/enrollment/enrollment.api";
+import { videoProgressStatusConsts } from "@/utils/constants";
 import { Lock } from "lucide-react";
 import { useState } from "react";
 import ModuleItemSkeleton from "./ModuleItemSkeleton";
@@ -14,7 +15,7 @@ type TVideo = { _id: string; title: string };
 type TModuleVideo = {
   _id: string;
   video: TVideo;
-  videoStatus: "locked" | "unlocked";
+  videoStatus: keyof typeof videoProgressStatusConsts;
 };
 
 type TModuleType = {

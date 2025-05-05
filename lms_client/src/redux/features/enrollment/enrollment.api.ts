@@ -42,6 +42,8 @@ const enrollmentApi = baseApi.injectEndpoints({
       },
     }),
 
+    // ! for watching video of enrolled course
+
     //
   }),
 });
