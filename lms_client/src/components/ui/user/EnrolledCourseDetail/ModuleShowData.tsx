@@ -11,6 +11,12 @@ import ModuleItemSkeleton from "./ModuleItemSkeleton";
 
 type TVideo = { _id: string; title: string };
 
+type TModuleVideo = {
+  _id: string;
+  video: TVideo;
+  videoStatus: "locked" | "unlocked";
+};
+
 type TModuleType = {
   _id: string;
   title: string;
@@ -22,7 +28,7 @@ type TProps = {
 };
 
 const ModuleShowData = ({ modules }: TProps) => {
-  const [videoData, setVideoData] = useState(null);
+  const [videoData, setVideoData] = useState<TModuleVideo[] | null>(null);
 
   const [trigger, { isLoading }] = useLazyGetEnrolledCourseVideoModuleIdQuery();
 
@@ -30,18 +36,22 @@ const ModuleShowData = ({ modules }: TProps) => {
 
   // ! for getting module video , after clicking a module name
   const handleClickModule = async (module: TModuleType) => {
-    console.log("module clicked !!!");
-    // console.log(module);
     console.log("module id = ", module?._id);
 
     try {
-      const result = await trigger(module?._id);
+      const result = await trigger(module?._id, true);
 
-      console.log(result?.data?.data);
+      // console.log(result?.data?.data);
+
+      if (result?.data?.data) {
+        setVideoData(result?.data?.data);
+      }
     } catch (error) {
       console.error("Failed to fetch module videos", error);
     }
   };
+
+  console.log(videoData);
 
   return (
     <div className="ModuleShowDataContainer">
@@ -66,12 +76,11 @@ const ModuleShowData = ({ modules }: TProps) => {
                 {/* video name  */}
 
                 {isLoading && <ModuleItemSkeleton />}
-                {module?.videos &&
-                  module?.videos?.map((video: TVideo) => (
+                {videoData &&
+                  videoData?.map((video: TModuleVideo) => (
                     <AccordionContent className=" text-lg py-3 pl-4 font-medium border-y border-y-gray-300 flex items-center gap-x-2 cursor-pointer  ">
                       <Lock />
-                      {/* <p> {video?.title} </p> */}
-                      <p>video title </p>
+                      <p> {video?.video?.title} </p>
                     </AccordionContent>
                   ))}
 
