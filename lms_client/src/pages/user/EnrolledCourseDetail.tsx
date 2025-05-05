@@ -1,6 +1,9 @@
 import Wrapper from "@/components/shared/Wrapper";
 import { Button } from "@/components/ui/button";
-import { ModuleShowData } from "@/components/ui/user/EnrolledCourseDetail";
+import {
+  EnrolledCourseDetailSkeleton,
+  ModuleShowData,
+} from "@/components/ui/user/EnrolledCourseDetail";
 import { useGetUserEnrolledCourseDetailQuery } from "@/redux/features/enrollment/enrollment.api";
 import MuxPlayer from "@mux/mux-player-react";
 import { useParams } from "react-router-dom";
@@ -20,38 +23,44 @@ const EnrolledCourseDetail = () => {
   console.log(enrolledCourseData?.data?.course?.modules);
 
   return (
-    <div className="EnrolledCourseDetailContainer   bg-gray-100 min-h-screen ">
-      <Wrapper className="EnrolledCourseDetailWrapper py-5 flex justify-between gap-x-4 ">
-        {/* left video section  */}
-        <div className="leftVideoSection  w-[60%] ">
-          <div className="videoPreviewContainer mt-4">
-            <MuxPlayer
-              playbackId=""
-              streamType="on-demand"
-              src={videoUrl}
-              className="rounded-md"
-              autoPlay={false}
-              style={{ width: "100%", height: "26rem" }}
-              forwardSeekOffset={5}
-              backwardSeekOffset={5}
+    <>
+      {isLoading && <EnrolledCourseDetailSkeleton />}
+
+      <div className="EnrolledCourseDetailContainer   bg-gray-100 min-h-screen ">
+        <Wrapper className="EnrolledCourseDetailWrapper py-5 flex justify-between gap-x-4 ">
+          {/* left video section  */}
+          <div className="leftVideoSection  w-[60%] ">
+            <div className="videoPreviewContainer mt-4">
+              <MuxPlayer
+                playbackId=""
+                streamType="on-demand"
+                src={videoUrl}
+                className="rounded-md"
+                autoPlay={false}
+                style={{ width: "100%", height: "26rem" }}
+                forwardSeekOffset={5}
+                backwardSeekOffset={5}
+              />
+            </div>
+
+            {/* button section  */}
+            <div className="btnSection pt-3  flex justify-end gap-x-4 ">
+              <Button className="  ">Previous</Button>
+              <Button className=" bg-prime100 hover:bg-prime200 ">Next </Button>
+            </div>
+          </div>
+          {/*  */}
+
+          {/* right module section  */}
+          <div className="rightSection w-[40%]  ">
+            <ModuleShowData
+              modules={enrolledCourseData?.data?.course?.modules}
             />
           </div>
-
-          {/* button section  */}
-          <div className="btnSection pt-3  flex justify-end gap-x-4 ">
-            <Button className="  ">Previous</Button>
-            <Button className=" bg-prime100 hover:bg-prime200 ">Next </Button>
-          </div>
-        </div>
-        {/*  */}
-
-        {/* right module section  */}
-        <div className="rightSection w-[40%]  ">
-          <ModuleShowData modules={enrolledCourseData?.data?.course?.modules} />
-        </div>
-        {/*  */}
-      </Wrapper>
-    </div>
+          {/*  */}
+        </Wrapper>
+      </div>
+    </>
   );
 };
 
