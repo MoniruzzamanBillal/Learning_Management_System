@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/accordion";
 import { useLazyGetEnrolledCourseVideoModuleIdQuery } from "@/redux/features/enrollment/enrollment.api";
 import { videoProgressStatusConsts } from "@/utils/constants";
-import { Lock } from "lucide-react";
+import { CircleCheckBig, Lock } from "lucide-react";
 import { useState } from "react";
 import ModuleItemSkeleton from "./ModuleItemSkeleton";
 
@@ -52,7 +52,12 @@ const ModuleShowData = ({ modules }: TProps) => {
     }
   };
 
-  console.log(videoData);
+  // ! for getting video data
+  const handleGetVideo = async (video: TVideo) => {
+    console.log("video id = ", video?._id);
+  };
+
+  // console.log(videoData);
 
   return (
     <div className="ModuleShowDataContainer">
@@ -80,8 +85,16 @@ const ModuleShowData = ({ modules }: TProps) => {
                 {videoData &&
                   videoData?.map((video: TModuleVideo) => (
                     <AccordionContent className=" text-lg py-3 pl-4 font-medium border-y border-y-gray-300 flex items-center gap-x-2 cursor-pointer  ">
-                      <Lock />
-                      <p> {video?.video?.title} </p>
+                      {video?.videoStatus ===
+                      videoProgressStatusConsts?.locked ? (
+                        <Lock className=" text-red-600 font-bold " />
+                      ) : (
+                        <CircleCheckBig className=" text-green-700 font-bold " />
+                      )}
+
+                      <p onClick={() => handleGetVideo(video?.video)}>
+                        {video?.video?.title}
+                      </p>
                     </AccordionContent>
                   ))}
 
