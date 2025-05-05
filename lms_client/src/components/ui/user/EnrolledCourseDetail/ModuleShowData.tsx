@@ -46,7 +46,7 @@ const ModuleShowData = ({ modules }: TProps) => {
     console.log("module id = ", module?._id);
 
     try {
-      const result = await getModuleVideos(module?._id, true);
+      const result = await getModuleVideos(module?._id, false);
 
       // console.log(result?.data?.data);
 
@@ -65,7 +65,19 @@ const ModuleShowData = ({ modules }: TProps) => {
     try {
       const result = await getVideoData(video?._id);
 
-      console.log(result?.data);
+      const videoUrl = result?.data?.data?.videoUrl;
+      const moduleId = result?.data?.data?.module;
+
+      console.log(videoUrl);
+      console.log(moduleId);
+
+      const moduleResult = await getModuleVideos(moduleId, false);
+
+      console.log(moduleResult?.data?.data);
+
+      if (moduleResult?.data?.data) {
+        setVideoData(moduleResult?.data?.data);
+      }
     } catch (error) {
       console.error("Failed to fetch  video", error);
     }
