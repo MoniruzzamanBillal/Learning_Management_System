@@ -1,51 +1,10 @@
 import Wrapper from "@/components/shared/Wrapper";
 import { Button } from "@/components/ui/button";
-import { ModuleShowData } from "@/components/ui/user/EnrolledCourseDetail";
 import MuxPlayer from "@mux/mux-player-react";
 import { useParams } from "react-router-dom";
 
 const videoUrl =
   "https://res.cloudinary.com/dupxfufq9/video/upload/v1744733597/course_videos/AQOFgsKLEGwOyE_i4jmyiNuga7ebu0O6V29HSm9K7UGEm1d2OBRptAV244HuygbzgXrQ84d9Vh6IR1j8xF9W2Pl5.mp4";
-
-const enrolledCourseData = {
-  _id: "681447181aedd939ccb2a2eb",
-  user: "67d023a41a4a5455a78432b6",
-  Payment: "681447181aedd939ccb2a2e9",
-  completed: false,
-  course: {
-    _id: "681051cc5265f916112b34f2",
-    name: "tesing for publish ",
-    category: "App Development",
-    modules: [
-      {
-        _id: "681360874e56159731c53f9d",
-        course: "681051cc5265f916112b34f2",
-        title: "Module 1 : Introduction ",
-        videos: [
-          {
-            _id: "681360ac4e56159731c53fa8",
-            title: "Introduction to HTML",
-          },
-          {
-            _id: "681361644e56159731c53fc5",
-            title: "introduction 2",
-          },
-        ],
-      },
-      {
-        _id: "6813617d4e56159731c53fd9",
-        course: "681051cc5265f916112b34f2",
-        title: "Module 2 ",
-        videos: [
-          {
-            _id: "681361a14e56159731c53fe7",
-            title: "Introduction ",
-          },
-        ],
-      },
-    ],
-  },
-};
 
 const EnrolledCourseDetail = () => {
   const { courseId } = useParams();
@@ -83,7 +42,9 @@ const EnrolledCourseDetail = () => {
 
         {/* right module section  */}
         <div className="rightSection w-[40%]  ">
-          <ModuleShowData modules={enrolledCourseData?.course?.modules} />
+          {/* <ModuleShowData modules={enrolledCourseData?.course?.modules} /> */}
+          <h1>module detail </h1>
+          <h1>module detail </h1>
         </div>
         {/*  */}
       </Wrapper>

@@ -19,8 +19,8 @@ type TProps = {
   modules: TModuleType[];
 };
 
-const ModuleShowData = ({ modules }: TProps) => {
-  console.log(modules);
+const ModuleShowData = ({ modules }) => {
+  // console.log(modules);
 
   // ! for getting module video , after clicking a module name
   const handleClickModule = async (module: TModuleType) => {

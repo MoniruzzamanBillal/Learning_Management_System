@@ -22,11 +22,24 @@ const enrollmentApi = baseApi.injectEndpoints({
       },
     }),
 
+    // ! for getting user's single enrolled course data
+    getUserEnrolledCourseDetail: builder.query({
+      query: (courseId) => {
+        return {
+          url: `/enroll/my-enrolled-course/${courseId}`,
+          method: "GET",
+        };
+      },
+    }),
+
     //
   }),
 });
 
 //
 
-export const { useGetEnrollmentInfoQuery, useGetAllUserEnrolledCoursesQuery } =
-  enrollmentApi;
+export const {
+  useGetEnrollmentInfoQuery,
+  useGetAllUserEnrolledCoursesQuery,
+  useGetUserEnrolledCourseDetailQuery,
+} = enrollmentApi;

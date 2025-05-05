@@ -176,7 +176,7 @@ const getUserEnrolledCourse = async (userId: string, courseId: string) => {
       populate: {
         path: "modules",
         model: "Module",
-        select: "_id course title videos",
+        select: "_id  title videos",
       },
     })
     .select(" _id user course Payment completed ");
