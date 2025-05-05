@@ -6,9 +6,10 @@ import {
 } from "@/components/ui/user/EnrolledCourseDetail";
 import { useGetUserEnrolledCourseDetailQuery } from "@/redux/features/enrollment/enrollment.api";
 import MuxPlayer from "@mux/mux-player-react";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 
-const videoUrl =
+const videoUrl2 =
   "https://res.cloudinary.com/dupxfufq9/video/upload/v1744733597/course_videos/AQOFgsKLEGwOyE_i4jmyiNuga7ebu0O6V29HSm9K7UGEm1d2OBRptAV244HuygbzgXrQ84d9Vh6IR1j8xF9W2Pl5.mp4";
 
 const EnrolledCourseDetail = () => {
@@ -16,11 +17,14 @@ const EnrolledCourseDetail = () => {
 
   // console.log("course id = ", courseId);
 
+  const [videoUrl, setVideoUrl] = useState<string | null>(null);
+
   const { data: enrolledCourseData, isLoading } =
     useGetUserEnrolledCourseDetailQuery(courseId, { skip: !courseId });
 
   // console.log(enrolledCourseData?.data);
-  console.log(enrolledCourseData?.data?.course?.modules);
+  // console.log(enrolledCourseData?.data?.course?.modules);
+  // console.log(videoUrl);
 
   return (
     <>
@@ -31,16 +35,18 @@ const EnrolledCourseDetail = () => {
           {/* left video section  */}
           <div className="leftVideoSection  w-[60%] ">
             <div className="videoPreviewContainer mt-4">
-              <MuxPlayer
-                playbackId=""
-                streamType="on-demand"
-                src={videoUrl}
-                className="rounded-md"
-                autoPlay={false}
-                style={{ width: "100%", height: "26rem" }}
-                forwardSeekOffset={5}
-                backwardSeekOffset={5}
-              />
+              {videoUrl && (
+                <MuxPlayer
+                  playbackId=""
+                  streamType="on-demand"
+                  src={videoUrl}
+                  className="rounded-md"
+                  autoPlay={false}
+                  style={{ width: "100%", height: "26.5rem" }}
+                  forwardSeekOffset={5}
+                  backwardSeekOffset={5}
+                />
+              )}
             </div>
 
             {/* button section  */}
@@ -55,6 +61,7 @@ const EnrolledCourseDetail = () => {
           <div className="rightSection w-[40%]  ">
             <ModuleShowData
               modules={enrolledCourseData?.data?.course?.modules}
+              setVideoUrl={setVideoUrl}
             />
           </div>
           {/*  */}

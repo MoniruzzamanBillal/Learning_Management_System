@@ -258,6 +258,7 @@ const watchVideo = async (videoId: string, userId: string) => {
     const nextVideo = await videoModel.findOne({
       module: videoData?.module,
       videoOrder: videoData?.videoOrder + 1,
+      // videoStatus: videoProgressStatus?.locked,
     });
 
     if (nextVideo) {
