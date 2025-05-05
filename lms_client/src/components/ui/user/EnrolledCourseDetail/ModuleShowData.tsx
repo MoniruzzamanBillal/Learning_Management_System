@@ -69,7 +69,6 @@ const ModuleShowData = ({ modules }: TProps) => {
       const moduleId = result?.data?.data?.module;
 
       console.log(videoUrl);
-      console.log(moduleId);
 
       const moduleResult = await getModuleVideos(moduleId, false);
 
