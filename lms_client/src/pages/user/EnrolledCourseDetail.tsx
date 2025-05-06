@@ -3,14 +3,12 @@ import { Button } from "@/components/ui/button";
 import {
   EnrolledCourseDetailSkeleton,
   ModuleShowData,
+  VideoLoadingSkeleton,
 } from "@/components/ui/user/EnrolledCourseDetail";
 import { useGetUserEnrolledCourseDetailQuery } from "@/redux/features/enrollment/enrollment.api";
 import MuxPlayer from "@mux/mux-player-react";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-
-const videoUrl2 =
-  "https://res.cloudinary.com/dupxfufq9/video/upload/v1744733597/course_videos/AQOFgsKLEGwOyE_i4jmyiNuga7ebu0O6V29HSm9K7UGEm1d2OBRptAV244HuygbzgXrQ84d9Vh6IR1j8xF9W2Pl5.mp4";
 
 const EnrolledCourseDetail = () => {
   const { courseId } = useParams();
@@ -18,6 +16,7 @@ const EnrolledCourseDetail = () => {
   // console.log("course id = ", courseId);
 
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
+  const [videoUrlLoading, setVideoLoading] = useState<boolean>(false);
 
   const { data: enrolledCourseData, isLoading } =
     useGetUserEnrolledCourseDetailQuery(courseId, { skip: !courseId });
@@ -35,6 +34,7 @@ const EnrolledCourseDetail = () => {
           {/* left video section  */}
           <div className="leftVideoSection  w-[60%] ">
             <div className="videoPreviewContainer mt-4">
+              {videoUrlLoading && <VideoLoadingSkeleton />}
               {videoUrl && (
                 <MuxPlayer
                   playbackId=""
@@ -62,6 +62,7 @@ const EnrolledCourseDetail = () => {
             <ModuleShowData
               modules={enrolledCourseData?.data?.course?.modules}
               setVideoUrl={setVideoUrl}
+              setVideoLoading={setVideoLoading}
             />
           </div>
           {/*  */}

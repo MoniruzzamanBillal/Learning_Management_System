@@ -10,7 +10,7 @@ import {
 } from "@/redux/features/enrollment/enrollment.api";
 import { videoProgressStatusConsts } from "@/utils/constants";
 import { CircleCheckBig, Lock, LockOpen } from "lucide-react";
-import React, { SetStateAction, useState } from "react";
+import React, { SetStateAction, useEffect, useState } from "react";
 import ModuleItemSkeleton from "./ModuleItemSkeleton";
 
 type TVideo = { _id: string; title: string };
@@ -30,9 +30,10 @@ type TModuleType = {
 type TProps = {
   modules: TModuleType[];
   setVideoUrl: React.Dispatch<SetStateAction<string | null>>;
+  setVideoLoading: React.Dispatch<SetStateAction<boolean>>;
 };
 
-const ModuleShowData = ({ modules, setVideoUrl }: TProps) => {
+const ModuleShowData = ({ modules, setVideoUrl, setVideoLoading }: TProps) => {
   const [videoData, setVideoData] = useState<TModuleVideo[] | null>(null);
 
   const [getModuleVideos, { isLoading }] =
@@ -44,12 +45,8 @@ const ModuleShowData = ({ modules, setVideoUrl }: TProps) => {
 
   // ! for getting module video , after clicking a module name
   const handleClickModule = async (module: TModuleType) => {
-    // console.log("module id = ", module?._id);
-
     try {
       const result = await getModuleVideos(module?._id, false);
-
-      // console.log(result?.data?.data);
 
       if (result?.data?.data) {
         setVideoData(result?.data?.data);
@@ -61,8 +58,6 @@ const ModuleShowData = ({ modules, setVideoUrl }: TProps) => {
 
   // ! for getting video data
   const handleGetVideo = async (video: TVideo) => {
-    // console.log("video id = ", video?._id);
-
     try {
       const result = await getVideoData(video?._id);
 
@@ -71,11 +66,7 @@ const ModuleShowData = ({ modules, setVideoUrl }: TProps) => {
 
       setVideoUrl(videoUrl);
 
-      console.log(videoUrl);
-
       const moduleResult = await getModuleVideos(moduleId, false);
-
-      // console.log(moduleResult?.data?.data);
 
       if (moduleResult?.data?.data) {
         setVideoData(moduleResult?.data?.data);
@@ -85,7 +76,12 @@ const ModuleShowData = ({ modules, setVideoUrl }: TProps) => {
     }
   };
 
-  console.log(videoData);
+  // console.log(videoData);
+
+  // ! effect for setting video loading
+  useEffect(() => {
+    setVideoLoading(videoDataFetchLoading);
+  }, [videoDataFetchLoading]);
 
   return (
     <div className="ModuleShowDataContainer">
