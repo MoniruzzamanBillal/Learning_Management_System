@@ -3,7 +3,7 @@ import App from "@/App";
 import { createBrowserRouter } from "react-router-dom";
 
 import DashboardLayout from "@/components/layout/DashboardLayout";
-import { HomePage, Login, Register } from "@/pages";
+import { Courses, HomePage, Login, Register } from "@/pages";
 
 import { EnrolledCourseDetail, MyCourses } from "@/pages/user";
 import { adminRoutes } from "./AdminRoutes";
@@ -26,6 +26,10 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <HomePage />,
+      },
+      {
+        path: "/courses",
+        element: <Courses />,
       },
       {
         path: "/my-courses",
