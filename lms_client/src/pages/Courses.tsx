@@ -1,5 +1,5 @@
 import Wrapper from "@/components/shared/Wrapper";
-import { CategoryFilter } from "@/components/ui/courses";
+import { CategoryFilter, CourseCard } from "@/components/ui/courses";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 
@@ -32,11 +32,16 @@ const Courses = () => {
           </div>
 
           {/* right course section   */}
-          <div className="courseSection w-full xl:w-[84%]">
-            <h1>course section </h1>
-            <h1>course section </h1>
-            <h1>course section </h1>
-            <h1>course section </h1>
+          <div className="courseSection w-full xl:w-[84%] grid grid-cols-3 gap-x-4 gap-y-6  ">
+            <CourseCard />
+            <CourseCard />
+            <CourseCard />
+            <CourseCard />
+            <CourseCard />
+            <CourseCard />
+            <CourseCard />
+            <CourseCard />
+            <CourseCard />
           </div>
 
           {/*  */}
