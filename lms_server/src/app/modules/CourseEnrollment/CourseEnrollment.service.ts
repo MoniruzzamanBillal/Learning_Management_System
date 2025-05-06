@@ -7,6 +7,7 @@ import { moduleModel } from "../courseModule/module.model";
 import { paymentModel } from "../payment/payment.model";
 import { sslServices } from "../SSL/SSL.service";
 import { userModel } from "../user/user.model";
+import { videoStatus } from "../VideoModule/video.constants";
 import { videoModel } from "../VideoModule/video.model";
 import { videoProgressStatus } from "../VideoProgress/VideoProgress.constants";
 import { videoProgressModel } from "../VideoProgress/VideoProgress.model";
@@ -258,15 +259,22 @@ const watchVideo = async (videoId: string, userId: string) => {
     const nextVideo = await videoModel.findOne({
       module: videoData?.module,
       videoOrder: videoData?.videoOrder + 1,
-      videoStatus: videoProgressStatus?.locked,
     });
 
     if (nextVideo) {
-      await videoProgressModel.findOneAndUpdate(
-        { user: userId, video: nextVideo?._id?.toString() },
-        { videoStatus: videoProgressStatus?.unlocked },
-        { session }
-      );
+      const videoProgressData = await videoProgressModel.findOne({
+        user: userId,
+        video: nextVideo?._id?.toString(),
+      });
+
+      // * change the video status if status is locked
+      if (videoProgressData?.videoStatus === videoStatus?.locked) {
+        await videoProgressModel.findOneAndUpdate(
+          { user: userId, video: nextVideo?._id?.toString() },
+          { videoStatus: videoProgressStatus?.unlocked },
+          { session }
+        );
+      }
     }
 
     await session.commitTransaction();

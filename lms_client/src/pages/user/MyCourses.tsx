@@ -31,7 +31,10 @@ const MyCourses = () => {
         <h3 className="brand text-3xl font-medium mb-8 ">My Courses</h3>
 
         <div className="courseCardBody flex flex-col gap-y-8 ">
-          {isLoading && <MyCourseCardSkeleton />}
+          {isLoading &&
+            Array.from({ length: 4 })?.map((_, ind) => (
+              <MyCourseCardSkeleton key={ind} />
+            ))}
 
           {userEnrolledCourse?.data &&
             userEnrolledCourse?.data?.map(
