@@ -34,7 +34,7 @@ const MyCourseCard = ({ courseData }: { courseData: TUserEnrolledCourse }) => {
 
           {/* button section  */}
 
-          <Link to={`/user/course-detail/${courseData?.course?._id}`}>
+          <Link to={`/my-enrolled-course-detail/${courseData?.course?._id}`}>
             <Button className=" bg-prime100 hover:bg-prime200 ">
               Continue
             </Button>
