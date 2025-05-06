@@ -1,5 +1,4 @@
 import Wrapper from "@/components/shared/Wrapper";
-import { Button } from "@/components/ui/button";
 import {
   EnrolledCourseDetailSkeleton,
   ModuleShowData,
@@ -53,10 +52,10 @@ const EnrolledCourseDetail = () => {
             </div>
 
             {/* button section  */}
-            <div className="btnSection pt-3  flex justify-end gap-x-4 ">
+            {/* <div className="btnSection pt-3  flex justify-end gap-x-4 ">
               <Button className="  ">Previous</Button>
               <Button className=" bg-prime100 hover:bg-prime200 ">Next </Button>
-            </div>
+            </div> */}
           </div>
           {/*  */}
 

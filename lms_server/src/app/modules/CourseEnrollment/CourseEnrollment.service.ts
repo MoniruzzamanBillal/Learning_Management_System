@@ -231,6 +231,8 @@ const watchVideo = async (videoId: string, userId: string) => {
     video: videoId,
   });
 
+  // console.log(currentProgressData);
+
   if (!currentProgressData) {
     throw new AppError(
       httpStatus.BAD_REQUEST,

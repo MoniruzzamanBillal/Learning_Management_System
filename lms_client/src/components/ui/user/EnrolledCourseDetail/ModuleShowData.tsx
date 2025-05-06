@@ -11,6 +11,7 @@ import {
 import { videoProgressStatusConsts } from "@/utils/constants";
 import { CircleCheckBig, Lock, LockOpen } from "lucide-react";
 import React, { SetStateAction, useEffect, useState } from "react";
+import { toast } from "sonner";
 import ModuleItemSkeleton from "./ModuleItemSkeleton";
 
 type TVideo = { _id: string; title: string };
@@ -60,6 +61,14 @@ const ModuleShowData = ({ modules, setVideoUrl, setVideoLoading }: TProps) => {
   const handleGetVideo = async (video: TVideo) => {
     try {
       const result = await getVideoData(video?._id);
+
+      // console.log(result?.error?.data?.message);
+
+      if (result?.error) {
+        const errorMessage = result?.error?.data?.message;
+        toast.error(errorMessage, { duration: 1500 });
+        return;
+      }
 
       const videoUrl = result?.data?.data?.videoUrl;
       const moduleId = result?.data?.data?.module;
