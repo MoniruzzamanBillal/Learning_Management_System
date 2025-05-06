@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import {
   EnrolledCourseDetailSkeleton,
   ModuleShowData,
+  NoVideoPlaceholder,
   VideoLoadingSkeleton,
 } from "@/components/ui/user/EnrolledCourseDetail";
 import { useGetUserEnrolledCourseDetailQuery } from "@/redux/features/enrollment/enrollment.api";
@@ -35,6 +36,8 @@ const EnrolledCourseDetail = () => {
           <div className="leftVideoSection  w-[60%] ">
             <div className="videoPreviewContainer mt-4">
               {videoUrlLoading && <VideoLoadingSkeleton />}
+
+              {!videoUrl && <NoVideoPlaceholder />}
               {videoUrl && (
                 <MuxPlayer
                   playbackId=""

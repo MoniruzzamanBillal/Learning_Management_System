@@ -26,7 +26,7 @@ const MyCourses = () => {
   // console.log(userEnrolledCourse?.data);
 
   return (
-    <div className="MyCoursesContainer bg-gray-100  ">
+    <div className="MyCoursesContainer bg-gray-100 min-h-screen ">
       <Wrapper className="MyCoursesWrapper py-8 ">
         <h3 className="brand text-3xl font-medium mb-8 ">My Courses</h3>
 
