@@ -1,14 +1,34 @@
 import { Link } from "react-router-dom";
 import { Button } from "../button";
 
-const CourseCard = () => {
+type TInstructor = {
+  _id: string;
+  name: string;
+};
+
+export type TCourse = {
+  _id: string;
+  name: string;
+  category: string;
+  courseCover: string;
+  instructors: TInstructor[];
+  price: number;
+};
+
+type TCourseDataProps = {
+  course: TCourse;
+};
+
+const CourseCard = ({ course }: TCourseDataProps) => {
+  console.log(course?.instructors);
+
   return (
     <div className="CourseCardContainer bg-gray-50 border border-gray-300 shadow rounded  ">
-      <div className="CourseCardWrapper flex flex-col gap-y-2 ">
+      <div className="CourseCardWrapper   flex flex-col  gap-y-2 ">
         {/* course cover section  */}
         <div className="courseCover h-[14rem] rounded-t overflow-auto relative ">
           <img
-            src="https://i.postimg.cc/T3gDnj7S/494358010-646246441651486-5487058506954483020-n.jpg"
+            src={course?.courseCover}
             className=" w-full h-full "
             alt="course_cover"
           />
@@ -18,33 +38,39 @@ const CourseCard = () => {
           </span>
         </div>
 
-        <div className="courseDetailBody px-3 flex flex-col gap-y-2 ">
+        <div className="courseDetailBody px-3 flex flex-col justify-between gap-y-2 h-[15rem] ">
           {/* course name  */}
-          <p className=" courseName text-lg font-semibold ">Course name </p>
+          <p className=" courseName text-lg font-semibold "> {course?.name} </p>
 
           {/* course category  */}
           <p className=" courseCategory  ">
-            <span className=" font-semibold ">Category :</span> web Dev{" "}
+            <span className=" font-semibold ">Category : </span>
+
+            {course?.category}
           </p>
 
           {/* course instructors  */}
           <div className="courseInstructors">
             <p className=" font-semibold ">Instructors : </p>
             <ul className=" list-inside list-disc text-sm ">
-              <li>Instructor 1</li>
-              <li>Instructor 1</li>
+              {course?.instructors &&
+                course?.instructors?.map((indtructor: TInstructor) => (
+                  <li className=" pl-3 font-medium text-prime100 ">
+                    {indtructor?.name}
+                  </li>
+                ))}
             </ul>
           </div>
 
           <div className="bottomSection py-3 flex justify-between items-center ">
             {/* course price  */}
-            <p className=" coursePrice  ">
-              <span className=" font-semibold ">Price :</span> $200
+            <p className=" coursePrice  text-prime200 font-semibold ">
+              Price : ${course?.price}
             </p>
 
             {/* button  */}
             <div className="btn ">
-              <Link to={`/course-detail/${1234}`}>
+              <Link to={`/course-detail/${course?._id}`}>
                 <Button className=" bg-prime100 hover:bg-prime200 ">
                   See Details
                 </Button>

@@ -19,7 +19,6 @@ const CourseDetail = () => {
               <p className=" text-3xl font-semibold ">Course name </p>
 
               <p className=" text-lg font-medium ">
-                {" "}
                 Course Category : Web Dev{" "}
               </p>
 

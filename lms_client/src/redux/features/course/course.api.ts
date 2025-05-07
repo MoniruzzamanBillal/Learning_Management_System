@@ -88,6 +88,16 @@ const courseApi = baseApi.injectEndpoints({
       },
     }),
 
+    // ! for getting all course ( published course )
+    getAllPublishedCorses: builder.query({
+      query: () => {
+        return {
+          url: `/course/all-courses`,
+          method: "GET",
+        };
+      },
+    }),
+
     //
   }),
 });
@@ -102,4 +112,5 @@ export const {
   useGetAllCourseWithModuleQuery,
   useGetCourseDetailsForInstructorQuery,
   usePublishCourseMutation,
+  useGetAllPublishedCorsesQuery,
 } = courseApi;

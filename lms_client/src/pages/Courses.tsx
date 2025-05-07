@@ -1,5 +1,7 @@
 import Wrapper from "@/components/shared/Wrapper";
 import { CategoryFilter, CourseCard } from "@/components/ui/courses";
+import { TCourse } from "@/components/ui/courses/CourseCard";
+import CourseCardSkeleton from "@/components/ui/courses/CourseCardSkeleton";
 import { Input } from "@/components/ui/input";
 import {
   Pagination,
@@ -10,11 +12,17 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { useGetAllPublishedCorsesQuery } from "@/redux/features/course/course.api";
 import { useState } from "react";
 
 const Courses = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [categoryType, setcategoryType] = useState("");
+
+  const { data: allCourseData, isLoading: courseDataLoading } =
+    useGetAllPublishedCorsesQuery(undefined);
+
+  // console.log(allCourseData?.data);
 
   return (
     <div className="CoursesContainer bg-gray-100 py-4 min-h-screen ">
@@ -44,15 +52,15 @@ const Courses = () => {
           <div className="courseSection w-full xl:w-[84%]">
             {/* course card section  */}
             <div className="courseCard  grid grid-cols-3 gap-x-4 gap-y-6  ">
-              <CourseCard />
-              <CourseCard />
-              <CourseCard />
-              <CourseCard />
-              <CourseCard />
-              <CourseCard />
-              <CourseCard />
-              <CourseCard />
-              <CourseCard />
+              {courseDataLoading &&
+                Array.from({ length: 6 })?.map((_, ind) => (
+                  <CourseCardSkeleton key={ind} />
+                ))}
+
+              {allCourseData?.data &&
+                allCourseData?.data?.map((course: TCourse) => (
+                  <CourseCard key={course?._id} course={course} />
+                ))}
             </div>
 
             {/* pagination section  */}

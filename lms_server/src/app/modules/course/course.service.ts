@@ -44,7 +44,7 @@ const addCourse = async (payload: TCourse, file: any) => {
 const getAllCourses = async () => {
   const result = await courseModel
     .find({ published: true })
-    .populate("instructors", " name email profilePicture ")
+    .populate("instructors", " name   ")
     .select(" -published -createdAt -__v -description -modules -updatedAt ");
   return result;
 };
