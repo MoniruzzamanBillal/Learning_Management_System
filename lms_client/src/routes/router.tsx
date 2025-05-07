@@ -3,7 +3,14 @@ import App from "@/App";
 import { createBrowserRouter } from "react-router-dom";
 
 import DashboardLayout from "@/components/layout/DashboardLayout";
-import { CourseDetail, Courses, HomePage, Login, Register } from "@/pages";
+import {
+  CourseDetail,
+  Courses,
+  EnrollSuccess,
+  HomePage,
+  Login,
+  Register,
+} from "@/pages";
 
 import { EnrolledCourseDetail, MyCourses } from "@/pages/user";
 import { adminRoutes } from "./AdminRoutes";
@@ -42,6 +49,10 @@ const router = createBrowserRouter([
       {
         path: "/my-enrolled-course-detail/:courseId",
         element: <EnrolledCourseDetail />,
+      },
+      {
+        path: "/courseEnroll-success",
+        element: <EnrollSuccess />,
       },
       {
         path: "/dashboard",
