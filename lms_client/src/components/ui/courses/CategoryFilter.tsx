@@ -20,8 +20,8 @@ const CategoryFilter = ({
   setcategoryType,
 }: TCategoryFilterProps) => {
   return (
-    <div className="CategoryFilterContainer sticky top-[6rem]">
-      <div className="CategoryFilterWrapper shadow-md rounded border border-gray-400 py-2 px-3">
+    <div className="CategoryFilterContainer sticky top-[5rem]">
+      <div className="CategoryFilterWrapper shadow-md rounded bg-gray-50 border border-gray-200 py-2 px-3">
         <p className=" text-xl font-medium mb-3 text-gray-800  ">Category :</p>
 
         <div className="categoryData">

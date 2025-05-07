@@ -13,7 +13,7 @@ const CourseCard = () => {
             alt="course_cover"
           />
 
-          <span className="  courseLabel absolute top-0 left-0 bg-prime50 text-gray-100 text-xs py-1 px-2 rounded ">
+          <span className="  courseLabel absolute top-0 left-0 bg-prime50 text-gray-50 text-xs py-1 px-2 rounded font-medium ">
             Beginner
           </span>
         </div>
