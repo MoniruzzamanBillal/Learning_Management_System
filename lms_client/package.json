@@ -28,6 +28,7 @@
     "@tanstack/react-table": "^8.21.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
     "framer-motion": "^11.3.30",
     "install": "^0.13.0",
     "jsonwebtoken": "^9.0.2",

@@ -86,7 +86,8 @@ const getInstructorsAssignCourses = async (instructorId: string) => {
 const getSingleCoureData = async (courseId: string) => {
   const result = await courseModel
     .findOne({ _id: courseId, published: true })
-    .populate("instructors", " name email profilePicture _id ");
+    .populate("instructors", " name  _id ")
+    .select(" -published -__v -createdAt ");
 
   if (!result) {
     throw new AppError(httpStatus.BAD_REQUEST, "This Course don't exist!!!");
