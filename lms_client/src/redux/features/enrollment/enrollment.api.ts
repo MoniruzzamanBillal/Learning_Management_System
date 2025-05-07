@@ -2,6 +2,17 @@ import { baseApi } from "@/redux/api/baseApi";
 
 const enrollmentApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
+    // ! enroll into a course
+    enrollInCourse: builder.mutation({
+      query: (payload) => {
+        return {
+          url: `/enroll/enroll-course`,
+          method: "POST",
+          body: payload,
+        };
+      },
+    }),
+
     // ! for getting enrollment info for each course
     getEnrollmentInfo: builder.query({
       query: () => {
@@ -64,4 +75,5 @@ export const {
   useGetUserEnrolledCourseDetailQuery,
   useLazyGetEnrolledCourseVideoModuleIdQuery,
   useLazyGetEnrolledCourseVideoQuery,
+  useEnrollInCourseMutation,
 } = enrollmentApi;
