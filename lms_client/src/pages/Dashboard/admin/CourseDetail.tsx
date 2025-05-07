@@ -149,7 +149,7 @@ const CourseDetail = () => {
                     </AccordionTrigger>
                     <AccordionContent>
                       <div
-                        className=" text-lg courseDetail "
+                        className="  courseDetail "
                         dangerouslySetInnerHTML={{
                           __html: courseData?.data?.description,
                         }}

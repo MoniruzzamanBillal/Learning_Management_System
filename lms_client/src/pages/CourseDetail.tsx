@@ -10,7 +10,7 @@ const CourseDetail = () => {
   return (
     <div className="CourseDetailContainer bg-gray-50 min-h-screen ">
       <div className="CourseDetailWrapper">
-        {/* corse detail top name section  */}
+        {/* course detail top name section  */}
         <div className="courseTopSection  py-8 bg-gray-200  ">
           <Wrapper className="courseNameTopSection   flex justify-between gap-x-3     ">
             {/* course name section  */}
@@ -65,6 +65,18 @@ const CourseDetail = () => {
             {/*  */}
           </Wrapper>
         </div>
+
+        {/* course detail section  */}
+        <Wrapper className=" courseDetail ">
+          <h1>About this course : </h1>
+
+          <div
+            className="  courseDetail "
+            // dangerouslySetInnerHTML={{
+            //   __html: courseData?.data?.description,
+            // }}
+          ></div>
+        </Wrapper>
 
         {/*  */}
       </div>
