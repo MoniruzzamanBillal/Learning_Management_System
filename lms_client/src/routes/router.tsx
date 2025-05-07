@@ -6,6 +6,7 @@ import DashboardLayout from "@/components/layout/DashboardLayout";
 import {
   CourseDetail,
   Courses,
+  EnrollFail,
   EnrollSuccess,
   HomePage,
   Login,
@@ -53,6 +54,10 @@ const router = createBrowserRouter([
       {
         path: "/courseEnroll-success",
         element: <EnrollSuccess />,
+      },
+      {
+        path: "/courseEnroll-fail",
+        element: <EnrollFail />,
       },
       {
         path: "/dashboard",
