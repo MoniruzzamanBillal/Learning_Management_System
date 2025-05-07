@@ -98,6 +98,16 @@ const courseApi = baseApi.injectEndpoints({
       },
     }),
 
+    // ! for getting single course data
+    getCouseDetail: builder.query({
+      query: (courseId) => {
+        return {
+          url: `/course/course-detail/${courseId}`,
+          method: "GET",
+        };
+      },
+    }),
+
     //
   }),
 });
@@ -113,4 +123,5 @@ export const {
   useGetCourseDetailsForInstructorQuery,
   usePublishCourseMutation,
   useGetAllPublishedCorsesQuery,
+  useGetCouseDetailQuery,
 } = courseApi;
