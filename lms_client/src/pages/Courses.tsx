@@ -1,6 +1,15 @@
 import Wrapper from "@/components/shared/Wrapper";
 import { CategoryFilter, CourseCard } from "@/components/ui/courses";
 import { Input } from "@/components/ui/input";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 import { useState } from "react";
 
 const Courses = () => {
@@ -32,16 +41,47 @@ const Courses = () => {
           </div>
 
           {/* right course section   */}
-          <div className="courseSection w-full xl:w-[84%] grid grid-cols-3 gap-x-4 gap-y-6  ">
-            <CourseCard />
-            <CourseCard />
-            <CourseCard />
-            <CourseCard />
-            <CourseCard />
-            <CourseCard />
-            <CourseCard />
-            <CourseCard />
-            <CourseCard />
+          <div className="courseSection w-full xl:w-[84%]">
+            {/* course card section  */}
+            <div className="courseCard  grid grid-cols-3 gap-x-4 gap-y-6  ">
+              <CourseCard />
+              <CourseCard />
+              <CourseCard />
+              <CourseCard />
+              <CourseCard />
+              <CourseCard />
+              <CourseCard />
+              <CourseCard />
+              <CourseCard />
+            </div>
+
+            {/* pagination section  */}
+            <div className="paginationSection mt-6 ">
+              <Pagination>
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationPrevious href="#" />
+                  </PaginationItem>
+                  <PaginationItem>
+                    <PaginationLink href="#">1</PaginationLink>
+                  </PaginationItem>
+                  <PaginationItem>
+                    <PaginationLink href="#" isActive>
+                      2
+                    </PaginationLink>
+                  </PaginationItem>
+                  <PaginationItem>
+                    <PaginationLink href="#">3</PaginationLink>
+                  </PaginationItem>
+                  <PaginationItem>
+                    <PaginationEllipsis />
+                  </PaginationItem>
+                  <PaginationItem>
+                    <PaginationNext href="#" />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
+            </div>
           </div>
 
           {/*  */}
