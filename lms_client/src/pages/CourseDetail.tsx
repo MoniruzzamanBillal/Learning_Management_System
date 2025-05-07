@@ -24,7 +24,9 @@ const CourseDetail = () => {
       <div className="CourseDetailContainer bg-gray-50 min-h-screen  ">
         <div className="CourseDetailWrapper">
           {/* course detail top name section  */}
-          <CourseDetailTop courseDetails={courseDetail?.data} />
+          {courseDetail?.data && (
+            <CourseDetailTop courseDetails={courseDetail?.data} />
+          )}
 
           {/* course detail section  */}
           <Wrapper className=" courseDetail my-5 ">
