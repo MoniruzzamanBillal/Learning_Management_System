@@ -18,6 +18,11 @@ const CourseDetail = () => {
               {/* course name  */}
               <p className=" text-3xl font-semibold ">Course name </p>
 
+              <p className=" text-lg font-medium ">
+                {" "}
+                Course Category : Web Dev{" "}
+              </p>
+
               <p className=" text-lg font-medium "> Course Level : Beginner</p>
 
               {/* course instructors  */}
@@ -67,7 +72,7 @@ const CourseDetail = () => {
         </div>
 
         {/* course detail section  */}
-        <Wrapper className=" courseDetail ">
+        <Wrapper className=" courseDetail mt-2 ">
           <h1>About this course : </h1>
 
           <div

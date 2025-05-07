@@ -14,7 +14,7 @@ router.get("/all-courses", courseController.getAllCourses);
 // ! for getting all course data for admin
 router.get(
   "/admin-all-courses",
-  // authCheck(UserRole.admin),
+  authCheck(UserRole.admin),
   courseController.getAllCoursesForAdmin
 );
 
