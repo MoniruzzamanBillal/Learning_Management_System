@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Button } from "../button";
 
 const CourseCard = () => {
@@ -43,9 +44,11 @@ const CourseCard = () => {
 
             {/* button  */}
             <div className="btn ">
-              <Button className=" bg-prime100 hover:bg-prime200 ">
-                See Details
-              </Button>
+              <Link to={`/course-detail/${1234}`}>
+                <Button className=" bg-prime100 hover:bg-prime200 ">
+                  See Details
+                </Button>
+              </Link>
             </div>
 
             {/*  */}
