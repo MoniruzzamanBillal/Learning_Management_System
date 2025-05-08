@@ -1,4 +1,5 @@
 import Wrapper from "@/components/shared/Wrapper";
+import { Button } from "@/components/ui/button";
 import {
   EnrolledCourseDetailSkeleton,
   ModuleShowData,
@@ -7,7 +8,8 @@ import {
 } from "@/components/ui/user/EnrolledCourseDetail";
 import { useGetUserEnrolledCourseDetailQuery } from "@/redux/features/enrollment/enrollment.api";
 import MuxPlayer from "@mux/mux-player-react";
-import { useState } from "react";
+import { Bookmark } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 const EnrolledCourseDetail = () => {
@@ -17,13 +19,28 @@ const EnrolledCourseDetail = () => {
 
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
   const [videoUrlLoading, setVideoLoading] = useState<boolean>(false);
+  const [courseProgress, setCourseProgress] = useState<number | null>(null);
 
   const { data: enrolledCourseData, isLoading } =
     useGetUserEnrolledCourseDetailQuery(courseId, { skip: !courseId });
 
-  console.log(enrolledCourseData?.data);
+  // console.log(enrolledCourseData?.data);
   // console.log(enrolledCourseData?.data?.course?.modules);
   // console.log(videoUrl);
+
+  // console.log("course progress = ", courseProgress);
+
+  // ! for completing course
+  const handleMarkCompleteCourse = async () => {
+    console.log("course completed !!!!");
+  };
+
+  // ! for handling the value of course progress
+  useEffect(() => {
+    if (enrolledCourseData?.data?.courseProgressData) {
+      setCourseProgress(enrolledCourseData?.data?.courseProgressData);
+    }
+  }, [enrolledCourseData]);
 
   return (
     <>
@@ -60,7 +77,20 @@ const EnrolledCourseDetail = () => {
               setVideoUrl={setVideoUrl}
               setVideoLoading={setVideoLoading}
               courseId={enrolledCourseData?.data?.course?._id}
+              setCourseProgress={setCourseProgress}
             />
+
+            {/* complete course button  */}
+
+            {courseProgress === 100 && (
+              <Button
+                onClick={() => handleMarkCompleteCourse()}
+                className=" mt-2 w-full bg-prime100 hover:bg-prime200 "
+              >
+                <Bookmark size={48} strokeWidth={2.25} />
+                Mark as Completed
+              </Button>
+            )}
           </div>
           {/*  */}
         </Wrapper>

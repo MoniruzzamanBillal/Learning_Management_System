@@ -24,8 +24,8 @@ const MyCourses = () => {
   const { data: userEnrolledCourse, isLoading } =
     useGetAllUserEnrolledCoursesQuery(undefined);
 
-  console.log(userEnrolledCourse?.data);
-  console.log(userEnrolledCourse?.data?.length);
+  // console.log(userEnrolledCourse?.data);
+  // console.log(userEnrolledCourse?.data?.length);
 
   return (
     <div className="MyCoursesContainer bg-gray-100 min-h-screen ">

@@ -20,7 +20,7 @@ type TCourseDataProps = {
 };
 
 const CourseCard = ({ course }: TCourseDataProps) => {
-  console.log(course?.instructors);
+  // console.log(course?.instructors);
 
   return (
     <div className="CourseCardContainer bg-gray-50 border border-gray-300 shadow rounded  ">

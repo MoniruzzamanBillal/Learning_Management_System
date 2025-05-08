@@ -34,6 +34,7 @@ type TProps = {
   setVideoUrl: React.Dispatch<SetStateAction<string | null>>;
   setVideoLoading: React.Dispatch<SetStateAction<boolean>>;
   courseId: string;
+  setCourseProgress: React.Dispatch<SetStateAction<number | null>>;
 };
 
 const ModuleShowData = ({
@@ -41,6 +42,7 @@ const ModuleShowData = ({
   setVideoUrl,
   setVideoLoading,
   courseId,
+  setCourseProgress,
 }: TProps) => {
   const [videoData, setVideoData] = useState<TModuleVideo[] | null>(null);
 
@@ -85,7 +87,9 @@ const ModuleShowData = ({
 
       const courseProgressResult = await userCourseProgress(courseId);
 
-      console.log("course progress = ", courseProgressResult?.data?.data);
+      if (courseProgressResult?.data?.data) {
+        setCourseProgress(courseProgressResult?.data?.data);
+      }
 
       const moduleResult = await getModuleVideos(moduleId, false);
 
