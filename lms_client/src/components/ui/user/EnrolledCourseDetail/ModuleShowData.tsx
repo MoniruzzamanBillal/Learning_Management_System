@@ -31,21 +31,23 @@ type TModuleType = {
 
 type TProps = {
   modules: TModuleType[];
-
+  videoDataObj: { title: string; videoUrl: string } | null;
   setVideoLoading: React.Dispatch<SetStateAction<boolean>>;
   courseId: string;
   setCourseProgress: React.Dispatch<SetStateAction<number | null>>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  setVideoDataObj: React.Dispatch<SetStateAction<Record<string, any>>>;
+
+  setVideoDataObj: React.Dispatch<
+    SetStateAction<{ title: string; videoUrl: string } | null>
+  >;
 };
 
 const ModuleShowData = ({
   modules,
-
   setVideoLoading,
   courseId,
   setCourseProgress,
   setVideoDataObj,
+  videoDataObj,
 }: TProps) => {
   const [videoData, setVideoData] = useState<TModuleVideo[] | null>(null);
 
@@ -54,8 +56,6 @@ const ModuleShowData = ({
   const [getVideoData, { isLoading: videoDataFetchLoading }] =
     useLazyGetEnrolledCourseVideoQuery();
   const [userCourseProgress] = useLazyGetUserCourseProgressQuery();
-
-  // console.log(modules);
 
   // ! for getting module video , after clicking a module name
   const handleClickModule = async (module: TModuleType) => {
@@ -74,8 +74,6 @@ const ModuleShowData = ({
   const handleGetVideo = async (video: TVideo) => {
     try {
       const result = await getVideoData(video?._id);
-
-      // console.log(result?.error?.data?.message);
 
       if (result?.error) {
         const errorMessage = result?.error?.data?.message;
@@ -140,7 +138,12 @@ const ModuleShowData = ({
                 {isLoading && <ModuleItemSkeleton />}
                 {videoData &&
                   videoData?.map((video: TModuleVideo) => (
-                    <AccordionContent className=" text-lg py-3 pl-4 font-medium border-y border-y-gray-300 flex items-center gap-x-2 cursor-pointer  ">
+                    <AccordionContent
+                      className={` text-lg py-3 pl-4 font-medium border-y border-y-gray-300 flex items-center gap-x-2 cursor-pointer   ${
+                        video?.video?.title === videoDataObj?.title &&
+                        "bg-prime50/25 rounded "
+                      }  `}
+                    >
                       {video?.videoStatus ===
                         videoProgressStatusConsts?.locked && (
                         <Lock className=" text-red-600 font-bold " />

@@ -17,8 +17,10 @@ const EnrolledCourseDetail = () => {
 
   // console.log("course id = ", courseId);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [videoDataObj, setVideoDataObj] = useState<Record<string, any>>({});
+  const [videoDataObj, setVideoDataObj] = useState<{
+    title: string;
+    videoUrl: string;
+  } | null>(null);
   const [videoUrlLoading, setVideoLoading] = useState<boolean>(false);
   const [courseProgress, setCourseProgress] = useState<number | null>(null);
 
@@ -54,8 +56,7 @@ const EnrolledCourseDetail = () => {
             <div className="videoPreviewContainer mt-4">
               {videoDataObj && (
                 <p className=" text-xl font-medium mb-2 ">
-                  {" "}
-                  {videoDataObj?.title}{" "}
+                  {videoDataObj?.title}
                 </p>
               )}
 
@@ -87,6 +88,7 @@ const EnrolledCourseDetail = () => {
               courseId={enrolledCourseData?.data?.course?._id}
               setCourseProgress={setCourseProgress}
               setVideoDataObj={setVideoDataObj}
+              videoDataObj={videoDataObj}
             />
 
             {/* complete course button  */}
