@@ -17,7 +17,8 @@ const EnrolledCourseDetail = () => {
 
   // console.log("course id = ", courseId);
 
-  const [videoUrl, setVideoUrl] = useState<string | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [videoDataObj, setVideoDataObj] = useState<Record<string, any>>({});
   const [videoUrlLoading, setVideoLoading] = useState<boolean>(false);
   const [courseProgress, setCourseProgress] = useState<number | null>(null);
 
@@ -51,14 +52,22 @@ const EnrolledCourseDetail = () => {
           {/* left video section  */}
           <div className="leftVideoSection  w-[60%] ">
             <div className="videoPreviewContainer mt-4">
+              {videoDataObj && (
+                <p className=" text-xl font-medium mb-2 ">
+                  {" "}
+                  {videoDataObj?.title}{" "}
+                </p>
+              )}
+
               {videoUrlLoading && <VideoLoadingSkeleton />}
 
-              {!videoUrl && <NoVideoPlaceholder />}
-              {videoUrl && (
+              {!videoDataObj && <NoVideoPlaceholder />}
+
+              {videoDataObj && (
                 <MuxPlayer
                   playbackId=""
                   streamType="on-demand"
-                  src={videoUrl}
+                  src={videoDataObj?.videoUrl}
                   className="rounded-md"
                   autoPlay={false}
                   style={{ width: "100%", height: "26.5rem" }}
@@ -74,10 +83,10 @@ const EnrolledCourseDetail = () => {
           <div className="rightSection w-[40%]  ">
             <ModuleShowData
               modules={enrolledCourseData?.data?.course?.modules}
-              setVideoUrl={setVideoUrl}
               setVideoLoading={setVideoLoading}
               courseId={enrolledCourseData?.data?.course?._id}
               setCourseProgress={setCourseProgress}
+              setVideoDataObj={setVideoDataObj}
             />
 
             {/* complete course button  */}

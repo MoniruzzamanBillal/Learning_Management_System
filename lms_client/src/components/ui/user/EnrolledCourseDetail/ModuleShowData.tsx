@@ -31,18 +31,21 @@ type TModuleType = {
 
 type TProps = {
   modules: TModuleType[];
-  setVideoUrl: React.Dispatch<SetStateAction<string | null>>;
+
   setVideoLoading: React.Dispatch<SetStateAction<boolean>>;
   courseId: string;
   setCourseProgress: React.Dispatch<SetStateAction<number | null>>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  setVideoDataObj: React.Dispatch<SetStateAction<Record<string, any>>>;
 };
 
 const ModuleShowData = ({
   modules,
-  setVideoUrl,
+
   setVideoLoading,
   courseId,
   setCourseProgress,
+  setVideoDataObj,
 }: TProps) => {
   const [videoData, setVideoData] = useState<TModuleVideo[] | null>(null);
 
@@ -80,10 +83,14 @@ const ModuleShowData = ({
         return;
       }
 
-      const videoUrl = result?.data?.data?.videoUrl;
-      const moduleId = result?.data?.data?.module;
+      const videoPayload = {
+        title: result?.data?.data?.title,
+        videoUrl: result?.data?.data?.videoUrl,
+      };
 
-      setVideoUrl(videoUrl);
+      setVideoDataObj(videoPayload);
+
+      const moduleId = result?.data?.data?.module;
 
       const courseProgressResult = await userCourseProgress(courseId);
 
