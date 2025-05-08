@@ -63,6 +63,16 @@ const enrollmentApi = baseApi.injectEndpoints({
       },
     }),
 
+    // ! for getting course progress data
+    getUserCourseProgress: builder.query({
+      query: (courseId) => {
+        return {
+          url: `/enroll/my-course-progress/${courseId}`,
+          method: "GET",
+        };
+      },
+    }),
+
     //
   }),
 });
@@ -76,4 +86,5 @@ export const {
   useLazyGetEnrolledCourseVideoModuleIdQuery,
   useLazyGetEnrolledCourseVideoQuery,
   useEnrollInCourseMutation,
+  useLazyGetUserCourseProgressQuery,
 } = enrollmentApi;

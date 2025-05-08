@@ -11,6 +11,7 @@ import { videoStatus } from "../VideoModule/video.constants";
 import { videoModel } from "../VideoModule/video.model";
 import { videoProgressStatus } from "../VideoProgress/VideoProgress.constants";
 import { videoProgressModel } from "../VideoProgress/VideoProgress.model";
+import { TEnrollment } from "./CourseEnrollment.interface";
 import { courseEnrollmentModel } from "./CourseEnrollment.model";
 
 // ! for enrolling into a course
@@ -182,7 +183,21 @@ const getUserEnrolledCourse = async (userId: string, courseId: string) => {
     })
     .select(" _id user course Payment completed ");
 
-  return result;
+  if (!result) {
+    throw new Error("Enrollment not found");
+  }
+
+  interface TEnrollmentWithProgress extends TEnrollment {
+    courseProgressData: number;
+  }
+
+  const courseProgressData = await courseProgressPercentage(courseId, userId);
+
+  const updaedResult = result?.toObject() as unknown as TEnrollmentWithProgress;
+
+  updaedResult.courseProgressData = courseProgressData;
+
+  return updaedResult;
 };
 
 // ! get module data for enrolled course

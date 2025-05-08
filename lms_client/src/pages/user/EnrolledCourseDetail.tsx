@@ -21,7 +21,7 @@ const EnrolledCourseDetail = () => {
   const { data: enrolledCourseData, isLoading } =
     useGetUserEnrolledCourseDetailQuery(courseId, { skip: !courseId });
 
-  // console.log(enrolledCourseData?.data);
+  console.log(enrolledCourseData?.data);
   // console.log(enrolledCourseData?.data?.course?.modules);
   // console.log(videoUrl);
 
@@ -50,12 +50,6 @@ const EnrolledCourseDetail = () => {
                 />
               )}
             </div>
-
-            {/* button section  */}
-            {/* <div className="btnSection pt-3  flex justify-end gap-x-4 ">
-              <Button className="  ">Previous</Button>
-              <Button className=" bg-prime100 hover:bg-prime200 ">Next </Button>
-            </div> */}
           </div>
           {/*  */}
 
@@ -65,6 +59,7 @@ const EnrolledCourseDetail = () => {
               modules={enrolledCourseData?.data?.course?.modules}
               setVideoUrl={setVideoUrl}
               setVideoLoading={setVideoLoading}
+              courseId={enrolledCourseData?.data?.course?._id}
             />
           </div>
           {/*  */}

@@ -4,6 +4,8 @@ import { Button } from "../../button";
 import { Progress } from "../../progress";
 
 const MyCourseCard = ({ courseData }: { courseData: TUserEnrolledCourse }) => {
+  // console.log(courseData);
+
   return (
     <div className="enrolledCourseCard">
       <div className="enrolledCourseCardWrapper  w-[75%] rounded-md shadow bg-white border border-gray-200 flex justify-between gap-x-5  ">

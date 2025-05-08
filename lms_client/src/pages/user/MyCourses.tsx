@@ -2,6 +2,7 @@ import Wrapper from "@/components/shared/Wrapper";
 import {
   MyCourseCard,
   MyCourseCardSkeleton,
+  NoEnrollCourse,
 } from "@/components/ui/user/MyCourses";
 import { useGetAllUserEnrolledCoursesQuery } from "@/redux/features/enrollment/enrollment.api";
 
@@ -23,7 +24,8 @@ const MyCourses = () => {
   const { data: userEnrolledCourse, isLoading } =
     useGetAllUserEnrolledCoursesQuery(undefined);
 
-  // console.log(userEnrolledCourse?.data);
+  console.log(userEnrolledCourse?.data);
+  console.log(userEnrolledCourse?.data?.length);
 
   return (
     <div className="MyCoursesContainer bg-gray-100 min-h-screen ">
@@ -35,6 +37,8 @@ const MyCourses = () => {
             Array.from({ length: 4 })?.map((_, ind) => (
               <MyCourseCardSkeleton key={ind} />
             ))}
+
+          {userEnrolledCourse?.data?.length === 0 && <NoEnrollCourse />}
 
           {userEnrolledCourse?.data &&
             userEnrolledCourse?.data?.map(

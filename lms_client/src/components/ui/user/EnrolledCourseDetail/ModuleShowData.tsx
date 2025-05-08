@@ -7,6 +7,7 @@ import {
 import {
   useLazyGetEnrolledCourseVideoModuleIdQuery,
   useLazyGetEnrolledCourseVideoQuery,
+  useLazyGetUserCourseProgressQuery,
 } from "@/redux/features/enrollment/enrollment.api";
 import { videoProgressStatusConsts } from "@/utils/constants";
 import { CircleCheckBig, Lock, LockOpen } from "lucide-react";
@@ -32,15 +33,22 @@ type TProps = {
   modules: TModuleType[];
   setVideoUrl: React.Dispatch<SetStateAction<string | null>>;
   setVideoLoading: React.Dispatch<SetStateAction<boolean>>;
+  courseId: string;
 };
 
-const ModuleShowData = ({ modules, setVideoUrl, setVideoLoading }: TProps) => {
+const ModuleShowData = ({
+  modules,
+  setVideoUrl,
+  setVideoLoading,
+  courseId,
+}: TProps) => {
   const [videoData, setVideoData] = useState<TModuleVideo[] | null>(null);
 
   const [getModuleVideos, { isLoading }] =
     useLazyGetEnrolledCourseVideoModuleIdQuery();
   const [getVideoData, { isLoading: videoDataFetchLoading }] =
     useLazyGetEnrolledCourseVideoQuery();
+  const [userCourseProgress] = useLazyGetUserCourseProgressQuery();
 
   // console.log(modules);
 
@@ -74,6 +82,10 @@ const ModuleShowData = ({ modules, setVideoUrl, setVideoLoading }: TProps) => {
       const moduleId = result?.data?.data?.module;
 
       setVideoUrl(videoUrl);
+
+      const courseProgressResult = await userCourseProgress(courseId);
+
+      console.log("course progress = ", courseProgressResult?.data?.data);
 
       const moduleResult = await getModuleVideos(moduleId, false);
 
