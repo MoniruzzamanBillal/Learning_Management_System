@@ -27,6 +27,28 @@ const createUserIntoDB = async (payload: Partial<TUser>, file: any) => {
   return result;
 };
 
+// ! for creating an instructor
+const createInstructor = async (payload: Partial<TUser>, file: any) => {
+  if (file) {
+    const name = (payload?.name as string).trim();
+    const path = (file?.path as string).trim();
+
+    const cloudinaryResponse = await SendImageCloudinary(
+      path as string,
+      name as string
+    );
+    const profilePicture = cloudinaryResponse?.secure_url;
+    payload.profilePicture = profilePicture;
+  }
+
+  payload.password = "123456";
+  payload.needsPasswordChange = true;
+
+  const result = await userModel.create({ ...payload });
+
+  return result;
+};
+
 type Tlogin = {
   email: string;
   password: string;
@@ -69,4 +91,5 @@ const signInFromDb = async (payload: Tlogin) => {
 export const authServices = {
   createUserIntoDB,
   signInFromDb,
+  createInstructor,
 };

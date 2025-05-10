@@ -7,4 +7,5 @@ export type TUser = {
   profilePicture?: string;
   isDeleted: boolean;
   userRole: TUserRole;
+  needsPasswordChange?: boolean;
 };

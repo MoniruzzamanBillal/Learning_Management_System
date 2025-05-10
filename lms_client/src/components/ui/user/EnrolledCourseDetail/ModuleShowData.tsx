@@ -115,7 +115,7 @@ const ModuleShowData = ({
   }, [videoDataFetchLoading]);
 
   return (
-    <div className="ModuleShowDataContainer">
+    <div className="ModuleShowDataContainer mt-10 ">
       <div className="ModuleShowDataWrapper">
         {/*  */}
         <Accordion type="single" collapsible className="w-full">

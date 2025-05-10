@@ -15,6 +15,18 @@ const createUser = catchAsync(async (req, res) => {
   });
 });
 
+// ! for creating an instructor
+const createInstructor = catchAsync(async (req, res) => {
+  const result = await authServices.createInstructor(req?.body, req?.file);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Instructor added successfully !!!",
+    data: result,
+  });
+});
+
 // ! for login
 const loginUser = catchAsync(async (req, res) => {
   const result = await authServices.signInFromDb(req.body);
@@ -38,4 +50,5 @@ const loginUser = catchAsync(async (req, res) => {
 export const authControllers = {
   createUser,
   loginUser,
+  createInstructor,
 };

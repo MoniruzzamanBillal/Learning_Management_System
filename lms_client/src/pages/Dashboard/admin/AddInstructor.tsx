@@ -49,11 +49,19 @@ const AddInstructor = () => {
     const payload = {
       name: data?.name,
       email: data?.email,
-      password: data?.password,
       userRole: userRoleConts?.instructor,
     };
 
     console.log(payload);
+
+    const formData = new FormData();
+    if (imageFile) {
+      formData.append("profileImg", imageFile);
+    }
+
+    formData.append("data", JSON.stringify(payload));
+
+    //
   };
 
   return (
@@ -70,7 +78,7 @@ const AddInstructor = () => {
           >
             {/* Name */}
             <div className="nameContainer flex flex-col gap-y-1">
-              <Label htmlFor="name">Your Name</Label>
+              <Label htmlFor="name">Instructor Name</Label>
               <Input
                 id="name"
                 type="text"
@@ -86,7 +94,7 @@ const AddInstructor = () => {
 
             {/* Email */}
             <div className="emailContainer flex flex-col gap-y-1">
-              <Label htmlFor="email">Your Email Address</Label>
+              <Label htmlFor="email">Instructor Email Address</Label>
               <Input
                 id="email"
                 type="email"
@@ -129,24 +137,6 @@ const AddInstructor = () => {
                     <X />
                   </button>
                 </div>
-              )}
-            </div>
-
-            {/* Password */}
-            <div className="passwordContainer flex flex-col gap-y-1">
-              <Label htmlFor="password">Your Password</Label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="Enter Password"
-                {...register("password", {
-                  required: "Password is required",
-                })}
-              />
-              {errors?.password && (
-                <span className="text-red-600 text-sm">
-                  {errors?.password?.message as string}
-                </span>
               )}
             </div>
 
