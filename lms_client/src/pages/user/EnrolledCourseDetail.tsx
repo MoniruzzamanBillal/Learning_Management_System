@@ -93,7 +93,7 @@ const EnrolledCourseDetail = () => {
 
             {/* complete course button  */}
 
-            {courseProgress === 100 && (
+            {!enrolledCourseData?.data?.completed && courseProgress === 100 && (
               <Button
                 onClick={() => handleMarkCompleteCourse()}
                 className=" mt-2 w-full bg-prime100 hover:bg-prime200 "
