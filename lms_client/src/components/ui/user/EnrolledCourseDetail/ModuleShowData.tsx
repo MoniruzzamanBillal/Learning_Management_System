@@ -76,7 +76,8 @@ const ModuleShowData = ({
       const result = await getVideoData(video?._id);
 
       if (result?.error) {
-        const errorMessage = result?.error?.data?.message;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const errorMessage = (result?.error as any)?.data?.message;
         toast.error(errorMessage, { duration: 1500 });
         return;
       }

@@ -15,13 +15,9 @@ const router = (0, express_1.Router)();
 // ! for getting all course data
 router.get("/all-courses", course_controller_1.courseController.getAllCourses);
 // ! for getting all course data for admin
-router.get("/admin-all-courses", 
-// authCheck(UserRole.admin),
-course_controller_1.courseController.getAllCoursesForAdmin);
+router.get("/admin-all-courses", (0, authCheck_1.default)(user_constants_1.UserRole.admin), course_controller_1.courseController.getAllCoursesForAdmin);
 // ! for getting all course data for admin and instructor
-router.get("/all-courses-modules", 
-// authCheck(UserRole.admin, UserRole?.instructor),
-course_controller_1.courseController.getAllCoursesWithModules);
+router.get("/all-courses-modules", (0, authCheck_1.default)(user_constants_1.UserRole.admin, user_constants_1.UserRole === null || user_constants_1.UserRole === void 0 ? void 0 : user_constants_1.UserRole.instructor), course_controller_1.courseController.getAllCoursesWithModules);
 // ! for adding new course
 router.post("/add-course", (0, authCheck_1.default)(user_constants_1.UserRole.admin), SendImageCloudinary_1.upload.single("courseCover"), (req, res, next) => {
     var _a;

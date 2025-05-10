@@ -2,8 +2,7 @@ import Jwt from "jsonwebtoken";
 
 export const createToken = (
   payload: { userId: string; userRole: string },
-  secret: string,
-  expire: string
+  secret: string
 ) => {
-  return Jwt.sign(payload, secret, { expiresIn: expire });
+  return Jwt.sign(payload, secret, { expiresIn: "20d" });
 };

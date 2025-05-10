@@ -4,6 +4,7 @@ import AppError from "../../Error/AppError";
 import { courseModel } from "../course/course.model";
 import { moduleModel } from "../courseModule/module.model";
 
+import { TCourse } from "../course/course.interface";
 import { paymentModel } from "../payment/payment.model";
 import { sslServices } from "../SSL/SSL.service";
 import { userModel } from "../user/user.model";
@@ -153,8 +154,13 @@ const getAllUserEnrolledCourse = async (userId: string) => {
 
   const progressResult = await Promise.all(
     courseEnrolledData.map(async (enrollmentData) => {
+      type TCourseDocument = TCourse & { _id: string };
+
+      const courseData = enrollmentData?.course as unknown as TCourseDocument;
+
       const progressData = await courseProgressPercentage(
-        enrollmentData?.course?._id,
+        // enrollmentData?.course?._id,
+        courseData?._id,
         userId
       );
 
@@ -381,6 +387,63 @@ const getUserEnrolledModuleVideos = async (
   return videoData;
 };
 
+//  ! for marking course as complete
+const markCompleteCourse = async (courseId: string, userId: string) => {
+  const userData = await userModel.findById(userId);
+
+  if (!userData) {
+    throw new AppError(httpStatus.BAD_REQUEST, "This user don't exist !!!");
+  }
+
+  const courseData = await courseModel.findById(courseId);
+
+  if (!courseData) {
+    throw new AppError(httpStatus.BAD_REQUEST, "This course don't exist !!!");
+  }
+
+  if (!courseData?.published) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "This course is not published yet!!!"
+    );
+  }
+
+  const previousEnrolledData = await courseEnrollmentModel.findOne({
+    user: userId,
+    course: courseId,
+    isDeleted: false,
+  });
+
+  if (!previousEnrolledData) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "You did not enrolled into this course !!!"
+    );
+  }
+
+  const coursePercentageProgress = await courseProgressPercentage(
+    courseId,
+    userId
+  );
+
+  if (coursePercentageProgress !== 100) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "You did not complete the full course !!!"
+    );
+  }
+
+  const result = await courseEnrollmentModel.findOneAndUpdate(
+    { course: courseId, user: userId },
+    { completed: true },
+    { new: true }
+  );
+
+  return result;
+
+  //
+};
+
 //
 export const courseEnrollmentService = {
   enrollInCourse,
@@ -391,4 +454,5 @@ export const courseEnrollmentService = {
   enrollmentsPerCourse,
   getAllUserEnrolledCourse,
   getUserEnrolledModuleVideos,
+  markCompleteCourse,
 };

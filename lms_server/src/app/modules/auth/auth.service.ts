@@ -8,6 +8,7 @@ import { userModel } from "../user/user.model";
 import { createToken } from "./auth.util";
 
 // ! crate user
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const createUserIntoDB = async (payload: Partial<TUser>, file: any) => {
   if (file) {
     const name = (payload?.name as string).trim();
@@ -59,7 +60,7 @@ const signInFromDb = async (payload: Tlogin) => {
     userRole,
   };
 
-  const token = createToken(jwtPayload, config.jwt_secret as string, "20d");
+  const token = createToken(jwtPayload, config.jwt_secret as string);
 
   return { userData, token };
 };

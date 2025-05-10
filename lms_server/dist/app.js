@@ -23,7 +23,11 @@ const router_1 = require("./app/router");
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use((0, cors_1.default)({
-    origin: ["http://localhost:5173"],
+    origin: [
+        "http://localhost:5173",
+        "https://devmats.vercel.app/",
+        "https://dev-mats.vercel.app/",
+    ],
     credentials: true,
 }));
 app.use((0, morgan_1.default)("dev"));
@@ -40,6 +44,7 @@ app.get("/", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () 
     }
 }));
 //! global error handler
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 app.use(globalErrorHandler_1.default);
 // ! not found route
 app.use((req, res, next) => {

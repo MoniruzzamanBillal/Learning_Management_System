@@ -5,9 +5,7 @@ const express_1 = require("express");
 const payment_controller_1 = require("./payment.controller");
 const router = (0, express_1.Router)();
 // ! for validating payment
-router.get("/validate-payment", payment_controller_1.paymentController.validatePayment);
-// ! pay for the course
-router.post("pay-course", payment_controller_1.paymentController.payCourse);
+// router.get("/validate-payment", paymentController.validatePayment);
 // ! for successfully payment
 router.post("/success", payment_controller_1.paymentController.successfullyPayment);
 router.post("/fail", payment_controller_1.paymentController.failPayment);

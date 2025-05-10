@@ -125,8 +125,10 @@ const getAllUserEnrolledCourse = (userId) => __awaiter(void 0, void 0, void 0, f
         .populate("course", " _id name category courseCover ")
         .select(" -Payment -isDeleted -createdAt -updatedAt -__v ");
     const progressResult = yield Promise.all(courseEnrolledData.map((enrollmentData) => __awaiter(void 0, void 0, void 0, function* () {
-        var _a;
-        const progressData = yield courseProgressPercentage((_a = enrollmentData === null || enrollmentData === void 0 ? void 0 : enrollmentData.course) === null || _a === void 0 ? void 0 : _a._id, userId);
+        const courseData = enrollmentData === null || enrollmentData === void 0 ? void 0 : enrollmentData.course;
+        const progressData = yield courseProgressPercentage(
+        // enrollmentData?.course?._id,
+        courseData === null || courseData === void 0 ? void 0 : courseData._id, userId);
         return Object.assign(Object.assign({}, enrollmentData.toObject()), { courseProgress: progressData });
     })));
     return progressResult;
@@ -145,7 +147,13 @@ const getUserEnrolledCourse = (userId, courseId) => __awaiter(void 0, void 0, vo
         },
     })
         .select(" _id user course Payment completed ");
-    return result;
+    if (!result) {
+        throw new Error("Enrollment not found");
+    }
+    const courseProgressData = yield courseProgressPercentage(courseId, userId);
+    const updaedResult = result === null || result === void 0 ? void 0 : result.toObject();
+    updaedResult.courseProgressData = courseProgressData;
+    return updaedResult;
 });
 // ! get module data for enrolled course
 const getModuleDataEnrlledCourse = (userId, courseId) => __awaiter(void 0, void 0, void 0, function* () {

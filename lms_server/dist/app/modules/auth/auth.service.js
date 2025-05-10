@@ -21,6 +21,7 @@ const SendImageCloudinary_1 = require("../../util/SendImageCloudinary");
 const user_model_1 = require("../user/user.model");
 const auth_util_1 = require("./auth.util");
 // ! crate user
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const createUserIntoDB = (payload, file) => __awaiter(void 0, void 0, void 0, function* () {
     if (file) {
         const name = (payload === null || payload === void 0 ? void 0 : payload.name).trim();
@@ -49,7 +50,7 @@ const signInFromDb = (payload) => __awaiter(void 0, void 0, void 0, function* ()
         userId,
         userRole,
     };
-    const token = (0, auth_util_1.createToken)(jwtPayload, config_1.default.jwt_secret, "20d");
+    const token = (0, auth_util_1.createToken)(jwtPayload, config_1.default.jwt_secret);
     return { userData, token };
 });
 //

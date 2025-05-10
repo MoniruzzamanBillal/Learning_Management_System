@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { TLoginPayload, TRegistrationPayload } from "@/types/auth.types";
+import { TLoginPayload } from "@/types/auth.types";
 import { TUser } from "@/types/globalTypes";
 import { verifyToken } from "@/utils/verifyToken";
 import { toast } from "sonner";

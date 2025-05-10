@@ -41,7 +41,8 @@ const addCourse = (payload, file) => __awaiter(void 0, void 0, void 0, function*
 const getAllCourses = () => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield course_model_1.courseModel
         .find({ published: true })
-        .populate("instructors", " name email profilePicture ");
+        .populate("instructors", " name   ")
+        .select(" -published -createdAt -__v -description -modules -updatedAt ");
     return result;
 });
 // ! for getting all course data ,admin manage course
@@ -73,7 +74,8 @@ const getInstructorsAssignCourses = (instructorId) => __awaiter(void 0, void 0, 
 const getSingleCoureData = (courseId) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield course_model_1.courseModel
         .findOne({ _id: courseId, published: true })
-        .populate("instructors", " name email profilePicture _id ");
+        .populate("instructors", " name  _id ")
+        .select(" -published -__v -createdAt ");
     if (!result) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "This Course don't exist!!!");
     }

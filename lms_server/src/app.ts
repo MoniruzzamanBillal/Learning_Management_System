@@ -14,8 +14,14 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: ["http://localhost:5173"],
+    origin: [
+      "http://localhost:5173",
+      "https://devmats.vercel.app/",
+      "https://dev-mats.vercel.app/",
+    ],
     credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 app.use(morgan("dev"));
@@ -34,7 +40,8 @@ app.get("/", async (req: Request, res: Response, next: NextFunction) => {
 });
 
 //! global error handler
-app.use(globalErrorHandler);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+app.use(globalErrorHandler as any);
 
 // ! not found route
 app.use((req: Request, res: Response, next: NextFunction) => {

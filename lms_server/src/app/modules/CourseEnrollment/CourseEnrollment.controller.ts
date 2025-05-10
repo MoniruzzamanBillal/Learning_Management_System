@@ -116,6 +116,21 @@ const getUserEnrolledModuleVideos = catchAsync(async (req, res) => {
   });
 });
 
+//  ! for marking course as complete
+const markCompleteCourse = catchAsync(async (req, res) => {
+  const result = await courseEnrollmentService.markCompleteCourse(
+    req?.params?.courseId,
+    req?.user?.userId
+  );
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Course Completed successfully !!!",
+    data: result,
+  });
+});
+
 //
 export const CourseEnrollmentController = {
   enrollInCourse,
@@ -126,4 +141,5 @@ export const CourseEnrollmentController = {
   enrollmentsPerCourse,
   getAllUserEnrolledCourse,
   getUserEnrolledModuleVideos,
+  markCompleteCourse,
 };

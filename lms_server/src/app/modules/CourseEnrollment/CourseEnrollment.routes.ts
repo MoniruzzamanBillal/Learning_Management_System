@@ -64,5 +64,12 @@ router.get(
   CourseEnrollmentController.getUserEnrolledModuleVideos
 );
 
+//  ! for marking course as complete
+router.patch(
+  "/complete-my-course/:courseId",
+  authCheck(UserRole.user),
+  CourseEnrollmentController.markCompleteCourse
+);
+
 //
 export const courseEnrollmentRouter = router;

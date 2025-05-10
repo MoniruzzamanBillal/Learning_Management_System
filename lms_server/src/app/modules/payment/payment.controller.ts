@@ -1,31 +1,19 @@
-import httpStatus from "http-status";
 import catchAsync from "../../util/catchAsync";
-import sendResponse from "../../util/sendResponse";
 import { paymentServices } from "./payment.service";
 
 const redirectURL = "http://localhost:5173";
 
-// ! for enrolling into a course
-const payCourse = catchAsync(async (req, res) => {
-  sendResponse(res, {
-    statusCode: httpStatus.CREATED,
-    success: true,
-    message: "Payed for the course successfully !!!",
-    data: "result",
-  });
-});
-
 // ! for validating payment
-const validatePayment = catchAsync(async (req, res) => {
-  const result = await paymentServices.validatePayment(req?.query);
+// const validatePayment = catchAsync(async (req, res) => {
+//   const result = await paymentServices.validatePayment(req?.query);
 
-  sendResponse(res, {
-    statusCode: httpStatus.CREATED,
-    success: true,
-    message: "Payment Validate successfully !!!",
-    data: result,
-  });
-});
+//   sendResponse(res, {
+//     statusCode: httpStatus.CREATED,
+//     success: true,
+//     message: "Payment Validate successfully !!!",
+//     data: result,
+//   });
+// });
 
 // ! after successfully payment
 const successfullyPayment = catchAsync(async (req, res) => {
@@ -51,8 +39,6 @@ const failPayment = catchAsync(async (req, res) => {
 
 //
 export const paymentController = {
-  payCourse,
-  validatePayment,
   successfullyPayment,
   failPayment,
 };

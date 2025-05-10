@@ -13,31 +13,33 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.paymentServices = void 0;
-const axios_1 = __importDefault(require("axios"));
+/* eslint-disable @typescript-eslint/no-explicit-any */
 const http_status_1 = __importDefault(require("http-status"));
 const mongoose_1 = __importDefault(require("mongoose"));
-const config_1 = __importDefault(require("../../config"));
 const AppError_1 = __importDefault(require("../../Error/AppError"));
 const CourseEnrollment_model_1 = require("../CourseEnrollment/CourseEnrollment.model");
 const payment_constant_1 = require("./payment.constant");
 const payment_model_1 = require("./payment.model");
 // ! for validating payment
-const validatePayment = (payload) => __awaiter(void 0, void 0, void 0, function* () {
-    if (!payload || !(payload === null || payload === void 0 ? void 0 : payload.status) || !((payload === null || payload === void 0 ? void 0 : payload.status) === "VALID")) {
-        throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "Invalid Payment ");
-    }
-    const response = yield (0, axios_1.default)({
-        method: "GET",
-        url: `${config_1.default.SSL_VALIDATION_URL}?val_id=${payload === null || payload === void 0 ? void 0 : payload.val_id}&store_id=${config_1.default.STORE_ID}&store_passwd=${config_1.default.STORE_PASSWORD}&format=json`,
-    });
-    if (!(response === null || response === void 0 ? void 0 : response.status) === "VALID ") {
-        throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "Payment Failed !!!");
-    }
-    const transactionId = response === null || response === void 0 ? void 0 : response.tran_id;
-    const result = yield payment_model_1.paymentModel.findOneAndUpdate({ transactionId }, { paymentStatus: payment_constant_1.PAYMENTSTATUS.Completed }, { new: true });
-    return result;
-    //
-});
+// const validatePayment = async (payload: any) => {
+//   if (!payload || !payload?.status || !(payload?.status === "VALID")) {
+//     throw new AppError(httpStatus.BAD_REQUEST, "Invalid Payment ");
+//   }
+//   const response = await axios({
+//     method: "GET",
+//     url: `${config.SSL_VALIDATION_URL}?val_id=${payload?.val_id}&store_id=${config.STORE_ID}&store_passwd=${config.STORE_PASSWORD}&format=json`,
+//   });
+//   if ((!response?.status as unknown) === "VALID ") {
+//     throw new AppError(httpStatus.BAD_REQUEST, "Payment Failed !!!");
+//   }
+//   const transactionId = response?.tran_id;
+//   const result = await paymentModel.findOneAndUpdate(
+//     { transactionId },
+//     { paymentStatus: PAYMENTSTATUS.Completed },
+//     { new: true }
+//   );
+//   return result;
+// };
 // ! after successfully payment
 const successfullyPayment = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const { tran_id, status } = payload;
@@ -74,7 +76,6 @@ const failPayment = (payload) => __awaiter(void 0, void 0, void 0, function* () 
 });
 //
 exports.paymentServices = {
-    validatePayment,
     successfullyPayment,
     failPayment,
 };
