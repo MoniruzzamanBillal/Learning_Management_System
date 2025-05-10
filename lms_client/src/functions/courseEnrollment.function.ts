@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { handleToastResponse } from "@/utils/sharedFunction";
 import { toast } from "sonner";
 
 type TenrollCourse = {
@@ -41,6 +42,25 @@ export const enrollInCourseFunction = async (
   } catch (error) {
     console.log(error);
     toast.error("Something went wrong while purchasing the course !!!", {
+      duration: 1400,
+    });
+  }
+};
+
+//  ! for marking course as complete
+export const markCompleteCourseFunction = async (
+  courseId: string,
+  markCompleteCourse: any
+) => {
+  const taostId = toast.loading("Marking couse complete...");
+
+  try {
+    const result = await markCompleteCourse(courseId);
+
+    handleToastResponse(result, taostId);
+  } catch (error) {
+    console.log(error);
+    toast.error("Something went wrong while completing course !!!", {
       duration: 1400,
     });
   }

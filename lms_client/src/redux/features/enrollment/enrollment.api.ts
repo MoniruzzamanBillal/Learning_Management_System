@@ -74,7 +74,6 @@ const enrollmentApi = baseApi.injectEndpoints({
     }),
 
     //  ! for marking course as complete
-
     markCompleteCourse: builder.mutation({
       query: (courseId) => {
         return {
