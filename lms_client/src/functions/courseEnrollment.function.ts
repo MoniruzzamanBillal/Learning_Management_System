@@ -52,12 +52,13 @@ export const markCompleteCourseFunction = async (
   courseId: string,
   markCompleteCourse: any
 ) => {
-  const taostId = toast.loading("Marking couse complete...");
+  const taostId = toast.loading("Marking course complete...");
 
   try {
     const result = await markCompleteCourse(courseId);
 
-    handleToastResponse(result, taostId);
+    const responseResult = handleToastResponse(result, taostId);
+    return responseResult;
   } catch (error) {
     console.log(error);
     toast.error("Something went wrong while completing course !!!", {

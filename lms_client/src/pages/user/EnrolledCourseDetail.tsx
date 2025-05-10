@@ -6,6 +6,7 @@ import {
   NoVideoPlaceholder,
   VideoLoadingSkeleton,
 } from "@/components/ui/user/EnrolledCourseDetail";
+import { markCompleteCourseFunction } from "@/functions/courseEnrollment.function";
 import {
   useGetUserEnrolledCourseDetailQuery,
   useMarkCompleteCourseMutation,
@@ -20,6 +21,10 @@ const EnrolledCourseDetail = () => {
 
   // console.log("course id = ", courseId);
 
+  if (!courseId) {
+    throw new Error("Something went wrong !!!");
+  }
+
   const [videoDataObj, setVideoDataObj] = useState<{
     title: string;
     videoUrl: string;
@@ -27,8 +32,11 @@ const EnrolledCourseDetail = () => {
   const [videoUrlLoading, setVideoLoading] = useState<boolean>(false);
   const [courseProgress, setCourseProgress] = useState<number | null>(null);
 
-  const { data: enrolledCourseData, isLoading } =
-    useGetUserEnrolledCourseDetailQuery(courseId, { skip: !courseId });
+  const {
+    data: enrolledCourseData,
+    isLoading,
+    refetch: courseDataRefetch,
+  } = useGetUserEnrolledCourseDetailQuery(courseId, { skip: !courseId });
 
   const [markCompleteCourse, { isLoading: courseMarkCompleteLoading }] =
     useMarkCompleteCourseMutation();
@@ -41,7 +49,14 @@ const EnrolledCourseDetail = () => {
 
   // ! for completing course
   const handleMarkCompleteCourse = async () => {
-    console.log("course completed !!!!");
+    const result = await markCompleteCourseFunction(
+      courseId,
+      markCompleteCourse
+    );
+
+    if (result?.data?.data?.completed) {
+      courseDataRefetch();
+    }
   };
 
   // ! for handling the value of course progress
