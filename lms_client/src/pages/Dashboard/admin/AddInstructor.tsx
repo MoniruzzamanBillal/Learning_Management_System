@@ -57,15 +57,11 @@ const AddInstructor = () => {
   const handleAddInstructor = async (data: AddInstructorFormData) => {
     const imageFile = data?.image?.[0];
 
-    console.log("image file = ", imageFile);
-
     const payload = {
       name: data?.name,
       email: data?.email,
       userRole: userRoleConts?.instructor,
     };
-
-    console.log(payload);
 
     const formData = new FormData();
     if (imageFile) {

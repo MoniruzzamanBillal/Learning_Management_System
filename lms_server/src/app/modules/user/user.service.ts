@@ -43,7 +43,7 @@ const changePassword = async (
   );
 
   const result = await userModel.findByIdAndUpdate(
-    { userId },
+    userId,
     { password: hashedPassword, needsPasswordChange: false },
     { new: true }
   );
