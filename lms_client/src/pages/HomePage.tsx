@@ -2,6 +2,7 @@ import {
   HeroSection,
   PopularCourse,
   Service,
+  Testimonial,
   TutorSection,
 } from "@/components/ui/Home";
 
@@ -12,6 +13,7 @@ const HomePage = () => {
       <Service />
       <PopularCourse />
       <TutorSection />
+      <Testimonial />
     </div>
   );
 };
