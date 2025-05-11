@@ -71,13 +71,6 @@ const Login = () => {
       console.log(error);
     }
 
-    // const result = await authLogin(data, logIn);
-
-    // if (result) {
-    //   dispatch(setUser(result));
-    //   navigate("/");
-    // }
-
     //
   };
 

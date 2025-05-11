@@ -14,7 +14,20 @@ const getAllInstructor = catchAsync(async (req, res) => {
   });
 });
 
+// ! for changing password
+const changePassword = catchAsync(async (req, res) => {
+  const result = await userServices.changePassword(req.body, req.user?.userId);
+
+  sendResponse(res, {
+    statusCode: httpStatus.CREATED,
+    success: true,
+    message: "password changed successfully!!!",
+    data: result,
+  });
+});
+
 //
 export const userController = {
   getAllInstructor,
+  changePassword,
 };
