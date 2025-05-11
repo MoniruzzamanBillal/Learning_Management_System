@@ -76,7 +76,9 @@ const Service = () => {
   return (
     <div className="ServiceContainer py-8 bg-gray-100 ">
       <Wrapper className="ServiceWrapper">
-        <h1 className=" text-center ">Our Services</h1>
+        <h1 className=" text-center  text-prime100 font-medium">
+          Our Services
+        </h1>
         <h2 className=" text-center pt-4 font-medium ">
           Delivering Interactive & Skill-Focused Online Learning
         </h2>
