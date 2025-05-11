@@ -1,7 +1,9 @@
 import Wrapper from "@/components/shared/Wrapper";
+import { FormSubmitLoading } from "@/components/ui";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useChangePasswordMutation } from "@/redux/features/auth/auth.api";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -14,6 +16,8 @@ type TChangePassword = {
 const ChangePassword = () => {
   const navigate = useNavigate();
 
+  const [changePassword, { isLoading }] = useChangePasswordMutation();
+
   const {
     register,
     handleSubmit,
@@ -23,11 +27,41 @@ const ChangePassword = () => {
   //   ! for changing password
   const handleChangePassword = async (data: TChangePassword) => {
     const toastId = toast.loading("Changing password...");
+
+    try {
+      const result = await changePassword(data);
+
+      //  *  for any  error
+      if (result?.error) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const errorMessage = (result?.error as any)?.data?.message;
+        console.log(errorMessage);
+        toast.error(errorMessage, {
+          id: toastId,
+          duration: 1400,
+        });
+      }
+
+      // * for successful insertion
+      if (result?.data) {
+        toast.success("Password changed successfully", {
+          id: toastId,
+          duration: 1400,
+        });
+
+        setTimeout(() => {
+          navigate("/");
+        }, 700);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Password change failed", { id: toastId, duration: 1800 });
+    }
   };
 
   return (
     <>
-      {/* {isLoading && <FormSubmitLoading />} */}
+      {isLoading && <FormSubmitLoading />}
 
       <div className="ChangePasswordContainer w-full min-h-screen flex items-center justify-center">
         <Wrapper className="formContainer py-14">

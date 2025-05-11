@@ -23,6 +23,26 @@ const authApi = baseApi.injectEndpoints({
         };
       },
     }),
+    // ! for register an instructor
+    instructorRegistration: builder.mutation({
+      query: (payload) => {
+        return {
+          url: "/auth/register-instructor",
+          method: "POST",
+          body: payload,
+        };
+      },
+    }),
+
+    changePassword: builder.mutation({
+      query: (payload) => {
+        return {
+          url: "/user/change-password",
+          method: "PATCH",
+          body: payload,
+        };
+      },
+    }),
 
     //
   }),
@@ -31,4 +51,9 @@ const authApi = baseApi.injectEndpoints({
 });
 
 //
-export const { useLogInMutation, useUserRegistrationMutation } = authApi;
+export const {
+  useLogInMutation,
+  useUserRegistrationMutation,
+  useChangePasswordMutation,
+  useInstructorRegistrationMutation,
+} = authApi;

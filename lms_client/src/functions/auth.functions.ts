@@ -2,6 +2,7 @@
 
 import { TLoginPayload } from "@/types/auth.types";
 import { TUser } from "@/types/globalTypes";
+import { handleToastResponse } from "@/utils/sharedFunction";
 import { verifyToken } from "@/utils/verifyToken";
 import { toast } from "sonner";
 
@@ -67,6 +68,27 @@ export const registerUser = async (payload: any, registerFun: any) => {
     }
   } catch (error) {
     toast.error("Something went wrong while reistering a user !! ", {
+      id: toastId,
+      duration: 1400,
+    });
+    console.log(error);
+  }
+};
+
+// ! for register an instructor
+export const registerInstructorFunction = async (
+  payload: any,
+  instructorRegistration: any,
+  navigate: () => void
+) => {
+  const toastId = toast.loading("Registering an instructor.....");
+
+  try {
+    const result = await instructorRegistration(payload);
+
+    await handleToastResponse(result, toastId, navigate);
+  } catch (error) {
+    toast.error("Something went wrong while reistering an instructor !! ", {
       id: toastId,
       duration: 1400,
     });
