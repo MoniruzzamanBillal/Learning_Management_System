@@ -15,4 +15,11 @@ router.post(
   reviewController.addReview
 );
 
+// ! for updating review
+router.post(
+  "/update-review",
+  authCheck(UserRole.user),
+  reviewController.updateReview
+);
+
 export const reviewRouter = router;

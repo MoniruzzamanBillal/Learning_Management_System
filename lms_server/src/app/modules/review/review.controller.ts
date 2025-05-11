@@ -15,7 +15,20 @@ const addReview = catchAsync(async (req, res) => {
   });
 });
 
+// ! for updating review
+const updateReview = catchAsync(async (req, res) => {
+  const result = await reviewServices.updateReview(req?.body);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Review updated successfully !!!",
+    data: result,
+  });
+});
+
 //
 export const reviewController = {
   addReview,
+  updateReview,
 };

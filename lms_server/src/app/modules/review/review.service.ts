@@ -60,7 +60,25 @@ const addReview = async (payload: TReview) => {
   //
 };
 
+// ! for updating review
+const updateReview = async (payload: {
+  reviewId: string;
+  comment: string;
+  rating: number;
+}) => {
+  const { reviewId, comment, rating } = payload;
+
+  const updateResult = await reviewModel.findByIdAndUpdate(
+    reviewId,
+    { comment, rating },
+    { new: true }
+  );
+
+  return updateResult;
+};
+
 //
 export const reviewServices = {
   addReview,
+  updateReview,
 };
