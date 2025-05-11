@@ -5,6 +5,7 @@ import {
   ReviewInput,
   UserReviewCard,
 } from "@/components/ui/courseDetail.tsx";
+import { TPopulatedReview } from "@/components/ui/courseDetail.tsx/UserReviewCard";
 import { useGetCouseDetailQuery } from "@/redux/features/course/course.api";
 import {
   useCheckReviewEligibilityQuery,
@@ -37,7 +38,7 @@ const CourseDetail = () => {
 
   // console.log(courseDetail?.data);
   // console.log(reviewEligibility?.data);
-  console.log(courseReview?.data);
+  // console.log(courseReview?.data);
 
   // ! for adding review
   const handleAddReview = async () => {
@@ -89,9 +90,10 @@ const CourseDetail = () => {
 
               {/* review card section  */}
               <div className="userReviewCard">
-                <UserReviewCard />
-                <UserReviewCard />
-                <UserReviewCard />
+                {courseReview?.data &&
+                  courseReview?.data?.map((reviewData: TPopulatedReview) => (
+                    <UserReviewCard reviewData={reviewData} />
+                  ))}
               </div>
             </Wrapper>
           </div>

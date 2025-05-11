@@ -4,10 +4,28 @@ import { useState } from "react";
 
 import { FaStar } from "react-icons/fa";
 
-const UserReviewCard = () => {
+export type TPopulatedReview = {
+  _id: string;
+  comment: string;
+  rating: number;
+  createdAt: string;
+  userId: {
+    _id: string;
+    name: string;
+    profilePicture: string;
+  };
+};
+
+type Tprops = {
+  reviewData: TPopulatedReview;
+};
+
+const UserReviewCard = ({ reviewData }: Tprops) => {
+  // console.log(reviewData);
+
   const [isEditing, setIsEditing] = useState(false);
-  //   const [editedContent, setEditedContent] = useState(review?.comment);
-  const [editedContent, setEditedContent] = useState("");
+  const [editedContent, setEditedContent] = useState(reviewData?.comment);
+
   const [rating, setRating] = useState(0);
 
   const userInfo = useGetUser();
@@ -19,16 +37,20 @@ const UserReviewCard = () => {
   // ! for canceling updadteing edit
   const handleCancelClick = () => {
     setIsEditing(false);
-    setEditedContent("");
-    // setEditedContent(review?.comment);
-    setRating(0);
+    setEditedContent(reviewData?.comment);
+    setRating(reviewData?.rating);
   };
 
   // ! for updating comment
   const handleSaveClick = async () => {
-    // const payload = { reviewId: review?._id, comment: editedContent, rating };
+    const payload = {
+      reviewId: reviewData?._id,
+      comment: editedContent,
+      rating,
+    };
 
     console.log("save review ");
+    console.log(payload);
   };
 
   return (
@@ -40,8 +62,8 @@ const UserReviewCard = () => {
           <div className="writerImg   ">
             <img
               className=" w-8 h-8 xsm:w-9 xsm:h-9 sm:w-10 sm:h-10 rounded-full"
-              src={"https://i.postimg.cc/Wbc4RGDZ/images.jpg"}
-              alt="user avatar"
+              src={reviewData?.userId?.profilePicture}
+              alt={reviewData?.userId?.name}
             />
           </div>
           {/* writer image  */}
@@ -50,10 +72,13 @@ const UserReviewCard = () => {
 
           <div className="writerName   ">
             <p className=" text-gray-900 font-semibold text-xs sm:text-sm ">
-              user name
+              {reviewData?.userId?.name}
             </p>
             <p className=" text-gray-600 font-medium text-xs  ">
-              {format(new Date(2014, 1, 11), "dd-MMMM-yyyy")}
+              {format(
+                new Date(reviewData?.createdAt as string),
+                "dd-MMMM-yyyy"
+              )}
             </p>
           </div>
         </div>
@@ -61,20 +86,27 @@ const UserReviewCard = () => {
         {/* review star starts  */}
         {!isEditing && (
           <div className="reviewStar paragraphFont text-sm sm:text-base mb-2 flex gap-x-.5 ">
-            {renderStars()}
+            {renderStars(reviewData)}
           </div>
         )}
 
         {/* User comment */}
-        <div className="userComment paragraphFont text-sm sm:text-base mb-2 ">
+        <div className="userComment paragraphFont text-sm sm:text-base mb-2   ">
           {isEditing ? (
             <div>
-              <input
+              <textarea
+                className="  border border-gray-300 rounded-md p-1  w-[40%] "
+                id="comment"
+                rows={4}
+                value={editedContent}
+                onChange={(e) => setEditedContent(e.target.value)}
+              ></textarea>
+              {/* <input
                 type="text"
                 value={editedContent}
                 onChange={(e) => setEditedContent(e.target.value)}
                 className="  border border-gray-300 rounded-md p-1  "
-              />
+              /> */}
 
               {/* Rating Section */}
               <div className=" pt-3">
@@ -98,7 +130,7 @@ const UserReviewCard = () => {
               </div>
             </div>
           ) : (
-            <p> user review data </p>
+            <p> {reviewData?.comment} </p>
           )}
         </div>
 
@@ -139,10 +171,10 @@ const UserReviewCard = () => {
 };
 
 //   ! fucntion for rendering star
-const renderStars = () => {
+const renderStars = (reviewData: TPopulatedReview) => {
   const totalLength = 5;
-  const filledStars = 3;
-  // const filledStars = review?.rating || 0;
+
+  const filledStars = reviewData?.rating || 0;
 
   return Array.from({ length: totalLength }, (_, index) => (
     <FaStar
