@@ -16,7 +16,7 @@ router.post(
 );
 
 // ! for updating review
-router.post(
+router.patch(
   "/update-review",
   authCheck(UserRole.user),
   reviewController.updateReview

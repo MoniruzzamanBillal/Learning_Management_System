@@ -26,10 +26,13 @@ const CourseDetail = () => {
     skip: !courseId,
   });
 
-  const { data: courseReview, isLoading: courseReviewLoading } =
-    useGetCourseReviewQuery(courseId, {
-      skip: !courseId,
-    });
+  const {
+    data: courseReview,
+    isLoading: courseReviewLoading,
+    refetch: reviewDataRefetch,
+  } = useGetCourseReviewQuery(courseId, {
+    skip: !courseId,
+  });
 
   const { data: reviewEligibility, isLoading: reviewEligibleDataLoading } =
     useCheckReviewEligibilityQuery(courseId, {
@@ -92,7 +95,10 @@ const CourseDetail = () => {
               <div className="userReviewCard">
                 {courseReview?.data &&
                   courseReview?.data?.map((reviewData: TPopulatedReview) => (
-                    <UserReviewCard reviewData={reviewData} />
+                    <UserReviewCard
+                      reviewData={reviewData}
+                      reviewDataRefetch={reviewDataRefetch}
+                    />
                   ))}
               </div>
             </Wrapper>

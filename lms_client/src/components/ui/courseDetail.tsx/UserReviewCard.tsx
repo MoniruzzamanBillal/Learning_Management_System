@@ -1,8 +1,10 @@
-import { useGetUser } from "@/utils/sharedFunction";
+import { updateReviewFunction } from "@/functions/review.function";
+import { useUpdateReviewMutation } from "@/redux/features/review/review.api";
 import { format } from "date-fns";
 import { useState } from "react";
 
 import { FaStar } from "react-icons/fa";
+import { toast } from "sonner";
 
 export type TPopulatedReview = {
   _id: string;
@@ -18,9 +20,10 @@ export type TPopulatedReview = {
 
 type Tprops = {
   reviewData: TPopulatedReview;
+  reviewDataRefetch: any;
 };
 
-const UserReviewCard = ({ reviewData }: Tprops) => {
+const UserReviewCard = ({ reviewData, reviewDataRefetch }: Tprops) => {
   // console.log(reviewData);
 
   const [isEditing, setIsEditing] = useState(false);
@@ -28,7 +31,8 @@ const UserReviewCard = ({ reviewData }: Tprops) => {
 
   const [rating, setRating] = useState(0);
 
-  const userInfo = useGetUser();
+  const [updateReview, { isLoading: reviewUpdateLoading }] =
+    useUpdateReviewMutation();
 
   const handleEditClick = () => {
     setIsEditing(true);
@@ -43,6 +47,15 @@ const UserReviewCard = ({ reviewData }: Tprops) => {
 
   // ! for updating comment
   const handleSaveClick = async () => {
+    if (!editedContent) {
+      toast.error("Give a meaningfull review  ");
+      return;
+    }
+    if (rating === 0) {
+      toast.error("Give a star  ");
+      return;
+    }
+
     const payload = {
       reviewId: reviewData?._id,
       comment: editedContent,
@@ -51,6 +64,15 @@ const UserReviewCard = ({ reviewData }: Tprops) => {
 
     console.log("save review ");
     console.log(payload);
+
+    const result = await updateReviewFunction(payload, updateReview);
+
+    console.log(result?.data?.data);
+
+    if (result?.data?.data) {
+      reviewDataRefetch();
+      setIsEditing(false);
+    }
   };
 
   return (

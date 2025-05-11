@@ -22,11 +22,25 @@ const reviewApi = baseApi.injectEndpoints({
       },
     }),
 
+    // ! update review
+    updateReview: builder.mutation({
+      query: (payload) => {
+        return {
+          url: `/review/update-review`,
+          method: "PATCH",
+          body: payload,
+        };
+      },
+    }),
+
     //
   }),
 });
 
 //
 
-export const { useGetCourseReviewQuery, useCheckReviewEligibilityQuery } =
-  reviewApi;
+export const {
+  useGetCourseReviewQuery,
+  useCheckReviewEligibilityQuery,
+  useUpdateReviewMutation,
+} = reviewApi;
