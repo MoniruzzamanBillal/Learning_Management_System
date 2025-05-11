@@ -16,4 +16,9 @@ export const UserLinks = [
     path: "/dashboard/user/my-enrolled-courses",
     icon: <CiBookmark className="text-xl font-bold" />,
   },
+  {
+    name: "My Certificates",
+    path: "/dashboard/user/course-certificates",
+    icon: <CiBookmark className="text-xl font-bold" />,
+  },
 ];
