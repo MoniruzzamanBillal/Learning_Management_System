@@ -91,7 +91,10 @@ const checkReviewEligibility = async (courseId: string, userId: string) => {
 
 // ! for getting course review
 const getCourseReview = async (courseId: string) => {
-  const result = await reviewModel.find({ courseId: courseId });
+  const result = await reviewModel
+    .find({ courseId: courseId })
+    .populate("userId", "_id name profilePicture ")
+    .select(" _id  rating  comment   createdAt ");
 
   return result;
 };
