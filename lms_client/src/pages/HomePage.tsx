@@ -1,11 +1,9 @@
+import { HeroSection } from "@/components/ui/Home";
+
 const HomePage = () => {
   return (
     <div className="HomePageContainer">
-      <h1> HomePage</h1>
-      <h1> HomePage</h1>
-      <h1> HomePage</h1>
-      <h1> HomePage</h1>
-      <h1> HomePage</h1>
+      <HeroSection />
     </div>
   );
 };
