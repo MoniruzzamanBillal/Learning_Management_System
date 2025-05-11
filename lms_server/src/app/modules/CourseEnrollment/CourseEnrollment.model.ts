@@ -23,6 +23,7 @@ const courseEnrollmentSchema = new Schema<TEnrollment>(
       default: false,
     },
     isDeleted: { type: Boolean, default: false },
+    isReviewed: { type: Boolean, default: false },
   },
   { timestamps: true }
 );

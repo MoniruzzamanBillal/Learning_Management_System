@@ -6,4 +6,5 @@ export type TEnrollment = {
   Payment: ObjectId;
   completed: boolean;
   isDeleted?: boolean;
+  isReviewed?: boolean;
 };
