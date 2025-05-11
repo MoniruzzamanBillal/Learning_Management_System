@@ -2,11 +2,12 @@ import { Router } from "express";
 
 import { authRouter } from "../modules/auth/auth.route";
 import { courseRouter } from "../modules/course/course.routes";
-import { moduleRouter } from "../modules/courseModule/module.routes";
-import { videoRouter } from "../modules/VideoModule/video.routes";
 import { courseEnrollmentRouter } from "../modules/CourseEnrollment/CourseEnrollment.routes";
+import { moduleRouter } from "../modules/courseModule/module.routes";
 import { paymentRoute } from "../modules/payment/payment.routes";
+import { reviewRouter } from "../modules/review/review.route";
 import { userRouter } from "../modules/user/user.route";
+import { videoRouter } from "../modules/VideoModule/video.routes";
 
 const router = Router();
 
@@ -38,6 +39,10 @@ const routeArray = [
   {
     path: "/payment",
     route: paymentRoute,
+  },
+  {
+    path: "/review",
+    route: reviewRouter,
   },
 ];
 

@@ -61,6 +61,6 @@ const addReview = async (payload: TReview) => {
 };
 
 //
-export const reviewService = {
+export const reviewServices = {
   addReview,
 };
