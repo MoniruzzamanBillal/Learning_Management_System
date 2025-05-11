@@ -19,7 +19,7 @@ const ReviewInput = ({
 TProps) => {
   return (
     <div className="ReviewInputContainer  ">
-      <div className="ReviewInputWrapper w-full mb-4 border   rounded-md bg-gray-100 ">
+      <div className="ReviewInputWrapper w-full mb-4 border border-gray-300  rounded-md bg-gray-50 shadow ">
         <div className="px-4 py-2   ">
           <label htmlFor="review" className="sr-only">
             Your Review
@@ -29,7 +29,7 @@ TProps) => {
             rows={5}
             value={review as string}
             onChange={(e) => setReview(e.target.value)}
-            className="w-full px-0 text-sm bg-gray-100  border-none outline-none  "
+            className="w-full px-0 text-sm bg-gray-50  border-none outline-none  "
             required
             placeholder="Give Your Review..."
           ></textarea>
@@ -62,7 +62,7 @@ TProps) => {
             // disabled={reviewGivingLoading}
             type="submit"
             onClick={() => handleAddReview()}
-            className=" text-sm font-medium  text-white bg-prime50 rounded-md  hover:bg-prime100 "
+            className=" text-sm font-medium  text-white bg-prime100 hover:bg-prime200 rounded-md   "
           >
             Post Review
           </Button>

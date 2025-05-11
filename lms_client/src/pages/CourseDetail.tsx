@@ -3,6 +3,7 @@ import {
   CourseDetailSkeleton,
   CourseDetailTop,
   ReviewInput,
+  UserReviewCard,
 } from "@/components/ui/courseDetail.tsx";
 import { useGetCouseDetailQuery } from "@/redux/features/course/course.api";
 import { useState } from "react";
@@ -51,22 +52,31 @@ const CourseDetail = () => {
           </Wrapper>
 
           {/* review section  */}
-          <Wrapper className="reviewSection mt-8 ">
-            <h1 className="   font-semibold text-2xl mb-3 mt-6 underline ">
-              Comments :{" "}
-            </h1>
+          <div className="reviewContainer bg-gray-100 py-3 ">
+            <Wrapper className="reviewSection  ">
+              <h1 className="   font-semibold text-2xl py-5 underline ">
+                Comments :{" "}
+              </h1>
 
-            {/* review button section  */}
-            <div className="reviewInputSection">
-              <ReviewInput
-                review={review}
-                setReview={setReview}
-                handleAddReview={handleAddReview}
-                rating={rating}
-                setRating={setRating}
-              />
-            </div>
-          </Wrapper>
+              {/* review button section  */}
+              <div className="reviewInputSection">
+                <ReviewInput
+                  review={review}
+                  setReview={setReview}
+                  handleAddReview={handleAddReview}
+                  rating={rating}
+                  setRating={setRating}
+                />
+              </div>
+
+              {/* review card section  */}
+              <div className="userReviewCard">
+                <UserReviewCard />
+                <UserReviewCard />
+                <UserReviewCard />
+              </div>
+            </Wrapper>
+          </div>
 
           {/*  */}
         </div>
