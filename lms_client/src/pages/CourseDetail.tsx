@@ -21,7 +21,7 @@ const CourseDetail = () => {
     skip: !courseId,
   });
 
-  // console.log(courseDetail?.data?.description);
+  console.log(courseDetail?.data);
 
   // ! for adding review
   const handleAddReview = async () => {

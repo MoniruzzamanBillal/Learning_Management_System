@@ -27,6 +27,21 @@ const updateReview = catchAsync(async (req, res) => {
   });
 });
 
+// ! check review eligibility
+const checkReviewEligibility = catchAsync(async (req, res) => {
+  const result = await reviewServices.checkReviewEligibility(
+    req?.params?.courseId,
+    req?.user?.userId
+  );
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Review eligibility retrived successfully !!!",
+    data: result,
+  });
+});
+
 // ! for getting course review
 const getCourseReview = catchAsync(async (req, res) => {
   const result = await reviewServices.getCourseReview(req?.params?.courseId);
@@ -44,4 +59,5 @@ export const reviewController = {
   addReview,
   updateReview,
   getCourseReview,
+  checkReviewEligibility,
 };

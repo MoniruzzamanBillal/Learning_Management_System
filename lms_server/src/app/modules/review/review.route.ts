@@ -25,4 +25,11 @@ router.post(
 // ! for getting course review
 router.get("/course-review/:courseId", reviewController.getCourseReview);
 
+// ! for checking review eligibility
+router.get(
+  "/check-review-eligibility/:courseId",
+  authCheck(UserRole.user),
+  reviewController.checkReviewEligibility
+);
+
 export const reviewRouter = router;

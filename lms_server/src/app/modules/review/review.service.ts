@@ -77,6 +77,18 @@ const updateReview = async (payload: {
   return updateResult;
 };
 
+// ! check review eligibility
+const checkReviewEligibility = async (courseId: string, userId: string) => {
+  const result = await courseEnrollmentModel.findOne({
+    user: userId,
+    course: courseId,
+    completed: true,
+    isReviewed: false,
+  });
+
+  return result;
+};
+
 // ! for getting course review
 const getCourseReview = async (courseId: string) => {
   const result = await reviewModel.find({ courseId: courseId });
@@ -89,4 +101,5 @@ export const reviewServices = {
   addReview,
   updateReview,
   getCourseReview,
+  checkReviewEligibility,
 };
