@@ -1,4 +1,9 @@
-import { HeroSection, PopularCourse, Service } from "@/components/ui/Home";
+import {
+  HeroSection,
+  PopularCourse,
+  Service,
+  TutorSection,
+} from "@/components/ui/Home";
 
 const HomePage = () => {
   return (
@@ -6,6 +11,7 @@ const HomePage = () => {
       <HeroSection />
       <Service />
       <PopularCourse />
+      <TutorSection />
     </div>
   );
 };
