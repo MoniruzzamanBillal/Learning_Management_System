@@ -77,8 +77,16 @@ const updateReview = async (payload: {
   return updateResult;
 };
 
+// ! for getting course review
+const getCourseReview = async (courseId: string) => {
+  const result = await reviewModel.find({ courseId: courseId });
+
+  return result;
+};
+
 //
 export const reviewServices = {
   addReview,
   updateReview,
+  getCourseReview,
 };

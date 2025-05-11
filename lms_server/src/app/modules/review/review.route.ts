@@ -22,4 +22,7 @@ router.post(
   reviewController.updateReview
 );
 
+// ! for getting course review
+router.get("/course-review/:courseId", reviewController.getCourseReview);
+
 export const reviewRouter = router;

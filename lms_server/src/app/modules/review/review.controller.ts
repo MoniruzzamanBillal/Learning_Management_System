@@ -27,8 +27,21 @@ const updateReview = catchAsync(async (req, res) => {
   });
 });
 
+// ! for getting course review
+const getCourseReview = catchAsync(async (req, res) => {
+  const result = await reviewServices.getCourseReview(req?.params?.courseId);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Review retrived successfully !!!",
+    data: result,
+  });
+});
+
 //
 export const reviewController = {
   addReview,
   updateReview,
+  getCourseReview,
 };

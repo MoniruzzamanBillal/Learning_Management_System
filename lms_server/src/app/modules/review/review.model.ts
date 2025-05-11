@@ -27,17 +27,5 @@ const reviewSchema = new Schema<TReview>(
   { timestamps: true }
 );
 
-reviewSchema.pre("find", async function (next) {
-  this.where({ isDeleted: false });
-
-  next();
-});
-
-reviewSchema.pre("findOne", async function (next) {
-  this.where({ isDeleted: false });
-
-  next();
-});
-
 //
 export const reviewModel = model<TReview>("Review", reviewSchema);
