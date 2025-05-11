@@ -6,21 +6,32 @@ import {
   UserReviewCard,
 } from "@/components/ui/courseDetail.tsx";
 import { TPopulatedReview } from "@/components/ui/courseDetail.tsx/UserReviewCard";
+import { giveReviewFunction } from "@/functions/review.function";
 import { useGetCouseDetailQuery } from "@/redux/features/course/course.api";
 import {
   useCheckReviewEligibilityQuery,
   useGetCourseReviewQuery,
+  useGiveReviewMutation,
 } from "@/redux/features/review/review.api";
+import { useGetUser } from "@/utils/sharedFunction";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
+import { toast } from "sonner";
 
 const CourseDetail = () => {
   const { courseId } = useParams();
 
+  const userInfo = useGetUser();
+
   // console.log("course id = ", courseId);
+
+  // console.log(userInfo?.userId);
 
   const [review, setReview] = useState<string | null>(null);
   const [rating, setRating] = useState(0);
+
+  const [giveReview, { isLoading: reviewGivingLoading }] =
+    useGiveReviewMutation();
 
   const { data: courseDetail, isLoading } = useGetCouseDetailQuery(courseId, {
     skip: !courseId,
@@ -34,10 +45,13 @@ const CourseDetail = () => {
     skip: !courseId,
   });
 
-  const { data: reviewEligibility, isLoading: reviewEligibleDataLoading } =
-    useCheckReviewEligibilityQuery(courseId, {
-      skip: !courseId,
-    });
+  const {
+    data: reviewEligibility,
+    isLoading: reviewEligibleDataLoading,
+    refetch: eligibilityRefetch,
+  } = useCheckReviewEligibilityQuery(courseId, {
+    skip: !courseId,
+  });
 
   // console.log(courseDetail?.data);
   // console.log(reviewEligibility?.data);
@@ -45,7 +59,29 @@ const CourseDetail = () => {
 
   // ! for adding review
   const handleAddReview = async () => {
-    console.log("review added !!!!");
+    if (!review) {
+      toast.error("Give a meaningfull review  ");
+      return;
+    }
+    if (rating === 0) {
+      toast.error("Give a star  ");
+      return;
+    }
+
+    const payload = {
+      userId: userInfo?.userId,
+      courseId: courseId,
+      rating,
+      comment: review,
+    };
+
+    const result = await giveReviewFunction(payload, giveReview);
+    console.log(result?.data?.success);
+
+    if (result?.data?.success) {
+      reviewDataRefetch();
+      eligibilityRefetch();
+    }
   };
 
   return (
@@ -77,19 +113,22 @@ const CourseDetail = () => {
           <div className="reviewContainer bg-gray-100 py-3 ">
             <Wrapper className="reviewSection  ">
               <h1 className="   font-semibold text-2xl py-5 underline ">
-                Comments :{" "}
+                Review :
               </h1>
 
               {/* review button section  */}
-              <div className="reviewInputSection">
-                <ReviewInput
-                  review={review}
-                  setReview={setReview}
-                  handleAddReview={handleAddReview}
-                  rating={rating}
-                  setRating={setRating}
-                />
-              </div>
+              {reviewEligibility?.data && (
+                <div className="reviewInputSection">
+                  <ReviewInput
+                    review={review}
+                    setReview={setReview}
+                    handleAddReview={handleAddReview}
+                    rating={rating}
+                    setRating={setRating}
+                    reviewGivingLoading={reviewGivingLoading}
+                  />
+                </div>
+              )}
 
               {/* review card section  */}
               <div className="userReviewCard">

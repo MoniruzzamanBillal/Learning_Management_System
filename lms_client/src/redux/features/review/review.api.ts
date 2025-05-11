@@ -22,6 +22,17 @@ const reviewApi = baseApi.injectEndpoints({
       },
     }),
 
+    // ! for giving a review
+    giveReview: builder.mutation({
+      query: (payload) => {
+        return {
+          url: `/review/give-review`,
+          method: "POST",
+          body: payload,
+        };
+      },
+    }),
+
     // ! update review
     updateReview: builder.mutation({
       query: (payload) => {
@@ -43,4 +54,5 @@ export const {
   useGetCourseReviewQuery,
   useCheckReviewEligibilityQuery,
   useUpdateReviewMutation,
+  useGiveReviewMutation,
 } = reviewApi;

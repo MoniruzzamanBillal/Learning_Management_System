@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { updateReviewFunction } from "@/functions/review.function";
 import { useUpdateReviewMutation } from "@/redux/features/review/review.api";
 import { format } from "date-fns";
@@ -29,10 +30,9 @@ const UserReviewCard = ({ reviewData, reviewDataRefetch }: Tprops) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState(reviewData?.comment);
 
-  const [rating, setRating] = useState(0);
+  const [rating, setRating] = useState(reviewData?.rating);
 
-  const [updateReview, { isLoading: reviewUpdateLoading }] =
-    useUpdateReviewMutation();
+  const [updateReview] = useUpdateReviewMutation();
 
   const handleEditClick = () => {
     setIsEditing(true);

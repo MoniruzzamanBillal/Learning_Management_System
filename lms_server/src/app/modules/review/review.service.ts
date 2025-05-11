@@ -48,11 +48,12 @@ const addReview = async (payload: TReview) => {
       { new: true, session }
     );
 
-    session.commitTransaction();
-    session.endSession();
+    await session.commitTransaction();
+    await session.endSession();
   } catch (error) {
     await session.abortTransaction();
     await session.endSession();
+
     console.error("Error during review  the course : ", error);
     throw new Error("Failed to review the course!!");
   }

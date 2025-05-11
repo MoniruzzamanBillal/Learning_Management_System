@@ -3,7 +3,7 @@ import { Button } from "../button";
 type TProps = {
   review: string | null;
   rating: number;
-  //   reviewGivingLoading: boolean;
+  reviewGivingLoading: boolean;
   setRating: (value: number) => void;
   setReview: (value: string) => void;
   handleAddReview: () => void;
@@ -15,8 +15,8 @@ const ReviewInput = ({
   handleAddReview,
   rating,
   setRating,
-}: //   reviewGivingLoading,
-TProps) => {
+  reviewGivingLoading,
+}: TProps) => {
   return (
     <div className="ReviewInputContainer  ">
       <div className="ReviewInputWrapper w-full mb-4 border border-gray-300  rounded-md bg-gray-50 shadow ">
@@ -59,12 +59,12 @@ TProps) => {
         {/* button  */}
         <div className="flex items-center justify-between px-3 py-2 border-t  ">
           <Button
-            // disabled={reviewGivingLoading}
+            disabled={reviewGivingLoading}
             type="submit"
             onClick={() => handleAddReview()}
             className=" text-sm font-medium  text-white bg-prime100 hover:bg-prime200 rounded-md   "
           >
-            Post Review
+            {reviewGivingLoading ? "Giving Review " : "Give Review "}
           </Button>
         </div>
       </div>
