@@ -11,7 +11,7 @@ type TUser = {
 const TutorSection = () => {
   const { data: instructorData } = useGetAllInstructorQuery(undefined);
 
-  console.log(instructorData?.data);
+  // console.log(instructorData?.data);
 
   return (
     <div className="TutorSectionContainer py-8 bg-gray-100 ">

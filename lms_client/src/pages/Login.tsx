@@ -2,14 +2,16 @@ import Wrapper from "@/components/shared/Wrapper";
 import { FormSubmitLoading } from "@/components/ui";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { authLogin } from "@/functions/auth.functions";
 import { useLogInMutation } from "@/redux/features/auth/auth.api";
 import { setUser } from "@/redux/features/auth/auth.slice";
 import { useAppDispatch } from "@/redux/hook";
 import { TLoginPayload } from "@/types/auth.types";
+import { TUser } from "@/types/globalTypes";
+import { verifyToken } from "@/utils/verifyToken";
 import { Label } from "@radix-ui/react-label";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -24,12 +26,57 @@ const Login = () => {
 
   // ! for login
   const handleLogin = async (data: TLoginPayload) => {
-    const result = await authLogin(data, logIn);
+    const toastId = toast.loading("Loginng in...");
 
-    if (result) {
-      dispatch(setUser(result));
-      navigate("/");
+    try {
+      const result = await logIn(data);
+
+      // console.log(result?.data);
+      // console.log(result?.data?.message);
+      // console.log(result?.data?.data);
+      // console.log(result?.data?.data?.needsPasswordChange);
+      // console.log(result?.data?.token);
+
+      //  *  for any  error
+      if (result?.error) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const errorMessage = (result?.error as any)?.data?.message;
+        console.log(errorMessage);
+        toast.error(errorMessage, {
+          id: toastId,
+          duration: 1400,
+        });
+      }
+
+      if (result?.data?.data?.needsPasswordChange) {
+        const token = result?.data?.token;
+        const user = verifyToken(token) as TUser;
+        dispatch(setUser({ user, token }));
+        navigate("/change-password");
+
+        toast.success(result?.data?.message, { id: toastId, duration: 1400 });
+      } else if (result?.data?.success) {
+        const token = result?.data?.token;
+
+        const user = verifyToken(token) as TUser;
+
+        dispatch(setUser({ user, token }));
+        toast.success(result?.data?.message, { id: toastId, duration: 1400 });
+        navigate("/");
+      }
+    } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const errorMsg = (error as any)?.data?.message;
+      toast.error(errorMsg, { id: toastId, duration: 1800 });
+      console.log(error);
     }
+
+    // const result = await authLogin(data, logIn);
+
+    // if (result) {
+    //   dispatch(setUser(result));
+    //   navigate("/");
+    // }
 
     //
   };
@@ -98,9 +145,9 @@ const Login = () => {
             </form>
             {/* form ends */}
 
-            <div className="forgotPassword  mt-2  font-semibold underline cursor-pointer text-blue-800 dark:text-blue-500  ">
+            {/* <div className="forgotPassword  mt-2  font-semibold underline cursor-pointer text-blue-800 dark:text-blue-500  ">
               <Link to={"/forgotPassword"}>forgot password</Link>
-            </div>
+            </div> */}
 
             {/*  */}
 
