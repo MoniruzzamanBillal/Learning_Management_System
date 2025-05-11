@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { updateReviewFunction } from "@/functions/review.function";
 import { useUpdateReviewMutation } from "@/redux/features/review/review.api";
+import { useGetUser } from "@/utils/sharedFunction";
 import { format } from "date-fns";
 import { useState } from "react";
 
@@ -25,6 +26,8 @@ type Tprops = {
 };
 
 const UserReviewCard = ({ reviewData, reviewDataRefetch }: Tprops) => {
+  const userInfo = useGetUser();
+
   // console.log(reviewData);
 
   const [isEditing, setIsEditing] = useState(false);
@@ -123,12 +126,6 @@ const UserReviewCard = ({ reviewData, reviewDataRefetch }: Tprops) => {
                 value={editedContent}
                 onChange={(e) => setEditedContent(e.target.value)}
               ></textarea>
-              {/* <input
-                type="text"
-                value={editedContent}
-                onChange={(e) => setEditedContent(e.target.value)}
-                className="  border border-gray-300 rounded-md p-1  "
-              /> */}
 
               {/* Rating Section */}
               <div className=" pt-3">
@@ -158,33 +155,35 @@ const UserReviewCard = ({ reviewData, reviewDataRefetch }: Tprops) => {
 
         {/* Edit delete button section */}
 
-        <div className="mt-4 editDeleteBtn text-xs flex items-center gap-x-4">
-          {isEditing ? (
-            <>
-              <p
-                className="underline text-green-600 font-semibold cursor-pointer"
-                onClick={handleSaveClick}
-              >
-                Save
-              </p>
-              <p
-                className="underline text-red-600 font-semibold cursor-pointer"
-                onClick={handleCancelClick}
-              >
-                Cancel
-              </p>
-            </>
-          ) : (
-            <>
-              <p
-                className="underline text-green-600 font-semibold cursor-pointer"
-                onClick={handleEditClick}
-              >
-                Edit
-              </p>
-            </>
-          )}
-        </div>
+        {userInfo?.userId === reviewData?.userId?._id && (
+          <div className="mt-4 editDeleteBtn text-xs flex items-center gap-x-4">
+            {isEditing ? (
+              <>
+                <p
+                  className="underline text-green-600 font-semibold cursor-pointer"
+                  onClick={handleSaveClick}
+                >
+                  Save
+                </p>
+                <p
+                  className="underline text-red-600 font-semibold cursor-pointer"
+                  onClick={handleCancelClick}
+                >
+                  Cancel
+                </p>
+              </>
+            ) : (
+              <>
+                <p
+                  className="underline text-green-600 font-semibold cursor-pointer"
+                  onClick={handleEditClick}
+                >
+                  Edit
+                </p>
+              </>
+            )}
+          </div>
+        )}
 
         {/*  */}
       </div>
