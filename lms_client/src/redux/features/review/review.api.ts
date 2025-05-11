@@ -12,10 +12,21 @@ const reviewApi = baseApi.injectEndpoints({
       },
     }),
 
+    // ! check review eligibility
+    checkReviewEligibility: builder.query({
+      query: (courseId) => {
+        return {
+          url: `/review/check-review-eligibility/${courseId}`,
+          method: "GET",
+        };
+      },
+    }),
+
     //
   }),
 });
 
 //
 
-export const { useGetCourseReviewQuery } = reviewApi;
+export const { useGetCourseReviewQuery, useCheckReviewEligibilityQuery } =
+  reviewApi;

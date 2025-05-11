@@ -6,6 +6,7 @@ import {
   UserReviewCard,
 } from "@/components/ui/courseDetail.tsx";
 import { useGetCouseDetailQuery } from "@/redux/features/course/course.api";
+import { useCheckReviewEligibilityQuery } from "@/redux/features/review/review.api";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 
@@ -21,7 +22,13 @@ const CourseDetail = () => {
     skip: !courseId,
   });
 
-  console.log(courseDetail?.data);
+  const { data: reviewEligibility, isLoading: reviewEligibleDataLoading } =
+    useCheckReviewEligibilityQuery(courseId, {
+      skip: !courseId,
+    });
+
+  // console.log(courseDetail?.data);
+  console.log(reviewEligibility?.data);
 
   // ! for adding review
   const handleAddReview = async () => {
@@ -30,7 +37,7 @@ const CourseDetail = () => {
 
   return (
     <>
-      {isLoading && <CourseDetailSkeleton />}
+      {(isLoading || reviewEligibleDataLoading) && <CourseDetailSkeleton />}
 
       <div className="CourseDetailContainer bg-gray-50 min-h-screen  ">
         <div className="CourseDetailWrapper">
