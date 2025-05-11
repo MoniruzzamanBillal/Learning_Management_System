@@ -1,9 +1,10 @@
-import { HeroSection } from "@/components/ui/Home";
+import { HeroSection, Service } from "@/components/ui/Home";
 
 const HomePage = () => {
   return (
     <div className="HomePageContainer">
       <HeroSection />
+      <Service />
     </div>
   );
 };
