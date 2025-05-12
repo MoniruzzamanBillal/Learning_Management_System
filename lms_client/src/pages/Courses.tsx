@@ -3,15 +3,6 @@ import { CategoryFilter, CourseCard } from "@/components/ui/courses";
 import { TCourse } from "@/components/ui/courses/CourseCard";
 import CourseCardSkeleton from "@/components/ui/courses/CourseCardSkeleton";
 import { Input } from "@/components/ui/input";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
 import { useGetAllPublishedCorsesQuery } from "@/redux/features/course/course.api";
 import { useState } from "react";
 
@@ -22,13 +13,11 @@ const Courses = () => {
   const { data: allCourseData, isLoading: courseDataLoading } =
     useGetAllPublishedCorsesQuery(undefined);
 
-  // console.log(allCourseData?.data);
-
   return (
-    <div className="CoursesContainer bg-gray-100 py-4 min-h-screen ">
+    <div className="CoursesContainer bg-gray-100 py-8 min-h-screen ">
       <Wrapper className="CoursesWrapper">
         {/* search section   */}
-        <div className="searchSection bg-gray-50 border border-gray-300  w-[50%] m-auto py-1 px-5 rounded-full flex justify-center items-center mb-8  ">
+        <div className="searchSection bg-white border border-gray-300  w-[50%] m-auto py-1 px-5 rounded-full flex justify-center items-center mb-8  ">
           <Input
             type="text"
             placeholder="Looking for...."
@@ -61,34 +50,6 @@ const Courses = () => {
                 allCourseData?.data?.map((course: TCourse) => (
                   <CourseCard key={course?._id} course={course} />
                 ))}
-            </div>
-
-            {/* pagination section  */}
-            <div className="paginationSection mt-6 ">
-              <Pagination>
-                <PaginationContent>
-                  <PaginationItem>
-                    <PaginationPrevious href="#" />
-                  </PaginationItem>
-                  <PaginationItem>
-                    <PaginationLink href="#">1</PaginationLink>
-                  </PaginationItem>
-                  <PaginationItem>
-                    <PaginationLink href="#" isActive>
-                      2
-                    </PaginationLink>
-                  </PaginationItem>
-                  <PaginationItem>
-                    <PaginationLink href="#">3</PaginationLink>
-                  </PaginationItem>
-                  <PaginationItem>
-                    <PaginationEllipsis />
-                  </PaginationItem>
-                  <PaginationItem>
-                    <PaginationNext href="#" />
-                  </PaginationItem>
-                </PaginationContent>
-              </Pagination>
             </div>
           </div>
 

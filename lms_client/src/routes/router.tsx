@@ -12,6 +12,7 @@ import {
   HomePage,
   Login,
   Register,
+  UserProfile,
 } from "@/pages";
 
 import { EnrolledCourseDetail, MyCourses } from "@/pages/user";
@@ -69,8 +70,8 @@ const router = createBrowserRouter([
         element: <DashboardLayout />,
         children: [
           {
-            path: "/dashboard",
-            element: <p>Dashboard !!!!</p>,
+            path: "/dashboard/profile",
+            element: <UserProfile />,
           },
 
           // * admin routes

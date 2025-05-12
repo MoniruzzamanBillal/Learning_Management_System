@@ -130,6 +130,12 @@ const CourseDetail = () => {
                 </div>
               )}
 
+              {courseReview?.data?.length === 0 && (
+                <p className=" py-4 text-xl  font-semibold text-prime100 ">
+                  No Review Available for this course{" "}
+                </p>
+              )}
+
               {/* review card section  */}
               <div className="userReviewCard">
                 {courseReview?.data &&
