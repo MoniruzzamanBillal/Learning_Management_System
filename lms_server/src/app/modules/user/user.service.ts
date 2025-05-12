@@ -52,8 +52,18 @@ const changePassword = async (
   //
 };
 
+// ! for getting logged in user data
+const getLoggedInUser = async (userId: string) => {
+  const result = await userModel
+    .findById(userId)
+    .select(" _id name profilePicture userRole createdAt ");
+
+  return result;
+};
+
 //
 export const userServices = {
   getAllInstructor,
   changePassword,
+  getLoggedInUser,
 };

@@ -26,8 +26,21 @@ const changePassword = catchAsync(async (req, res) => {
   });
 });
 
+// ! for getting logged in user data
+const getLoggedInUser = catchAsync(async (req, res) => {
+  const result = await userServices.getLoggedInUser(req.user?.userId);
+
+  sendResponse(res, {
+    statusCode: httpStatus.CREATED,
+    success: true,
+    message: "User data retirved successfully!!!",
+    data: result,
+  });
+});
+
 //
 export const userController = {
   getAllInstructor,
   changePassword,
+  getLoggedInUser,
 };
