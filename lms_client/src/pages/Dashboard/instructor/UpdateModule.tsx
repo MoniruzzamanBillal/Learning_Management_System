@@ -102,7 +102,7 @@ const UpdateModule = () => {
         fetchingCourseDataLoading ||
         moduleDataLoading) && <FormSubmitLoading />}
 
-      <div className="UpdateModuleContainer py-8 bg-gray-100 border border-gray-300 p-3 shadow rounded-md">
+      <div className="UpdateModuleContainer py-8 bg-gray-100 border border-gray-300 p-3 shadow rounded-md ">
         <div className="UpdateModuleWrapper">
           <h1 className="mb-8 px-3 xsm:px-4 sm:px-5 md:px-6 font-bold text-2xl md:text-3xl text-center">
             Update Module

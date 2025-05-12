@@ -12,6 +12,7 @@ import {
   HomePage,
   Login,
   Register,
+  UpdateProfile,
   UserProfile,
 } from "@/pages";
 
@@ -72,6 +73,10 @@ const router = createBrowserRouter([
           {
             path: "/dashboard/profile",
             element: <UserProfile />,
+          },
+          {
+            path: "/dashboard/update-profile/:userId",
+            element: <UpdateProfile />,
           },
 
           // * admin routes
