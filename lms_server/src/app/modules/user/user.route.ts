@@ -22,5 +22,12 @@ router.patch(
   userController.changePassword
 );
 
+// ! for getting specific user
+router.get(
+  "/get-user/:userId",
+  authCheck(UserRole.admin, UserRole.instructor, UserRole.user),
+  userController.getLoggedInUser
+);
+
 //
 export const userRouter = router;

@@ -38,9 +38,22 @@ const getLoggedInUser = catchAsync(async (req, res) => {
   });
 });
 
+// ! for getting user based on user id
+const getSpecificUser = catchAsync(async (req, res) => {
+  const result = await userServices.getSpecificUser(req.params?.userId);
+
+  sendResponse(res, {
+    statusCode: httpStatus.CREATED,
+    success: true,
+    message: "User data retirved successfully!!!",
+    data: result,
+  });
+});
+
 //
 export const userController = {
   getAllInstructor,
   changePassword,
   getLoggedInUser,
+  getSpecificUser,
 };

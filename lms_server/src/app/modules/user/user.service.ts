@@ -61,9 +61,19 @@ const getLoggedInUser = async (userId: string) => {
   return result;
 };
 
+// ! for getting user based on user id
+const getSpecificUser = async (userId: string) => {
+  const result = await userModel
+    .findById(userId)
+    .select(" _id name profilePicture userRole createdAt email ");
+
+  return result;
+};
+
 //
 export const userServices = {
   getAllInstructor,
   changePassword,
   getLoggedInUser,
+  getSpecificUser,
 };
