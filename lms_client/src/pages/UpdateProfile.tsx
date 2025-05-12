@@ -2,7 +2,10 @@ import { FormSubmitLoading } from "@/components/ui";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useGetSingleUserQuery } from "@/redux/features/user/user.api";
+import {
+  useGetSingleUserQuery,
+  useUpdateUserMutation,
+} from "@/redux/features/user/user.api";
 import { X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -29,7 +32,10 @@ const UpdateProfile = () => {
     skip: !userId,
   });
 
-  console.log(userData?.data);
+  const [updateUser, { isLoading: userUpdateLoading }] =
+    useUpdateUserMutation();
+
+  //   console.log(userData?.data);
 
   const {
     register,
@@ -86,11 +92,9 @@ const UpdateProfile = () => {
   useEffect(() => {
     if (userData?.data) {
       const user = userData.data;
-
       reset({
         name: user?.name,
       });
-
       if (user?.profilePicture) {
         setImagePreview(user?.profilePicture);
       }
@@ -99,7 +103,7 @@ const UpdateProfile = () => {
 
   return (
     <>
-      {isLoading && <FormSubmitLoading />}
+      {(isLoading || userUpdateLoading) && <FormSubmitLoading />}
 
       <div className="UpdateProfileContainer py-8 bg-gray-100 border border-gray-300 p-3 shadow rounded-md  ">
         <div className="UpdateProfileWrapper">

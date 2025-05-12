@@ -22,10 +22,25 @@ const userApi = baseApi.injectEndpoints({
       },
     }),
 
+    // ! for update a user
+    updateUser: builder.mutation({
+      query: (payload) => {
+        return {
+          url: "/user/update-user",
+          method: "PATCH",
+          body: payload,
+        };
+      },
+    }),
+
     //
   }),
 });
 
 //
 
-export const { useGetLoggedInUserQuery, useGetSingleUserQuery } = userApi;
+export const {
+  useGetLoggedInUserQuery,
+  useGetSingleUserQuery,
+  useUpdateUserMutation,
+} = userApi;
