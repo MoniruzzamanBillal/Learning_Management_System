@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useGetSingleUserQuery } from "@/redux/features/user/user.api";
 import { X } from "lucide-react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -64,16 +64,19 @@ const UpdateProfile = () => {
   };
 
   // ! useeffect for handling default value
-  //  useEffect(() => {
-  //     if (moduleData?.data) {
-  //       const module = moduleData.data;
+  useEffect(() => {
+    if (userData?.data) {
+      const user = userData.data;
 
-  //       reset({
-  //         course: module?.course?._id,
-  //         title: module?.title,
-  //       });
-  //     }
-  //   }, [moduleData?.data, reset]);
+      reset({
+        name: user?.name,
+      });
+
+      if (user?.profilePicture) {
+        setImagePreview(user?.profilePicture);
+      }
+    }
+  }, [userData?.data, reset]);
 
   return (
     <>
