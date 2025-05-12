@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { useGetLoggedInUserQuery } from "@/redux/features/user/user.api";
 import { FiEdit } from "react-icons/fi";
 import { Link } from "react-router-dom";
 
@@ -6,6 +7,11 @@ const defaultImg =
   "https://i.postimg.cc/KjSd51G7/Screen-Shot-2019-03-30-at-1-ezgif-com-webp-to-jpg-converter.jpg";
 
 const UserProfile = () => {
+  const { data: userData, isLoading: userDataLoading } =
+    useGetLoggedInUserQuery(undefined);
+
+  console.log(userData?.data);
+
   return (
     <div className="UserProfileContainer">
       <div className="UserProfileWrapper bg-gray-100/90 border border-gray-300  shadow rounded-md p-3 ">
