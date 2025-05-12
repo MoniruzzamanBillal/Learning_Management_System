@@ -56,7 +56,7 @@ const changePassword = async (
 const getLoggedInUser = async (userId: string) => {
   const result = await userModel
     .findById(userId)
-    .select(" _id name profilePicture userRole createdAt ");
+    .select(" _id name profilePicture userRole createdAt email ");
 
   return result;
 };
