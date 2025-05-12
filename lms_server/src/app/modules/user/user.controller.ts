@@ -50,10 +50,27 @@ const getSpecificUser = catchAsync(async (req, res) => {
   });
 });
 
+// ! for updating a user
+const updateUser = catchAsync(async (req, res) => {
+  const result = await userServices.updateUser(
+    req?.body,
+    req?.file,
+    req?.user?.userId
+  );
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "User updated successfully ",
+    data: result,
+  });
+});
+
 //
 export const userController = {
   getAllInstructor,
   changePassword,
   getLoggedInUser,
   getSpecificUser,
+  updateUser,
 };

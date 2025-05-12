@@ -8,6 +8,11 @@ import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 
+type TUpdateProfileInput = {
+  name: string;
+  image?: FileList;
+};
+
 const UpdateProfile = () => {
   const { userId } = useParams();
 
@@ -32,7 +37,7 @@ const UpdateProfile = () => {
 
     reset,
     formState: { errors, isSubmitting },
-  } = useForm();
+  } = useForm<TUpdateProfileInput>();
 
   const handleNavigate = () => {
     navigate(-1);
@@ -58,7 +63,21 @@ const UpdateProfile = () => {
   };
 
   //   ! for updating profile
-  const handleUpdateProfile = async (data) => {
+  const handleUpdateProfile = async (data: TUpdateProfileInput) => {
+    const imageFile = data?.image?.[0];
+
+    const payload = {
+      name: data?.name,
+    };
+
+    const formData = new FormData();
+
+    if (imageFile) {
+      formData.append("profileImg", imageFile);
+    }
+
+    formData.append("data", JSON.stringify(payload));
+
     console.log("update profile !!!!");
     console.log(data);
   };

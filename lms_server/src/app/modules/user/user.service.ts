@@ -2,7 +2,9 @@ import bcrypt from "bcrypt";
 import httpStatus from "http-status";
 import config from "../../config";
 import AppError from "../../Error/AppError";
+import { SendImageCloudinary } from "../../util/SendImageCloudinary";
 import { UserRole } from "./user.constants";
+import { TUser } from "./user.interface";
 import { userModel } from "./user.model";
 
 // ! for getting all instructor
@@ -70,10 +72,36 @@ const getSpecificUser = async (userId: string) => {
   return result;
 };
 
+// ! for updating a user
+const updateUser = async (
+  payload: Partial<TUser>,
+  file: any,
+  userId: string
+) => {
+  if (file) {
+    const name = (payload?.name as string).trim();
+    const path = (file?.path as string).trim();
+
+    const cloudinaryResponse = await SendImageCloudinary(
+      path as string,
+      name as string
+    );
+    const profilePicture = cloudinaryResponse?.secure_url;
+    payload.profilePicture = profilePicture;
+  }
+
+  const result = await userModel.findByIdAndUpdate(userId, payload, {
+    new: true,
+  });
+
+  return result;
+};
+
 //
 export const userServices = {
   getAllInstructor,
   changePassword,
   getLoggedInUser,
   getSpecificUser,
+  updateUser,
 };
