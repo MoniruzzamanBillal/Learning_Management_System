@@ -12,10 +12,20 @@ const userApi = baseApi.injectEndpoints({
       },
     }),
 
+    // ! for getting single user
+    getSingleUser: builder.query({
+      query: (userId) => {
+        return {
+          url: `/user/get-user/${userId}`,
+          method: "GET",
+        };
+      },
+    }),
+
     //
   }),
 });
 
 //
 
-export const { useGetLoggedInUserQuery } = userApi;
+export const { useGetLoggedInUserQuery, useGetSingleUserQuery } = userApi;

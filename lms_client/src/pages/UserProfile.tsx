@@ -6,14 +6,11 @@ import { Link } from "react-router-dom";
 
 import { format } from "date-fns";
 
-const defaultImg =
-  "https://i.postimg.cc/KjSd51G7/Screen-Shot-2019-03-30-at-1-ezgif-com-webp-to-jpg-converter.jpg";
-
 const UserProfile = () => {
   const { data: userData, isLoading: userDataLoading } =
     useGetLoggedInUserQuery(undefined);
 
-  console.log(userData?.data);
+  // console.log(userData?.data);
 
   return (
     <>
