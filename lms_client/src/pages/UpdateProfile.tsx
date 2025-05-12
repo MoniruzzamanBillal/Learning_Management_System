@@ -2,6 +2,7 @@ import { FormSubmitLoading } from "@/components/ui";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { updateUserFunction } from "@/functions/user.function";
 import {
   useGetSingleUserQuery,
   useUpdateUserMutation,
@@ -30,6 +31,7 @@ const UpdateProfile = () => {
 
   const { data: userData, isLoading } = useGetSingleUserQuery(userId, {
     skip: !userId,
+    refetchOnMountOrArgChange: true,
   });
 
   const [updateUser, { isLoading: userUpdateLoading }] =
@@ -84,8 +86,7 @@ const UpdateProfile = () => {
 
     formData.append("data", JSON.stringify(payload));
 
-    console.log("update profile !!!!");
-    console.log(data);
+    await updateUserFunction(formData, updateUser, handleNavigate);
   };
 
   // ! useeffect for handling default value

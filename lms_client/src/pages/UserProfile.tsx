@@ -8,7 +8,7 @@ import { format } from "date-fns";
 
 const UserProfile = () => {
   const { data: userData, isLoading: userDataLoading } =
-    useGetLoggedInUserQuery(undefined);
+    useGetLoggedInUserQuery(undefined, { refetchOnMountOrArgChange: true });
 
   // console.log(userData?.data);
 

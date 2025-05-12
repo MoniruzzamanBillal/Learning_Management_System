@@ -88,7 +88,7 @@ export const registerInstructorFunction = async (
 
     await handleToastResponse(result, toastId, navigate);
   } catch (error) {
-    toast.error("Something went wrong while reistering an instructor !! ", {
+    toast.error("Something went wrong while registering an instructor !! ", {
       id: toastId,
       duration: 1400,
     });
