@@ -57,6 +57,8 @@ const CourseDetail = () => {
   // console.log(reviewEligibility?.data);
   // console.log(courseReview?.data);
 
+  // console.log(userInfo);
+
   // ! for adding review
   const handleAddReview = async () => {
     if (!review) {

@@ -1,6 +1,6 @@
 import { model, Schema } from "mongoose";
-import { TVideoProgress } from "./VideoProgress.interface";
 import { videoProgressStatus } from "./VideoProgress.constants";
+import { TVideoProgress } from "./VideoProgress.interface";
 
 const videoProgressSchema = new Schema<TVideoProgress>(
   {

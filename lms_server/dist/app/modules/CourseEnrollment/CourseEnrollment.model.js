@@ -23,6 +23,7 @@ const courseEnrollmentSchema = new mongoose_1.Schema({
         default: false,
     },
     isDeleted: { type: Boolean, default: false },
+    isReviewed: { type: Boolean, default: false },
 }, { timestamps: true });
 //
 exports.courseEnrollmentModel = (0, mongoose_1.model)("CourseEnrollment", courseEnrollmentSchema);

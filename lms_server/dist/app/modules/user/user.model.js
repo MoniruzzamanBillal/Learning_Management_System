@@ -38,6 +38,10 @@ const userSchema = new mongoose_1.Schema({
         type: Boolean,
         default: false,
     },
+    needsPasswordChange: {
+        type: Boolean,
+        default: false,
+    },
     userRole: {
         type: String,
         default: user_constants_1.UserRole.user,

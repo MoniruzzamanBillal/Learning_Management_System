@@ -3,6 +3,7 @@ import { enrollInCourseFunction } from "@/functions/courseEnrollment.function";
 import { useEnrollInCourseMutation } from "@/redux/features/enrollment/enrollment.api";
 import { useGetUser } from "@/utils/sharedFunction";
 import { format } from "date-fns";
+import { toast } from "sonner";
 import { Button } from "../button";
 import FormSubmitLoading from "../FormSubmitLoading";
 
@@ -37,6 +38,11 @@ const CourseDetailTop = ({ courseDetails }: TCourseDetailProps) => {
 
   // ! for enrolling into a course
   const handleEnrollCourse = async (courseId: string) => {
+    if (!userInfo) {
+      toast.error("Login to enroll into this course !!!!");
+      return;
+    }
+
     const payload = {
       user: userInfo?.userId as string,
       course: courseId,
@@ -111,6 +117,7 @@ const CourseDetailTop = ({ courseDetails }: TCourseDetailProps) => {
 
             {/* enroll button  */}
             <Button
+              // disabled={userInfo ? false : true}
               onClick={() => handleEnrollCourse(courseDetails?._id)}
               className="  bg-prime100 hover:bg-prime200 "
             >

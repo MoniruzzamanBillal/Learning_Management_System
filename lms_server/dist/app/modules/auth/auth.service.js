@@ -33,6 +33,20 @@ const createUserIntoDB = (payload, file) => __awaiter(void 0, void 0, void 0, fu
     const result = yield user_model_1.userModel.create(Object.assign({}, payload));
     return result;
 });
+// ! for creating an instructor
+const createInstructor = (payload, file) => __awaiter(void 0, void 0, void 0, function* () {
+    if (file) {
+        const name = (payload === null || payload === void 0 ? void 0 : payload.name).trim();
+        const path = (file === null || file === void 0 ? void 0 : file.path).trim();
+        const cloudinaryResponse = yield (0, SendImageCloudinary_1.SendImageCloudinary)(path, name);
+        const profilePicture = cloudinaryResponse === null || cloudinaryResponse === void 0 ? void 0 : cloudinaryResponse.secure_url;
+        payload.profilePicture = profilePicture;
+    }
+    payload.password = "123456";
+    payload.needsPasswordChange = true;
+    const result = yield user_model_1.userModel.create(Object.assign({}, payload));
+    return result;
+});
 // ! for login
 const signInFromDb = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
@@ -57,4 +71,5 @@ const signInFromDb = (payload) => __awaiter(void 0, void 0, void 0, function* ()
 exports.authServices = {
     createUserIntoDB,
     signInFromDb,
+    createInstructor,
 };

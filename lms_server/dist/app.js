@@ -29,6 +29,8 @@ app.use((0, cors_1.default)({
         "https://dev-mats.vercel.app/",
     ],
     credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    allowedHeaders: ["Content-Type", "Authorization"],
 }));
 app.use((0, morgan_1.default)("dev"));
 app.use((0, cookie_parser_1.default)());

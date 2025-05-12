@@ -26,5 +26,7 @@ router.get("/my-enrolled-course-videos/:videoId", (0, authCheck_1.default)(user_
 router.get("/my-course-progress/:courseId", (0, authCheck_1.default)(user_constants_1.UserRole.user), CourseEnrollment_controller_1.CourseEnrollmentController.courseProgressPercentage);
 // ! based on module id , find video data for enrolled user
 router.get("/module-videos/:moduleId", (0, authCheck_1.default)(user_constants_1.UserRole.user), CourseEnrollment_controller_1.CourseEnrollmentController.getUserEnrolledModuleVideos);
+//  ! for marking course as complete
+router.patch("/complete-my-course/:courseId", (0, authCheck_1.default)(user_constants_1.UserRole.user), CourseEnrollment_controller_1.CourseEnrollmentController.markCompleteCourse);
 //
 exports.courseEnrollmentRouter = router;

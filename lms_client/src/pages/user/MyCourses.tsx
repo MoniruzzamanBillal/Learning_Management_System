@@ -22,7 +22,9 @@ export type TUserEnrolledCourse = {
 
 const MyCourses = () => {
   const { data: userEnrolledCourse, isLoading } =
-    useGetAllUserEnrolledCoursesQuery(undefined);
+    useGetAllUserEnrolledCoursesQuery(undefined, {
+      refetchOnMountOrArgChange: true,
+    });
 
   // console.log(userEnrolledCourse?.data);
   // console.log(userEnrolledCourse?.data?.length);

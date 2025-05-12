@@ -93,11 +93,7 @@ const EnrolledCourseColumn: ColumnDef<TEnrollment>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem>
-              <Link
-                to={`/dashboard/instructor/assign-course-detail/${rowData?._id}`}
-              >
-                View Details
-              </Link>
+              <Link to={`/my-courses`}>View Details</Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
           </DropdownMenuContent>

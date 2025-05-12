@@ -4,11 +4,12 @@ exports.MainRouter = void 0;
 const express_1 = require("express");
 const auth_route_1 = require("../modules/auth/auth.route");
 const course_routes_1 = require("../modules/course/course.routes");
-const module_routes_1 = require("../modules/courseModule/module.routes");
-const video_routes_1 = require("../modules/VideoModule/video.routes");
 const CourseEnrollment_routes_1 = require("../modules/CourseEnrollment/CourseEnrollment.routes");
+const module_routes_1 = require("../modules/courseModule/module.routes");
 const payment_routes_1 = require("../modules/payment/payment.routes");
+const review_route_1 = require("../modules/review/review.route");
 const user_route_1 = require("../modules/user/user.route");
+const video_routes_1 = require("../modules/VideoModule/video.routes");
 const router = (0, express_1.Router)();
 const routeArray = [
     {
@@ -38,6 +39,10 @@ const routeArray = [
     {
         path: "/payment",
         route: payment_routes_1.paymentRoute,
+    },
+    {
+        path: "/review",
+        route: review_route_1.reviewRouter,
     },
 ];
 routeArray.forEach((item) => {

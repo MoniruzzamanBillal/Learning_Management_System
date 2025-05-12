@@ -31,12 +31,6 @@ const Login = () => {
     try {
       const result = await logIn(data);
 
-      // console.log(result?.data);
-      // console.log(result?.data?.message);
-      // console.log(result?.data?.data);
-      // console.log(result?.data?.data?.needsPasswordChange);
-      // console.log(result?.data?.token);
-
       //  *  for any  error
       if (result?.error) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -80,7 +74,7 @@ const Login = () => {
 
       <div className="LoginContainer w-full min-h-screen  imageCenter flex items-center justify-center    ">
         <Wrapper className="formContainer py-14  ">
-          <div className="    w-[95%] xsm:w-[85%] sm:w-[78%] md:w-[70%] xmd:w-[65%] lg:w-[55%] m-auto p-3 xsm:p-5 sm:p-7 md:p-10  rounded-md shadow-xl bg-gray-200  backdrop-blur bg-opacity-60 border   ">
+          <div className=" w-[95%] xsm:w-[85%] sm:w-[78%] md:w-[70%] xmd:w-[65%] lg:w-[55%] m-auto p-3 xsm:p-5 sm:p-7 md:p-10  rounded-md shadow-xl bg-gray-200  backdrop-blur bg-opacity-60 border   ">
             <p className=" mb-3 xsm:mb-5 sm:mb-8 text-xl xsm:text-2xl sm:text-3xl text-center font-semibold CormorantFont text-gray-700   ">
               Log in
             </p>

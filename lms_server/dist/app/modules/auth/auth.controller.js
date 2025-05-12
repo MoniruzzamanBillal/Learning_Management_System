@@ -27,6 +27,16 @@ const createUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, voi
         data: result,
     });
 }));
+// ! for creating an instructor
+const createInstructor = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield auth_service_1.authServices.createInstructor(req === null || req === void 0 ? void 0 : req.body, req === null || req === void 0 ? void 0 : req.file);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "Instructor added successfully !!!",
+        data: result,
+    });
+}));
 // ! for login
 const loginUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield auth_service_1.authServices.signInFromDb(req.body);
@@ -46,4 +56,5 @@ const loginUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void
 exports.authControllers = {
     createUser,
     loginUser,
+    createInstructor,
 };

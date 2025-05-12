@@ -293,6 +293,35 @@ const getUserEnrolledModuleVideos = (moduleId, userId) => __awaiter(void 0, void
         .select("  _id  videoStatus ");
     return videoData;
 });
+//  ! for marking course as complete
+const markCompleteCourse = (courseId, userId) => __awaiter(void 0, void 0, void 0, function* () {
+    const userData = yield user_model_1.userModel.findById(userId);
+    if (!userData) {
+        throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "This user don't exist !!!");
+    }
+    const courseData = yield course_model_1.courseModel.findById(courseId);
+    if (!courseData) {
+        throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "This course don't exist !!!");
+    }
+    if (!(courseData === null || courseData === void 0 ? void 0 : courseData.published)) {
+        throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "This course is not published yet!!!");
+    }
+    const previousEnrolledData = yield CourseEnrollment_model_1.courseEnrollmentModel.findOne({
+        user: userId,
+        course: courseId,
+        isDeleted: false,
+    });
+    if (!previousEnrolledData) {
+        throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "You did not enrolled into this course !!!");
+    }
+    const coursePercentageProgress = yield courseProgressPercentage(courseId, userId);
+    if (coursePercentageProgress !== 100) {
+        throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "You did not complete the full course !!!");
+    }
+    const result = yield CourseEnrollment_model_1.courseEnrollmentModel.findOneAndUpdate({ course: courseId, user: userId }, { completed: true }, { new: true });
+    return result;
+    //
+});
 //
 exports.courseEnrollmentService = {
     enrollInCourse,
@@ -303,4 +332,5 @@ exports.courseEnrollmentService = {
     enrollmentsPerCourse,
     getAllUserEnrolledCourse,
     getUserEnrolledModuleVideos,
+    markCompleteCourse,
 };

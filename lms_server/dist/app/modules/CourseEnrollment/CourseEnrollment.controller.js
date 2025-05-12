@@ -103,6 +103,17 @@ const getUserEnrolledModuleVideos = (0, catchAsync_1.default)((req, res) => __aw
         data: result,
     });
 }));
+//  ! for marking course as complete
+const markCompleteCourse = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b;
+    const result = yield CourseEnrollment_service_1.courseEnrollmentService.markCompleteCourse((_a = req === null || req === void 0 ? void 0 : req.params) === null || _a === void 0 ? void 0 : _a.courseId, (_b = req === null || req === void 0 ? void 0 : req.user) === null || _b === void 0 ? void 0 : _b.userId);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "Course Completed successfully !!!",
+        data: result,
+    });
+}));
 //
 exports.CourseEnrollmentController = {
     enrollInCourse,
@@ -113,4 +124,5 @@ exports.CourseEnrollmentController = {
     enrollmentsPerCourse,
     getAllUserEnrolledCourse,
     getUserEnrolledModuleVideos,
+    markCompleteCourse,
 };
