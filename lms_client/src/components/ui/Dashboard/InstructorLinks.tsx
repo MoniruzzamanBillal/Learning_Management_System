@@ -12,7 +12,7 @@ export const InstructorLinks = [
     icon: <CiBookmark className="text-xl font-bold" />,
   },
   {
-    name: "Assign Courses",
+    name: "Assigned Courses",
     path: "/dashboard/instructor/assign-courses",
     icon: <CiBookmark className="text-xl font-bold" />,
   },

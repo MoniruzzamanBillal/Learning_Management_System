@@ -46,6 +46,7 @@ const InstructorColumn: ColumnDef<TInstructorDummyData>[] = [
     header: "Profile Image",
   },
   {
+    accessorKey: "Action",
     id: "actions",
     cell: ({ row }) => {
       const rowData = row?.original;

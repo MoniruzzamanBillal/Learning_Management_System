@@ -22,7 +22,7 @@ const TutorSection = () => {
 
         <h1 className=" font-medium text-center ">Meet the Heroes </h1>
 
-        <div className="instructorContainer mt-10 grid grid-cols-4 gap-3 ">
+        <div className="instructorContainer mt-10 grid grid-cols-4 gap-x-3 gap-y-8 ">
           {instructorData?.data &&
             instructorData?.data?.map((instructor: TUser) => (
               <div

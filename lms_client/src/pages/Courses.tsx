@@ -4,11 +4,16 @@ import { TCourse } from "@/components/ui/courses/CourseCard";
 import CourseCardSkeleton from "@/components/ui/courses/CourseCardSkeleton";
 import { Input } from "@/components/ui/input";
 import { useGetAllPublishedCorsesQuery } from "@/redux/features/course/course.api";
+import useDebounce from "@/utils/useDebounce";
 import { useState } from "react";
 
 const Courses = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [categoryType, setcategoryType] = useState("");
+
+  const debounceTerm = useDebounce(searchTerm, 400);
+
+  console.log(debounceTerm);
 
   const { data: allCourseData, isLoading: courseDataLoading } =
     useGetAllPublishedCorsesQuery(undefined);
