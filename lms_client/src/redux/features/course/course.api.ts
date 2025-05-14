@@ -90,9 +90,19 @@ const courseApi = baseApi.injectEndpoints({
 
     // ! for getting all course ( published course )
     getAllPublishedCorses: builder.query({
-      query: () => {
+      query: (args) => {
+        const params = new URLSearchParams();
+
+        if (args) {
+          Object.entries(args)?.forEach(([key, value]) => {
+            if (value) {
+              params.append(key, value.toString());
+            }
+          });
+        }
+
         return {
-          url: `/course/all-courses`,
+          url: `/course/all-courses?${params?.toString()}`,
           method: "GET",
         };
       },

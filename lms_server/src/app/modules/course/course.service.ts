@@ -41,7 +41,11 @@ const addCourse = async (payload: TCourse, file: any) => {
 };
 
 // ! for getting all course data
-const getAllCourses = async () => {
+const getAllCourses = async (query: Record<string, unknown>) => {
+  console.log(query);
+
+  const { searchTerm, category } = query;
+
   const result = await courseModel
     .find({ published: true })
     .populate("instructors", " name   ")

@@ -13,10 +13,14 @@ const Courses = () => {
 
   const debounceTerm = useDebounce(searchTerm, 400);
 
-  console.log(debounceTerm);
-
   const { data: allCourseData, isLoading: courseDataLoading } =
-    useGetAllPublishedCorsesQuery(undefined);
+    useGetAllPublishedCorsesQuery(
+      {
+        searchTerm: debounceTerm,
+        category: categoryType,
+      },
+      { refetchOnMountOrArgChange: true }
+    );
 
   return (
     <div className="CoursesContainer bg-gray-100 py-8 min-h-screen ">
