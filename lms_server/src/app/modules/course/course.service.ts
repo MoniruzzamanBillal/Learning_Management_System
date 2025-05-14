@@ -42,12 +42,26 @@ const addCourse = async (payload: TCourse, file: any) => {
 
 // ! for getting all course data
 const getAllCourses = async (query: Record<string, unknown>) => {
-  console.log(query);
-
   const { searchTerm, category } = query;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const params: any = {};
+
+  params.published = true;
+
+  if (category) {
+    params.category = category;
+  }
+
+  if (searchTerm) {
+    params.$or = [
+      { name: { $regex: new RegExp(searchTerm as string, "i") } },
+      { detail: { $regex: new RegExp(searchTerm as string, "i") } },
+    ];
+  }
+
   const result = await courseModel
-    .find({ published: true })
+    .find(params)
     .populate("instructors", " name   ")
     .select(" -published -createdAt -__v -description -modules -updatedAt ");
   return result;
