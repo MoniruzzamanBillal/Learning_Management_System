@@ -22,6 +22,37 @@ const Courses = () => {
       { refetchOnMountOrArgChange: true }
     );
 
+  console.log(allCourseData?.data?.length);
+
+  let content = null;
+
+  if (courseDataLoading) {
+    content = (
+      <>
+        {Array.from({ length: 6 })?.map((_, ind) => (
+          <CourseCardSkeleton key={ind} />
+        ))}
+      </>
+    );
+  } else if (!allCourseData?.data?.length) {
+    content = (
+      <div className="   h-[60vh] w-[80vw] xl:w-[60vw]  flex  robotoFont mt-6 flex-col items-center justify-center   px-4">
+        <h1 className=" text-3xl sm:text-4xl font-bold text-prime100 mb-4">
+          No course available
+        </h1>
+      </div>
+    );
+  } else if (allCourseData?.data?.length) {
+    content = (
+      <>
+        {allCourseData?.data &&
+          allCourseData?.data?.map((course: TCourse) => (
+            <CourseCard key={course?._id} course={course} />
+          ))}
+      </>
+    );
+  }
+
   return (
     <div className="CoursesContainer bg-gray-100 py-8 min-h-screen ">
       <Wrapper className="CoursesWrapper">
@@ -50,15 +81,7 @@ const Courses = () => {
           <div className="courseSection w-full xl:w-[84%]">
             {/* course card section  */}
             <div className="courseCard  grid grid-cols-3 gap-x-4 gap-y-6  ">
-              {courseDataLoading &&
-                Array.from({ length: 6 })?.map((_, ind) => (
-                  <CourseCardSkeleton key={ind} />
-                ))}
-
-              {allCourseData?.data &&
-                allCourseData?.data?.map((course: TCourse) => (
-                  <CourseCard key={course?._id} course={course} />
-                ))}
+              {content}
             </div>
           </div>
 
