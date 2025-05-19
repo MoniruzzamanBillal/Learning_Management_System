@@ -54,10 +54,25 @@ const getCourseReview = catchAsync(async (req, res) => {
   });
 });
 
+// ! for getting average review
+const getAverageReviewOfCourse = catchAsync(async (req, res) => {
+  const result = await reviewServices.getAverageReviewOfCourse(
+    req?.params?.courseId
+  );
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Average Review successfully !!!",
+    data: result,
+  });
+});
+
 //
 export const reviewController = {
   addReview,
   updateReview,
   getCourseReview,
   checkReviewEligibility,
+  getAverageReviewOfCourse,
 };

@@ -126,9 +126,7 @@ const getAllUserEnrolledCourse = (userId) => __awaiter(void 0, void 0, void 0, f
         .select(" -Payment -isDeleted -createdAt -updatedAt -__v ");
     const progressResult = yield Promise.all(courseEnrolledData.map((enrollmentData) => __awaiter(void 0, void 0, void 0, function* () {
         const courseData = enrollmentData === null || enrollmentData === void 0 ? void 0 : enrollmentData.course;
-        const progressData = yield courseProgressPercentage(
-        // enrollmentData?.course?._id,
-        courseData === null || courseData === void 0 ? void 0 : courseData._id, userId);
+        const progressData = yield courseProgressPercentage(courseData === null || courseData === void 0 ? void 0 : courseData._id, userId);
         return Object.assign(Object.assign({}, enrollmentData.toObject()), { courseProgress: progressData });
     })));
     return progressResult;

@@ -19,8 +19,8 @@ const testimonialData: TTestimonial[] = [
   {
     review:
       "This platform made learning so much easier! The video lessons are clear, well-structured, and I could track my progress seamlessly. Highly recommended for anyone serious about upskilling.",
-    name: "Abu Ubaida",
-    img: "https://i.ibb.co/Kqrjj24/Doc-P-754782-638436953125887126.png",
+    name: "Abul Hasan",
+    img: "https://res.cloudinary.com/dupxfufq9/image/upload/v1747106241/Musaddikul%20Islam%20Sakib.jpg",
   },
   {
     review:
@@ -31,20 +31,20 @@ const testimonialData: TTestimonial[] = [
   {
     review:
       "The course dashboard is very intuitive. I loved how each video unlocks as I make progress. It kept me motivated to complete the modules!",
-    name: "Abdul Malek ",
-    img: "https://i.ibb.co/X3QBnnF/Abdel-Malik-al-Houthi-blue-background-png.jpg",
+    name: "Mahfuz ahmed",
+    img: "https://res.cloudinary.com/dupxfufq9/image/upload/v1747464740/Mahfuz%20ahmed.png",
   },
   {
     review:
       "Enrolling in the Cybersecurity course was one of my best decisions. The real-world use cases and practical labs helped me gain strong foundational skills.",
-    name: "Yahya Sinwar",
-    img: "https://i.ibb.co/bdpwbzK/131779399-yahya-sinwar-epa.jpg",
+    name: "Obaidul Hasan",
+    img: "https://res.cloudinary.com/dupxfufq9/image/upload/v1747464765/Obaidul%20Hasan.jpg",
   },
   {
     review:
       "What I love most is the flexibility. I can learn at my own pace, revisit videos, and even track which ones I’ve completed. Truly a learner-friendly platform!",
-    name: "Abu Hamza",
-    img: "https://i.postimg.cc/Wbc4RGDZ/images.jpg",
+    name: "Rabbi",
+    img: "https://res.cloudinary.com/dupxfufq9/image/upload/v1747464786/Rabbi.jpg.jpg",
   },
 ];
 

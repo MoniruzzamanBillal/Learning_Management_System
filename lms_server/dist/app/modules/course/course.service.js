@@ -16,6 +16,7 @@ exports.courseServices = void 0;
 const http_status_1 = __importDefault(require("http-status"));
 const AppError_1 = __importDefault(require("../../Error/AppError"));
 const SendImageCloudinary_1 = require("../../util/SendImageCloudinary");
+const review_service_1 = require("../review/review.service");
 const user_model_1 = require("../user/user.model");
 const course_model_1 = require("./course.model");
 // ! for crating a course
@@ -38,11 +39,30 @@ const addCourse = (payload, file) => __awaiter(void 0, void 0, void 0, function*
     return result;
 });
 // ! for getting all course data
-const getAllCourses = () => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield course_model_1.courseModel
-        .find({ published: true })
+const getAllCourses = (query) => __awaiter(void 0, void 0, void 0, function* () {
+    const { searchTerm, category } = query;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const params = {};
+    params.published = true;
+    if (category) {
+        params.category = category;
+    }
+    if (searchTerm) {
+        params.$or = [
+            { name: { $regex: new RegExp(searchTerm, "i") } },
+            { detail: { $regex: new RegExp(searchTerm, "i") } },
+        ];
+    }
+    const allCourseData = yield course_model_1.courseModel
+        .find(params)
         .populate("instructors", " name   ")
         .select(" -published -createdAt -__v -description -modules -updatedAt ");
+    // console.log(allCourseData);
+    const result = yield Promise.all(allCourseData === null || allCourseData === void 0 ? void 0 : allCourseData.map((courseData) => __awaiter(void 0, void 0, void 0, function* () {
+        var _a;
+        const reviewData = yield review_service_1.reviewServices.getAverageReviewOfCourse((_a = courseData === null || courseData === void 0 ? void 0 : courseData._id) === null || _a === void 0 ? void 0 : _a.toString());
+        return Object.assign(Object.assign({}, courseData.toObject()), { reviewData });
+    })));
     return result;
 });
 // ! for getting all course data ,admin manage course

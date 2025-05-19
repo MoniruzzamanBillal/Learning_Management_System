@@ -10,20 +10,21 @@ import { MainRouter } from "./app/router";
 
 const app: Application = express();
 
-app.use(express.json());
-
 app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "https://devmats.vercel.app/",
-      "https://dev-mats.vercel.app/",
+      "https://devmats.vercel.app",
+      "https://dev-mats.vercel.app",
     ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+
+app.use(express.json());
+
 app.use(morgan("dev"));
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));

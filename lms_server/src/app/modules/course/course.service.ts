@@ -1,6 +1,7 @@
 import httpStatus from "http-status";
 import AppError from "../../Error/AppError";
 import { SendImageCloudinary } from "../../util/SendImageCloudinary";
+import { reviewServices } from "../review/review.service";
 import { userModel } from "../user/user.model";
 import { TCourse } from "./course.interface";
 import { courseModel } from "./course.model";
@@ -60,10 +61,26 @@ const getAllCourses = async (query: Record<string, unknown>) => {
     ];
   }
 
-  const result = await courseModel
+  const allCourseData = await courseModel
     .find(params)
     .populate("instructors", " name   ")
     .select(" -published -createdAt -__v -description -modules -updatedAt ");
+
+  // console.log(allCourseData);
+
+  const result = await Promise.all(
+    allCourseData?.map(async (courseData) => {
+      const reviewData = await reviewServices.getAverageReviewOfCourse(
+        courseData?._id?.toString()
+      );
+
+      return {
+        ...courseData.toObject(),
+        reviewData,
+      };
+    })
+  );
+
   return result;
 };
 

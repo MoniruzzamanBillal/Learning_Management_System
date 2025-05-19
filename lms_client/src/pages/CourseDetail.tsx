@@ -101,8 +101,6 @@ const CourseDetail = () => {
 
           {/* course detail section  */}
           <Wrapper className=" courseDetail my-5 ">
-            <h1>About this course : </h1>
-
             <div
               className="  courseDetail "
               dangerouslySetInnerHTML={{

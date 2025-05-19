@@ -11,6 +11,9 @@ import { useNavigate } from "react-router-dom";
 const ManageCourse = () => {
   const navigate = useNavigate();
 
+  // const { data: allCourseData, isLoading: courseDataLoading } =
+  //   useGetAllCourseAdminQuery(undefined, { refetchOnMountOrArgChange: true });
+
   const { data: allCourseData, isLoading: courseDataLoading } =
     useGetAllCourseAdminQuery(undefined);
 

@@ -159,7 +159,6 @@ const getAllUserEnrolledCourse = async (userId: string) => {
       const courseData = enrollmentData?.course as unknown as TCourseDocument;
 
       const progressData = await courseProgressPercentage(
-        // enrollmentData?.course?._id,
         courseData?._id,
         userId
       );

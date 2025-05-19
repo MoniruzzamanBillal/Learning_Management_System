@@ -79,10 +79,29 @@ const getCourseReview = (courseId) => __awaiter(void 0, void 0, void 0, function
         .select(" _id  rating  comment   createdAt ");
     return result;
 });
+// ! for getting average review
+const getAverageReviewOfCourse = (courseId) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield review_model_1.reviewModel.aggregate([
+        {
+            $match: { courseId: new mongoose_1.default.Types.ObjectId(courseId) },
+        },
+        {
+            $group: {
+                _id: "$courseId",
+                averageRating: {
+                    $avg: "$rating",
+                },
+                totalReviews: { $sum: 1 },
+            },
+        },
+    ]);
+    return result[0];
+});
 //
 exports.reviewServices = {
     addReview,
     updateReview,
     getCourseReview,
     checkReviewEligibility,
+    getAverageReviewOfCourse,
 };

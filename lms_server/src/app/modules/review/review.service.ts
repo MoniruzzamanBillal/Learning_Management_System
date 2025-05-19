@@ -100,10 +100,31 @@ const getCourseReview = async (courseId: string) => {
   return result;
 };
 
+// ! for getting average review
+const getAverageReviewOfCourse = async (courseId: string) => {
+  const result = await reviewModel.aggregate([
+    {
+      $match: { courseId: new mongoose.Types.ObjectId(courseId) },
+    },
+    {
+      $group: {
+        _id: "$courseId",
+        averageRating: {
+          $avg: "$rating",
+        },
+        totalReviews: { $sum: 1 },
+      },
+    },
+  ]);
+
+  return result[0];
+};
+
 //
 export const reviewServices = {
   addReview,
   updateReview,
   getCourseReview,
   checkReviewEligibility,
+  getAverageReviewOfCourse,
 };

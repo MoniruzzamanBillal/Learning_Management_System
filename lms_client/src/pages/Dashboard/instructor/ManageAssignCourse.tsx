@@ -25,8 +25,7 @@ const ManageAssignCourse = () => {
       <div className="ManageAssignCourseContainer">
         <div className="ManageAssignCourseWrapper bg-gray-100/90 border border-gray-300  shadow rounded-md p-3">
           <h3 className="brand text-2xl font-medium mb-4 ">
-            {" "}
-            Assigned Course{" "}
+            My Assigned Course
           </h3>
 
           {/* table section  */}

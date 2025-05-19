@@ -79,8 +79,8 @@ const EnrolledCourseColumn: ColumnDef<TEnrollment>[] = [
   },
   {
     id: "actions",
-    cell: ({ row }) => {
-      const rowData = row.original;
+    cell: () => {
+      // const rowData = row.original;
 
       return (
         <DropdownMenu>

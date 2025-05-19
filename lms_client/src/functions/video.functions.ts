@@ -13,6 +13,8 @@ export const addVideoFunction = async (
   try {
     const result = await AddVideo(payload);
 
+    console.log(result);
+
     handleToastResponse(result, taostId, navigate);
   } catch (error) {
     console.log(error);

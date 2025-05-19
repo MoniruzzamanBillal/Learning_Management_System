@@ -17,6 +17,8 @@ router.post("/give-review", (0, authCheck_1.default)(user_constants_1.UserRole.u
 router.patch("/update-review", (0, authCheck_1.default)(user_constants_1.UserRole.user), review_controller_1.reviewController.updateReview);
 // ! for getting course review
 router.get("/course-review/:courseId", review_controller_1.reviewController.getCourseReview);
+// ! for getting course average review
+router.get("/average-course-review/:courseId", review_controller_1.reviewController.getAverageReviewOfCourse);
 // ! for checking review eligibility
 router.get("/check-review-eligibility/:courseId", (0, authCheck_1.default)(user_constants_1.UserRole.user), review_controller_1.reviewController.checkReviewEligibility);
 exports.reviewRouter = router;

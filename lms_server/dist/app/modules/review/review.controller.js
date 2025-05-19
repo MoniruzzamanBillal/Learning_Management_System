@@ -59,10 +59,22 @@ const getCourseReview = (0, catchAsync_1.default)((req, res) => __awaiter(void 0
         data: result,
     });
 }));
+// ! for getting average review
+const getAverageReviewOfCourse = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    const result = yield review_service_1.reviewServices.getAverageReviewOfCourse((_a = req === null || req === void 0 ? void 0 : req.params) === null || _a === void 0 ? void 0 : _a.courseId);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "Average Review successfully !!!",
+        data: result,
+    });
+}));
 //
 exports.reviewController = {
     addReview,
     updateReview,
     getCourseReview,
     checkReviewEligibility,
+    getAverageReviewOfCourse,
 };
