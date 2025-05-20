@@ -1,3 +1,4 @@
+import { FaStar } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { Button } from "../button";
 
@@ -24,9 +25,9 @@ const CourseCard = ({ course }: TCourseDataProps) => {
 
   return (
     <div className="CourseCardContainer bg-gray-50 border border-gray-300 shadow rounded  ">
-      <div className="CourseCardWrapper   flex flex-col  gap-y-2 ">
+      <div className="CourseCardWrapper   flex flex-col  gap-y-1 ">
         {/* course cover section  */}
-        <div className="courseCover h-[14rem] rounded-t overflow-auto relative ">
+        <div className="courseCover h-[13rem] rounded-t overflow-auto relative ">
           <img
             src={course?.courseCover}
             className=" w-full h-full "
@@ -38,21 +39,21 @@ const CourseCard = ({ course }: TCourseDataProps) => {
           </span>
         </div>
 
-        <div className="courseDetailBody px-3 flex flex-col justify-between gap-y-2 h-[15rem] ">
+        <div className="courseDetailBody px-3 flex flex-col justify-between h-[15rem] ">
           {/* course name  */}
-          <p className=" courseName text-lg font-semibold "> {course?.name} </p>
+          <p className=" courseName  font-bold "> {course?.name} </p>
 
           {/* course category  */}
           <p className=" courseCategory  ">
-            <span className=" font-semibold ">Category : </span>
+            <span className=" font-semibold text-sm ">Category : </span>
 
             {course?.category}
           </p>
 
           {/* course instructors  */}
           <div className="courseInstructors">
-            <p className=" font-semibold ">Instructors : </p>
-            <ul className=" list-inside list-disc text-sm ">
+            <p className=" font-semibold text-sm ">Instructors : </p>
+            <ul className=" list-inside list-disc text-xs ">
               {course?.instructors &&
                 course?.instructors?.map((indtructor: TInstructor) => (
                   <li className=" pl-3 font-medium text-prime100 ">
@@ -62,16 +63,23 @@ const CourseCard = ({ course }: TCourseDataProps) => {
             </ul>
           </div>
 
+          {/* review star section  */}
+          <div className="reviewStarSection pt-2 flex items-center  ">
+            {renderStars()}
+            <span className=" pl-1 ">(5)</span>
+          </div>
+
+          {/* button section  */}
           <div className="bottomSection py-3 flex justify-between items-center ">
             {/* course price  */}
-            <p className=" coursePrice  text-prime200 font-semibold ">
+            <p className=" coursePrice  text-prime200 font-semibold text-sm ">
               Price : ${course?.price}
             </p>
 
             {/* button  */}
             <div className="btn ">
               <Link to={`/course-detail/${course?._id}`}>
-                <Button className=" bg-prime100 hover:bg-prime200 ">
+                <Button className=" bg-prime100 hover:bg-prime200 text-sm ">
                   See Details
                 </Button>
               </Link>
@@ -87,6 +95,22 @@ const CourseCard = ({ course }: TCourseDataProps) => {
       </div>
     </div>
   );
+};
+
+const renderStars = () => {
+  const totalLength = 5;
+
+  // const filledStars = reviewData?.rating || 0;
+  const filledStars = 3;
+
+  return Array.from({ length: totalLength }, (_, index) => (
+    <FaStar
+      key={index}
+      className={`  ${
+        index < filledStars ? "text-orange-400" : "text-gray-400"
+      }`}
+    />
+  ));
 };
 
 export default CourseCard;

@@ -201,7 +201,7 @@ const renderStars = (reviewData: TPopulatedReview) => {
     <FaStar
       key={index}
       className={`  ${
-        index < filledStars ? "text-orange-400" : "text-gray-500"
+        index < filledStars ? "text-orange-400" : "text-gray-400"
       }`}
     />
   ));
