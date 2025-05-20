@@ -26,7 +26,7 @@ const testimonialData: TTestimonial[] = [
     review:
       "The Web Development course exceeded my expectations. The instructors were top-notch and I loved the hands-on projects. I feel more confident applying for developer jobs now.",
     name: "Ismail Hania",
-    img: "https://i.ibb.co/FxHzzq7/images.jpg",
+    img: "https://res.cloudinary.com/dupxfufq9/image/upload/v1747464710/Nazir%20Ahmed.jpg",
   },
   {
     review:
@@ -44,7 +44,7 @@ const testimonialData: TTestimonial[] = [
     review:
       "What I love most is the flexibility. I can learn at my own pace, revisit videos, and even track which ones I’ve completed. Truly a learner-friendly platform!",
     name: "Rabbi",
-    img: "https://res.cloudinary.com/dupxfufq9/image/upload/v1747464786/Rabbi.jpg.jpg",
+    img: "https://res.cloudinary.com/dupxfufq9/image/upload/v1747464786/Rabbi.jpg",
   },
 ];
 

@@ -10,7 +10,6 @@ const HomePage = () => {
   return (
     <div className="HomePageContainer">
       <HeroSection />
-
       <Service />
       <PopularCourse />
       <TutorSection />
