@@ -7,6 +7,12 @@ type TInstructor = {
   name: string;
 };
 
+type TReview = {
+  averageRating: number;
+  totalReviews: number;
+  _id: string;
+};
+
 export type TCourse = {
   _id: string;
   name: string;
@@ -14,6 +20,7 @@ export type TCourse = {
   courseCover: string;
   instructors: TInstructor[];
   price: number;
+  reviewData?: TReview;
 };
 
 type TCourseDataProps = {
@@ -21,7 +28,7 @@ type TCourseDataProps = {
 };
 
 const CourseCard = ({ course }: TCourseDataProps) => {
-  // console.log(course?.instructors);
+  // console.log(course?.reviewData);
 
   return (
     <div className="CourseCardContainer bg-gray-50 border border-gray-300 shadow rounded  ">
@@ -64,15 +71,21 @@ const CourseCard = ({ course }: TCourseDataProps) => {
           </div>
 
           {/* review star section  */}
-          <div className="reviewStarSection pt-2 flex items-center  ">
-            {renderStars()}
-            <span className=" pl-1 ">(5)</span>
+          <div className="reviewStarSection flex items-center  ">
+            {renderStars(course?.reviewData)}
+            <span className=" pl-1 ">
+              (
+              {course?.reviewData?.totalReviews
+                ? course?.reviewData?.totalReviews
+                : 0}
+              )
+            </span>
           </div>
 
           {/* button section  */}
           <div className="bottomSection py-3 flex justify-between items-center ">
             {/* course price  */}
-            <p className=" coursePrice  text-prime200 font-semibold text-sm ">
+            <p className=" coursePrice  text-prime200 font-bold ">
               Price : ${course?.price}
             </p>
 
@@ -97,11 +110,10 @@ const CourseCard = ({ course }: TCourseDataProps) => {
   );
 };
 
-const renderStars = () => {
+const renderStars = (reviewData?: TReview) => {
   const totalLength = 5;
 
-  // const filledStars = reviewData?.rating || 0;
-  const filledStars = 3;
+  const filledStars = Math.floor(reviewData?.averageRating || 0);
 
   return Array.from({ length: totalLength }, (_, index) => (
     <FaStar

@@ -22,8 +22,8 @@ const Courses = () => {
       { refetchOnMountOrArgChange: true }
     );
 
-  console.log(allCourseData?.data?.length);
-  console.log(allCourseData?.data);
+  // console.log(allCourseData?.data?.length);
+  // console.log(allCourseData?.data);
 
   let content = null;
 
