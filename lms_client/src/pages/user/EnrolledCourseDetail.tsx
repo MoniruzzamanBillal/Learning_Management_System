@@ -66,6 +66,27 @@ const EnrolledCourseDetail = () => {
     }
   }, [enrolledCourseData]);
 
+  let content = null;
+
+  if (videoUrlLoading) {
+    content = <VideoLoadingSkeleton />;
+  } else if (!videoDataObj && !videoUrlLoading && !isLoading) {
+    content = <NoVideoPlaceholder />;
+  } else if (videoDataObj) {
+    content = (
+      <MuxPlayer
+        playbackId=""
+        streamType="on-demand"
+        src={videoDataObj?.videoUrl}
+        className="rounded-md"
+        autoPlay={false}
+        style={{ width: "100%", height: "26.5rem" }}
+        forwardSeekOffset={5}
+        backwardSeekOffset={5}
+      />
+    );
+  }
+
   return (
     <>
       {isLoading && <EnrolledCourseDetailSkeleton />}
@@ -81,22 +102,8 @@ const EnrolledCourseDetail = () => {
                 </p>
               )}
 
-              {videoUrlLoading && <VideoLoadingSkeleton />}
-
-              {!videoDataObj && <NoVideoPlaceholder />}
-
-              {videoDataObj && (
-                <MuxPlayer
-                  playbackId=""
-                  streamType="on-demand"
-                  src={videoDataObj?.videoUrl}
-                  className="rounded-md"
-                  autoPlay={false}
-                  style={{ width: "100%", height: "26.5rem" }}
-                  forwardSeekOffset={5}
-                  backwardSeekOffset={5}
-                />
-              )}
+              {/* video content  */}
+              {content}
             </div>
           </div>
           {/*  */}

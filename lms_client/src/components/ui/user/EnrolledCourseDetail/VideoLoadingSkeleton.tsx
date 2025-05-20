@@ -2,7 +2,7 @@ import { Skeleton } from "../../skeleton";
 
 const VideoLoadingSkeleton = () => {
   return (
-    <div className=" bg-white border-gray-300 shadow-md relative  ">
+    <div className=" bg-white border  border-gray-300 shadow-md rounded-md relative  ">
       <div className=" absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-x-2 ">
         {/*  */}
         <svg
