@@ -68,6 +68,7 @@ const EnrolledCourseDetail = () => {
 
   let content = null;
 
+  // ! video content for different state
   if (videoUrlLoading) {
     content = <VideoLoadingSkeleton />;
   } else if (!videoDataObj && !videoUrlLoading && !isLoading) {

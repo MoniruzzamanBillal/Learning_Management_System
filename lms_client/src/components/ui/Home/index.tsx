@@ -5,3 +5,4 @@ export { default as ServiceCard } from "./ServiceCard";
 export { default as Testimonial } from "./Testimonial";
 export { default as TestimonialCard } from "./TestimonialCard";
 export { default as TutorSection } from "./TutorSection";
+export { default as TutorSkeleton } from "./TutorSkeleton";
