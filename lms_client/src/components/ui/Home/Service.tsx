@@ -24,7 +24,7 @@ const servicesData: TService[] = [
     category: "Web Development",
     heading:
       "Hands-on courses in modern web development using the latest tools and frameworks.",
-    icon: <Webcam className=" size-8 " />,
+    icon: <Webcam className="size-7 xsm:size-6 lg:size-8 " />,
   },
 
   {
@@ -32,7 +32,7 @@ const servicesData: TService[] = [
     category: "App Development",
     heading:
       "Learn to build responsive and powerful mobile apps for both Android and iOS.",
-    icon: <Smartphone className=" size-8 " />,
+    icon: <Smartphone className=" size-7 xsm:size-6 lg:size-8 " />,
   },
 
   {
@@ -40,35 +40,35 @@ const servicesData: TService[] = [
     category: "Software Development",
     heading:
       "Master software engineering concepts to build scalable and efficient applications.",
-    icon: <Laptop className="  size-8 " />,
+    icon: <Laptop className=" size-7 xsm:size-6 lg:size-8 " />,
   },
   {
     id: 4,
     category: "Cybersecurity",
     heading:
       "Courses focused on real-world threats, ethical hacking, and securing systems.",
-    icon: <Lock className="  size-8 " />,
+    icon: <Lock className="  size-7 xsm:size-6 lg:size-8 " />,
   },
   {
     id: 5,
     category: "DevOps",
     heading:
       "Streamline development and deployment with practical DevOps tools and workflows.",
-    icon: <Settings className="  size-8 " />,
+    icon: <Settings className=" size-7 xsm:size-6 lg:size-8 " />,
   },
   {
     id: 6,
     category: "Cloud Computing",
     heading:
       "Understand cloud infrastructure and deploy scalable services using AWS, Azure & more.",
-    icon: <Cloud className="  size-8" />,
+    icon: <Cloud className="  size-7 xsm:size-6 lg:size-8 " />,
   },
   {
     id: 7,
     category: " Blockchain Development",
     heading:
       "Dive into blockchain fundamentals and build decentralized applications from scratch.",
-    icon: <Link className="  size-8 " />,
+    icon: <Link className=" size-7 xsm:size-6 lg:size-8 " />,
   },
 ];
 
@@ -76,14 +76,14 @@ const Service = () => {
   return (
     <div className="ServiceContainer py-8 bg-gray-100 ">
       <Wrapper className="ServiceWrapper">
-        <h1 className=" text-center  text-prime100 font-medium">
+        <h1 className="  text-center  text-prime100 font-medium  text-xl xsm:text-2xl md:text-3xl ">
           Our Services
         </h1>
-        <h2 className=" text-center pt-4 font-medium ">
+        <h2 className=" text-center pt-4 font-medium text-lg xsm:text-xl md:text-2xl ">
           Delivering Interactive & Skill-Focused Online Learning
         </h2>
 
-        <div className="servicesSection pt-8 grid grid-cols-3 gap-4 ">
+        <div className="servicesSection pt-8 grid grid-cols-1 xsm:grid-cols-2 xmd:grid-cols-3 gap-4 ">
           {servicesData &&
             servicesData?.map((service: TService) => (
               <ServiceCard service={service} />
