@@ -7,10 +7,24 @@ const PopularCourse = () => {
   const { data: allCourseData, isLoading: courseDataLoading } =
     useGetAllPublishedCorsesQuery(undefined);
 
+  let content = null;
+
+  if (courseDataLoading) {
+    content = Array.from({ length: 3 })?.map((_, ind) => (
+      <CourseCardSkeleton key={ind} />
+    ));
+  } else if (allCourseData?.data) {
+    content = allCourseData?.data
+      ?.slice(0, 3)
+      ?.map((course: TCourse) => (
+        <CourseCard key={course?._id} course={course} />
+      ));
+  }
+
   return (
     <div className="PopularCourseContainer bg-gray-50 py-8 ">
       <Wrapper className="PopularCourseWrapper">
-        <h1 className=" text-center text-prime100 font-medium  text-xl xsm:text-2xl md:text-3xl">
+        <h1 className=" text-center text-prime100 font-medium  text-xl xsm:text-2xl md:text-3xl ">
           Our Most Popular Class
         </h1>
 
@@ -20,17 +34,7 @@ const PopularCourse = () => {
         </h2>
 
         <div className="courseSection  m-auto  w-[88%] xsm:w-[70%]  sm:w-full  grid grid-cols-1 sm:grid-cols-2 xmd:grid-cols-3 gap-x-4 gap-y-6">
-          {courseDataLoading &&
-            Array.from({ length: 3 })?.map((_, ind) => (
-              <CourseCardSkeleton key={ind} />
-            ))}
-
-          {allCourseData?.data &&
-            allCourseData?.data
-              ?.slice(0, 3)
-              ?.map((course: TCourse) => (
-                <CourseCard key={course?._id} course={course} />
-              ))}
+          {content}
         </div>
       </Wrapper>
     </div>
