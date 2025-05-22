@@ -7,7 +7,7 @@ const PopularCourse = () => {
   const { data: allCourseData, isLoading: courseDataLoading } =
     useGetAllPublishedCorsesQuery({ limit: 3 });
 
-  console.log(allCourseData?.data);
+  // console.log(allCourseData?.data?.data);
 
   let content = null;
 
@@ -15,8 +15,8 @@ const PopularCourse = () => {
     content = Array.from({ length: 3 })?.map((_, ind) => (
       <CourseCardSkeleton key={ind} />
     ));
-  } else if (allCourseData?.data) {
-    content = allCourseData?.data?.map((course: TCourse) => (
+  } else if (allCourseData?.data?.data) {
+    content = allCourseData?.data?.data?.map((course: TCourse) => (
       <CourseCard key={course?._id} course={course} />
     ));
   }

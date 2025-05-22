@@ -24,6 +24,8 @@ const Courses = () => {
 
   // console.log(allCourseData?.data?.length);
   // console.log(allCourseData?.data);
+  // console.log(allCourseData?.data?.meta);
+  // console.log(allCourseData?.data?.data);
 
   let content = null;
 
@@ -35,7 +37,7 @@ const Courses = () => {
         ))}
       </>
     );
-  } else if (!allCourseData?.data?.length) {
+  } else if (!allCourseData?.data?.data?.length) {
     content = (
       <div className="   h-[60vh] w-[80vw] xl:w-[60vw]  flex  robotoFont mt-6 flex-col items-center justify-center   px-4">
         <h1 className=" text-3xl sm:text-4xl font-bold text-prime100 mb-4">
@@ -43,15 +45,10 @@ const Courses = () => {
         </h1>
       </div>
     );
-  } else if (allCourseData?.data?.length) {
-    content = (
-      <>
-        {allCourseData?.data &&
-          allCourseData?.data?.map((course: TCourse) => (
-            <CourseCard key={course?._id} course={course} />
-          ))}
-      </>
-    );
+  } else if (allCourseData?.data?.data?.length) {
+    content = allCourseData?.data?.data?.map((course: TCourse) => (
+      <CourseCard key={course?._id} course={course} />
+    ));
   }
 
   return (
