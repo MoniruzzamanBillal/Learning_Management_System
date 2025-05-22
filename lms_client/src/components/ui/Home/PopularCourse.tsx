@@ -5,7 +5,9 @@ import CourseCardSkeleton from "../courses/CourseCardSkeleton";
 
 const PopularCourse = () => {
   const { data: allCourseData, isLoading: courseDataLoading } =
-    useGetAllPublishedCorsesQuery(undefined);
+    useGetAllPublishedCorsesQuery({ limit: 3 });
+
+  console.log(allCourseData?.data);
 
   let content = null;
 
@@ -14,11 +16,9 @@ const PopularCourse = () => {
       <CourseCardSkeleton key={ind} />
     ));
   } else if (allCourseData?.data) {
-    content = allCourseData?.data
-      ?.slice(0, 3)
-      ?.map((course: TCourse) => (
-        <CourseCard key={course?._id} course={course} />
-      ));
+    content = allCourseData?.data?.map((course: TCourse) => (
+      <CourseCard key={course?._id} course={course} />
+    ));
   }
 
   return (

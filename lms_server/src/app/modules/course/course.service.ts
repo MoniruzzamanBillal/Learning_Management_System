@@ -43,10 +43,9 @@ const addCourse = async (payload: TCourse, file: any) => {
 
 // ! for getting all course data
 const getAllCourses = async (query: Record<string, unknown>) => {
-  const { searchTerm, category } = query;
+  const { searchTerm, category, limit = 10, page = 1 } = query;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const params: any = {};
+  const params: Record<string, unknown> = {};
 
   params.published = true;
 
@@ -61,9 +60,17 @@ const getAllCourses = async (query: Record<string, unknown>) => {
     ];
   }
 
+  const numaricLimit = Number(limit);
+  const numaricPage = Number(page);
+  const skip = (numaricPage - 1) * numaricLimit;
+
+  // console.log(params);
+
   const allCourseData = await courseModel
     .find(params)
     .populate("instructors", " name   ")
+    .limit(numaricLimit)
+    .skip(skip)
     .select(" -published -createdAt -__v -description -modules -updatedAt ");
 
   // console.log(allCourseData);
