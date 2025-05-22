@@ -88,7 +88,9 @@ const getAllCourses = async (query: Record<string, unknown>) => {
     })
   );
 
-  return result;
+  const totalCourses = await courseModel.countDocuments({ published: true });
+
+  return { data: result, meta: { totalCourses } };
 };
 
 // ! for getting all course data ,admin manage course

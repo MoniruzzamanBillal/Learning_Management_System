@@ -40,8 +40,7 @@ const addCourse = (payload, file) => __awaiter(void 0, void 0, void 0, function*
 });
 // ! for getting all course data
 const getAllCourses = (query) => __awaiter(void 0, void 0, void 0, function* () {
-    const { searchTerm, category } = query;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { searchTerm, category, limit = 10, page = 1 } = query;
     const params = {};
     params.published = true;
     if (category) {
@@ -53,9 +52,15 @@ const getAllCourses = (query) => __awaiter(void 0, void 0, void 0, function* () 
             { detail: { $regex: new RegExp(searchTerm, "i") } },
         ];
     }
+    const numaricLimit = Number(limit);
+    const numaricPage = Number(page);
+    const skip = (numaricPage - 1) * numaricLimit;
+    // console.log(params);
     const allCourseData = yield course_model_1.courseModel
         .find(params)
         .populate("instructors", " name   ")
+        .limit(numaricLimit)
+        .skip(skip)
         .select(" -published -createdAt -__v -description -modules -updatedAt ");
     // console.log(allCourseData);
     const result = yield Promise.all(allCourseData === null || allCourseData === void 0 ? void 0 : allCourseData.map((courseData) => __awaiter(void 0, void 0, void 0, function* () {
