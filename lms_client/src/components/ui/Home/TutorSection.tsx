@@ -56,7 +56,7 @@ const TutorSection = () => {
         </p>
 
         <h1 className=" font-medium text-center  text-xl xsm:text-2xl md:text-3xl ">
-          Meet the Heroes{" "}
+          Meet the Heroes
         </h1>
 
         <div className="instructorContainer mt-12 grid grid-cols-1 xsm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-3 gap-y-8 ">

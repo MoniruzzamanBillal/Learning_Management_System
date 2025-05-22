@@ -52,7 +52,7 @@ const Testimonial = () => {
   return (
     <div className="TestimonialContainer bg-gray-50 py-8 ">
       <Wrapper className=" TestimonialWrapper">
-        <h1 className="  text-center font-semibold text-prime100   ">
+        <h1 className="  text-center font-semibold text-prime100  text-xl xsm:text-2xl md:text-3xl  ">
           What others say about us
         </h1>
 
@@ -74,9 +74,7 @@ const Testimonial = () => {
             {testimonialData &&
               testimonialData?.map((testimonial: TTestimonial, ind: number) => (
                 <SwiperSlide key={ind}>
-                  {/* testimonial starts  */}
                   <TestimonialCard testimonial={testimonial} />
-                  {/* testimonial ends  */}
                 </SwiperSlide>
               ))}
 

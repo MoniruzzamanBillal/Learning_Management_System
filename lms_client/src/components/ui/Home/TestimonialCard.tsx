@@ -13,12 +13,12 @@ const TestimonialCard = ({ testimonial }: TTestimonialProps) => {
           <div className="mx-auto max-w-screen-2xl px-4 md:px-8">
             {/* quote - start  */}
             <div className="flex flex-col items-center gap-4 md:gap-6">
-              <div className="max-w-md text-center text-gray-600 lg:text-lg">
+              <div className="max-w-md text-center text-gray-600 text-sm sm:text-base md:text-lg">
                 {testimonial?.review}
               </div>
 
               <div className="flex flex-col items-center gap-2 sm:flex-row md:gap-3">
-                <div className="h-12 w-12 overflow-hidden rounded-full bg-gray-100 shadow-lg md:h-14 md:w-14">
+                <div className=" overflow-hidden rounded-full bg-gray-100 shadow-lg size-10  xsm:size-12  md:size-14 ">
                   <img
                     src={testimonial?.img}
                     loading="lazy"
