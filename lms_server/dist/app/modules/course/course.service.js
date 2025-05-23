@@ -68,7 +68,8 @@ const getAllCourses = (query) => __awaiter(void 0, void 0, void 0, function* () 
         const reviewData = yield review_service_1.reviewServices.getAverageReviewOfCourse((_a = courseData === null || courseData === void 0 ? void 0 : courseData._id) === null || _a === void 0 ? void 0 : _a.toString());
         return Object.assign(Object.assign({}, courseData.toObject()), { reviewData });
     })));
-    return result;
+    const totalCourses = yield course_model_1.courseModel.countDocuments({ published: true });
+    return { data: result, meta: { totalCourses } };
 });
 // ! for getting all course data ,admin manage course
 const getAllCoursesForAdmin = () => __awaiter(void 0, void 0, void 0, function* () {
