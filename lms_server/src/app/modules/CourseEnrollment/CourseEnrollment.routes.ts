@@ -35,6 +35,13 @@ router.get(
   CourseEnrollmentController.getMyCourseEnrollData
 );
 
+// ! for checking user enrolled a coure or not
+router.get(
+  "/check-user-enrolled/:courseId",
+  authCheck(UserRole.user),
+  CourseEnrollmentController.checkUserEnrolledInCourse
+);
+
 // ! for getting module data for enrolled course
 router.get(
   "/my-enrolled-course-modules/:courseId",

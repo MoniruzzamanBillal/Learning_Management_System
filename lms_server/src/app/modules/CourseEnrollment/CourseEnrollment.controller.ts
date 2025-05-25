@@ -131,6 +131,21 @@ const markCompleteCourse = catchAsync(async (req, res) => {
   });
 });
 
+// ! for checking user enrolled a coure or not
+const checkUserEnrolledInCourse = catchAsync(async (req, res) => {
+  const result = await courseEnrollmentService.checkUserEnrolledInCourse(
+    req?.params?.courseId,
+    req?.user?.userId
+  );
+
+  sendResponse(res, {
+    statusCode: httpStatus.CREATED,
+    success: true,
+    message: "Enrolled Course confirmation retrived successfully!!!",
+    data: result,
+  });
+});
+
 //
 export const CourseEnrollmentController = {
   enrollInCourse,
@@ -142,4 +157,5 @@ export const CourseEnrollmentController = {
   getAllUserEnrolledCourse,
   getUserEnrolledModuleVideos,
   markCompleteCourse,
+  checkUserEnrolledInCourse,
 };

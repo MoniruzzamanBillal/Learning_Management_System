@@ -173,6 +173,38 @@ const getAllUserEnrolledCourse = async (userId: string) => {
   return progressResult;
 };
 
+// ! for checking user enrolled a coure or not
+const checkUserEnrolledInCourse = async (courseId: string, userId: string) => {
+  const userData = await userModel.findById(userId);
+
+  if (!userData) {
+    throw new AppError(httpStatus.BAD_REQUEST, "This user don't exist !!!");
+  }
+
+  const courseData = await courseModel.findById(courseId);
+
+  if (!courseData) {
+    throw new AppError(httpStatus.BAD_REQUEST, "This course don't exist !!!");
+  }
+
+  if (!courseData?.published) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "This course is not published yet!!!"
+    );
+  }
+
+  const previousEnrolledData = await courseEnrollmentModel.findOne({
+    user: userId,
+    course: courseId,
+    isDeleted: false,
+  });
+
+  const enrolledIncourse = previousEnrolledData ? true : false;
+
+  return { enrolledIncourse };
+};
+
 // ! get user single enrolled  course data
 const getUserEnrolledCourse = async (userId: string, courseId: string) => {
   const result = await courseEnrollmentModel
@@ -454,4 +486,5 @@ export const courseEnrollmentService = {
   getAllUserEnrolledCourse,
   getUserEnrolledModuleVideos,
   markCompleteCourse,
+  checkUserEnrolledInCourse,
 };
