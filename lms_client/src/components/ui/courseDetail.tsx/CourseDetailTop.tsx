@@ -1,6 +1,7 @@
 import Wrapper from "@/components/shared/Wrapper";
 import { enrollInCourseFunction } from "@/functions/courseEnrollment.function";
 import { useEnrollInCourseMutation } from "@/redux/features/enrollment/enrollment.api";
+import { userRoleConts } from "@/utils/constants";
 import { useGetUser } from "@/utils/sharedFunction";
 import { format } from "date-fns";
 import { toast } from "sonner";
@@ -26,10 +27,16 @@ export type CourseDetailType = {
 
 type TCourseDetailProps = {
   courseDetails: CourseDetailType;
+  alreadyEnrolled: true;
 };
 
-const CourseDetailTop = ({ courseDetails }: TCourseDetailProps) => {
+const CourseDetailTop = ({
+  courseDetails,
+  alreadyEnrolled,
+}: TCourseDetailProps) => {
   // console.log(courseDetails);
+
+  console.log(alreadyEnrolled);
 
   const [enrollInCourse, { isLoading: courseEnrollementLoading }] =
     useEnrollInCourseMutation();
@@ -117,11 +124,15 @@ const CourseDetailTop = ({ courseDetails }: TCourseDetailProps) => {
 
             {/* enroll button  */}
             <Button
-              // disabled={userInfo ? false : true}
+              disabled={
+                alreadyEnrolled ||
+                userInfo?.userRole === userRoleConts.admin ||
+                userInfo?.userRole === userRoleConts?.instructor
+              }
               onClick={() => handleEnrollCourse(courseDetails?._id)}
-              className="  bg-prime100 hover:bg-prime200 "
+              className={`  bg-prime100 hover:bg-prime200  `}
             >
-              Enroll Now{" "}
+              {alreadyEnrolled ? "Course Enrolled" : "Enroll Now"}
             </Button>
 
             {/*  */}

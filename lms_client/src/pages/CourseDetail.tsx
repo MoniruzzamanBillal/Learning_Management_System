@@ -8,6 +8,7 @@ import {
 import { TPopulatedReview } from "@/components/ui/courseDetail.tsx/UserReviewCard";
 import { giveReviewFunction } from "@/functions/review.function";
 import { useGetCouseDetailQuery } from "@/redux/features/course/course.api";
+import { useGetCheckUserEnrolledInCourseQuery } from "@/redux/features/enrollment/enrollment.api";
 import {
   useCheckReviewEligibilityQuery,
   useGetCourseReviewQuery,
@@ -33,6 +34,11 @@ const CourseDetail = () => {
   const [giveReview, { isLoading: reviewGivingLoading }] =
     useGiveReviewMutation();
 
+  const { data: checkEnrolledData } = useGetCheckUserEnrolledInCourseQuery(
+    courseId,
+    { skip: !courseId }
+  );
+
   const { data: courseDetail, isLoading } = useGetCouseDetailQuery(courseId, {
     skip: !courseId,
   });
@@ -52,6 +58,9 @@ const CourseDetail = () => {
   } = useCheckReviewEligibilityQuery(courseId, {
     skip: !courseId,
   });
+
+  // console.log(checkEnrolledData?.data);
+  // console.log(checkEnrolledData?.data?.enrolledIncourse);
 
   // console.log(courseDetail?.data);
   // console.log(reviewEligibility?.data);
@@ -96,7 +105,10 @@ const CourseDetail = () => {
         <div className="CourseDetailWrapper">
           {/* course detail top name section  */}
           {courseDetail?.data && (
-            <CourseDetailTop courseDetails={courseDetail?.data} />
+            <CourseDetailTop
+              alreadyEnrolled={checkEnrolledData?.data?.enrolledIncourse}
+              courseDetails={courseDetail?.data}
+            />
           )}
 
           {/* course detail section  */}
