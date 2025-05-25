@@ -73,6 +73,16 @@ const enrollmentApi = baseApi.injectEndpoints({
       },
     }),
 
+    // ! for checking user enrolled a coure or not
+    getCheckUserEnrolledInCourse: builder.query({
+      query: (courseId) => {
+        return {
+          url: `/enroll/check-user-enrolled/${courseId}`,
+          method: "GET",
+        };
+      },
+    }),
+
     //  ! for marking course as complete
     markCompleteCourse: builder.mutation({
       query: (courseId) => {
@@ -98,4 +108,5 @@ export const {
   useEnrollInCourseMutation,
   useLazyGetUserCourseProgressQuery,
   useMarkCompleteCourseMutation,
+  useGetCheckUserEnrolledInCourseQuery,
 } = enrollmentApi;
