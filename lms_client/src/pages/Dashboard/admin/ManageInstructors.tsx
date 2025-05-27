@@ -15,35 +15,39 @@ const ManageInstructors = () => {
 
   // console.log(isntructorData?.data);
 
-  return (
-    <>
-      {isLoading && <TableDataLoading />}
+  let content = null;
 
-      <div className="ManageInstructorsContainer">
-        <div className="ManageInstructorsWrapper bg-gray-100/90 border border-gray-300  shadow rounded-md p-3 ">
-          <h3 className="brand text-2xl font-medium mb-4 ">
-            Manage Instructors
-          </h3>
-
-          <Button
-            onClick={() => navigate("/dashboard/admin/add-instructor")}
-            className="mb-4 bg-prime100 hover:bg-prime100 cursor-pointer"
-          >
-            Add Instructors
-          </Button>
-
-          {/* table section  */}
-          <div className="Tablecontainer mx-auto py-10">
-            {isntructorData?.data && (
-              <ManageInstructorTable
-                columns={InstructorColumn}
-                data={isntructorData?.data}
-              />
-            )}
-          </div>
-        </div>
+  if (isLoading) {
+    content = <TableDataLoading />;
+  } else if (!isLoading && isntructorData?.data) {
+    content = (
+      <div className="Tablecontainer mx-auto py-10">
+        {isntructorData?.data && (
+          <ManageInstructorTable
+            columns={InstructorColumn}
+            data={isntructorData?.data}
+          />
+        )}
       </div>
-    </>
+    );
+  }
+
+  return (
+    <div className="ManageInstructorsContainer">
+      <div className="ManageInstructorsWrapper bg-gray-100/90 border border-gray-300  shadow rounded-md p-3 ">
+        <h3 className="brand text-2xl font-medium mb-4 ">Manage Instructors</h3>
+
+        <Button
+          onClick={() => navigate("/dashboard/admin/add-instructor")}
+          className="mb-4 bg-prime100 hover:bg-prime100 cursor-pointer"
+        >
+          Add Instructors
+        </Button>
+
+        {/* table section  */}
+        {content}
+      </div>
+    </div>
   );
 };
 
