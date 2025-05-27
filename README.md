@@ -101,7 +101,7 @@
 | ---------- | --------------------- | -------- |
 | Admin      | abc@d.com             | 123456   |
 | Instructor | instructor1@gmail.com | 123456   |
-| Student    | user1@gmail.com       | 123456   |
+| Student    | user@gmail.com        | 123456   |
 
 ---
 

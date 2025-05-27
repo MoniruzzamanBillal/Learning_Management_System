@@ -33,6 +33,16 @@ const userApi = baseApi.injectEndpoints({
       },
     }),
 
+    // ! for getting all instructors
+    getAllInstructors: builder.query({
+      query: () => {
+        return {
+          url: "/user/get-instructors",
+          method: "GET",
+        };
+      },
+    }),
+
     //
   }),
 });
@@ -43,4 +53,5 @@ export const {
   useGetLoggedInUserQuery,
   useGetSingleUserQuery,
   useUpdateUserMutation,
+  useGetAllInstructorsQuery,
 } = userApi;
