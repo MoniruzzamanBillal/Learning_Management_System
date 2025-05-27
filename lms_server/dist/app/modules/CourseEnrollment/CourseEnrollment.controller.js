@@ -125,6 +125,17 @@ const checkUserEnrolledInCourse = (0, catchAsync_1.default)((req, res) => __awai
         data: result,
     });
 }));
+// ! get user's finished course
+const usersFinishedCourses = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    const result = yield CourseEnrollment_service_1.courseEnrollmentService.usersFinishedCourses((_a = req === null || req === void 0 ? void 0 : req.user) === null || _a === void 0 ? void 0 : _a.userId);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "User's finished courses retrived successfully !!!",
+        data: result,
+    });
+}));
 //
 exports.CourseEnrollmentController = {
     enrollInCourse,
@@ -137,4 +148,5 @@ exports.CourseEnrollmentController = {
     getUserEnrolledModuleVideos,
     markCompleteCourse,
     checkUserEnrolledInCourse,
+    usersFinishedCourses,
 };

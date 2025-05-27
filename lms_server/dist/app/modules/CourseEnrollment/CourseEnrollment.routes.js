@@ -12,10 +12,12 @@ const CourseEnrollment_controller_1 = require("./CourseEnrollment.controller");
 const router = (0, express_1.Router)();
 // ! for getting enrollment course info
 router.get("/enrollment-data", (0, authCheck_1.default)(user_constants_1.UserRole.admin), CourseEnrollment_controller_1.CourseEnrollmentController.enrollmentsPerCourse);
-// ! for enrolling into a course
-router.post("/enroll-course", (0, authCheck_1.default)(user_constants_1.UserRole.user), CourseEnrollment_controller_1.CourseEnrollmentController.enrollInCourse);
 // ! for getting all user's enrolled course
 router.get("/user-all-enrolled-couses", (0, authCheck_1.default)(user_constants_1.UserRole.user), CourseEnrollment_controller_1.CourseEnrollmentController.getAllUserEnrolledCourse);
+// ! get user's finished course
+router.get("/user-finished-course", (0, authCheck_1.default)(user_constants_1.UserRole.user), CourseEnrollment_controller_1.CourseEnrollmentController.usersFinishedCourses);
+// ! for enrolling into a course
+router.post("/enroll-course", (0, authCheck_1.default)(user_constants_1.UserRole.user), CourseEnrollment_controller_1.CourseEnrollmentController.enrollInCourse);
 // ! for getting user single enrolled course data
 router.get("/my-enrolled-course/:courseId", (0, authCheck_1.default)(user_constants_1.UserRole.user), ValidateCourseAccess_1.default, CourseEnrollment_controller_1.CourseEnrollmentController.getMyCourseEnrollData);
 // ! for checking user enrolled a coure or not

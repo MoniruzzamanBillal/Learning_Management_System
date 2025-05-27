@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "946afc6d-b545-4a1e-bd6f-1cabe1ac12f4",
 		"name": "LMS_system",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
 		"_exporter_id": "31252728"
 	},
 	"item": [
@@ -29,16 +29,37 @@
 								}
 							]
 						},
-						"url": {
-							"raw": "{{BASE_API}}/auth/register",
-							"host": [
-								"{{BASE_API}}"
-							],
-							"path": [
-								"auth",
-								"register"
+						"url": "{{BASE_API}}/auth/register"
+					},
+					"response": []
+				},
+				{
+					"name": "add instructor",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2RjZWM4OTU0MTBkOWRmMjdlZWNlNjEiLCJ1c2VyUm9sZSI6ImFkbWluIiwiaWF0IjoxNzQ1MjkzODIyLCJleHAiOjE3NDcwMjE4MjJ9.W4iOmO7G0SXXjH8BlJzcfB5iAo60ckJgyzsNMyn9Xm4",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "data",
+									"value": "{\n  \"name\": \"Moniruzzaman\",\n  \"email\": \"\"\n}",
+									"type": "text"
+								},
+								{
+									"key": "profileImg",
+									"type": "file",
+									"src": "/C:/Users/ACER/Downloads/images.jpg"
+								}
 							]
-						}
+						},
+						"url": "{{BASE_API}}/auth/register-instructor"
 					},
 					"response": []
 				},
@@ -49,23 +70,14 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"instructor2@gmail.com\",\r\n    \"password\": \"123456\"\r\n}",
+							"raw": "{\r\n    \"email\": \"user@gmail.com\",\r\n    \"password\": \"123456\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
 								}
 							}
 						},
-						"url": {
-							"raw": "{{BASE_API}}/auth/login",
-							"host": [
-								"{{BASE_API}}"
-							],
-							"path": [
-								"auth",
-								"login"
-							]
-						}
+						"url": "{{BASE_API}}/auth/login"
 					},
 					"response": []
 				}
@@ -100,16 +112,7 @@
 								}
 							]
 						},
-						"url": {
-							"raw": "{{BASE_API}}/course/add-course",
-							"host": [
-								"{{BASE_API}}"
-							],
-							"path": [
-								"course",
-								"add-course"
-							]
-						}
+						"url": "{{BASE_API}}/course/add-course"
 					},
 					"response": []
 				},
@@ -139,17 +142,7 @@
 								}
 							]
 						},
-						"url": {
-							"raw": "{{BASE_API}}/course/update-course/68071acb01ebcb97d5d1d7f5",
-							"host": [
-								"{{BASE_API}}"
-							],
-							"path": [
-								"course",
-								"update-course",
-								"68071acb01ebcb97d5d1d7f5"
-							]
-						}
+						"url": "{{BASE_API}}/course/update-course/68071acb01ebcb97d5d1d7f5"
 					},
 					"response": []
 				},
@@ -158,16 +151,7 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "{{BASE_API}}/course/all-courses",
-							"host": [
-								"{{BASE_API}}"
-							],
-							"path": [
-								"course",
-								"all-courses"
-							]
-						}
+						"url": "{{BASE_API}}/course/all-courses"
 					},
 					"response": []
 				},
@@ -176,16 +160,7 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "{{BASE_API}}/course/admin-all-courses",
-							"host": [
-								"{{BASE_API}}"
-							],
-							"path": [
-								"course",
-								"admin-all-courses"
-							]
-						}
+						"url": "{{BASE_API}}/course/admin-all-courses"
 					},
 					"response": []
 				},
@@ -194,16 +169,7 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "{{BASE_API}}/course/all-courses-modules",
-							"host": [
-								"{{BASE_API}}"
-							],
-							"path": [
-								"course",
-								"all-courses-modules"
-							]
-						}
+						"url": "{{BASE_API}}/course/all-courses-modules"
 					},
 					"response": []
 				},
@@ -212,17 +178,7 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "{{BASE_API}}/course/course-detail/680b8fdd08c2b4cd5ac263e3",
-							"host": [
-								"{{BASE_API}}"
-							],
-							"path": [
-								"course",
-								"course-detail",
-								"680b8fdd08c2b4cd5ac263e3"
-							]
-						}
+						"url": "{{BASE_API}}/course/course-detail/68071acb01ebcb97d5d1d7f5"
 					},
 					"response": []
 				},
@@ -237,17 +193,7 @@
 								"type": "text"
 							}
 						],
-						"url": {
-							"raw": "{{BASE_API}}/course/admin-course-detail/680b8fdd08c2b4cd5ac263e3",
-							"host": [
-								"{{BASE_API}}"
-							],
-							"path": [
-								"course",
-								"admin-course-detail",
-								"680b8fdd08c2b4cd5ac263e3"
-							]
-						}
+						"url": "{{BASE_API}}/course/admin-course-detail/680b8fdd08c2b4cd5ac263e3"
 					},
 					"response": []
 				},
@@ -263,17 +209,7 @@
 								"disabled": true
 							}
 						],
-						"url": {
-							"raw": "{{BASE_API}}/course/instructor-course-detail/680b8fdd08c2b4cd5ac263e3",
-							"host": [
-								"{{BASE_API}}"
-							],
-							"path": [
-								"course",
-								"instructor-course-detail",
-								"680b8fdd08c2b4cd5ac263e3"
-							]
-						}
+						"url": "{{BASE_API}}/course/instructor-course-detail/680b8fdd08c2b4cd5ac263e3"
 					},
 					"response": []
 				},
@@ -288,17 +224,7 @@
 								"type": "text"
 							}
 						],
-						"url": {
-							"raw": "{{BASE_API}}/course/instructor-courses/67dcebede2a31f35e669a5df",
-							"host": [
-								"{{BASE_API}}"
-							],
-							"path": [
-								"course",
-								"instructor-courses",
-								"67dcebede2a31f35e669a5df"
-							]
-						}
+						"url": "{{BASE_API}}/course/instructor-courses/67dcebede2a31f35e669a5df"
 					},
 					"response": []
 				},
@@ -313,17 +239,7 @@
 								"type": "text"
 							}
 						],
-						"url": {
-							"raw": "{{BASE_API}}/course/publish-course/67f5ed7b6feae26b9840219c",
-							"host": [
-								"{{BASE_API}}"
-							],
-							"path": [
-								"course",
-								"publish-course",
-								"67f5ed7b6feae26b9840219c"
-							]
-						}
+						"url": "{{BASE_API}}/course/publish-course/67f5ed7b6feae26b9840219c"
 					},
 					"response": []
 				}
@@ -346,16 +262,7 @@
 								}
 							}
 						},
-						"url": {
-							"raw": "{{BASE_API}}/module/add-module",
-							"host": [
-								"{{BASE_API}}"
-							],
-							"path": [
-								"module",
-								"add-module"
-							]
-						}
+						"url": "{{BASE_API}}/module/add-module"
 					},
 					"response": []
 				},
@@ -364,17 +271,7 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "{{BASE_API}}/module/module-detail/67e0e020f8ce7c377743a001",
-							"host": [
-								"{{BASE_API}}"
-							],
-							"path": [
-								"module",
-								"module-detail",
-								"67e0e020f8ce7c377743a001"
-							]
-						}
+						"url": "{{BASE_API}}/module/module-detail/67e0e020f8ce7c377743a001"
 					},
 					"response": []
 				},
@@ -392,17 +289,7 @@
 								}
 							}
 						},
-						"url": {
-							"raw": "{{BASE_API}}/module/update-module/67de4ce5e28c78fecee94237",
-							"host": [
-								"{{BASE_API}}"
-							],
-							"path": [
-								"module",
-								"update-module",
-								"67de4ce5e28c78fecee94237"
-							]
-						}
+						"url": "{{BASE_API}}/module/update-module/67de4ce5e28c78fecee94237"
 					},
 					"response": []
 				},
@@ -411,16 +298,7 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "{{BASE_API}}/module/all-module",
-							"host": [
-								"{{BASE_API}}"
-							],
-							"path": [
-								"module",
-								"all-module"
-							]
-						}
+						"url": "{{BASE_API}}/module/all-module"
 					},
 					"response": []
 				},
@@ -429,17 +307,7 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "{{BASE_API}}/module/course-module-detail/68071acb01ebcb97d5d1d7f5",
-							"host": [
-								"{{BASE_API}}"
-							],
-							"path": [
-								"module",
-								"course-module-detail",
-								"68071acb01ebcb97d5d1d7f5"
-							]
-						}
+						"url": "{{BASE_API}}/module/course-module-detail/68071acb01ebcb97d5d1d7f5"
 					},
 					"response": []
 				}
@@ -468,16 +336,7 @@
 								}
 							]
 						},
-						"url": {
-							"raw": "{{BASE_API}}/video/add-video",
-							"host": [
-								"{{BASE_API}}"
-							],
-							"path": [
-								"video",
-								"add-video"
-							]
-						}
+						"url": "{{BASE_API}}/video/add-video"
 					},
 					"response": []
 				},
@@ -498,16 +357,7 @@
 								}
 							}
 						},
-						"url": {
-							"raw": "{{BASE_API}}/video/module-video",
-							"host": [
-								"{{BASE_API}}"
-							],
-							"path": [
-								"video",
-								"module-video"
-							]
-						}
+						"url": "{{BASE_API}}/video/module-video"
 					},
 					"response": []
 				},
@@ -528,17 +378,7 @@
 								}
 							}
 						},
-						"url": {
-							"raw": "{{BASE_API}}/video/individual-video/680df17dc921ad9a89343e4f",
-							"host": [
-								"{{BASE_API}}"
-							],
-							"path": [
-								"video",
-								"individual-video",
-								"680df17dc921ad9a89343e4f"
-							]
-						}
+						"url": "{{BASE_API}}/video/individual-video/680df17dc921ad9a89343e4f"
 					},
 					"response": []
 				},
@@ -556,16 +396,7 @@
 								}
 							}
 						},
-						"url": {
-							"raw": "{{BASE_API}}/video/delete-video",
-							"host": [
-								"{{BASE_API}}"
-							],
-							"path": [
-								"video",
-								"delete-video"
-							]
-						}
+						"url": "{{BASE_API}}/video/delete-video"
 					},
 					"response": []
 				},
@@ -589,17 +420,7 @@
 								}
 							]
 						},
-						"url": {
-							"raw": "{{BASE_API}}/video/update-video/67f60c0d5c80fc95d11288de",
-							"host": [
-								"{{BASE_API}}"
-							],
-							"path": [
-								"video",
-								"update-video",
-								"67f60c0d5c80fc95d11288de"
-							]
-						}
+						"url": "{{BASE_API}}/video/update-video/67f60c0d5c80fc95d11288de"
 					},
 					"response": []
 				},
@@ -618,16 +439,7 @@
 								}
 							]
 						},
-						"url": {
-							"raw": "{{BASE_API}}/video/add-video2",
-							"host": [
-								"{{BASE_API}}"
-							],
-							"path": [
-								"video",
-								"add-video2"
-							]
-						}
+						"url": "{{BASE_API}}/video/add-video2"
 					},
 					"response": []
 				},
@@ -649,16 +461,7 @@
 								}
 							]
 						},
-						"url": {
-							"raw": "{{BASE_API}}/video/add-video3",
-							"host": [
-								"{{BASE_API}}"
-							],
-							"path": [
-								"video",
-								"add-video3"
-							]
-						}
+						"url": "{{BASE_API}}/video/add-video3"
 					},
 					"response": []
 				}
@@ -680,23 +483,14 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"user\": \"67d023a41a4a5455a78432b6\",\r\n    \"course\": \"68071acb01ebcb97d5d1d7f5\"\r\n}",
+							"raw": "{\r\n    \"user\": \"67d023a41a4a5455a78432b6\",\r\n    \"course\": \"68198a1f56c3886545932892\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
 								}
 							}
 						},
-						"url": {
-							"raw": "{{BASE_API}}/enroll/enroll-course",
-							"host": [
-								"{{BASE_API}}"
-							],
-							"path": [
-								"enroll",
-								"enroll-course"
-							]
-						}
+						"url": "{{BASE_API}}/enroll/enroll-course"
 					},
 					"response": []
 				},
@@ -711,17 +505,7 @@
 								"type": "text"
 							}
 						],
-						"url": {
-							"raw": "{{BASE_API}}/enroll/my-enrolled-course/681051cc5265f916112b34f2",
-							"host": [
-								"{{BASE_API}}"
-							],
-							"path": [
-								"enroll",
-								"my-enrolled-course",
-								"681051cc5265f916112b34f2"
-							]
-						}
+						"url": "{{BASE_API}}/enroll/my-enrolled-course/681051cc5265f916112b34f2"
 					},
 					"response": []
 				},
@@ -736,16 +520,22 @@
 								"type": "text"
 							}
 						],
-						"url": {
-							"raw": "{{BASE_API}}/enroll/user-all-enrolled-couses",
-							"host": [
-								"{{BASE_API}}"
-							],
-							"path": [
-								"enroll",
-								"user-all-enrolled-couses"
-							]
-						}
+						"url": "{{BASE_API}}/enroll/user-all-enrolled-couses"
+					},
+					"response": []
+				},
+				{
+					"name": "get user's completed course",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2QwMjNhNDFhNGE1NDU1YTc4NDMyYjYiLCJ1c2VyUm9sZSI6InVzZXIiLCJpYXQiOjE3NDgzMTM5OTAsImV4cCI6MTc1MDA0MTk5MH0.cmTBqwPa3Eyw_ziZAHx0tZ-wGf-fq6GDdIyeE3Bjz-w",
+								"type": "text"
+							}
+						],
+						"url": "{{BASE_API}}/enroll/user-finished-course"
 					},
 					"response": []
 				},
@@ -760,16 +550,7 @@
 								"type": "text"
 							}
 						],
-						"url": {
-							"raw": "{{BASE_API}}/enroll/enrollment-data",
-							"host": [
-								"{{BASE_API}}"
-							],
-							"path": [
-								"enroll",
-								"enrollment-data"
-							]
-						}
+						"url": "{{BASE_API}}/enroll/enrollment-data"
 					},
 					"response": []
 				},
@@ -780,21 +561,41 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2QwMjNhNDFhNGE1NDU1YTc4NDMyYjYiLCJ1c2VyUm9sZSI6InVzZXIiLCJpYXQiOjE3NDI1MzMxMDEsImV4cCI6MTc0NDI2MTEwMX0.aAck0BdOtEsZlFSZ-IIqjbRS9CloFTGFoCsJpbsKlVM",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2QwMjNhNDFhNGE1NDU1YTc4NDMyYjYiLCJ1c2VyUm9sZSI6InVzZXIiLCJpYXQiOjE3NDUyOTM4OTcsImV4cCI6MTc0NzAyMTg5N30.BaPM4uIJvnC5qKJ2qSB5cprqjcjlpglYnL9JlidnenA",
 								"type": "text"
 							}
 						],
-						"url": {
-							"raw": "{{BASE_API}}/enroll/my-enrolled-course-modules/67de1e78da6249388795b913",
-							"host": [
-								"{{BASE_API}}"
-							],
-							"path": [
-								"enroll",
-								"my-enrolled-course-modules",
-								"67de1e78da6249388795b913"
-							]
-						}
+						"url": "{{BASE_API}}/enroll/my-enrolled-course-modules/681051cc5265f916112b34f2"
+					},
+					"response": []
+				},
+				{
+					"name": "check user enrolled in course",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2QwMjNhNDFhNGE1NDU1YTc4NDMyYjYiLCJ1c2VyUm9sZSI6InVzZXIiLCJpYXQiOjE3NDgxNDkwODQsImV4cCI6MTc0OTg3NzA4NH0.2Z7IbT_xtsltUQZxVfgKjLwzNLipFLSlGM1qj60aSgA",
+								"type": "text"
+							}
+						],
+						"url": "{{BASE_API}}/enroll/check-user-enrolled/68282b8668181ab2d0d64fe7"
+					},
+					"response": []
+				},
+				{
+					"name": "get enrolled module data Copy",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2QwMjNhNDFhNGE1NDU1YTc4NDMyYjYiLCJ1c2VyUm9sZSI6InVzZXIiLCJpYXQiOjE3NDUyOTM4OTcsImV4cCI6MTc0NzAyMTg5N30.BaPM4uIJvnC5qKJ2qSB5cprqjcjlpglYnL9JlidnenA",
+								"type": "text"
+							}
+						],
+						"url": "{{BASE_API}}/enroll/module-videos/681360874e56159731c53f9d"
 					},
 					"response": []
 				},
@@ -805,21 +606,11 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2QwMjNhNDFhNGE1NDU1YTc4NDMyYjYiLCJ1c2VyUm9sZSI6InVzZXIiLCJpYXQiOjE3NDQ3ODQwNTMsImV4cCI6MTc0NjUxMjA1M30.5QqJ0kp5yOdgCs-RL7gHuSIpnrIFf8RIH2oJuVHlZYQ",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2QwMjNhNDFhNGE1NDU1YTc4NDMyYjYiLCJ1c2VyUm9sZSI6InVzZXIiLCJpYXQiOjE3NDUyOTM4OTcsImV4cCI6MTc0NzAyMTg5N30.BaPM4uIJvnC5qKJ2qSB5cprqjcjlpglYnL9JlidnenA",
 								"type": "text"
 							}
 						],
-						"url": {
-							"raw": "{{BASE_API}}/enroll/my-enrolled-course-videos/67fe859b1504f6105990269d",
-							"host": [
-								"{{BASE_API}}"
-							],
-							"path": [
-								"enroll",
-								"my-enrolled-course-videos",
-								"67fe859b1504f6105990269d"
-							]
-						}
+						"url": "{{BASE_API}}/enroll/my-enrolled-course-videos/67fe859b1504f6105990269d"
 					},
 					"response": []
 				},
@@ -830,21 +621,26 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2QwMjNhNDFhNGE1NDU1YTc4NDMyYjYiLCJ1c2VyUm9sZSI6InVzZXIiLCJpYXQiOjE3NDQ3ODQwNTMsImV4cCI6MTc0NjUxMjA1M30.5QqJ0kp5yOdgCs-RL7gHuSIpnrIFf8RIH2oJuVHlZYQ",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2QwMjNhNDFhNGE1NDU1YTc4NDMyYjYiLCJ1c2VyUm9sZSI6InVzZXIiLCJpYXQiOjE3NDUyOTM4OTcsImV4cCI6MTc0NzAyMTg5N30.BaPM4uIJvnC5qKJ2qSB5cprqjcjlpglYnL9JlidnenA",
 								"type": "text"
 							}
 						],
-						"url": {
-							"raw": "{{BASE_API}}/enroll/my-course-progress/67f551b9acb44a0d2c5b5d00",
-							"host": [
-								"{{BASE_API}}"
-							],
-							"path": [
-								"enroll",
-								"my-course-progress",
-								"67f551b9acb44a0d2c5b5d00"
-							]
-						}
+						"url": "{{BASE_API}}/enroll/my-course-progress/681051cc5265f916112b34f2"
+					},
+					"response": []
+				},
+				{
+					"name": "complete course",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2QwMjNhNDFhNGE1NDU1YTc4NDMyYjYiLCJ1c2VyUm9sZSI6InVzZXIiLCJpYXQiOjE3NDY4ODQ0ODMsImV4cCI6MTc0ODYxMjQ4M30.UGpyV5IV8qcQa7_ZchydYMAhbE0--c4abKt3v5rohZY",
+								"type": "text"
+							}
+						],
+						"url": "{{BASE_API}}/enroll/complete-my-course/68071acb01ebcb97d5d1d7f5"
 					},
 					"response": []
 				}
@@ -868,16 +664,153 @@
 								"type": "text"
 							}
 						],
-						"url": {
-							"raw": "{{BASE_API}}/user/get-instructors",
-							"host": [
-								"{{BASE_API}}"
-							],
-							"path": [
-								"user",
-								"get-instructors"
+						"url": "{{BASE_API}}/user/get-instructors"
+					},
+					"response": []
+				},
+				{
+					"name": "get logged in user",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2QwMjNhNDFhNGE1NDU1YTc4NDMyYjYiLCJ1c2VyUm9sZSI6InVzZXIiLCJpYXQiOjE3NDY4ODQ0ODMsImV4cCI6MTc0ODYxMjQ4M30.UGpyV5IV8qcQa7_ZchydYMAhbE0--c4abKt3v5rohZY",
+								"type": "text"
+							}
+						],
+						"url": "{{BASE_API}}/user/loggedIn-user"
+					},
+					"response": []
+				},
+				{
+					"name": "get single user",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2QwMjNhNDFhNGE1NDU1YTc4NDMyYjYiLCJ1c2VyUm9sZSI6InVzZXIiLCJpYXQiOjE3NDY4ODQ0ODMsImV4cCI6MTc0ODYxMjQ4M30.UGpyV5IV8qcQa7_ZchydYMAhbE0--c4abKt3v5rohZY",
+								"type": "text"
+							}
+						],
+						"url": "{{BASE_API}}/user/get-user/67d023a41a4a5455a78432b6"
+					},
+					"response": []
+				},
+				{
+					"name": "update user",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2QwMjNhNDFhNGE1NDU1YTc4NDMyYjYiLCJ1c2VyUm9sZSI6InVzZXIiLCJpYXQiOjE3NDY4ODQ0ODMsImV4cCI6MTc0ODYxMjQ4M30.UGpyV5IV8qcQa7_ZchydYMAhbE0--c4abKt3v5rohZY",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "profileImg",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "data",
+									"value": "{\n  \"name\": \"Monir\"\n\n}",
+									"type": "text"
+								}
 							]
-						}
+						},
+						"url": "{{BASE_API}}/user/update-user"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "review",
+			"item": [
+				{
+					"name": "add review",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2QwMjNhNDFhNGE1NDU1YTc4NDMyYjYiLCJ1c2VyUm9sZSI6InVzZXIiLCJpYXQiOjE3NDY4ODQ0ODMsImV4cCI6MTc0ODYxMjQ4M30.UGpyV5IV8qcQa7_ZchydYMAhbE0--c4abKt3v5rohZY",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\": \"67d023a41a4a5455a78432b6\",\r\n    \"courseId\": \"68071acb01ebcb97d5d1d7f5\",\r\n    \"rating\": 4,\r\n    \"comment\": \"course was good !!!\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{BASE_API}}/review/give-review"
+					},
+					"response": []
+				},
+				{
+					"name": "update review",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2QwMjNhNDFhNGE1NDU1YTc4NDMyYjYiLCJ1c2VyUm9sZSI6InVzZXIiLCJpYXQiOjE3NDY4ODQ0ODMsImV4cCI6MTc0ODYxMjQ4M30.UGpyV5IV8qcQa7_ZchydYMAhbE0--c4abKt3v5rohZY",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"reviewId\": \"6820117c495e70bc0b2608d1\",\r\n    \"rating\": 2,\r\n    \"comment\": \"course was good updated review 2 !!!\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{BASE_API}}/review/update-review"
+					},
+					"response": []
+				},
+				{
+					"name": "get course review",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{BASE_API}}/review/course-review/68071acb01ebcb97d5d1d7f5"
+					},
+					"response": []
+				},
+				{
+					"name": "get average review",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{BASE_API}}/review/average-course-review/681051cc5265f916112b34f2"
+					},
+					"response": []
+				},
+				{
+					"name": "get review eligibility",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2QwMjNhNDFhNGE1NDU1YTc4NDMyYjYiLCJ1c2VyUm9sZSI6InVzZXIiLCJpYXQiOjE3NDY4ODQ0ODMsImV4cCI6MTc0ODYxMjQ4M30.UGpyV5IV8qcQa7_ZchydYMAhbE0--c4abKt3v5rohZY",
+								"type": "text"
+							}
+						],
+						"url": "{{BASE_API}}/review/check-review-eligibility/68071acb01ebcb97d5d1d7f5"
 					},
 					"response": []
 				}

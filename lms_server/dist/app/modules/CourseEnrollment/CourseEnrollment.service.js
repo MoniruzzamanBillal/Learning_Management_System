@@ -341,6 +341,23 @@ const markCompleteCourse = (courseId, userId) => __awaiter(void 0, void 0, void 
     return result;
     //
 });
+// ! get user's finished course
+const usersFinishedCourses = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    const userData = yield user_model_1.userModel.findById(userId);
+    if (!userData) {
+        throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "This user don't exist !!!");
+    }
+    const result = yield CourseEnrollment_model_1.courseEnrollmentModel
+        .find({
+        user: userId,
+        completed: true,
+        isDeleted: false,
+    })
+        .populate("user", " _id name  ")
+        .populate("course", " _id name category ")
+        .select(" _id isReviewed ");
+    return result;
+});
 //
 exports.courseEnrollmentService = {
     enrollInCourse,
@@ -353,4 +370,5 @@ exports.courseEnrollmentService = {
     getUserEnrolledModuleVideos,
     markCompleteCourse,
     checkUserEnrolledInCourse,
+    usersFinishedCourses,
 };
