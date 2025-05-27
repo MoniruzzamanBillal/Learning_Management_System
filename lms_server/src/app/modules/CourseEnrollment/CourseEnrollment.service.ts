@@ -475,6 +475,23 @@ const markCompleteCourse = async (courseId: string, userId: string) => {
   //
 };
 
+// ! get user's finished course
+const usersFinishedCourses = async (userId: string) => {
+  const userData = await userModel.findById(userId);
+
+  if (!userData) {
+    throw new AppError(httpStatus.BAD_REQUEST, "This user don't exist !!!");
+  }
+
+  const result = await courseEnrollmentModel.find({
+    user: userId,
+    completed: true,
+    isDeleted: false,
+  });
+
+  return result;
+};
+
 //
 export const courseEnrollmentService = {
   enrollInCourse,
@@ -487,4 +504,5 @@ export const courseEnrollmentService = {
   getUserEnrolledModuleVideos,
   markCompleteCourse,
   checkUserEnrolledInCourse,
+  usersFinishedCourses,
 };

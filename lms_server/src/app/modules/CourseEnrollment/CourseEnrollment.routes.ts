@@ -13,18 +13,25 @@ router.get(
   CourseEnrollmentController.enrollmentsPerCourse
 );
 
-// ! for enrolling into a course
-router.post(
-  "/enroll-course",
-  authCheck(UserRole.user),
-  CourseEnrollmentController.enrollInCourse
-);
-
 // ! for getting all user's enrolled course
 router.get(
   "/user-all-enrolled-couses",
   authCheck(UserRole.user),
   CourseEnrollmentController.getAllUserEnrolledCourse
+);
+
+// ! get user's finished course
+router.get(
+  "/user-finished-course",
+  authCheck(UserRole.user),
+  CourseEnrollmentController.usersFinishedCourses
+);
+
+// ! for enrolling into a course
+router.post(
+  "/enroll-course",
+  authCheck(UserRole.user),
+  CourseEnrollmentController.enrollInCourse
 );
 
 // ! for getting user single enrolled course data

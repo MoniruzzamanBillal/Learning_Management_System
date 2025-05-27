@@ -146,6 +146,20 @@ const checkUserEnrolledInCourse = catchAsync(async (req, res) => {
   });
 });
 
+// ! get user's finished course
+const usersFinishedCourses = catchAsync(async (req, res) => {
+  const result = await courseEnrollmentService.usersFinishedCourses(
+    req?.user?.userId
+  );
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "User's finished courses retrived successfully !!!",
+    data: result,
+  });
+});
+
 //
 export const CourseEnrollmentController = {
   enrollInCourse,
@@ -158,4 +172,5 @@ export const CourseEnrollmentController = {
   getUserEnrolledModuleVideos,
   markCompleteCourse,
   checkUserEnrolledInCourse,
+  usersFinishedCourses,
 };
