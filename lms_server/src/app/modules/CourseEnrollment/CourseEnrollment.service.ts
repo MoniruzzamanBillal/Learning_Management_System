@@ -483,11 +483,15 @@ const usersFinishedCourses = async (userId: string) => {
     throw new AppError(httpStatus.BAD_REQUEST, "This user don't exist !!!");
   }
 
-  const result = await courseEnrollmentModel.find({
-    user: userId,
-    completed: true,
-    isDeleted: false,
-  });
+  const result = await courseEnrollmentModel
+    .find({
+      user: userId,
+      completed: true,
+      isDeleted: false,
+    })
+    .populate("user", " _id name  ")
+    .populate("course", " _id name category ")
+    .select(" _id isReviewed ");
 
   return result;
 };
