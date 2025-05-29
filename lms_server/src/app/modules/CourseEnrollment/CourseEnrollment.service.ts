@@ -490,8 +490,8 @@ const usersFinishedCourses = async (userId: string) => {
       isDeleted: false,
     })
     .populate("user", " _id name  ")
-    .populate("course", " _id name category ")
-    .select(" _id isReviewed ");
+    .populate("course", " _id name category  ")
+    .select(" _id isReviewed updatedAt ");
 
   return result;
 };

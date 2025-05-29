@@ -1,4 +1,16 @@
+import TableDataLoading from "@/components/shared/TableLoading";
+import {
+  CertificateTableColumn,
+  CourseCertificateTable,
+} from "@/components/ui/user/table/CourseCertificateTable";
+import { useGetUserFinishCourseQuery } from "@/redux/features/enrollment/enrollment.api";
+
 const MyCourseCertificates = () => {
+  const { data: userFinishedCourse, isLoading } =
+    useGetUserFinishCourseQuery(undefined);
+
+  // console.log(userFinishedCourse?.data);
+
   return (
     <div className="MyCourseCertificatesContainer">
       <div className="MyCourseCertificatesWrapper bg-gray-100/90 border border-gray-300  shadow rounded-md p-3 ">
@@ -6,10 +18,17 @@ const MyCourseCertificates = () => {
           My Course Certificates
         </h3>
 
-        <div className="courseCertificates my-20  m-auto ">
-          <h1 className=" text-center ">
-            Certificate Section Will update soon !!!
-          </h1>
+        {isLoading && <TableDataLoading />}
+
+        <div className="courseCertificates  ">
+          {userFinishedCourse?.data && (
+            <div className="Tablecontainer mx-auto py-10">
+              <CourseCertificateTable
+                columns={CertificateTableColumn}
+                data={userFinishedCourse?.data}
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>
