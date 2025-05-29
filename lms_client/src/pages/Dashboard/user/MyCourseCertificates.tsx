@@ -9,8 +9,6 @@ const MyCourseCertificates = () => {
   const { data: userFinishedCourse, isLoading } =
     useGetUserFinishCourseQuery(undefined);
 
-  // console.log(userFinishedCourse?.data);
-
   return (
     <div className="MyCourseCertificatesContainer">
       <div className="MyCourseCertificatesWrapper bg-gray-100/90 border border-gray-300  shadow rounded-md p-3 ">
@@ -21,13 +19,17 @@ const MyCourseCertificates = () => {
         {isLoading && <TableDataLoading />}
 
         <div className="courseCertificates  ">
-          {userFinishedCourse?.data && (
+          {userFinishedCourse?.data?.length ? (
             <div className="Tablecontainer mx-auto py-10">
               <CourseCertificateTable
                 columns={CertificateTableColumn}
                 data={userFinishedCourse?.data}
               />
             </div>
+          ) : (
+            <h1 className=" text-prime100 text-center  py-16 ">
+              User did not finished any course yet!!!
+            </h1>
           )}
         </div>
       </div>

@@ -9,9 +9,6 @@ const Sidebar = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  // const { data: userData, isLoading: userDataLoading } =
-  //     useGetLoggedInUserQuery(undefined, { refetchOnMountOrArgChange: true });
-
   // ! for logout
   const handleLogout = () => {
     dispatch(logOut());
