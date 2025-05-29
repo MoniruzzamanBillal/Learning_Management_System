@@ -2,12 +2,15 @@ import { logOut } from "@/redux/features/auth/auth.slice";
 import { useAppDispatch } from "@/redux/hook";
 import { CiLogin } from "react-icons/ci";
 import { LuUser } from "react-icons/lu";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import DashboardLinks from "./DashboardLinks";
 
 const Sidebar = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
+  // const { data: userData, isLoading: userDataLoading } =
+  //     useGetLoggedInUserQuery(undefined, { refetchOnMountOrArgChange: true });
 
   // ! for logout
   const handleLogout = () => {
@@ -18,14 +21,11 @@ const Sidebar = () => {
   return (
     <div className="bg-gray-100 border border-gray-300 rounded-md p-4 sticky top-[5.2rem] shadow-md  ">
       <div className="flex items-center space-x-2 border-b-4 border-prime50 pb-2 print:hidden">
-        <Link to="/dashboard" className="flex items-center gap-2">
-          <span className="inline-block p-2 rounded-full bg-slate-200 cursor-pointe">
-            <div className="w-6">
-              <LuUser className=" text-2xl font-bold text-gray-800 " />
-            </div>
-          </span>
-          <h1 className="text-lg font-semibold">Dashboard</h1>
-        </Link>
+        <div className=" p-2 rounded-full bg-slate-200 cursor-pointe   ">
+          <LuUser className=" text-2xl font-bold text-gray-800 " />
+        </div>
+
+        <h1 className="text-lg font-semibold">Dashboard</h1>
       </div>
 
       {/* dashboard links starts  */}
