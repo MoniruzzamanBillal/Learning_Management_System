@@ -93,6 +93,16 @@ const enrollmentApi = baseApi.injectEndpoints({
       },
     }),
 
+    // ! get user's finished course
+    getUserFinishCourse: builder.query({
+      query: () => {
+        return {
+          url: `/enroll/user-finished-course`,
+          method: "GET",
+        };
+      },
+    }),
+
     //
   }),
 });
@@ -109,4 +119,5 @@ export const {
   useLazyGetUserCourseProgressQuery,
   useMarkCompleteCourseMutation,
   useGetCheckUserEnrolledInCourseQuery,
+  useGetUserFinishCourseQuery,
 } = enrollmentApi;
