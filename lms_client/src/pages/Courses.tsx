@@ -78,7 +78,7 @@ const Courses = () => {
           {/* right course section   */}
           <div className="courseSection w-full xl:w-[84%]">
             {/* course card section  */}
-            <div className="courseCard  grid-cols-1 sm:grid grid-cols-2 xmd:grid-cols-3 gap-x-4 gap-y-6  ">
+            <div className="courseCard grid  grid-cols-1 sm:grid-cols-2 xmd:grid-cols-3 gap-x-4 gap-y-6  ">
               {content}
             </div>
           </div>

@@ -8,9 +8,9 @@ const MyCourseCard = ({ courseData }: { courseData: TUserEnrolledCourse }) => {
 
   return (
     <div className="enrolledCourseCard">
-      <div className="enrolledCourseCardWrapper  w-[75%] rounded-md shadow bg-white border border-gray-200 flex justify-between gap-x-5  ">
+      <div className="enrolledCourseCardWrapper w-full xmd:w-[90%] lg:w-[75%] rounded-md shadow bg-white border border-gray-200 flex justify-between gap-x-5  ">
         {/* left course cover section  */}
-        <div className="courseLeftCover w-[40%] h-[13rem] rounded-l-md overflow-auto ">
+        <div className="courseLeftCover w-[40%] h-[10rem] xsm:h-[12rem] sm:h-[13rem] rounded-l-md overflow-auto ">
           <img
             src={courseData?.course?.courseCover}
             className=" w-full h-full "
@@ -22,14 +22,18 @@ const MyCourseCard = ({ courseData }: { courseData: TUserEnrolledCourse }) => {
         {/* course detail section  */}
         <div className="detailSection rightSection py-2 w-[60%] flex flex-col gap-y-3  pr-3  ">
           {/* courseName */}
-          <p className=" text-2xl font-medium ">{courseData?.course?.name}</p>
+          <p className=" text-sm xsm:text-lg sm:text-xl md:text-2xl font-medium ">
+            {courseData?.course?.name}
+          </p>
           {/* platform name  */}
-          <p className=" text-lg ">MATS academy </p>
+          <p className=" text-xs xsm:text-sm sm:text-base md:text-lg ">
+            MATS academy{" "}
+          </p>
 
           {/* course progress section  */}
-          <div className="courseProgressSection w-[90%] flex justify-center items-center gap-x-6  ">
+          <div className="courseProgressSection sm:w-[95%] md:w-[90%] flex justify-center items-center gap-x-6  ">
             <Progress value={courseData?.courseProgress} className="  " />
-            <p className=" text-lg font-medium ">
+            <p className=" text-xs xsm:text-sm sm:text-base md:text-lg font-medium ">
               {courseData?.courseProgress}%
             </p>
           </div>
@@ -37,7 +41,7 @@ const MyCourseCard = ({ courseData }: { courseData: TUserEnrolledCourse }) => {
           {/* button section  */}
 
           <Link to={`/my-enrolled-course-detail/${courseData?.course?._id}`}>
-            <Button className=" bg-prime100 hover:bg-prime200 ">
+            <Button className=" bg-prime100 hover:bg-prime200  ">
               Continue
             </Button>
           </Link>
