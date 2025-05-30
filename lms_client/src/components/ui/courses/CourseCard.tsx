@@ -31,7 +31,7 @@ const CourseCard = ({ course }: TCourseDataProps) => {
   // console.log(course?.reviewData);
 
   return (
-    <div className="CourseCardContainer bg-gray-50 border border-gray-300 shadow rounded  ">
+    <div className="CourseCardContainer   m-auto sm:m-0 w-[92%] xsm:w-[70%] sm:w-full   bg-gray-50 border border-gray-300 shadow rounded  ">
       <div className="CourseCardWrapper   flex flex-col  gap-y-1 ">
         {/* course cover section  */}
         <div className="courseCover h-[13rem] rounded-t overflow-auto relative ">
