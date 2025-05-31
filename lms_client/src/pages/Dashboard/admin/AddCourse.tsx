@@ -98,7 +98,7 @@ const AddCourse = () => {
   type TAddCourseType = z.infer<typeof addCourseValidationSchema>;
 
   const handleNavigate = () => {
-    navigate("/dashboard/admin/manage-course");
+    navigate(-1);
   };
 
   // ! for adding new course

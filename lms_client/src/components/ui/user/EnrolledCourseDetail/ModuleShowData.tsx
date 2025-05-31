@@ -115,7 +115,7 @@ const ModuleShowData = ({
   }, [videoDataFetchLoading]);
 
   return (
-    <div className="ModuleShowDataContainer mt-10 ">
+    <div className="ModuleShowDataContainer mt-10  ">
       <div className="ModuleShowDataWrapper">
         {/*  */}
         <Accordion type="single" collapsible className="w-full">
@@ -128,7 +128,7 @@ const ModuleShowData = ({
               >
                 {/* module name  */}
                 <AccordionTrigger
-                  className=" text-xl "
+                  className=" text-base lg:text-xl  text-left "
                   onClick={() => handleClickModule(module)}
                 >
                   {module?.title}
@@ -140,24 +140,24 @@ const ModuleShowData = ({
                 {videoData &&
                   videoData?.map((video: TModuleVideo) => (
                     <AccordionContent
-                      className={` text-lg py-3 pl-4 font-medium border-y border-y-gray-300 flex items-center gap-x-2 cursor-pointer   ${
+                      className={` text-sm lg:text-lg py-3 pl-4 font-medium border-y border-y-gray-300 flex items-center gap-x-2 cursor-pointer   ${
                         video?.video?.title === videoDataObj?.title &&
                         "bg-prime50/25 rounded "
                       }  `}
                     >
                       {video?.videoStatus ===
                         videoProgressStatusConsts?.locked && (
-                        <Lock className=" text-red-600 font-bold " />
+                        <Lock className=" text-red-600 font-bold  size-5 lg:size-6 " />
                       )}
 
                       {video?.videoStatus ===
                         videoProgressStatusConsts?.watched && (
-                        <CircleCheckBig className=" text-green-700 font-bold " />
+                        <CircleCheckBig className=" text-green-700 font-bold size-5 lg:size-6 " />
                       )}
 
                       {video?.videoStatus ===
                         videoProgressStatusConsts?.unlocked && (
-                        <LockOpen className=" text-blue-600 font-bold " />
+                        <LockOpen className=" text-blue-600 font-bold size-5 lg:size-6 " />
                       )}
 
                       <p onClick={() => handleGetVideo(video?.video)}>

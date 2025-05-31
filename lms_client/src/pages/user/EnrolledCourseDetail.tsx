@@ -93,9 +93,9 @@ const EnrolledCourseDetail = () => {
       {isLoading && <EnrolledCourseDetailSkeleton />}
 
       <div className="EnrolledCourseDetailContainer   bg-gray-100 min-h-screen ">
-        <Wrapper className="EnrolledCourseDetailWrapper py-5 flex justify-between gap-x-4 ">
+        <Wrapper className="EnrolledCourseDetailWrapper py-5 flex flex-col xmd:flex-row justify-between gap-x-4 ">
           {/* left video section  */}
-          <div className="leftVideoSection  w-[60%] ">
+          <div className="leftVideoSection w-full xmd:w-[70%] lg:w-[60%] ">
             <div className="videoPreviewContainer mt-4">
               {videoDataObj && (
                 <p className=" text-xl font-medium mb-2 ">
@@ -110,7 +110,7 @@ const EnrolledCourseDetail = () => {
           {/*  */}
 
           {/* right module section  */}
-          <div className="rightSection w-[40%]  ">
+          <div className="rightSection w-full xmd:w-[30%] lg:w-[40%]  ">
             <ModuleShowData
               modules={enrolledCourseData?.data?.course?.modules}
               setVideoLoading={setVideoLoading}
