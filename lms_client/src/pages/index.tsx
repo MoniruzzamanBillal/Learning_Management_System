@@ -1,3 +1,4 @@
+export { default as CertificatePage } from "./CertificatePage";
 export { default as ChangePassword } from "./ChangePassword";
 export { default as CourseDetail } from "./CourseDetail";
 export { default as Courses } from "./Courses";

@@ -4,6 +4,7 @@ import { createBrowserRouter } from "react-router-dom";
 
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import {
+  CertificatePage,
   ChangePassword,
   CourseDetail,
   Courses,
@@ -65,6 +66,10 @@ const router = createBrowserRouter([
       {
         path: "/courseEnroll-fail",
         element: <EnrollFail />,
+      },
+      {
+        path: "/certificate",
+        element: <CertificatePage />,
       },
       {
         path: "/dashboard",
