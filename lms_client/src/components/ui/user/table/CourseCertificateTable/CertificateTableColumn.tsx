@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
 import { ArrowUpDown } from "lucide-react";
+import CertificateDownloadButton from "./CertificateDownloadButton";
 
 type TUser = {
   name: string;
@@ -79,12 +80,11 @@ const CertificateTableColumn: ColumnDef<TData>[] = [
       const rowData = row.original;
 
       return (
-        <Button
-          onClick={() => console.log(rowData)}
-          className=" bg-green-600 hover:bg-green-700 "
-        >
-          Download
-        </Button>
+        <CertificateDownloadButton
+          userName={rowData.user.name}
+          userId={rowData.user._id}
+          courseName={rowData.course.name}
+        />
       );
     },
   },
