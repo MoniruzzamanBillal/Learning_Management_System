@@ -1,7 +1,7 @@
 import Wrapper from "@/components/shared/Wrapper";
-import { FormSubmitLoading } from "@/components/ui";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { authLogin } from "@/functions/auth.functions";
 import { useLogInMutation } from "@/redux/features/auth/auth.api";
 import { setUser } from "@/redux/features/auth/auth.slice";
 import { useAppDispatch } from "@/redux/hook";
@@ -56,7 +56,6 @@ const Login = () => {
 
         dispatch(setUser({ user, token }));
         toast.success(result?.data?.message, { id: toastId, duration: 1400 });
-        navigate("/");
       }
     } catch (error) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -68,10 +67,23 @@ const Login = () => {
     //
   };
 
+  // ! for demo login as user
+  const demoLogin = async () => {
+    const payload = {
+      email: "user@gmail.com",
+      password: "123456",
+    };
+
+    const result = await authLogin(payload, logIn);
+
+    if (result) {
+      dispatch(setUser(result));
+      navigate("/");
+    }
+  };
+
   return (
     <>
-      {isLoading && <FormSubmitLoading />}
-
       <div className="LoginContainer w-full min-h-screen  imageCenter flex items-center justify-center    ">
         <Wrapper className="formContainer py-14  ">
           <div className=" w-[95%] xsm:w-[85%] sm:w-[78%] md:w-[70%] xmd:w-[65%] lg:w-[55%] m-auto p-3 xsm:p-5 sm:p-7 md:p-10  rounded-md shadow-xl bg-gray-200  backdrop-blur bg-opacity-60 border   ">
@@ -132,9 +144,19 @@ const Login = () => {
             </form>
             {/* form ends */}
 
-            {/* <div className="forgotPassword  mt-2  font-semibold underline cursor-pointer text-blue-800 dark:text-blue-500  ">
-              <Link to={"/forgotPassword"}>forgot password</Link>
-            </div> */}
+            <div className="demoLoginButton mt-2  ">
+              <Button
+                disabled={isLoading}
+                onClick={() => demoLogin()}
+                className={` w-full px-3 xsm:px-4 sm:px-5 md:px-6 font-semibold text-xs sm:text-sm md:text-base  active:scale-95 duration-500 ${
+                  isLoading
+                    ? "cursor-not-allowed bg-gray-600 "
+                    : "bg-prime50 hover:bg-prime100"
+                }    `}
+              >
+                {isLoading ? "Logging in..." : "Demo Login as user"}
+              </Button>
+            </div>
 
             {/*  */}
 
