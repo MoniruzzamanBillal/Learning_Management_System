@@ -49,6 +49,10 @@ const Register = () => {
 
   type registerUserType = Partial<z.infer<typeof userRegistrationSchema>>;
 
+  const handleNvaigate = () => {
+    navigate("/login");
+  };
+
   //   ! for registration
   const handleRegistration = async (data: registerUserType) => {
     const imageFile = data?.image?.[0];
@@ -67,11 +71,7 @@ const Register = () => {
 
     formData.append("data", JSON.stringify(payload));
 
-    const result = await registerUser(formData, userRegistration);
-
-    if (result) {
-      navigate("/login");
-    }
+    await registerUser(formData, userRegistration, handleNvaigate);
   };
 
   return (

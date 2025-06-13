@@ -40,32 +40,17 @@ export const authLogin = async (payload: TLoginPayload, logInFunction: any) => {
 };
 
 // ! for register
-export const registerUser = async (payload: any, registerFun: any) => {
+export const registerUser = async (
+  payload: any,
+  registerFun: any,
+  navigate: () => void
+) => {
   const toastId = toast.loading("Registering a user.....");
 
   try {
     const result = await registerFun(payload);
 
-    // * if there is error
-    if (result?.error) {
-      const errorMsg = (result?.error as any)?.data?.message;
-
-      toast.error(errorMsg, {
-        id: toastId,
-        duration: 1400,
-      });
-
-      return;
-    }
-
-    if (result?.data?.success) {
-      toast.success(result?.data?.message, {
-        id: toastId,
-        duration: 1400,
-      });
-
-      return result?.data;
-    }
+    await handleToastResponse(result, toastId, navigate);
   } catch (error) {
     toast.error("Something went wrong while reistering a user !! ", {
       id: toastId,
