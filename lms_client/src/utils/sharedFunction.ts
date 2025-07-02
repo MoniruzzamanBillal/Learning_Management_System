@@ -27,6 +27,8 @@ export const handleToastResponse = (
   toastId: string | number,
   navigate?: () => void
 ) => {
+  console.log(result);
+
   if (result?.error) {
     const errorMessage = (result?.error as any)?.data?.message;
     console.log(errorMessage);

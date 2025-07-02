@@ -56,6 +56,7 @@ const Login = () => {
 
         dispatch(setUser({ user, token }));
         toast.success(result?.data?.message, { id: toastId, duration: 1400 });
+        navigate("/");
       }
     } catch (error) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -148,13 +149,9 @@ const Login = () => {
               <Button
                 disabled={isLoading}
                 onClick={() => demoLogin()}
-                className={` w-full px-3 xsm:px-4 sm:px-5 md:px-6 font-semibold text-xs sm:text-sm md:text-base  active:scale-95 duration-500 ${
-                  isLoading
-                    ? "cursor-not-allowed bg-gray-600 "
-                    : "bg-prime50 hover:bg-prime100"
-                }    `}
+                className={` w-full px-3 xsm:px-4 sm:px-5 md:px-6 font-semibold text-xs sm:text-sm md:text-base  active:scale-95 duration-500 bg-prime50 hover:bg-prime100     `}
               >
-                {isLoading ? "Logging in..." : "Demo Login as user"}
+                Demo Login as user
               </Button>
             </div>
 

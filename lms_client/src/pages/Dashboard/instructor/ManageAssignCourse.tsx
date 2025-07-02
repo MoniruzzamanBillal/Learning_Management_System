@@ -18,28 +18,30 @@ const ManageAssignCourse = () => {
 
   // console.log(isntructorAssignedCourses?.data);
 
-  return (
-    <>
-      {isLoading && <TableDataLoading />}
+  let content = null;
 
-      <div className="ManageAssignCourseContainer">
-        <div className="ManageAssignCourseWrapper bg-gray-100/90 border border-gray-300  shadow rounded-md p-3">
-          <h3 className="brand text-2xl font-medium mb-4 ">
-            My Assigned Course
-          </h3>
-
-          {/* table section  */}
-          {isntructorAssignedCourses?.data && (
-            <div className="Tablecontainer mx-auto py-10">
-              <ManageCourseTable
-                columns={ManageCourseColumn}
-                data={isntructorAssignedCourses?.data}
-              />
-            </div>
-          )}
-        </div>
+  if (isLoading) {
+    content = <TableDataLoading />;
+  } else if (!isLoading && isntructorAssignedCourses) {
+    content = isntructorAssignedCourses && isntructorAssignedCourses?.data && (
+      <div className="Tablecontainer mx-auto py-10">
+        <ManageCourseTable
+          columns={ManageCourseColumn}
+          data={isntructorAssignedCourses?.data}
+        />
       </div>
-    </>
+    );
+  }
+
+  return (
+    <div className="ManageAssignCourseContainer">
+      <div className="ManageAssignCourseWrapper bg-gray-100/90 border border-gray-300  shadow rounded-md p-3">
+        <h3 className="brand text-2xl font-medium mb-4 ">My Assigned Course</h3>
+
+        {/* table section  */}
+        {content}
+      </div>
+    </div>
   );
 };
 
