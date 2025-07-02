@@ -14,34 +14,37 @@ const ManageModule = () => {
     useAllModuleQuery(undefined);
 
   // console.log(moduleDataWithCourse?.data);
+  let content = null;
+
+  if (isLoading) {
+    content = <TableDataLoading />;
+  } else if (moduleDataWithCourse) {
+    content = moduleDataWithCourse && moduleDataWithCourse?.data && (
+      <div className="Tablecontainer mx-auto py-10">
+        <ManageModuleTable
+          columns={ManageModuleColumn}
+          data={moduleDataWithCourse?.data}
+        />
+      </div>
+    );
+  }
 
   return (
-    <>
-      {isLoading && <TableDataLoading />}
+    <div className="ManageModuleContainer">
+      <div className="ManageModuleWrapper bg-gray-100/90 border border-gray-300  shadow rounded-md p-3 ">
+        <h3 className="brand text-2xl font-medium mb-4 "> Manage Modules</h3>
 
-      <div className="ManageModuleContainer">
-        <div className="ManageModuleWrapper bg-gray-100/90 border border-gray-300  shadow rounded-md p-3 ">
-          <h3 className="brand text-2xl font-medium mb-4 "> Manage Modules</h3>
+        <Button
+          onClick={() => navigate("/dashboard/instructor/add-module")}
+          className="mb-4 bg-prime100 hover:bg-prime200 cursor-pointer"
+        >
+          Add Module
+        </Button>
 
-          <Button
-            onClick={() => navigate("/dashboard/instructor/add-module")}
-            className="mb-4 bg-prime100 hover:bg-prime200 cursor-pointer"
-          >
-            Add Module
-          </Button>
-
-          {/* table section  */}
-          {moduleDataWithCourse?.data && (
-            <div className="Tablecontainer mx-auto py-10">
-              <ManageModuleTable
-                columns={ManageModuleColumn}
-                data={moduleDataWithCourse?.data}
-              />
-            </div>
-          )}
-        </div>
+        {/* table section  */}
+        {content}
       </div>
-    </>
+    </div>
   );
 };
 

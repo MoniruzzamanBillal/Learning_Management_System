@@ -101,30 +101,26 @@ const AssignCourseDetail = () => {
   }
 
   return (
-    <>
-      <div className="AssignCourseDetailContainer">
-        <div className="AssignCourseDetailWrapper bg-gray-100 border border-gray-300  shadow rounded-md p-4 ">
-          <h3 className="brand text-2xl font-medium mb-6 underline  ">
-            Course Detail :
-          </h3>
+    <div className="AssignCourseDetailContainer">
+      <div className="AssignCourseDetailWrapper bg-gray-100 border border-gray-300  shadow rounded-md p-4 ">
+        <h3 className="brand text-2xl font-medium mb-6 underline  ">
+          Course Detail :
+        </h3>
 
-          {/* course detail section  */}
-          {courseDetailContent}
+        {/* course detail section  */}
+        {courseDetailContent}
 
-          {/* module section  */}
-          <div className="moduleSection mt-8 ">
-            <h3 className="brand text-xl font-medium  underline  ">
-              Modules :
-            </h3>
+        {/* module section  */}
+        <div className="moduleSection mt-8 ">
+          <h3 className="brand text-xl font-medium  underline  ">Modules :</h3>
 
-            {/* module data  table section  */}
-            {moduleContent}
-          </div>
-
-          {/*  */}
+          {/* module data  table section  */}
+          {moduleContent}
         </div>
+
+        {/*  */}
       </div>
-    </>
+    </div>
   );
 };
 
