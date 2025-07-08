@@ -14,10 +14,7 @@ const Enrollment = () => {
   return (
     <div className="EnrollmentContainer">
       <div className="EnrollmentWrapper  bg-gray-100/90 border border-gray-300  shadow rounded-md p-3">
-        <h3 className="brand text-2xl font-medium mb-4 ">
-          {" "}
-          Course Enrollments{" "}
-        </h3>
+        <h3 className="brand text-2xl font-medium mb-4 ">Course Enrollments</h3>
 
         {/* ! showing lodign  */}
         {isLoading && <TableDataLoading />}

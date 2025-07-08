@@ -59,15 +59,6 @@ const CourseDetail = () => {
     skip: !courseId,
   });
 
-  // console.log(checkEnrolledData?.data);
-  // console.log(checkEnrolledData?.data?.enrolledIncourse);
-
-  // console.log(courseDetail?.data);
-  // console.log(reviewEligibility?.data);
-  // console.log(courseReview?.data);
-
-  // console.log(userInfo);
-
   // ! for adding review
   const handleAddReview = async () => {
     if (!review) {
@@ -95,76 +86,84 @@ const CourseDetail = () => {
     }
   };
 
-  return (
-    <>
-      {(isLoading || reviewEligibleDataLoading || courseReviewLoading) && (
-        <CourseDetailSkeleton />
-      )}
+  let content = null;
 
-      <div className="CourseDetailContainer bg-gray-50 min-h-screen  ">
-        <div className="CourseDetailWrapper">
-          {/* course detail top name section  */}
-          {courseDetail?.data && (
-            <CourseDetailTop
-              alreadyEnrolled={checkEnrolledData?.data?.enrolledIncourse}
-              courseDetails={courseDetail?.data}
-            />
-          )}
+  if (
+    (isLoading || reviewEligibleDataLoading || courseReviewLoading) && (
+      <CourseDetailSkeleton />
+    )
+  ) {
+    content = <CourseDetailSkeleton />;
+  } else {
+    content = (
+      <div className="CourseDetailWrapper">
+        {/* course detail top name section  */}
+        {courseDetail?.data && (
+          <CourseDetailTop
+            alreadyEnrolled={checkEnrolledData?.data?.enrolledIncourse}
+            courseDetails={courseDetail?.data}
+          />
+        )}
 
-          {/* course detail section  */}
-          <Wrapper className=" courseDetail my-5 ">
-            <div
-              className="  courseDetail "
-              dangerouslySetInnerHTML={{
-                __html: courseDetail?.data?.description,
-              }}
-            ></div>
-          </Wrapper>
+        {/* course detail section  */}
+        <Wrapper className=" courseDetail my-5 ">
+          <div
+            className="  courseDetail "
+            dangerouslySetInnerHTML={{
+              __html: courseDetail?.data?.description,
+            }}
+          ></div>
+        </Wrapper>
 
-          {/* review section  */}
-          <div className="reviewContainer bg-gray-100 py-3 ">
-            <Wrapper className="reviewSection  ">
-              <h1 className="   font-semibold text-2xl py-5 underline ">
-                Review :
-              </h1>
+        {/* review section  */}
+        <div className="reviewContainer bg-gray-100 py-3 ">
+          <Wrapper className="reviewSection  ">
+            <h1 className="   font-semibold text-2xl py-5 underline ">
+              Review :
+            </h1>
 
-              {/* review button section  */}
-              {reviewEligibility?.data && (
-                <div className="reviewInputSection">
-                  <ReviewInput
-                    review={review}
-                    setReview={setReview}
-                    handleAddReview={handleAddReview}
-                    rating={rating}
-                    setRating={setRating}
-                    reviewGivingLoading={reviewGivingLoading}
-                  />
-                </div>
-              )}
-
-              {courseReview?.data?.length === 0 && (
-                <p className=" py-4 text-xl  font-semibold text-prime100 ">
-                  No Review Available for this course{" "}
-                </p>
-              )}
-
-              {/* review card section  */}
-              <div className="userReviewCard">
-                {courseReview?.data &&
-                  courseReview?.data?.map((reviewData: TPopulatedReview) => (
-                    <UserReviewCard
-                      reviewData={reviewData}
-                      reviewDataRefetch={reviewDataRefetch}
-                    />
-                  ))}
+            {/* review button section  */}
+            {reviewEligibility?.data && (
+              <div className="reviewInputSection">
+                <ReviewInput
+                  review={review}
+                  setReview={setReview}
+                  handleAddReview={handleAddReview}
+                  rating={rating}
+                  setRating={setRating}
+                  reviewGivingLoading={reviewGivingLoading}
+                />
               </div>
-            </Wrapper>
-          </div>
+            )}
 
-          {/*  */}
+            {courseReview?.data?.length === 0 && (
+              <p className=" py-4 text-xl  font-semibold text-prime100 ">
+                No Review Available for this course{" "}
+              </p>
+            )}
+
+            {/* review card section  */}
+            <div className="userReviewCard">
+              {courseReview?.data &&
+                courseReview?.data?.map((reviewData: TPopulatedReview) => (
+                  <UserReviewCard
+                    reviewData={reviewData}
+                    reviewDataRefetch={reviewDataRefetch}
+                  />
+                ))}
+            </div>
+          </Wrapper>
         </div>
+
+        {/*  */}
       </div>
-    </>
+    );
+  }
+
+  return (
+    <div className="CourseDetailContainer bg-gray-50 min-h-screen  ">
+      {content}
+    </div>
   );
 };
 

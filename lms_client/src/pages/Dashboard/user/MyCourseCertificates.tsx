@@ -1,8 +1,4 @@
 import TableDataLoading from "@/components/shared/TableLoading";
-import {
-  CertificateTableColumn,
-  CourseCertificateTable,
-} from "@/components/ui/user/table/CourseCertificateTable";
 import { useGetUserFinishCourseQuery } from "@/redux/features/enrollment/enrollment.api";
 
 const MyCourseCertificates = () => {
@@ -20,10 +16,13 @@ const MyCourseCertificates = () => {
   } else if (userFinishedCourse?.data?.length) {
     content = (
       <div className="Tablecontainer mx-auto py-10">
-        <CourseCertificateTable
+        {/* <CourseCertificateTable
           columns={CertificateTableColumn}
           data={userFinishedCourse?.data}
-        />
+        /> */}
+        <h1 className=" text-prime100 text-center  py-16 ">
+          Working in progress !!!
+        </h1>
       </div>
     );
   }
