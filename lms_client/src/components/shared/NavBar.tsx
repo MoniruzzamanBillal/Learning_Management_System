@@ -4,6 +4,7 @@ import { useState } from "react";
 import { LuUser } from "react-icons/lu";
 import { RiCloseFill, RiMenu3Fill } from "react-icons/ri";
 import { Link } from "react-router-dom";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import Wrapper from "./Wrapper";
 
@@ -16,8 +17,6 @@ const Links = [
 const NavBar = () => {
   const [open, setOpen] = useState(false);
   const userInfo = useGetUser();
-
-  console.log(userInfo);
 
   return (
     <div
@@ -100,9 +99,18 @@ const NavBar = () => {
               <div className="relative">
                 <Link
                   to="/dashboard/profile"
-                  className="inline-block p-2 rounded-full bg-orange-100 cursor-pointe"
+                  className="inline-block p-1.5 rounded-full bg-orange-100 cursor-pointe"
                 >
-                  <LuUser className=" text-2xl font-bold text-gray-800 " />
+                  {userInfo?.profileImage ? (
+                    <Avatar>
+                      <AvatarImage src={userInfo?.profileImage} />
+                      <AvatarFallback>
+                        <LuUser className=" text-2xl font-bold text-gray-800 " />
+                      </AvatarFallback>
+                    </Avatar>
+                  ) : (
+                    <LuUser className=" text-2xl font-bold text-gray-800 " />
+                  )}
                 </Link>
               </div>
             )}
