@@ -17,6 +17,8 @@ const NavBar = () => {
   const [open, setOpen] = useState(false);
   const userInfo = useGetUser();
 
+  console.log(userInfo);
+
   return (
     <div
       className="  shadow-md w-full fixed top-0 left-0 z-10 "

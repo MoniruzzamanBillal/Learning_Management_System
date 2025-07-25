@@ -3,6 +3,7 @@ import { ReactNode } from "react";
 export type TUser = {
   userId: string;
   userRole: string;
+  profileImage?: string;
   role: string;
   iat: number;
   exp: number;

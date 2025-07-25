@@ -63,6 +63,7 @@ const signInFromDb = (payload) => __awaiter(void 0, void 0, void 0, function* ()
     const jwtPayload = {
         userId,
         userRole,
+        profileImage: userData === null || userData === void 0 ? void 0 : userData.profilePicture,
     };
     const token = (0, auth_util_1.createToken)(jwtPayload, config_1.default.jwt_secret);
     return { userData, token };

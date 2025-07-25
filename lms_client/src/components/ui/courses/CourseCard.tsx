@@ -46,7 +46,7 @@ const CourseCard = ({ course }: TCourseDataProps) => {
           </span>
         </div>
 
-        <div className="courseDetailBody px-3 flex flex-col justify-between h-[15rem] ">
+        <div className="courseDetailBody px-3 flex flex-col justify-between h-[16rem] ">
           {/* course name  */}
           <p className=" courseName  font-bold "> {course?.name} </p>
 

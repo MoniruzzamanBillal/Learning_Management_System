@@ -80,6 +80,7 @@ const signInFromDb = async (payload: Tlogin) => {
   const jwtPayload = {
     userId,
     userRole,
+    profileImage: userData?.profilePicture,
   };
 
   const token = createToken(jwtPayload, config.jwt_secret as string);
