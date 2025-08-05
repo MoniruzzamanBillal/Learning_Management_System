@@ -10,6 +10,7 @@ import {
   Courses,
   EnrollFail,
   EnrollSuccess,
+  FAQpage,
   HomePage,
   Login,
   Register,
@@ -47,6 +48,10 @@ const router = createBrowserRouter([
       {
         path: "/courses",
         element: <Courses />,
+      },
+      {
+        path: "/faqs",
+        element: <FAQpage />,
       },
       {
         path: "/contact",
