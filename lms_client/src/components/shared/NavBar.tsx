@@ -12,6 +12,7 @@ const Links = [
   { name: "Home", link: "/" },
   { name: "Courses", link: "/courses" },
   { name: "About us", link: "/" },
+  { name: "Contact us", link: "/contact" },
 ];
 
 const NavBar = () => {

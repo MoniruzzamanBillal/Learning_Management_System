@@ -16,6 +16,7 @@ import {
   UserProfile,
 } from "@/pages";
 
+import { ContactUs } from "@/components/ui";
 import { EnrolledCourseDetail, MyCourses } from "@/pages/user";
 import { adminRoutes } from "./AdminRoutes";
 import { InstructorRoutes } from "./InstructorRoutes";
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
       {
         path: "/courses",
         element: <Courses />,
+      },
+      {
+        path: "/contact",
+        element: <ContactUs />,
       },
       {
         path: "/course-detail/:courseId",
