@@ -1,4 +1,4 @@
-import { StatsSection } from "@/components/ui";
+import { FeaturesGrid, StatsSection } from "@/components/ui";
 import {
   HeroSection,
   PopularCourse,
@@ -16,6 +16,7 @@ const HomePage = () => {
       <StatsSection />
 
       <TutorSection />
+      <FeaturesGrid />
       <Testimonial />
     </div>
   );
