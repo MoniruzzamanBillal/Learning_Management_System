@@ -1,3 +1,4 @@
+export { default as AboutUs } from "./AboutUs";
 export { default as CertificateTemplate } from "./CertificateTemplate";
 export { default as ChangePassword } from "./ChangePassword";
 export { default as CourseDetail } from "./CourseDetail";

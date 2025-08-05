@@ -4,6 +4,7 @@ import { createBrowserRouter } from "react-router-dom";
 
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import {
+  AboutUs,
   ChangePassword,
   CourseDetail,
   Courses,
@@ -50,6 +51,10 @@ const router = createBrowserRouter([
       {
         path: "/contact",
         element: <ContactUs />,
+      },
+      {
+        path: "/about-us",
+        element: <AboutUs />,
       },
       {
         path: "/course-detail/:courseId",

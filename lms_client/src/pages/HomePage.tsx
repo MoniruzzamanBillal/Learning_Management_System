@@ -19,7 +19,6 @@ const HomePage = () => {
       <Service />
       <PopularCourse />
       <StatsSection />
-
       <TutorSection />
       <FeaturesGrid />
       <FAQSection />

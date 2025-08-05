@@ -11,7 +11,7 @@ import Wrapper from "./Wrapper";
 const Links = [
   { name: "Home", link: "/" },
   { name: "Courses", link: "/courses" },
-  { name: "About us", link: "/" },
+  { name: "About us", link: "/about-us" },
   { name: "Contact us", link: "/contact" },
 ];
 
