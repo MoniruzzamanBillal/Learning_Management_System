@@ -69,12 +69,7 @@ const Login = () => {
   };
 
   // ! for demo login as user
-  const demoLogin = async () => {
-    const payload = {
-      email: "user@gmail.com",
-      password: "123456",
-    };
-
+  const demoLogin = async (payload: { email: string; password: string }) => {
     const result = await authLogin(payload, logIn);
 
     if (result) {
@@ -87,7 +82,7 @@ const Login = () => {
     <>
       <div className="LoginContainer w-full min-h-screen  imageCenter flex items-center justify-center    ">
         <Wrapper className="formContainer py-14  ">
-          <div className=" w-[95%] xsm:w-[85%] sm:w-[78%] md:w-[70%] xmd:w-[65%] lg:w-[55%] m-auto p-3 xsm:p-5 sm:p-7 md:p-10  rounded-md shadow-xl bg-gray-200  backdrop-blur bg-opacity-60 border   ">
+          <div className=" w-[95%] xsm:w-[85%] sm:w-[78%] md:w-[70%] xmd:w-[65%] lg:w-[55%] m-auto p-3 xsm:p-5 sm:p-7 md:p-10  rounded-md shadow-xl bg-gray-200  backdrop-blur bg-opacity-60 border border-gray-300   ">
             <p className=" mb-3 xsm:mb-5 sm:mb-8 text-xl xsm:text-2xl sm:text-3xl text-center font-semibold CormorantFont text-gray-800   ">
               Log in
             </p>
@@ -145,14 +140,59 @@ const Login = () => {
             </form>
             {/* form ends */}
 
-            <div className="demoLoginButton mt-2  ">
+            <div className="demoLoginButton my-3  flex  flex-wrap gap-3    ">
               <Button
                 disabled={isLoading}
-                onClick={() => demoLogin()}
-                className={` w-full px-3 xsm:px-4 sm:px-5 md:px-6 font-semibold text-xs sm:text-sm md:text-base  active:scale-95 duration-500 bg-prime50 hover:bg-prime100     `}
+                onClick={() =>
+                  demoLogin({
+                    email: "user2@gmail.com",
+                    password: "123456",
+                  })
+                }
+                className={`   px-3 xsm:px-4 sm:px-5 md:px-6 font-semibold text-xs sm:text-sm md:text-base  active:scale-95 duration-500 bg-prime50 hover:bg-prime100   ${
+                  isLoading
+                    ? " cursor-not-allowed bg-gray-600 "
+                    : "bg-prime50 hover:bg-prime100  "
+                }  `}
               >
-                Demo Login as user
+                Login as User
               </Button>
+
+              <Button
+                disabled={isLoading}
+                onClick={() =>
+                  demoLogin({
+                    email: "instructor1@gmail.com",
+                    password: "123456",
+                  })
+                }
+                className={`  px-3 xsm:px-4 sm:px-5 md:px-6 font-semibold text-xs sm:text-sm md:text-base  active:scale-95 duration-500 bg-prime50 hover:bg-prime100   ${
+                  isLoading
+                    ? " cursor-not-allowed bg-gray-600 "
+                    : "bg-prime50 hover:bg-prime100  "
+                }  `}
+              >
+                Login as Instructor
+              </Button>
+
+              <Button
+                disabled={isLoading}
+                onClick={() =>
+                  demoLogin({
+                    email: "abc@d.com",
+                    password: "123456",
+                  })
+                }
+                className={`   px-3 xsm:px-4 sm:px-5 md:px-6 font-semibold text-xs sm:text-sm md:text-base  active:scale-95 duration-500 bg-prime50 hover:bg-prime100   ${
+                  isLoading
+                    ? " cursor-not-allowed bg-gray-600 "
+                    : "bg-prime50 hover:bg-prime100  "
+                }  `}
+              >
+                Login as Admin
+              </Button>
+
+              {/*  */}
             </div>
 
             {/*  */}
