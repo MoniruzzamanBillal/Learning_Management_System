@@ -7,6 +7,7 @@ export { default as EnrollFail } from "./EnrollFail";
 export { default as EnrollSuccess } from "./EnrollSuccess";
 export { default as FAQpage } from "./FAQpage";
 export { default as HomePage } from "./HomePage";
+export { default as InstructorPage } from "./InstructorPage";
 export { default as Login } from "./Login";
 export { default as Register } from "./Register";
 export { default as UpdateProfile } from "./UpdateProfile";

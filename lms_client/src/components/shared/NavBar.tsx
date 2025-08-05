@@ -12,8 +12,9 @@ const Links = [
   { name: "Home", link: "/" },
   { name: "Courses", link: "/courses" },
   { name: "About us", link: "/about-us" },
-  { name: "Contact us", link: "/contact" },
+  { name: "Instructors", link: "/instructors" },
   { name: "FAQ", link: "/faqs" },
+  { name: "Contact us", link: "/contact" },
 ];
 
 const NavBar = () => {
@@ -51,7 +52,7 @@ const NavBar = () => {
         {/* rigth section  */}
         {/* linke items */}
         <ul
-          className={`absolute bg-white shadow-md 
+          className={`absolute bg-white/90 shadow-md 
         md:shadow-none z-[-1] left-0 w-full pl-10 
         md:flex md:items-center pb-8 md:pb-0 
         md:static md:bg-transparent md:z-auto 

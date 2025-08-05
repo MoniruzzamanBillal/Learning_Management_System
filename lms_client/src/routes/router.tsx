@@ -12,6 +12,7 @@ import {
   EnrollSuccess,
   FAQpage,
   HomePage,
+  InstructorPage,
   Login,
   Register,
   UpdateProfile,
@@ -60,6 +61,10 @@ const router = createBrowserRouter([
       {
         path: "/about-us",
         element: <AboutUs />,
+      },
+      {
+        path: "/instructors",
+        element: <InstructorPage />,
       },
       {
         path: "/course-detail/:courseId",
