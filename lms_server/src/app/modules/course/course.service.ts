@@ -1,7 +1,10 @@
+import { startOfDay, subDays } from "date-fns";
 import httpStatus from "http-status";
 import AppError from "../../Error/AppError";
 import { SendImageCloudinary } from "../../util/SendImageCloudinary";
+import { paymentModel } from "../payment/payment.model";
 import { reviewServices } from "../review/review.service";
+import { UserRole } from "../user/user.constants";
 import { userModel } from "../user/user.model";
 import { TCourse } from "./course.interface";
 import { courseModel } from "./course.model";
@@ -225,6 +228,52 @@ const publishCourse = async (courseId: string) => {
   return result;
 };
 
+// ! admin stat
+const adminStatistics = async () => {
+  const totalCourses = await courseModel.countDocuments();
+
+  const totalStudents = await userModel.countDocuments({
+    userRole: UserRole.user,
+  });
+
+  const totalInstructors = await userModel.countDocuments({
+    userRole: UserRole.instructor,
+  });
+
+  const publishedCourses = await courseModel.countDocuments({
+    published: true,
+  });
+
+  const thirtyDaysAgo = subDays(startOfDay(new Date()), 30);
+
+  const revenueLast30Day = await paymentModel.aggregate([
+    {
+      $match: {
+        createdAt: { $gte: thirtyDaysAgo },
+      },
+    },
+    {
+      $group: {
+        _id: null,
+        total: { $sum: "$amount" },
+      },
+    },
+    //
+  ]);
+
+  const result = {
+    totalCourses,
+    totalStudents,
+    totalInstructors,
+    publishedCourses,
+    revenue: revenueLast30Day[0]?.total || 0,
+  };
+
+  return result;
+
+  //
+};
+
 //
 export const courseServices = {
   addCourse,
@@ -237,4 +286,5 @@ export const courseServices = {
   getInstructorsAssignCourses,
   getAllCoursesWithModules,
   getCourseDetailForInstructor,
+  adminStatistics,
 };
