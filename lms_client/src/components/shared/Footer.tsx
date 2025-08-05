@@ -1,63 +1,132 @@
-import { FaFacebook, FaGithub, FaLinkedin } from "react-icons/fa";
+import { Facebook, Linkedin, Twitter, Youtube } from "lucide-react";
+
 import { Link } from "react-router-dom";
+import Wrapper from "./Wrapper";
 
 const Footer = () => {
   return (
-    <div className="bg-gray-200/80 pt-6  ">
-      <footer className="mx-auto max-w-screen-2xl px-4 md:px-8">
-        <div className="flex flex-col items-center border-t ">
-          <nav className="mb-4 flex flex-wrap justify-center gap-x-4 gap-y-2 md:justify-start md:gap-6">
-            <Link
-              to={"/"}
-              className="text-gray-500 transition duration-100 hover:text-indigo-500 active:text-indigo-600"
+    <footer className="bg-gray-800 text-gray-300 py-8 ">
+      <Wrapper className="container mx-auto  grid grid-cols-1 md:grid-cols-3 gap-8">
+        {/* Column 1: Logo & Description */}
+        <div className="col-span-1">
+          <Link
+            to="/"
+            className="text-2xl font-bold text-white font-headingFont mb-4 block"
+          >
+            MATS <span className="text-teal-500">Academy</span>
+          </Link>
+          <p className="text-sm leading-relaxed mb-4">
+            Empowering the next generation of tech professionals through
+            interactive and skill-focused online learning.
+          </p>
+          <div className="flex space-x-4">
+            <a
+              href="https://www.facebook.com/MoniruzzamanBillal3018"
+              target="_blank"
+              aria-label="Facebook"
+              className="text-gray-400 hover:text-teal-500 transition-colors"
             >
-              Home
-            </Link>
-            <Link
-              to={"/"}
-              className="text-gray-500 transition duration-100 hover:text-indigo-500 active:text-indigo-600"
+              <Facebook className="h-6 w-6" />
+            </a>
+            <a
+              href="https://x.com/MdMoniruzz48991"
+              target="_blank"
+              aria-label="Twitter"
+              className="text-gray-400 hover:text-teal-500 transition-colors"
             >
-              About Us
-            </Link>
-            <Link
-              to={"/"}
-              className="text-gray-500 transition duration-100 hover:text-indigo-500 active:text-indigo-600"
+              <Twitter className="h-6 w-6" />
+            </a>
+            <a
+              href="https://www.linkedin.com/in/MoniruzzamanBillal3018/"
+              target="_blank"
+              aria-label="LinkedIn"
+              className="text-gray-400 hover:text-teal-500 transition-colors"
             >
-              Courses
-            </Link>
-          </nav>
+              <Linkedin className="h-6 w-6" />
+            </a>
 
-          <div className="flex ">
-            {/* facebook icon  */}
-            <Link
-              to={"https://web.facebook.com/MoniruzzamanBillal3018"}
-              className="mr-6 text-2xl text-neutral-600 hover:text-blue-700"
+            <a
+              href="#"
+              aria-label="YouTube"
+              className="text-gray-400 hover:text-teal-500 transition-colors"
             >
-              <FaFacebook />
-            </Link>
-
-            {/* linkedin icon  */}
-            <Link
-              to={"https://www.linkedin.com/in/MoniruzzamanBillal3018"}
-              className="mr-6 text-2xl text-neutral-600 hover:text-blue-800"
-            >
-              <FaLinkedin />
-            </Link>
-            {/* github icon  */}
-            <Link
-              to={"https://github.com/MoniruzzamanBillal"}
-              className="mr-6 text-2xl text-neutral-600 hover:text-neutral-800"
-            >
-              <FaGithub />
-            </Link>
+              <Youtube className="h-6 w-6" />
+            </a>
           </div>
         </div>
 
-        <div className="py-3 text-center text-sm text-gray-400">
-          © 2025 All rights reserved.
+        {/* Column 2: Quick Links */}
+        <div className="col-span-1">
+          <h3 className="text-lg font-semibold text-white mb-4">Quick Links</h3>
+          <ul className="space-y-2">
+            <li>
+              <Link
+                to="/courses"
+                className="hover:text-teal-500 transition-colors text-sm"
+              >
+                Courses
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/instructors"
+                className="hover:text-teal-500 transition-colors text-sm"
+              >
+                Instructors
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/features"
+                className="hover:text-teal-500 transition-colors text-sm"
+              >
+                Features
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/faq"
+                className="hover:text-teal-500 transition-colors text-sm"
+              >
+                FAQ
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/about-us"
+                className="hover:text-teal-500 transition-colors text-sm"
+              >
+                About Us
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/contact"
+                className="hover:text-teal-500 transition-colors text-sm"
+              >
+                Contact Us
+              </Link>
+            </li>
+          </ul>
         </div>
-      </footer>
-    </div>
+
+        {/* Column 3: Contact Info */}
+        <div className="col-span-1">
+          <h3 className="text-lg font-semibold text-white mb-4">
+            Contact Info
+          </h3>
+          <p className="text-sm mb-2">123 Learning Lane, Tech City, TC 12345</p>
+          <p className="text-sm mb-2">Email: support@devmats.com</p>
+          <p className="text-sm mb-2">Phone: +1 (234) 567-890</p>
+          <p className="text-sm">Hours: Mon-Fri, 9 AM - 5 PM (EST)</p>
+        </div>
+      </Wrapper>
+
+      {/* Copyright */}
+      <div className="border-t border-gray-700 mt-8 pt-8 text-center text-sm text-gray-400">
+        &copy; {new Date().getFullYear()} MATS Academy. All rights reserved.
+      </div>
+    </footer>
   );
 };
 
