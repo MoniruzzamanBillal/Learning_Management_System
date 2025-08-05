@@ -1,3 +1,4 @@
+import { StatsSection } from "@/components/ui";
 import {
   HeroSection,
   PopularCourse,
@@ -12,6 +13,8 @@ const HomePage = () => {
       <HeroSection />
       <Service />
       <PopularCourse />
+      <StatsSection />
+
       <TutorSection />
       <Testimonial />
     </div>
