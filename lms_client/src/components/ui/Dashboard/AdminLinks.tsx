@@ -3,7 +3,7 @@ import { CiBookmark } from "react-icons/ci";
 export const adminLinks = [
   {
     name: "Home",
-    path: "/",
+    path: "/dashboard/admin/home",
     icon: <CiBookmark className="text-xl font-bold" />,
   },
   {

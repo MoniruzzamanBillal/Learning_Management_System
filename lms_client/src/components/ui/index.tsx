@@ -1,3 +1,4 @@
+export { default as AdminStatCard } from "./AdminStatCard";
 export { default as ContactSection } from "./ContactSection";
 export { default as ContactUs } from "./ContactUs";
 export { default as FAQSection } from "./FAQSection";

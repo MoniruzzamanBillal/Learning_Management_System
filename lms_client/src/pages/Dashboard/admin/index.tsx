@@ -7,4 +7,5 @@ export { default as ModuleDetail } from "./ModuleDetail";
 
 export { default as AddCourse } from "./AddCourse";
 export { default as AddInstructor } from "./AddInstructor";
+export { default as AdminStatistics } from "./AdminStatistics";
 export { default as UpdateCourse } from "./UpdateCourse";
