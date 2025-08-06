@@ -36,6 +36,16 @@ const courseApi = baseApi.injectEndpoints({
       },
     }),
 
+    // ! for getting admin stats
+    getAdminStats: builder.query({
+      query: () => {
+        return {
+          url: `/course/admin-stats`,
+          method: "GET",
+        };
+      },
+    }),
+
     // ! for getting instructor single course detail
     getCourseDetailsForInstructor: builder.query({
       query: (courseId: string) => {
@@ -134,4 +144,5 @@ export const {
   usePublishCourseMutation,
   useGetAllPublishedCorsesQuery,
   useGetCouseDetailQuery,
+  useGetAdminStatsQuery,
 } = courseApi;

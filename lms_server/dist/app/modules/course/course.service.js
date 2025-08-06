@@ -13,10 +13,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.courseServices = void 0;
+const date_fns_1 = require("date-fns");
 const http_status_1 = __importDefault(require("http-status"));
 const AppError_1 = __importDefault(require("../../Error/AppError"));
 const SendImageCloudinary_1 = require("../../util/SendImageCloudinary");
+const payment_model_1 = require("../payment/payment.model");
 const review_service_1 = require("../review/review.service");
+const user_constants_1 = require("../user/user.constants");
 const user_model_1 = require("../user/user.model");
 const course_model_1 = require("./course.model");
 // ! for crating a course
@@ -160,6 +163,44 @@ const publishCourse = (courseId) => __awaiter(void 0, void 0, void 0, function* 
     const result = yield course_model_1.courseModel.findByIdAndUpdate(courseId, { published: true }, { new: true });
     return result;
 });
+// ! admin stat
+const adminStatistics = () => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    const totalCourses = yield course_model_1.courseModel.countDocuments();
+    const totalStudents = yield user_model_1.userModel.countDocuments({
+        userRole: user_constants_1.UserRole.user,
+    });
+    const totalInstructors = yield user_model_1.userModel.countDocuments({
+        userRole: user_constants_1.UserRole.instructor,
+    });
+    const publishedCourses = yield course_model_1.courseModel.countDocuments({
+        published: true,
+    });
+    const thirtyDaysAgo = (0, date_fns_1.subDays)((0, date_fns_1.startOfDay)(new Date()), 30);
+    const revenueLast30Day = yield payment_model_1.paymentModel.aggregate([
+        {
+            $match: {
+                createdAt: { $gte: thirtyDaysAgo },
+            },
+        },
+        {
+            $group: {
+                _id: null,
+                total: { $sum: "$amount" },
+            },
+        },
+        //
+    ]);
+    const result = {
+        totalCourses,
+        totalStudents,
+        totalInstructors,
+        publishedCourses,
+        revenue: ((_a = revenueLast30Day[0]) === null || _a === void 0 ? void 0 : _a.total) || 0,
+    };
+    return result;
+    //
+});
 //
 exports.courseServices = {
     addCourse,
@@ -172,4 +213,5 @@ exports.courseServices = {
     getInstructorsAssignCourses,
     getAllCoursesWithModules,
     getCourseDetailForInstructor,
+    adminStatistics,
 };

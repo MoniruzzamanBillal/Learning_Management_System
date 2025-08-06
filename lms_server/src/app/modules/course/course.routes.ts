@@ -18,6 +18,13 @@ router.get(
   courseController.getAllCoursesForAdmin
 );
 
+// ! for getting admin statistics
+router.get(
+  "/admin-stats",
+  // authCheck(UserRole.admin),
+  courseController.adminStatistics
+);
+
 // ! for getting all course data for admin and instructor
 router.get(
   "/all-courses-modules",

@@ -133,6 +133,18 @@ const publishCourse = catchAsync(async (req, res) => {
   });
 });
 
+// ! admin stat
+const adminStatistics = catchAsync(async (req, res) => {
+  const result = await courseServices.adminStatistics();
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Admin Statistics retrived successfully !!!",
+    data: result,
+  });
+});
+
 //
 export const courseController = {
   createCourse,
@@ -145,4 +157,5 @@ export const courseController = {
   getInstructorsAssignCourses,
   getAllCoursesWithModules,
   getCourseDetailForInstructor,
+  adminStatistics,
 };
