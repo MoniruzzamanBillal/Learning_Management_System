@@ -14,7 +14,7 @@ const UserProfile = () => {
   const { data: userData, isLoading: userDataLoading } =
     useGetLoggedInUserQuery(undefined, { refetchOnMountOrArgChange: true });
 
-  console.log(userData?.data);
+  // console.log(userData?.data);
 
   let content = null;
 
@@ -34,7 +34,7 @@ const UserProfile = () => {
           />
         </div>
 
-        <div className="container mx-auto px-4 -mt-16 sm:-mt-24 md:-mt-32 relative z-10">
+        <div className="container mx-auto px-4 -mt-16 sm:-mt-24 md:-mt-32 relative z-5">
           <div className="flex flex-col items-center gap-4">
             {/* Profile Picture */}
             <div className="relative size-32 sm:size-40 md:size-48 rounded-full border-4 border-white bg-gray-200 shadow-lg overflow-hidden">
@@ -87,7 +87,7 @@ const UserProfile = () => {
   }
 
   return (
-    <div className="UserProfileContainer bg-gray-100/90 border border-gray-300  shadow rounded-md p-3 ">
+    <div className="UserProfileContainer bg-gray-100/90 border border-gray-300  shadow rounded-md p-4 ">
       {content}
     </div>
   );

@@ -33,18 +33,16 @@ const NavBar = () => {
         {/* left section  */}
         <div className="imgContainer  ">
           <Link to={"/"}>
-            <div className=" text-2xl cursor-pointer flex items-center  gap-x-1">
-              <p className="  text-2xl sm:text-2xl md:text-xl lg:text-3xl font-bold font-headingFont ">
-                MATS <span className=" text-prime50 ">Academy</span>
-              </p>
-            </div>
+            <p className="  text-2xl  xmd:text-xl lg:text-3xl font-bold font-headingFont cursor-pointer ">
+              MATS <span className=" text-prime50 ">Academy</span>
+            </p>
           </Link>
         </div>
 
         {/* Menu icon */}
         <div
           onClick={() => setOpen(!open)}
-          className="   flex justify-center items-center   cursor-pointer md:hidden  font-semibold  text-2xl "
+          className="   flex justify-center items-center   cursor-pointer xmd:hidden  font-bold  text-2xl "
         >
           {open ? <RiCloseFill className="  " /> : <RiMenu3Fill />}
         </div>
@@ -52,15 +50,15 @@ const NavBar = () => {
         {/* rigth section  */}
         {/* linke items */}
         <ul
-          className={`absolute bg-white/90 shadow-md 
-        md:shadow-none z-[-1] left-0 w-full pl-10 
-        md:flex md:items-center pb-8 md:pb-0 
-        md:static md:bg-transparent md:z-auto 
-        md:w-auto md:pl-0 transition-all 
-        duration-300 ease-in 
+          className={`absolute bg-white/90 shadow-md text-end  
+        xmd:shadow-none z-[-1] left-0 w-full pr-8 xmd:pr-12 
+        xmd:flex md:items-center pb-8 xmd:pb-0 
+        xmd:static xmd:bg-transparent md:z-auto 
+        xmd:w-auto md:pl-0 transition-all 
+        duration-100 ease-in 
         text-xs xsm:text-sm sm:text-base 
-        md:text-xs xmd:text-sm lg:text-base 
-        ${open ? "top-[3.2rem] block" : "top-[-490px]"}`}
+        md:text-xs xmd:text-xs lg:text-sm xlm:text-base 
+        ${open ? "top-[2.8rem] block" : "top-[-490px]"}`}
           style={{
             backdropFilter: "blur(3rem)",
           }}
@@ -69,7 +67,7 @@ const NavBar = () => {
             Links.map((link, index) => (
               <li
                 key={index}
-                className="  my-5 xsm:my-7 md:ml-8 md:my-0  font-semibold uppercase"
+                className="  my-4 xmd:ml-5 xmd:my-0  font-bold uppercase"
               >
                 <Link
                   to={link.link}
@@ -84,16 +82,16 @@ const NavBar = () => {
           {userInfo?.userRole === userRoleConts.user && (
             <Link
               to={"/my-courses"}
-              className=" hover:text-prime50 duration-500 pl-4 font-semibold uppercase "
+              className=" hover:text-prime50 duration-500 pl-4 font-bold uppercase "
               onClick={() => setOpen(false)}
             >
               My Courses
             </Link>
           )}
 
-          <div className="buttonSection  md:ml-5 lg:ml-8  flex  items-center gap-x-0.5  ">
+          <div className="buttonSection mt-2 xmd:mt-0  xmd:ml-4 flex justify-end xmd:justify-center  items-center gap-x-0.5  ">
             {!userInfo ? (
-              <Link to={"/login"}>
+              <Link to={"/login"} onClick={() => setOpen(!open)}>
                 <Button className=" -z-[1] text-xs sm:text-sm md:text-base bg-prime50 hover:bg-prime100 ">
                   Sign in
                 </Button>

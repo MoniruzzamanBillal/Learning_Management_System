@@ -33,7 +33,7 @@ const PopularCourse = () => {
           useful for you.
         </h2>
 
-        <div className="courseSection  m-auto  w-[88%] xsm:w-[70%]  sm:w-full  grid grid-cols-1 sm:grid-cols-2 xmd:grid-cols-3 gap-x-4 gap-y-6">
+        <div className="courseSection  mx-auto  w-[92%] xsm:w-[96%]  sm:w-full  grid grid-cols-1 sm:grid-cols-2 xmd:grid-cols-3 gap-x-4 gap-y-6">
           {content}
         </div>
       </Wrapper>
