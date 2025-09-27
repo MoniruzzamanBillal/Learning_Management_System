@@ -92,7 +92,10 @@ const CourseCard = ({ course }: TCourseDataProps) => {
             {/* button  */}
             <div className="btn ">
               <Link to={`/course-detail/${course?._id}`}>
-                <Button className=" bg-prime100 hover:bg-prime200 text-sm ">
+                <Button
+                  size={"sm"}
+                  className=" bg-prime100 hover:bg-prime200 text-sm "
+                >
                   See Details
                 </Button>
               </Link>
