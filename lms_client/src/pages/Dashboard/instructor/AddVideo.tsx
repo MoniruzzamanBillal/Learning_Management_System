@@ -75,7 +75,7 @@ const AddVideo = () => {
           </h1>
 
           {/* add video form  */}
-          <div className="addModuleForm p-1 w-[98%] xsm:w-[92%] sm:w-[85%] md:w-[80%] xmd:w-[75%] lg:w-[65%] m-auto ">
+          <div className="addModuleForm p-1 w-[98%] xsm:w-[92%] sm:w-[85%] md:w-[80%]   m-auto ">
             <form
               onSubmit={handleSubmit(handleAddVideo)}
               className=" flex flex-col gap-y-4 "

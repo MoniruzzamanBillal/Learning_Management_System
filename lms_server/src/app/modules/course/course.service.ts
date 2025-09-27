@@ -74,9 +74,7 @@ const getAllCourses = async (query: Record<string, unknown>) => {
     .populate("instructors", " name   ")
     .limit(numaricLimit)
     .skip(skip)
-    .select(" -published -createdAt -__v -description -modules -updatedAt ");
-
-  // console.log(allCourseData);
+    .select(" -published -createdAt -__v  -description -modules -updatedAt ");
 
   const result = await Promise.all(
     allCourseData?.map(async (courseData) => {

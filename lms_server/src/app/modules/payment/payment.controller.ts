@@ -4,18 +4,6 @@ import { paymentServices } from "./payment.service";
 // const redirectURL = "http://localhost:5173";
 const redirectURL = "https://devmats.vercel.app";
 
-// ! for validating payment
-// const validatePayment = catchAsync(async (req, res) => {
-//   const result = await paymentServices.validatePayment(req?.query);
-
-//   sendResponse(res, {
-//     statusCode: httpStatus.CREATED,
-//     success: true,
-//     message: "Payment Validate successfully !!!",
-//     data: result,
-//   });
-// });
-
 // ! after successfully payment
 const successfullyPayment = catchAsync(async (req, res) => {
   const result = await paymentServices.successfullyPayment(req?.body);
