@@ -20,31 +20,43 @@ const testimonialData: TTestimonial[] = [
     review:
       "This platform made learning so much easier! The video lessons are clear, well-structured, and I could track my progress seamlessly. Highly recommended for anyone serious about upskilling.",
     name: "Abul Hasan",
-    img: "https://res.cloudinary.com/dupxfufq9/image/upload/v1747106241/Musaddikul%20Islam%20Sakib.jpg",
+    img: "https://i.postimg.cc/kGzbs8Jq/515439020-2147819785682162-260233122788938226-n.jpg",
   },
   {
     review:
       "The Web Development course exceeded my expectations. The instructors were top-notch and I loved the hands-on projects. I feel more confident applying for developer jobs now.",
     name: "Ismail Hania",
-    img: "https://res.cloudinary.com/dupxfufq9/image/upload/v1747464710/Nazir%20Ahmed.jpg",
+    img: "https://i.postimg.cc/yNR75bmx/504088512-4181158668874712-5104357887335128166-n.jpg",
   },
   {
     review:
       "The course dashboard is very intuitive. I loved how each video unlocks as I make progress. It kept me motivated to complete the modules!",
     name: "Mahfuz ahmed",
-    img: "https://res.cloudinary.com/dupxfufq9/image/upload/v1747464740/Mahfuz%20ahmed.png",
+    img: "https://i.postimg.cc/8cJF75hY/425321265-122100582938203050-1203191898968956264-n.jpg",
   },
   {
     review:
       "Enrolling in the Cybersecurity course was one of my best decisions. The real-world use cases and practical labs helped me gain strong foundational skills.",
     name: "Obaidul Hasan",
-    img: "https://res.cloudinary.com/dupxfufq9/image/upload/v1747464765/Obaidul%20Hasan.jpg",
+    img: "https://i.postimg.cc/26JF63q3/118776616-2682016592038358-33323368280966418-n.jpg",
   },
   {
     review:
       "What I love most is the flexibility. I can learn at my own pace, revisit videos, and even track which ones I’ve completed. Truly a learner-friendly platform!",
-    name: "Rabbi",
-    img: "https://res.cloudinary.com/dupxfufq9/image/upload/v1747464786/Rabbi.jpg",
+    name: "Md Mahmudul Hasan",
+    img: "https://i.postimg.cc/MThVw445/499168714-1465365904628987-4897850097428601686-n.jpg",
+  },
+  {
+    review:
+      "The React Native course was exactly what I needed. The step-by-step guidance and practical projects helped me build my first cross-platform app with confidence.",
+    name: "Tanvirul Haque Prottoy",
+    img: "https://i.postimg.cc/1t422nhy/481675488-942284284736543-8872097060163243105-n.jpg",
+  },
+  {
+    review:
+      "I never thought online learning could feel this engaging. The quizzes, structured modules, and community support kept me motivated till the very end.",
+    name: "Jubaer Ahamed Bhuiyan",
+    img: "https://i.postimg.cc/Qxg46kKD/54521483-394082101170981-1515656545298284544-n.jpg",
   },
 ];
 

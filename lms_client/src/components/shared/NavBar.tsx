@@ -92,7 +92,10 @@ const NavBar = () => {
           <div className="buttonSection mt-2 xmd:mt-0  xmd:ml-4 flex justify-end xmd:justify-center  items-center gap-x-0.5  ">
             {!userInfo ? (
               <Link to={"/login"} onClick={() => setOpen(!open)}>
-                <Button className=" -z-[1] text-xs sm:text-sm md:text-base bg-prime50 hover:bg-prime100 ">
+                <Button
+                  size={"sm"}
+                  className=" -z-[1] text-xs sm:text-sm md:text-base bg-prime50 hover:bg-prime100 "
+                >
                   Sign in
                 </Button>
               </Link>
