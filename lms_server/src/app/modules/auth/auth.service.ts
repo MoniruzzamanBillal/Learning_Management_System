@@ -88,9 +88,33 @@ const signInFromDb = async (payload: Tlogin) => {
   return { userData, token };
 };
 
+// ! for update password
+const updatePassword = async (payload: Tlogin) => {
+  const userData = await userModel.findOne({ email: payload?.email });
+
+  if (!userData) {
+    throw new AppError(
+      httpStatus.NOT_FOUND,
+      "User dont exist with this email !!!"
+    );
+  }
+
+  const hashedPassword = await bcrypt.hash(
+    payload?.password,
+    Number(config.bcrypt_salt_rounds)
+  );
+
+  await userModel.findByIdAndUpdate(
+    userData?._id,
+    { password: hashedPassword },
+    { new: true }
+  );
+};
+
 //
 export const authServices = {
   createUserIntoDB,
   signInFromDb,
   createInstructor,
+  updatePassword,
 };

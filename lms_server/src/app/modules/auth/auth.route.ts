@@ -41,5 +41,13 @@ router.post(
   authControllers.loginUser
 );
 
+// ! for update password
+router.patch(
+  "/update-password",
+  authCheck(UserRole.admin),
+  authControllers.updatePassword
+);
+
 //
+
 export const authRouter = router;
