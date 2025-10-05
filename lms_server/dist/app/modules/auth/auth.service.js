@@ -68,9 +68,19 @@ const signInFromDb = (payload) => __awaiter(void 0, void 0, void 0, function* ()
     const token = (0, auth_util_1.createToken)(jwtPayload, config_1.default.jwt_secret);
     return { userData, token };
 });
+// ! for update password
+const updatePassword = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const userData = yield user_model_1.userModel.findOne({ email: payload === null || payload === void 0 ? void 0 : payload.email });
+    if (!userData) {
+        throw new AppError_1.default(http_status_1.default.NOT_FOUND, "User dont exist with this email !!!");
+    }
+    const hashedPassword = yield bcrypt_1.default.hash(payload === null || payload === void 0 ? void 0 : payload.password, Number(config_1.default.bcrypt_salt_rounds));
+    yield user_model_1.userModel.findByIdAndUpdate(userData === null || userData === void 0 ? void 0 : userData._id, { password: hashedPassword }, { new: true });
+});
 //
 exports.authServices = {
     createUserIntoDB,
     signInFromDb,
     createInstructor,
+    updatePassword,
 };

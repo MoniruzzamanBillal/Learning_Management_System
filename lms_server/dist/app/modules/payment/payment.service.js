@@ -20,26 +20,6 @@ const AppError_1 = __importDefault(require("../../Error/AppError"));
 const CourseEnrollment_model_1 = require("../CourseEnrollment/CourseEnrollment.model");
 const payment_constant_1 = require("./payment.constant");
 const payment_model_1 = require("./payment.model");
-// ! for validating payment
-// const validatePayment = async (payload: any) => {
-//   if (!payload || !payload?.status || !(payload?.status === "VALID")) {
-//     throw new AppError(httpStatus.BAD_REQUEST, "Invalid Payment ");
-//   }
-//   const response = await axios({
-//     method: "GET",
-//     url: `${config.SSL_VALIDATION_URL}?val_id=${payload?.val_id}&store_id=${config.STORE_ID}&store_passwd=${config.STORE_PASSWORD}&format=json`,
-//   });
-//   if ((!response?.status as unknown) === "VALID ") {
-//     throw new AppError(httpStatus.BAD_REQUEST, "Payment Failed !!!");
-//   }
-//   const transactionId = response?.tran_id;
-//   const result = await paymentModel.findOneAndUpdate(
-//     { transactionId },
-//     { paymentStatus: PAYMENTSTATUS.Completed },
-//     { new: true }
-//   );
-//   return result;
-// };
 // ! after successfully payment
 const successfullyPayment = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const { tran_id, status } = payload;

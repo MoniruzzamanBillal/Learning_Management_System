@@ -82,7 +82,6 @@ const CertificateTableColumn: ColumnDef<TData>[] = [
       return (
         <CertificateDownloadButton
           userName={rowData.user.name}
-          userId={rowData.user._id}
           courseName={rowData.course.name}
         />
       );

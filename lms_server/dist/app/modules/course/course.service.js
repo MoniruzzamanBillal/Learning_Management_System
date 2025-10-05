@@ -64,8 +64,7 @@ const getAllCourses = (query) => __awaiter(void 0, void 0, void 0, function* () 
         .populate("instructors", " name   ")
         .limit(numaricLimit)
         .skip(skip)
-        .select(" -published -createdAt -__v -description -modules -updatedAt ");
-    // console.log(allCourseData);
+        .select(" -published -createdAt -__v  -description -modules -updatedAt ");
     const result = yield Promise.all(allCourseData === null || allCourseData === void 0 ? void 0 : allCourseData.map((courseData) => __awaiter(void 0, void 0, void 0, function* () {
         var _a;
         const reviewData = yield review_service_1.reviewServices.getAverageReviewOfCourse((_a = courseData === null || courseData === void 0 ? void 0 : courseData._id) === null || _a === void 0 ? void 0 : _a.toString());

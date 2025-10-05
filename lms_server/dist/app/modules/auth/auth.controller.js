@@ -52,9 +52,20 @@ const loginUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void
         token: token,
     });
 }));
+// ! for update password
+const updatePassword = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield auth_service_1.authServices.updatePassword(req.body);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "Password successfully!!!",
+        data: result,
+    });
+}));
 //
 exports.authControllers = {
     createUser,
     loginUser,
     createInstructor,
+    updatePassword,
 };

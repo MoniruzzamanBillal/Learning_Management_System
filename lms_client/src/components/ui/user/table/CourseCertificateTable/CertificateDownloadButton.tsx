@@ -1,59 +1,46 @@
 // CertificateDownloadButton.tsx
 import { Button } from "@/components/ui/button";
-import { CertificateTemplate } from "@/pages";
-import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
-import { useRef } from "react";
 
 type Props = {
   userName: string;
-  userId: string;
+
   courseName: string;
 };
 
-const CertificateDownloadButton = ({ userName, userId, courseName }: Props) => {
-  const certificateRef = useRef(null);
-
+const CertificateDownloadButton = ({ userName, courseName }: Props) => {
+  // ! for downloading certificate
   const handleDownload = async () => {
-    if (!certificateRef.current) return;
+    const doc = new jsPDF();
 
-    const canvas = await html2canvas(certificateRef.current, { scale: 2 });
-    const imgData = canvas.toDataURL("image/png");
-    const pdf = new jsPDF("landscape", "mm", "a4");
+    doc.addImage("/certificate.jpg", "JPEG", 0, 0, 210, 297);
 
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+    doc.setFontSize(20);
+    doc.setTextColor(0, 0, 0);
 
-    pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-    pdf.save(`${userName}_certificate.pdf`);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(38);
+    doc.text(userName, 15, 120);
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(24);
+    doc.text(`Has completed the course:`, 105, 160, { align: "center" });
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(28);
+    doc.text(courseName, 105, 176, { align: "center" });
+
+    doc.save(`${userName}_certificate.pdf`);
   };
 
   return (
     <>
       <Button
-        onClick={handleDownload}
+        onClick={() => handleDownload()}
         className="bg-green-600 hover:bg-green-700"
       >
         Download
       </Button>
-
-      {/* Hidden rendered certificate */}
-      <div
-        style={{
-          position: "absolute",
-          left: "-9999px",
-          top: "0",
-          width: "1120px",
-          height: "794px",
-        }}
-      >
-        <CertificateTemplate
-          ref={certificateRef}
-          userName={userName}
-          userId={userId}
-          courseName={courseName}
-        />
-      </div>
     </>
   );
 };

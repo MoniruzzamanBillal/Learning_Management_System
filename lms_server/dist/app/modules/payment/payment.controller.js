@@ -17,16 +17,6 @@ const catchAsync_1 = __importDefault(require("../../util/catchAsync"));
 const payment_service_1 = require("./payment.service");
 // const redirectURL = "http://localhost:5173";
 const redirectURL = "https://devmats.vercel.app";
-// ! for validating payment
-// const validatePayment = catchAsync(async (req, res) => {
-//   const result = await paymentServices.validatePayment(req?.query);
-//   sendResponse(res, {
-//     statusCode: httpStatus.CREATED,
-//     success: true,
-//     message: "Payment Validate successfully !!!",
-//     data: result,
-//   });
-// });
 // ! after successfully payment
 const successfullyPayment = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield payment_service_1.paymentServices.successfullyPayment(req === null || req === void 0 ? void 0 : req.body);

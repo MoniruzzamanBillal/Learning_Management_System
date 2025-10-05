@@ -25,7 +25,7 @@ const initPayment = (payload) => __awaiter(void 0, void 0, void 0, function* () 
             total_amount: payload === null || payload === void 0 ? void 0 : payload.price,
             currency: "BDT",
             tran_id: payload === null || payload === void 0 ? void 0 : payload.transactionId,
-            // success_url: config.SUCCESS_URL,
+            // success_url: "http://localhost:5000/api/payment/success",
             success_url: "https://lms-server-topaz.vercel.app/api/payment/success",
             fail_url: config_1.default.FAIL_URL,
             cancel_url: config_1.default.CANCEL_URL,

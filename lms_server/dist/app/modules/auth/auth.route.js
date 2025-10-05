@@ -27,5 +27,7 @@ router.post("/register-instructor", (0, authCheck_1.default)(user_constants_1.Us
 }, (0, validateRequest_1.default)(user_validation_1.userValidationSchemas.createInstructorValidationSchema), auth_controller_1.authControllers.createInstructor);
 // ! for login
 router.post("/login", (0, validateRequest_1.default)(auth_validation_1.authValidations.loginValidationSchema), auth_controller_1.authControllers.loginUser);
+// ! for update password
+router.patch("/update-password", (0, authCheck_1.default)(user_constants_1.UserRole.admin), auth_controller_1.authControllers.updatePassword);
 //
 exports.authRouter = router;
