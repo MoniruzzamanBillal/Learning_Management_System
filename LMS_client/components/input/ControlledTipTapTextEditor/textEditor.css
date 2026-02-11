@@ -1,0 +1,114 @@
+/* TipTap specific styles */
+
+.bodyStyle {
+  background-color: red;
+  padding: 10px;
+}
+
+.ProseMirror {
+  padding: 1rem;
+  min-height: 300px;
+  outline: none;
+}
+
+.ProseMirror:focus {
+  outline: none;
+}
+
+/* Lists styling */
+.ProseMirror ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+  margin: 1rem 0;
+}
+
+.ProseMirror ol {
+  list-style-type: decimal;
+  padding-left: 1.5rem;
+  margin: 1rem 0;
+}
+
+.ProseMirror li {
+  margin: 0.5rem 0;
+}
+
+.ProseMirror li p {
+  margin: 0;
+}
+
+/* Headings */
+.ProseMirror h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 1.5rem 0 1rem 0;
+}
+
+.ProseMirror h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 1.25rem 0 0.75rem 0;
+}
+
+.ProseMirror h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 1rem 0 0.5rem 0;
+}
+
+/* Highlight */
+.ProseMirror mark {
+  padding: 0.1rem 0.2rem;
+  border-radius: 0.2rem;
+}
+
+/* Text alignment */
+.ProseMirror .text-align-left {
+  text-align: left;
+}
+
+.ProseMirror .text-align-center {
+  text-align: center;
+}
+
+.ProseMirror .text-align-right {
+  text-align: right;
+}
+
+.ProseMirror .text-align-justify {
+  text-align: justify;
+}
+
+/* Blockquote */
+.ProseMirror blockquote {
+  border-left: 3px solid #ccc;
+  padding-left: 1rem;
+  margin: 1rem 0;
+  font-style: italic;
+}
+
+/* Code */
+.ProseMirror code {
+  background-color: #f3f4f6;
+  padding: 0.2rem 0.4rem;
+  border-radius: 0.25rem;
+  font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
+  font-size: 0.875rem;
+}
+
+.ProseMirror pre {
+  background-color: #1f2937;
+  color: #f3f4f6;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+
+/* Placeholder */
+.ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  color: #9ca3af;
+  pointer-events: none;
+  height: 0;
+  float: left;
+}
