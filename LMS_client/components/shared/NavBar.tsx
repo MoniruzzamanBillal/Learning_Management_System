@@ -32,8 +32,8 @@ const NavBar = () => {
         {/* left section  */}
         <div className="imgContainer  ">
           <Link href={"/"}>
-            <p className="  text-2xl  xmd:text-xl lg:text-3xl font-bold font-headingFont cursor-pointer ">
-              MATS <span className=" text-prime50 ">Academy</span>
+            <p className="  text-2xl  md:text-xl lg:text-3xl font-bold font-headingFont cursor-pointer ">
+              MATS <span className=" text-prime-50 ">Academy</span>
             </p>
           </Link>
         </div>
@@ -67,7 +67,7 @@ const NavBar = () => {
               >
                 <Link
                   href={link.link}
-                  className=" hover:text-prime50 duration-500  "
+                  className=" hover:text-prime-50 duration-300  "
                   onClick={() => setOpen(false)}
                 >
                   {link.name}

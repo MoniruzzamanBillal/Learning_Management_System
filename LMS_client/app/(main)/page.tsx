@@ -1,12 +1,5 @@
+import HomePage from "@/components/main/publicPage/home/HomePage";
+
 export default function Home() {
-  return (
-    <div>
-      <h1>home page </h1>
-      <h1>home page </h1>
-      <h1>home page </h1>
-      <h1>home page </h1>
-      <h1>home page </h1>
-      <h1>home page </h1>
-    </div>
-  );
+  return <HomePage />;
 }
