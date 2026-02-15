@@ -24,7 +24,7 @@ const CourseCard = ({ course }: TCourseDataProps) => {
             alt="course_cover"
           />
 
-          <span className="  courseLabel absolute top-0 left-0 bg-prime50 text-gray-50 text-xs py-1 px-2 rounded font-medium ">
+          <span className="  courseLabel absolute top-0 left-0 bg-prime-50 text-gray-50 text-xs py-1 px-2 rounded font-medium ">
             Beginner
           </span>
         </div>
@@ -77,7 +77,7 @@ const CourseCard = ({ course }: TCourseDataProps) => {
 
             {/* button  */}
             <div className="btn ">
-              <Link href={`/course-detail/${course?._id}`}>
+              <Link href={`/courses/${course?._id}`}>
                 <Button
                   size={"sm"}
                   className=" bg-prime-100 hover:bg-prime-200 text-sm "

@@ -1,9 +1,23 @@
-export default function page({ params }: { params: { id: string } }) {
-  const { id } = params;
+import { Metadata } from "next";
+import dynamic from "next/dynamic";
 
-  return (
-    <div>
-      <h1>Course ID: {id}</h1>
-    </div>
+export const metadata: Metadata = {
+  title: "MATS Academy | Course Detail",
+};
+
+interface IPageProps {
+  params: Promise<{ id: string }>;
+}
+
+export default async function page({ params }: IPageProps) {
+  const { id } = await params;
+
+  const CourseDetailPage = dynamic(
+    () => import("@/components/main/publicPage/courseDetail/CourseDetailPage"),
+    {
+      loading: () => <p>loading....</p>,
+    },
   );
+
+  return <CourseDetailPage id={id} />;
 }
