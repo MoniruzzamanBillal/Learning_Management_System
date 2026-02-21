@@ -1,12 +1,14 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import Cookies from "js-cookie";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { LoginFormData, loginSchema } from "./schema/LoginSchema";
 
 import ControlledInput from "@/components/input/ControlledInput";
 import Wrapper from "@/components/shared/Wrapper";
 import { Button } from "@/components/ui/button";
+import { authKey } from "@/constants/storageKey";
 import { usePost } from "@/hooks/useApi";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -29,10 +31,12 @@ export default function LoginPage() {
         payload: data,
       });
 
-      console.log(result);
-
       if (result?.success) {
+        Cookies.set(authKey, result.token, { expires: 1 });
+
         toast.success("Logged in successfull!!!");
+
+        router.push("/");
       }
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

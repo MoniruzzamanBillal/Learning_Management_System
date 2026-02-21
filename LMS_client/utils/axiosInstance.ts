@@ -1,4 +1,4 @@
-import { authKey, refreshTokenKey, userIdKey } from "@/constants/storageKey";
+import { authKey } from "@/constants/storageKey";
 
 import { getBaseUrl } from "@/config/envConfig";
 import axios from "axios";
@@ -56,50 +56,12 @@ instance.interceptors.response.use(
   async function (error) {
     const originalRequest = error.config;
 
-    // console.log("-----");
-    // console.log("-----");
-    // console.log("line = 64");
-    // console.log("error from axiosInstance = ", error);
-    // console.log("-----");
-    // console.log("-----");
-
-    // !
     if (error?.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
-      try {
-        const refreshToken = getCookies(refreshTokenKey);
-
-        const response = await axios.post(
-          "http://localhost:5000/api/auth/refresh-token",
-          { refreshToken },
-          { withCredentials: true },
-        );
-
-        console.log(
-          "response from axiosinstance line 88 = ",
-          response?.data?.data?.accessToken,
-        );
-
-        Cookies.set(authKey, response?.data?.data?.accessToken, {
-          expires: 1,
-        });
-
-        originalRequest.headers.Authorization = `Bearer ${response?.data?.data?.accessToken}`;
-        return axios(originalRequest);
-      } catch (refreshError) {
-        // Handle refresh token failure
-        console.log("refreshError from axiosinstance line 94 = ", refreshError);
-
-        Cookies.remove(authKey);
-        Cookies.remove(refreshTokenKey);
-        Cookies.remove(userIdKey);
-        toast.error("Session Expired , Login to continue.");
-
-        window.location.href = "/login";
-
-        return Promise.reject(refreshError);
-      }
+      Cookies.remove(authKey);
+      toast.error("Session expired. Please login again.");
+      window.location.href = "/login";
     }
     // !
 

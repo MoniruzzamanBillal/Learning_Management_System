@@ -1,9 +1,12 @@
 "use client";
 
-import { useState } from "react";
-import { RiCloseFill, RiMenu3Fill } from "react-icons/ri";
-
+import { useGetUser } from "@/hooks/useGetUser";
+import { userRoleConts } from "@/utils/constants";
 import Link from "next/link";
+import { useState } from "react";
+import { LuUser } from "react-icons/lu";
+import { RiCloseFill, RiMenu3Fill } from "react-icons/ri";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import Wrapper from "./Wrapper";
 
@@ -18,7 +21,9 @@ const Links = [
 
 const NavBar = () => {
   const [open, setOpen] = useState(false);
-  // const userInfo = useGetUser();
+  const userInfo = useGetUser();
+
+  console.log(userInfo);
 
   return (
     <div
@@ -75,7 +80,7 @@ const NavBar = () => {
               </li>
             ))}
 
-          {/* {userInfo?.userRole === userRoleConts.user && (
+          {userInfo?.userRole === userRoleConts.user && (
             <Link
               href={"/my-courses"}
               className=" hover:text-prime50 duration-500 pl-4 font-bold uppercase "
@@ -83,20 +88,11 @@ const NavBar = () => {
             >
               My Courses
             </Link>
-          )} */}
+          )}
 
           <div className="buttonSection mt-2 md:mt-0  md:ml-4 flex justify-end md:justify-center  items-center gap-x-0.5   ">
-            <Link href={"/login"} onClick={() => setOpen(!open)}>
-              <Button
-                size={"sm"}
-                className=" -z-[1] text-xs sm:text-sm md:text-base bg-prime-50 hover:bg-prime-100 cursor-pointer "
-              >
-                Sign in
-              </Button>
-            </Link>
-            {/* 
             {!userInfo ? (
-              <Link to={"/login"} onClick={() => setOpen(!open)}>
+              <Link href={"/login"} onClick={() => setOpen(!open)}>
                 <Button
                   size={"sm"}
                   className=" -z-[1] text-xs sm:text-sm md:text-base bg-prime50 hover:bg-prime100 "
@@ -107,7 +103,7 @@ const NavBar = () => {
             ) : (
               <div className="relative">
                 <Link
-                  to="/dashboard/profile"
+                  href="/dashboard/profile"
                   className="inline-block p-1.5 rounded-full bg-orange-100 cursor-pointe"
                 >
                   {userInfo?.profileImage ? (
@@ -122,9 +118,7 @@ const NavBar = () => {
                   )}
                 </Link>
               </div>
-            )} */}
-            {/*  */}
-            {/*  */}
+            )}
           </div>
         </ul>
       </Wrapper>
