@@ -1,7 +1,5 @@
+import InstructorPage from "@/components/main/instructor/Instructor";
+
 export default function page() {
-  return (
-    <div>
-      <h1>instructors </h1>
-    </div>
-  );
+  return <InstructorPage />;
 }
