@@ -1,6 +1,7 @@
 import Wrapper from "@/components/shared/Wrapper";
 import { CategoryFilter, CourseCard } from "@/components/ui/courses";
-import { TCourse } from "@/components/ui/courses/CourseCard";
+import { TCourse } from "@/components/ui/courses/Course.type";
+
 import CourseCardSkeleton from "@/components/ui/courses/CourseCardSkeleton";
 import { Input } from "@/components/ui/input";
 import { useGetAllPublishedCorsesQuery } from "@/redux/features/course/course.api";
@@ -19,7 +20,7 @@ const Courses = () => {
         searchTerm: debounceTerm,
         category: categoryType,
       },
-      { refetchOnMountOrArgChange: true }
+      { refetchOnMountOrArgChange: true },
     );
 
   let content = null;

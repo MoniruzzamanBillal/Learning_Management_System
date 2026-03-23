@@ -1,27 +1,7 @@
 import { FaStar } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { Button } from "../button";
-
-type TInstructor = {
-  _id: string;
-  name: string;
-};
-
-type TReview = {
-  averageRating: number;
-  totalReviews: number;
-  _id: string;
-};
-
-export type TCourse = {
-  _id: string;
-  name: string;
-  category: string;
-  courseCover: string;
-  instructors: TInstructor[];
-  price: number;
-  reviewData?: TReview;
-};
+import { TCourse, TInstructor, TReview } from "./Course.type";
 
 type TCourseDataProps = {
   course: TCourse;

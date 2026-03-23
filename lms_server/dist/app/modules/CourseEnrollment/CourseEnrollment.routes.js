@@ -21,7 +21,7 @@ router.post("/enroll-course", (0, authCheck_1.default)(user_constants_1.UserRole
 // ! for getting user single enrolled course data
 router.get("/my-enrolled-course/:courseId", (0, authCheck_1.default)(user_constants_1.UserRole.user), ValidateCourseAccess_1.default, CourseEnrollment_controller_1.CourseEnrollmentController.getMyCourseEnrollData);
 // ! for checking user enrolled a coure or not
-router.get("/check-user-enrolled/:courseId", (0, authCheck_1.default)(user_constants_1.UserRole.user), CourseEnrollment_controller_1.CourseEnrollmentController.checkUserEnrolledInCourse);
+router.get("/check-user-enrolled", CourseEnrollment_controller_1.CourseEnrollmentController.checkUserEnrolledInCourse);
 // ! for getting module data for enrolled course
 router.get("/my-enrolled-course-modules/:courseId", (0, authCheck_1.default)(user_constants_1.UserRole.user), ValidateCourseAccess_1.default, CourseEnrollment_controller_1.CourseEnrollmentController.getModuleDataEnrlledCourse);
 // ! for getting video for enrolled course

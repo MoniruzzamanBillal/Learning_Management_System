@@ -29,7 +29,9 @@ const getAllModuleData = catchAsync(async (req, res) => {
 
 // ! for getting module data
 const getModuleData = catchAsync(async (req, res) => {
-  const result = await moduleServices.getModulData(req?.params?.moduleId);
+  const result = await moduleServices.getModulData(
+    req?.params?.moduleId as string,
+  );
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -42,7 +44,7 @@ const getModuleData = catchAsync(async (req, res) => {
 // ! get module data based on course id
 const getModuleFromCourseId = catchAsync(async (req, res) => {
   const result = await moduleServices.getModuleFromCourseId(
-    req?.params?.courseId
+    req?.params?.courseId as string,
   );
 
   sendResponse(res, {
@@ -57,7 +59,7 @@ const getModuleFromCourseId = catchAsync(async (req, res) => {
 const updateModule = catchAsync(async (req, res) => {
   const result = await moduleServices.updateModule(
     req?.body,
-    req?.params?.moduleId
+    req?.params?.moduleId as string,
   );
 
   sendResponse(res, {

@@ -17,6 +17,7 @@ const http_status_1 = __importDefault(require("http-status"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const AppError_1 = __importDefault(require("../../Error/AppError"));
 const CourseEnrollment_model_1 = require("../CourseEnrollment/CourseEnrollment.model");
+const user_model_1 = require("../user/user.model");
 const review_model_1 = require("./review.model");
 // ! for adding a review
 const addReview = (payload) => __awaiter(void 0, void 0, void 0, function* () {
@@ -63,6 +64,10 @@ const updateReview = (payload) => __awaiter(void 0, void 0, void 0, function* ()
 });
 // ! check review eligibility
 const checkReviewEligibility = (courseId, userId) => __awaiter(void 0, void 0, void 0, function* () {
+    const userData = yield user_model_1.userModel.findById(userId);
+    if (!userData) {
+        return false;
+    }
     const result = yield CourseEnrollment_model_1.courseEnrollmentModel.findOne({
         user: userId,
         course: courseId,

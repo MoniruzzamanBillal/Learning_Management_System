@@ -102,7 +102,7 @@ const UserReviewCard = ({ reviewData, reviewDataRefetch }: Tprops) => {
             <p className=" text-gray-600 font-medium text-xs  ">
               {format(
                 new Date(reviewData?.createdAt as string),
-                "dd-MMMM-yyyy"
+                "dd-MMMM-yyyy",
               )}
             </p>
           </div>

@@ -13,8 +13,8 @@ const authCheck = (...requiredRoles: TUserRole[]) => {
       return next(
         new AppError(
           httpStatus.UNAUTHORIZED,
-          "Authorization header missing or malformed"
-        )
+          "Authorization header missing or malformed",
+        ),
       );
     }
 
@@ -24,9 +24,7 @@ const authCheck = (...requiredRoles: TUserRole[]) => {
     try {
       decoded = Jwt.verify(token, config.jwt_secret as string) as JwtPayload;
     } catch (error) {
-      return next(
-        new AppError(httpStatus.UNAUTHORIZED, "Invalid or expired token")
-      );
+      return next(new AppError(httpStatus.UNAUTHORIZED, "Token expired!!!"));
     }
 
     const { userRole } = decoded;
@@ -35,8 +33,8 @@ const authCheck = (...requiredRoles: TUserRole[]) => {
       return next(
         new AppError(
           httpStatus.UNAUTHORIZED,
-          "You have no access to this route"
-        )
+          "You have no access to this route",
+        ),
       );
     }
 

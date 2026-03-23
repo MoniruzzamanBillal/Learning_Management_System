@@ -17,7 +17,7 @@ const axios_1 = __importDefault(require("axios"));
 const config_1 = __importDefault(require("../../config"));
 // ! for initializing payment
 const initPayment = (payload) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b;
+    var _a;
     try {
         const data = {
             store_id: config_1.default.STORE_ID,
@@ -58,7 +58,7 @@ const initPayment = (payload) => __awaiter(void 0, void 0, void 0, function* () 
             data,
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
         });
-        return (_b = (_a = response === null || response === void 0 ? void 0 : response.data) === null || _a === void 0 ? void 0 : _a.desc[6]) === null || _b === void 0 ? void 0 : _b.redirectGatewayURL;
+        return (_a = response === null || response === void 0 ? void 0 : response.data) === null || _a === void 0 ? void 0 : _a.GatewayPageURL;
     }
     catch (error) {
         console.log(error);

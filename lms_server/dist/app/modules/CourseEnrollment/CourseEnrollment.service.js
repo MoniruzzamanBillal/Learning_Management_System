@@ -134,8 +134,11 @@ const getAllUserEnrolledCourse = (userId) => __awaiter(void 0, void 0, void 0, f
 // ! for checking user enrolled a coure or not
 const checkUserEnrolledInCourse = (courseId, userId) => __awaiter(void 0, void 0, void 0, function* () {
     const userData = yield user_model_1.userModel.findById(userId);
+    let enrolledIncourse = false;
     if (!userData) {
-        throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "This user don't exist !!!");
+        return {
+            enrolledIncourse: false,
+        };
     }
     const courseData = yield course_model_1.courseModel.findById(courseId);
     if (!courseData) {
@@ -149,7 +152,7 @@ const checkUserEnrolledInCourse = (courseId, userId) => __awaiter(void 0, void 0
         course: courseId,
         isDeleted: false,
     });
-    const enrolledIncourse = previousEnrolledData ? true : false;
+    enrolledIncourse = previousEnrolledData ? true : false;
     return { enrolledIncourse };
 });
 // ! get user single enrolled  course data

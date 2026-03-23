@@ -40,7 +40,9 @@ const getLoggedInUser = catchAsync(async (req, res) => {
 
 // ! for getting user based on user id
 const getSpecificUser = catchAsync(async (req, res) => {
-  const result = await userServices.getSpecificUser(req.params?.userId);
+  const result = await userServices.getSpecificUser(
+    req.params?.userId as string,
+  );
 
   sendResponse(res, {
     statusCode: httpStatus.CREATED,
@@ -55,7 +57,7 @@ const updateUser = catchAsync(async (req, res) => {
   const result = await userServices.updateUser(
     req?.body,
     req?.file,
-    req?.user?.userId
+    req?.user?.userId,
   );
 
   sendResponse(res, {

@@ -36,7 +36,7 @@ const CourseDetail = () => {
 
   const { data: checkEnrolledData } = useGetCheckUserEnrolledInCourseQuery(
     courseId,
-    { skip: !courseId }
+    { skip: !courseId },
   );
 
   const { data: courseDetail, isLoading } = useGetCouseDetailQuery(courseId, {

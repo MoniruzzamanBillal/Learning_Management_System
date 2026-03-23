@@ -19,7 +19,7 @@ const addCourse = async (payload: TCourse, file: any) => {
 
     const cloudinaryResponse = await SendImageCloudinary(
       path as string,
-      name as string
+      name as string,
     );
 
     const courseCover = cloudinaryResponse?.secure_url as string;
@@ -33,10 +33,10 @@ const addCourse = async (payload: TCourse, file: any) => {
       if (!instructorData) {
         throw new AppError(
           httpStatus.BAD_REQUEST,
-          "Instructor don't exist !!!"
+          "Instructor don't exist !!!",
         );
       }
-    })
+    }),
   );
 
   const result = await courseModel.create(payload);
@@ -79,14 +79,14 @@ const getAllCourses = async (query: Record<string, unknown>) => {
   const result = await Promise.all(
     allCourseData?.map(async (courseData) => {
       const reviewData = await reviewServices.getAverageReviewOfCourse(
-        courseData?._id?.toString()
+        courseData?._id?.toString(),
       );
 
       return {
         ...courseData.toObject(),
         reviewData,
       };
-    })
+    }),
   );
 
   const totalCourses = await courseModel.countDocuments({ published: true });
@@ -120,7 +120,7 @@ const getInstructorsAssignCourses = async (instructorId: string) => {
   if (!courseData) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
-      "Instructor don't assigned for any courses  !!!"
+      "Instructor don't assigned for any courses  !!!",
     );
   }
 
@@ -173,7 +173,7 @@ const getCourseDetailForInstructor = async (courseId: string) => {
 const updateCourseData = async (
   payload: Partial<TCourse>,
   file: any,
-  courseId: string
+  courseId: string,
 ) => {
   const courseData = await courseModel.findById(courseId);
 
@@ -187,7 +187,7 @@ const updateCourseData = async (
 
     const cloudinaryResponse = await SendImageCloudinary(
       path as string,
-      name as string
+      name as string,
     );
 
     const courseCover = cloudinaryResponse?.secure_url as string;
@@ -213,14 +213,14 @@ const publishCourse = async (courseId: string) => {
   if (courseData?.published) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
-      "This Course is already published !!!"
+      "This Course is already published !!!",
     );
   }
 
   const result = await courseModel.findByIdAndUpdate(
     courseId,
     { published: true },
-    { new: true }
+    { new: true },
   );
 
   return result;

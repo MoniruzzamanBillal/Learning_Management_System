@@ -2,6 +2,7 @@ import httpStatus from "http-status";
 import mongoose from "mongoose";
 import AppError from "../../Error/AppError";
 import { courseEnrollmentModel } from "../CourseEnrollment/CourseEnrollment.model";
+import { userModel } from "../user/user.model";
 import { TReview } from "./review.interface";
 import { reviewModel } from "./review.model";
 
@@ -17,14 +18,14 @@ const addReview = async (payload: TReview) => {
   if (!courseEnrolledCompletedData) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
-      "You did not complete this course !!!"
+      "You did not complete this course !!!",
     );
   }
 
   if (courseEnrolledCompletedData?.isReviewed) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
-      "You already reivewed this course !!!"
+      "You already reivewed this course !!!",
     );
   }
 
@@ -45,7 +46,7 @@ const addReview = async (payload: TReview) => {
         completed: true,
       },
       { isReviewed: true },
-      { new: true, session }
+      { new: true, session },
     );
 
     await session.commitTransaction();
@@ -72,14 +73,23 @@ const updateReview = async (payload: {
   const updateResult = await reviewModel.findByIdAndUpdate(
     reviewId,
     { comment, rating },
-    { new: true }
+    { new: true },
   );
 
   return updateResult;
 };
 
 // ! check review eligibility
-const checkReviewEligibility = async (courseId: string, userId: string) => {
+const checkReviewEligibility = async (
+  courseId: string,
+  userId: string | undefined,
+) => {
+  const userData = await userModel.findById(userId);
+
+  if (!userData) {
+    return false;
+  }
+
   const result = await courseEnrollmentModel.findOne({
     user: userId,
     course: courseId,

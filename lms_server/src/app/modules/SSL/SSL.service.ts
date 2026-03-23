@@ -54,7 +54,7 @@ const initPayment = async (payload: TInitPayment) => {
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
     });
 
-    return response?.data?.desc[6]?.redirectGatewayURL;
+    return response?.data?.GatewayPageURL;
   } catch (error: any) {
     console.log(error);
     throw new Error(error);

@@ -19,7 +19,7 @@ const enrollInCourse = catchAsync(async (req, res) => {
 const getMyCourseEnrollData = catchAsync(async (req, res) => {
   const result = await courseEnrollmentService.getUserEnrolledCourse(
     req?.user?.userId,
-    req?.params?.courseId
+    req?.params?.courseId as string,
   );
 
   sendResponse(res, {
@@ -33,7 +33,7 @@ const getMyCourseEnrollData = catchAsync(async (req, res) => {
 // ! for getting all user enrolled course
 const getAllUserEnrolledCourse = catchAsync(async (req, res) => {
   const result = await courseEnrollmentService.getAllUserEnrolledCourse(
-    req?.user?.userId
+    req?.user?.userId,
   );
 
   sendResponse(res, {
@@ -48,7 +48,7 @@ const getAllUserEnrolledCourse = catchAsync(async (req, res) => {
 const getModuleDataEnrlledCourse = catchAsync(async (req, res) => {
   const result = await courseEnrollmentService.getModuleDataEnrlledCourse(
     req?.user?.userId,
-    req?.params?.courseId
+    req?.params?.courseId as string,
   );
 
   sendResponse(res, {
@@ -62,8 +62,8 @@ const getModuleDataEnrlledCourse = catchAsync(async (req, res) => {
 // ! for getting video data for enrolled course
 const getVideoDataEnrlledCourse = catchAsync(async (req, res) => {
   const result = await courseEnrollmentService.watchVideo(
-    req?.params?.videoId,
-    req?.user?.userId
+    req?.params?.videoId as string,
+    req?.user?.userId,
   );
 
   sendResponse(res, {
@@ -77,8 +77,8 @@ const getVideoDataEnrlledCourse = catchAsync(async (req, res) => {
 // ! for getting course progress percentage
 const courseProgressPercentage = catchAsync(async (req, res) => {
   const result = await courseEnrollmentService.courseProgressPercentage(
-    req?.params?.courseId,
-    req?.user?.userId
+    req?.params?.courseId as string,
+    req?.user?.userId,
   );
 
   sendResponse(res, {
@@ -104,8 +104,8 @@ const enrollmentsPerCourse = catchAsync(async (req, res) => {
 // ! based on module id , find video data for enrolled user
 const getUserEnrolledModuleVideos = catchAsync(async (req, res) => {
   const result = await courseEnrollmentService.getUserEnrolledModuleVideos(
-    req?.params?.moduleId,
-    req?.user?.userId
+    req?.params?.moduleId as string,
+    req?.user?.userId,
   );
 
   sendResponse(res, {
@@ -119,8 +119,8 @@ const getUserEnrolledModuleVideos = catchAsync(async (req, res) => {
 //  ! for marking course as complete
 const markCompleteCourse = catchAsync(async (req, res) => {
   const result = await courseEnrollmentService.markCompleteCourse(
-    req?.params?.courseId,
-    req?.user?.userId
+    req?.params?.courseId as string,
+    req?.user?.userId,
   );
 
   sendResponse(res, {
@@ -133,9 +133,11 @@ const markCompleteCourse = catchAsync(async (req, res) => {
 
 // ! for checking user enrolled a coure or not
 const checkUserEnrolledInCourse = catchAsync(async (req, res) => {
+  const { courseId, userId } = req.query;
+
   const result = await courseEnrollmentService.checkUserEnrolledInCourse(
-    req?.params?.courseId,
-    req?.user?.userId
+    courseId as string,
+    userId as string | undefined,
   );
 
   sendResponse(res, {
@@ -149,7 +151,7 @@ const checkUserEnrolledInCourse = catchAsync(async (req, res) => {
 // ! get user's finished course
 const usersFinishedCourses = catchAsync(async (req, res) => {
   const result = await courseEnrollmentService.usersFinishedCourses(
-    req?.user?.userId
+    req?.user?.userId,
   );
 
   sendResponse(res, {

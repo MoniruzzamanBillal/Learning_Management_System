@@ -10,7 +10,7 @@ type TenrollCourse = {
 // ! for enrolling into a course
 export const enrollInCourseFunction = async (
   payload: TenrollCourse,
-  enrollInCourse: any
+  enrollInCourse: any,
 ) => {
   const taostId = toast.loading("Purchasing Course....");
 
@@ -50,7 +50,7 @@ export const enrollInCourseFunction = async (
 //  ! for marking course as complete
 export const markCompleteCourseFunction = async (
   courseId: string,
-  markCompleteCourse: any
+  markCompleteCourse: any,
 ) => {
   const taostId = toast.loading("Marking course complete...");
 

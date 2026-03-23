@@ -29,7 +29,7 @@ const authCheck = (...requiredRoles) => {
             decoded = jsonwebtoken_1.default.verify(token, config_1.default.jwt_secret);
         }
         catch (error) {
-            return next(new AppError_1.default(http_status_1.default.UNAUTHORIZED, "Invalid or expired token"));
+            return next(new AppError_1.default(http_status_1.default.UNAUTHORIZED, "Token expired!!!"));
         }
         const { userRole } = decoded;
         if (requiredRoles.length && !requiredRoles.includes(userRole)) {

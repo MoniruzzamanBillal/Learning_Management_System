@@ -29,9 +29,11 @@ const updateReview = catchAsync(async (req, res) => {
 
 // ! check review eligibility
 const checkReviewEligibility = catchAsync(async (req, res) => {
+  const { courseId, userId } = req.query;
+
   const result = await reviewServices.checkReviewEligibility(
-    req?.params?.courseId,
-    req?.user?.userId
+    courseId as string,
+    userId as string | undefined,
   );
 
   sendResponse(res, {
@@ -44,7 +46,9 @@ const checkReviewEligibility = catchAsync(async (req, res) => {
 
 // ! for getting course review
 const getCourseReview = catchAsync(async (req, res) => {
-  const result = await reviewServices.getCourseReview(req?.params?.courseId);
+  const result = await reviewServices.getCourseReview(
+    req?.params?.courseId as string,
+  );
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -57,7 +61,7 @@ const getCourseReview = catchAsync(async (req, res) => {
 // ! for getting average review
 const getAverageReviewOfCourse = catchAsync(async (req, res) => {
   const result = await reviewServices.getAverageReviewOfCourse(
-    req?.params?.courseId
+    req?.params?.courseId as string,
   );
 
   sendResponse(res, {

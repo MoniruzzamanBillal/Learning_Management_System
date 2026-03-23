@@ -1,6 +1,7 @@
 import Wrapper from "@/components/shared/Wrapper";
 import { useGetAllPublishedCorsesQuery } from "@/redux/features/course/course.api";
-import CourseCard, { TCourse } from "../courses/CourseCard";
+import { TCourse } from "../courses/Course.type";
+import CourseCard from "../courses/CourseCard";
 import CourseCardSkeleton from "../courses/CourseCardSkeleton";
 
 const PopularCourse = () => {

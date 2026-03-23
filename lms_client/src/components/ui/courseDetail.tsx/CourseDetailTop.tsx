@@ -87,7 +87,7 @@ const CourseDetailTop = ({
                       <li className=" pl-3 font-medium text-prime100 ">
                         {indtructor?.name}
                       </li>
-                    )
+                    ),
                   )}
               </ul>
             </div>

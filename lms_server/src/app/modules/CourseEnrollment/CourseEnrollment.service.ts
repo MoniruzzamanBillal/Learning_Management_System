@@ -34,7 +34,7 @@ const enrollInCourse = async (payload: { user: string; course: string }) => {
   if (!courseData?.published) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
-      "This course is not published yet!!!"
+      "This course is not published yet!!!",
     );
   }
 
@@ -47,7 +47,7 @@ const enrollInCourse = async (payload: { user: string; course: string }) => {
   if (previousEnrolledData) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
-      "This course is already enrolled by the user !!!"
+      "This course is already enrolled by the user !!!",
     );
   }
 
@@ -77,14 +77,14 @@ const enrollInCourse = async (payload: { user: string; course: string }) => {
     // * create course enrollment record
     const courseEnrollmentRecord = await courseEnrollmentModel.create(
       [courseEnrollmentData],
-      { session }
+      { session },
     );
 
     // * update payment record
     await paymentModel.findByIdAndUpdate(
       paymentRecord[0]?._id,
       { CourseEnrollment: courseEnrollmentRecord[0]?._id },
-      { session }
+      { session },
     );
 
     const modules = await moduleModel
@@ -160,25 +160,32 @@ const getAllUserEnrolledCourse = async (userId: string) => {
 
       const progressData = await courseProgressPercentage(
         courseData?._id,
-        userId
+        userId,
       );
 
       return {
         ...enrollmentData.toObject(),
         courseProgress: progressData,
       };
-    })
+    }),
   );
 
   return progressResult;
 };
 
 // ! for checking user enrolled a coure or not
-const checkUserEnrolledInCourse = async (courseId: string, userId: string) => {
+const checkUserEnrolledInCourse = async (
+  courseId: string,
+  userId: string | undefined,
+) => {
   const userData = await userModel.findById(userId);
 
+  let enrolledIncourse = false;
+
   if (!userData) {
-    throw new AppError(httpStatus.BAD_REQUEST, "This user don't exist !!!");
+    return {
+      enrolledIncourse: false,
+    };
   }
 
   const courseData = await courseModel.findById(courseId);
@@ -190,7 +197,7 @@ const checkUserEnrolledInCourse = async (courseId: string, userId: string) => {
   if (!courseData?.published) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
-      "This course is not published yet!!!"
+      "This course is not published yet!!!",
     );
   }
 
@@ -200,7 +207,7 @@ const checkUserEnrolledInCourse = async (courseId: string, userId: string) => {
     isDeleted: false,
   });
 
-  const enrolledIncourse = previousEnrolledData ? true : false;
+  enrolledIncourse = previousEnrolledData ? true : false;
 
   return { enrolledIncourse };
 };
@@ -248,7 +255,7 @@ const getModuleDataEnrlledCourse = async (userId: string, courseId: string) => {
   if (!previousEnrolledData) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
-      "You have no access of this course content!!!"
+      "You have no access of this course content!!!",
     );
   }
 
@@ -288,14 +295,14 @@ const watchVideo = async (videoId: string, userId: string) => {
   if (!currentProgressData) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
-      "Video progress not found for this user!"
+      "Video progress not found for this user!",
     );
   }
 
   if (currentProgressData?.videoStatus === videoProgressStatus?.locked) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
-      "This video is locked , complete previous video to unlock this video !!!"
+      "This video is locked , complete previous video to unlock this video !!!",
     );
   }
 
@@ -326,7 +333,7 @@ const watchVideo = async (videoId: string, userId: string) => {
         await videoProgressModel.findOneAndUpdate(
           { user: userId, video: nextVideo?._id?.toString() },
           { videoStatus: videoProgressStatus?.unlocked },
-          { session }
+          { session },
         );
       }
     }
@@ -405,7 +412,7 @@ const enrollmentsPerCourse = async () => {
 // ! based on module id , find video data for enrolled user
 const getUserEnrolledModuleVideos = async (
   moduleId: string,
-  userId: string
+  userId: string,
 ) => {
   const videoData = await videoProgressModel
     .find({
@@ -435,7 +442,7 @@ const markCompleteCourse = async (courseId: string, userId: string) => {
   if (!courseData?.published) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
-      "This course is not published yet!!!"
+      "This course is not published yet!!!",
     );
   }
 
@@ -448,26 +455,26 @@ const markCompleteCourse = async (courseId: string, userId: string) => {
   if (!previousEnrolledData) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
-      "You did not enrolled into this course !!!"
+      "You did not enrolled into this course !!!",
     );
   }
 
   const coursePercentageProgress = await courseProgressPercentage(
     courseId,
-    userId
+    userId,
   );
 
   if (coursePercentageProgress !== 100) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
-      "You did not complete the full course !!!"
+      "You did not complete the full course !!!",
     );
   }
 
   const result = await courseEnrollmentModel.findOneAndUpdate(
     { course: courseId, user: userId },
     { completed: true },
-    { new: true }
+    { new: true },
   );
 
   return result;

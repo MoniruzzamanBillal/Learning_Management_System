@@ -37,6 +37,7 @@ const CertificateDownloadButton = ({ userName, courseName }: Props) => {
     <>
       <Button
         onClick={() => handleDownload()}
+        size={"sm"}
         className="bg-green-600 hover:bg-green-700"
       >
         Download

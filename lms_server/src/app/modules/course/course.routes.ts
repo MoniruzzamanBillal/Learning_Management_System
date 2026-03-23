@@ -15,21 +15,21 @@ router.get("/all-courses", courseController.getAllCourses);
 router.get(
   "/admin-all-courses",
   authCheck(UserRole.admin),
-  courseController.getAllCoursesForAdmin
+  courseController.getAllCoursesForAdmin,
 );
 
 // ! for getting admin statistics
 router.get(
   "/admin-stats",
   // authCheck(UserRole.admin),
-  courseController.adminStatistics
+  courseController.adminStatistics,
 );
 
 // ! for getting all course data for admin and instructor
 router.get(
   "/all-courses-modules",
   authCheck(UserRole.admin, UserRole?.instructor),
-  courseController.getAllCoursesWithModules
+  courseController.getAllCoursesWithModules,
 );
 
 // ! for adding new course
@@ -43,7 +43,7 @@ router.post(
     next();
   },
   validateRequest(courseValidations.crateCourseValidationSchema),
-  courseController.createCourse
+  courseController.createCourse,
 );
 
 // ! for getting single course data
@@ -53,21 +53,21 @@ router.get("/course-detail/:id", courseController.getSingleCourse);
 router.get(
   "/admin-course-detail/:courseId",
   authCheck(UserRole.admin),
-  courseController.getCourseDetailsForAdmin
+  courseController.getCourseDetailsForAdmin,
 );
 
 // ! for getting single course data , for instructor
 router.get(
   "/instructor-course-detail/:courseId",
   authCheck(UserRole.instructor),
-  courseController.getCourseDetailForInstructor
+  courseController.getCourseDetailForInstructor,
 );
 
 // ! for getting instructor assigned courses
 router.get(
   "/instructor-courses/:instructorId",
   authCheck(UserRole.instructor),
-  courseController.getInstructorsAssignCourses
+  courseController.getInstructorsAssignCourses,
 );
 
 // ! for updating a course
@@ -81,14 +81,14 @@ router.patch(
     next();
   },
   validateRequest(courseValidations.updateCourseValidationSchema),
-  courseController.updateCourse
+  courseController.updateCourse,
 );
 
 // ! for publishing a course
 router.patch(
   "/publish-course/:id",
   authCheck(UserRole.admin),
-  courseController.publishCourse
+  courseController.publishCourse,
 );
 
 //

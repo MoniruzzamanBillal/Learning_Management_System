@@ -25,7 +25,7 @@ export const GetUserRole = () => {
 export const handleToastResponse = (
   result: any,
   toastId: string | number,
-  navigate?: () => void
+  navigate?: () => void,
 ) => {
   console.log(result);
 

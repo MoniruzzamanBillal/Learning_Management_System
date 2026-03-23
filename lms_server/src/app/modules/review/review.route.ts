@@ -12,14 +12,14 @@ router.post(
   "/give-review",
   authCheck(UserRole.user),
   validateRequest(reviewValidationSchema.addReviewSchema),
-  reviewController.addReview
+  reviewController.addReview,
 );
 
 // ! for updating review
 router.patch(
   "/update-review",
   authCheck(UserRole.user),
-  reviewController.updateReview
+  reviewController.updateReview,
 );
 
 // ! for getting course review
@@ -28,14 +28,13 @@ router.get("/course-review/:courseId", reviewController.getCourseReview);
 // ! for getting course average review
 router.get(
   "/average-course-review/:courseId",
-  reviewController.getAverageReviewOfCourse
+  reviewController.getAverageReviewOfCourse,
 );
 
 // ! for checking review eligibility
 router.get(
-  "/check-review-eligibility/:courseId",
-  authCheck(UserRole.user),
-  reviewController.checkReviewEligibility
+  "/check-review-eligibility",
+  reviewController.checkReviewEligibility,
 );
 
 export const reviewRouter = router;
