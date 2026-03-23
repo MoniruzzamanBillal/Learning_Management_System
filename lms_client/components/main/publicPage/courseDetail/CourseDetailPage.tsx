@@ -3,7 +3,6 @@
 import Wrapper from "@/components/shared/Wrapper";
 import { useFetchData, usePost } from "@/hooks/useApi";
 import { useGetUser } from "@/hooks/useGetUser";
-import { TApiResponse } from "@/types/globalTypes";
 import { useState } from "react";
 import { toast } from "sonner";
 import { TCourse } from "../course/Course.type";
@@ -18,7 +17,7 @@ export default function CourseDetailPage({ id }: { id: string }) {
   const [review, setReview] = useState<string | null>(null);
   const [rating, setRating] = useState(0);
 
-  const { data: courseDetail, isLoading } = useFetchData<TApiResponse<TCourse>>(
+  const { data: courseDetail, isLoading } = useFetchData<TCourse>(
     [`course-detail-${id}`, `course-${id}`],
     `/course/course-detail/${id}`,
     {
@@ -26,11 +25,9 @@ export default function CourseDetailPage({ id }: { id: string }) {
     },
   );
 
-  const { data: checkEnrolledData } = useFetchData<
-    TApiResponse<{
-      enrolledIncourse: boolean;
-    }>
-  >(
+  const { data: checkEnrolledData } = useFetchData<{
+    enrolledIncourse: boolean;
+  }>(
     [`user-enroll-course-${id}`],
     `/enroll/check-user-enrolled?courseId=${id}&userId=${userData?.userId || ""}`,
     {
@@ -44,7 +41,7 @@ export default function CourseDetailPage({ id }: { id: string }) {
     data: courseReview,
     isLoading: courseReviewLoading,
     refetch: reviewDataRefetch,
-  } = useFetchData<TApiResponse<TPopulatedReview[]>>(
+  } = useFetchData<TPopulatedReview[]>(
     [`course-review-${id}`],
     `/review/course-review/${id}`,
     {
@@ -58,7 +55,7 @@ export default function CourseDetailPage({ id }: { id: string }) {
     data: reviewEligibility,
     isLoading: reviewEligibleDataLoading,
     refetch: eligibilityRefetch,
-  } = useFetchData<TApiResponse<boolean | null>>(
+  } = useFetchData<boolean | null>(
     [`review-eligibility-${id}`],
     `/review/check-review-eligibility?courseId=${id}&userId=${userData?.userId || ""}`,
     {

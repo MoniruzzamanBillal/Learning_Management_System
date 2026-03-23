@@ -2,7 +2,6 @@
 
 import Wrapper from "@/components/shared/Wrapper";
 import { useFetchData } from "@/hooks/useApi";
-import { TApiResponse } from "@/types/globalTypes";
 import Image from "next/image";
 import TutorSkeleton from "./TutorSkeleton";
 
@@ -15,10 +14,7 @@ type TUser = {
 
 export default function TutorSection() {
   const { data: instructorData, isLoading: instructorDataLoading } =
-    useFetchData<TApiResponse<TUser[]>>(
-      ["all-instructors"],
-      "/user/get-instructors",
-    );
+    useFetchData<TUser[]>(["all-instructors"], "/user/get-instructors");
 
   let content = null;
 

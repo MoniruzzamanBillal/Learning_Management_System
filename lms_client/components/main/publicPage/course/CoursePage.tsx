@@ -15,7 +15,9 @@ export default function CoursePage() {
   const [categoryType, setcategoryType] = useState<string>("");
   const debounceTerm = useDebounce(searchTerm, 400);
 
-  const { data: allCourseData, isLoading: courseDataLoading } = useFetchData(
+  const { data: allCourseData, isLoading: courseDataLoading } = useFetchData<{
+    data: TCourse[];
+  }>(
     ["all-courses", `${debounceTerm}`, `${categoryType}`],
     `/course/all-courses?searchTerm=${debounceTerm}&category=${categoryType}`,
   );

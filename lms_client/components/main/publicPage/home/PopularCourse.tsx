@@ -7,10 +7,9 @@ import CourseCard from "../course/CourseCard";
 import CourseCardSkeleton from "../course/CourseCardSkeleton";
 
 export default function PopularCourse() {
-  const { data: allCourseData, isLoading: courseDataLoading } = useFetchData(
-    ["popular-courses"],
-    "/course/all-courses?limit=3",
-  );
+  const { data: allCourseData, isLoading: courseDataLoading } = useFetchData<{
+    data: TCourse[];
+  }>(["popular-courses"], "/course/all-courses?limit=3");
 
   let content = null;
 

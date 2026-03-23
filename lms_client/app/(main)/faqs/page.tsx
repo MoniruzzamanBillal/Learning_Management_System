@@ -1,7 +1,5 @@
+import FAQPage from "@/components/main/publicPage/FAQPage/FAQPage";
+
 export default function page() {
-  return (
-    <div>
-      <h1>faqs </h1>
-    </div>
-  );
+  return <FAQPage />;
 }

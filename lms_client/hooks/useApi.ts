@@ -6,8 +6,15 @@ import {
   UseQueryOptions,
 } from "@tanstack/react-query";
 
+type TgenericResponse<TData> = {
+  data: TData;
+  statusCode: number;
+  success: boolean;
+  message: string;
+};
+
 type TFetchOptions<TData> = Omit<
-  UseQueryOptions<TData, Error>,
+  UseQueryOptions<TgenericResponse<TData>, Error>,
   "queryKey" | "queryFn"
 >;
 
