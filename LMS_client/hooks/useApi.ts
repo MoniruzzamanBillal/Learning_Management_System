@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 import { apiDelete, apiGet, apiPatch, apiPost, apiPut } from "@/utils/api";
 import {
   useMutation,
@@ -8,12 +6,16 @@ import {
   UseQueryOptions,
 } from "@tanstack/react-query";
 
-type TFetchOptions = Omit<UseQueryOptions<any, Error>, "queryKey" | "queryFn">;
+type TFetchOptions<TData> = Omit<
+  UseQueryOptions<TData, Error>,
+  "queryKey" | "queryFn"
+>;
 
-export const useFetchData = (
+// ! updated useFetchHook with options - enabled , staleTime
+export const useFetchData = <TData>(
   key: string[],
   endPoint: string,
-  options?: TFetchOptions,
+  options?: TFetchOptions<TData>,
 ) => {
   return useQuery({
     queryKey: key,
@@ -28,7 +30,7 @@ export const usePost = (invalidateQueriesKeys?: Array<string[]>) => {
   return useMutation({
     mutationFn: (params: {
       url: string;
-      payload: Record<string, unknown> | FormData | any;
+      payload: Record<string, unknown> | FormData | unknown;
     }) => {
       return apiPost(params.url, params.payload);
     },
@@ -39,7 +41,7 @@ export const usePost = (invalidateQueriesKeys?: Array<string[]>) => {
         });
       }
     },
-    onError: (error: any) => {
+    onError: (error: unknown) => {
       // console.log("error = ", error?.response?.data?.message);
       // toast.error(
       //   error?.response?.data?.message || error.message || "Failed to Add.",
@@ -50,12 +52,19 @@ export const usePost = (invalidateQueriesKeys?: Array<string[]>) => {
 };
 
 // Update Hook
-export const useUpdateData = (key: string[], endPoint: string) => {
+export const useUpdateData = (invalidateQueriesKeys?: Array<string[]>) => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (payload: any) => apiPut(endPoint, payload),
+    mutationFn: (params: {
+      url: string;
+      payload: Record<string, unknown> | FormData | unknown;
+    }) => apiPut(params.url, params.payload),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: key });
+      if (invalidateQueriesKeys) {
+        invalidateQueriesKeys.forEach((key) => {
+          queryClient.invalidateQueries({ queryKey: key });
+        });
+      }
     },
   });
 };
@@ -66,7 +75,7 @@ export const usePatch = (invalidateQueriesKeys?: Array<string[]>) => {
   return useMutation({
     mutationFn: (params: {
       url: string;
-      payload: Record<string, unknown> | FormData;
+      payload: Record<string, unknown> | FormData | unknown;
     }) => {
       return apiPatch(params.url, params.payload);
     },

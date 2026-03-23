@@ -56,6 +56,8 @@ instance.interceptors.response.use(
   async function (error) {
     const originalRequest = error.config;
 
+    console.log("error in axiosinstance =  ", error);
+
     if (error?.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 

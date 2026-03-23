@@ -1,3 +1,4 @@
+import CourseDetailSkeleton from "@/components/main/publicPage/courseDetail/CourseDetailSkeleton";
 import { Metadata } from "next";
 import dynamic from "next/dynamic";
 
@@ -15,7 +16,7 @@ export default async function page({ params }: IPageProps) {
   const CourseDetailPage = dynamic(
     () => import("@/components/main/publicPage/courseDetail/CourseDetailPage"),
     {
-      loading: () => <p>loading....</p>,
+      loading: () => <CourseDetailSkeleton />,
     },
   );
 

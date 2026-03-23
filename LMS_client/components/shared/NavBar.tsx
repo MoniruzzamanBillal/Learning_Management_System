@@ -23,8 +23,6 @@ const NavBar = () => {
   const [open, setOpen] = useState(false);
   const userInfo = useGetUser();
 
-  console.log(userInfo);
-
   return (
     <div
       className="  shadow-md w-full fixed top-0 left-0 z-10 "
@@ -95,7 +93,7 @@ const NavBar = () => {
               <Link href={"/login"} onClick={() => setOpen(!open)}>
                 <Button
                   size={"sm"}
-                  className=" -z-[1] text-xs sm:text-sm md:text-base bg-prime50 hover:bg-prime100 "
+                  className=" -z-[1] text-xs sm:text-sm md:text-base bg-prime-50 hover:bg-prime-100 "
                 >
                   Sign in
                 </Button>
