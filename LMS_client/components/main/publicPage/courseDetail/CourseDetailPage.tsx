@@ -30,9 +30,15 @@ export default function CourseDetailPage({ id }: { id: string }) {
     TApiResponse<{
       enrolledIncourse: boolean;
     }>
-  >([`user-enroll-course-${id}`], `/enroll/check-user-enrolled/${id}`, {
-    enabled: !!id,
-  });
+  >(
+    [`user-enroll-course-${id}`],
+    `/enroll/check-user-enrolled?courseId=${id}&userId=${userData?.userId || ""}`,
+    {
+      enabled: !!id && !!userData?.userId,
+    },
+  );
+
+  // console.log("checkEnrolledData = ", checkEnrolledData);
 
   const {
     data: courseReview,
@@ -46,17 +52,21 @@ export default function CourseDetailPage({ id }: { id: string }) {
     },
   );
 
+  // console.log("courseReview = ", courseReview);
+
   const {
     data: reviewEligibility,
     isLoading: reviewEligibleDataLoading,
     refetch: eligibilityRefetch,
   } = useFetchData<TApiResponse<boolean | null>>(
     [`review-eligibility-${id}`],
-    `/review/check-review-eligibility/${id}`,
+    `/review/check-review-eligibility?courseId=${id}&userId=${userData?.userId || ""}`,
     {
-      enabled: !!id,
+      enabled: !!id && !!userData?.userId,
     },
   );
+
+  // console.log("reviewEligibility = ", reviewEligibility);
 
   const { mutateAsync: giveReview, isPending: reviewGivingPending } = usePost([
     [`course-${id}`],

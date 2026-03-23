@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Wrapper from "@/components/shared/Wrapper";
 import { Button } from "@/components/ui/button";
 import { usePost } from "@/hooks/useApi";
@@ -37,13 +38,6 @@ const CourseDetailTop = ({
   alreadyEnrolled,
   userInfo,
 }: TCourseDetailProps) => {
-  // console.log(courseDetails);
-
-  // const [enrollInCourse, { isLoading: courseEnrollementLoading }] =
-  //   useEnrollInCourseMutation();
-
-  // const userInfo = useGetUser();
-
   const { mutateAsync: enrollCourseMutaion, isPending } = usePost([
     [`course-${courseDetails?._id}`],
     [`course-detail-${courseDetails?._id}`],
@@ -53,7 +47,6 @@ const CourseDetailTop = ({
 
   // ! for enrolling into a course
   const handleEnrollCourse = async (courseId: string) => {
-    console.log("course id = ", courseId);
     if (!userInfo?.userId) {
       toast.error("Login to enroll into this course !!!!");
       return;
@@ -64,14 +57,46 @@ const CourseDetailTop = ({
       course: courseId,
     };
 
-    console.log("enroll payload = ", payload);
+    try {
+      const taostId = toast.loading("Purchasing Course....");
 
-    const result = await enrollCourseMutaion({
-      url: `/enroll/enroll-course`,
-      payload,
-    });
+      const result = await enrollCourseMutaion({
+        url: `/enroll/enroll-course`,
+        payload,
+      });
 
-    console.log("course enroll result = ", result);
+      console.log("course enroll result = ", result);
+
+      if (result?.error) {
+        const errorMessage = (result?.error as any)?.data?.message;
+        console.log(errorMessage);
+        toast.error(errorMessage, {
+          id: taostId,
+          duration: 1400,
+        });
+      }
+
+      if (result?.data) {
+        const successMsg = result?.message;
+        const paymentUrl = result?.data;
+
+        toast.success(successMsg, {
+          id: taostId,
+          duration: 2000,
+        });
+
+        window.location.href = paymentUrl;
+      }
+    } catch (error: any) {
+      console.log(error);
+      toast.error(
+        error?.message ||
+          "Something went wrong while purchasing the course !!!",
+        {
+          duration: 1400,
+        },
+      );
+    }
 
     //
   };
