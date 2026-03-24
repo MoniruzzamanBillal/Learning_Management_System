@@ -1,3 +1,4 @@
+import MyCourses from "@/components/main/publicPage/MyCourses/MyCourses";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -5,11 +6,5 @@ export const metadata: Metadata = {
 };
 
 export default function page() {
-  return (
-    <div>
-      <h1>my courses </h1>
-      <h1>my courses </h1>
-      <h1>my courses </h1>
-    </div>
-  );
+  return <MyCourses />;
 }
