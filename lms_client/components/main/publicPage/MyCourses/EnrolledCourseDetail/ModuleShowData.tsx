@@ -5,10 +5,28 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
+import { useFetchData } from "@/hooks/useApi";
+import { TApiResponse } from "@/types/globalTypes";
+import { apiGet } from "@/utils/api";
 import { videoProgressStatusConsts } from "@/utils/constants";
 import { CircleCheckBig, Lock, LockOpen } from "lucide-react";
 import React, { SetStateAction, useState } from "react";
+import { toast } from "sonner";
+import ModuleItemSkeleton from "./ModuleItemSkeleton";
 import { TModule } from "./type";
+
+type TVideoDetail = {
+  _id: string;
+  title: string;
+  videoUrl: string;
+  videoOrder: number;
+  module: string;
+  instructor: string;
+  createdAt: string;
+  updatedAt: string;
+  isDeleted: boolean;
+  __v: number;
+};
 
 type TVideo = { _id: string; title: string };
 
@@ -38,69 +56,65 @@ const ModuleShowData = ({
   setVideoDataObj,
   videoDataObj,
 }: TProps) => {
-  const [videoData, setVideoData] = useState<TModuleVideo[] | null>(null);
+  const [selectedModuleId, setSelectedModuleId] = useState<string | null>(null);
 
-  // const [getModuleVideos, { isLoading }] =
-  //   useLazyGetEnrolledCourseVideoModuleIdQuery();
-  // const [getVideoData, { isLoading: videoDataFetchLoading }] =
-  //   useLazyGetEnrolledCourseVideoQuery();
-  // const [userCourseProgress] = useLazyGetUserCourseProgressQuery();
+  const {
+    data: moduleVideosData,
+    isLoading: moduleVideosLoading,
+    refetch: moduleVideoRefetch,
+  } = useFetchData<TModuleVideo[]>(
+    [`module-videos-${selectedModuleId}`],
+    `/enroll/module-videos/${selectedModuleId}`,
+    {
+      enabled: !!selectedModuleId,
+      refetchOnMount: true,
+      refetchOnWindowFocus: true,
+    },
+  );
 
   // ! for getting module video , after clicking a module name
-  // const handleClickModule = async (module: TModuleType) => {
-  //   try {
-  //     const result = await getModuleVideos(module?._id, false);
-
-  //     if (result?.data?.data) {
-  //       setVideoData(result?.data?.data);
-  //     }
-  //   } catch (error) {
-  //     console.error("Failed to fetch module videos", error);
-  //   }
-  // };
+  const handleClickModule = async (module: TModule) => {
+    setSelectedModuleId(module._id);
+  };
 
   // ! for getting video data
-  // const handleGetVideo = async (video: TVideo) => {
-  //   try {
-  //     const result = await getVideoData(video?._id);
+  const handleGetVideo = async (videoId: string) => {
+    setVideoLoading(true);
 
-  //     if (result?.error) {
-  //       const errorMessage = (result?.error as any)?.data?.message;
-  //       toast.error(errorMessage, { duration: 1500 });
-  //       return;
-  //     }
+    try {
+      const result = (await apiGet(
+        `/enroll/my-enrolled-course-videos/${videoId}`,
+      )) as TApiResponse<TVideoDetail>;
 
-  //     const videoPayload = {
-  //       title: result?.data?.data?.title,
-  //       videoUrl: result?.data?.data?.videoUrl,
-  //     };
+      moduleVideoRefetch();
+      setVideoLoading(false);
 
-  //     setVideoDataObj(videoPayload);
+      const videoPayload = {
+        title: result?.data?.title,
+        videoUrl: result?.data?.videoUrl,
+      };
 
-  //     const moduleId = result?.data?.data?.module;
+      setVideoDataObj(videoPayload);
 
-  //     const courseProgressResult = await userCourseProgress(courseId);
+      const courseProgressResult = (await apiGet(
+        `/enroll/my-course-progress/${courseId}`,
+      )) as TApiResponse<number>;
 
-  //     if (courseProgressResult?.data?.data) {
-  //       setCourseProgress(courseProgressResult?.data?.data);
-  //     }
+      if (courseProgressResult?.data) {
+        setCourseProgress(courseProgressResult?.data);
+      }
 
-  //     const moduleResult = await getModuleVideos(moduleId, false);
+      const moduleId = result?.data?.module;
 
-  //     if (moduleResult?.data?.data) {
-  //       setVideoData(moduleResult?.data?.data);
-  //     }
-  //   } catch (error) {
-  //     console.error("Failed to fetch  video", error);
-  //   }
-  // };
+      setSelectedModuleId(moduleId);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      setVideoLoading(false);
 
-  // console.log(videoData);
-
-  // ! effect for setting video loading
-  // useEffect(() => {
-  //   setVideoLoading(videoDataFetchLoading);
-  // }, [videoDataFetchLoading]);
+      console.log("Failed to fetch  video", error);
+      toast.error(error?.message || "Failed to fetch  video");
+    }
+  };
 
   return (
     <div className="ModuleShowDataContainer mt-10  ">
@@ -109,7 +123,6 @@ const ModuleShowData = ({
         <Accordion type="single" collapsible className="w-full">
           {modules &&
             modules?.map((module: TModule) => (
-              //
               <AccordionItem
                 key={module?._id}
                 value={module?._id}
@@ -118,16 +131,16 @@ const ModuleShowData = ({
                 {/* module name  */}
                 <AccordionTrigger
                   className=" text-base lg:text-xl  text-left "
-                  // onClick={() => handleClickModule(module)}
+                  onClick={() => handleClickModule(module)}
                 >
                   {module?.title}
                 </AccordionTrigger>
 
                 {/* video name  */}
 
-                {/* {isLoading && <ModuleItemSkeleton />} */}
-                {videoData &&
-                  videoData?.map((video: TModuleVideo) => (
+                {moduleVideosLoading && <ModuleItemSkeleton />}
+                {moduleVideosData &&
+                  moduleVideosData?.data?.map((video: TModuleVideo) => (
                     <AccordionContent
                       key={video?._id}
                       className={` text-sm lg:text-lg py-3 pl-4 font-medium border-y border-y-gray-300 flex items-center gap-x-2 cursor-pointer   ${
@@ -150,23 +163,14 @@ const ModuleShowData = ({
                         <LockOpen className=" text-blue-600 font-bold size-5 lg:size-6 " />
                       )}
 
-                      <p
-                      // onClick={() => handleGetVideo(video?.video)}
-                      >
+                      <p onClick={() => handleGetVideo(video?.video?._id)}>
                         {video?.video?.title}
                       </p>
                     </AccordionContent>
                   ))}
-
-                {/*  */}
               </AccordionItem>
-
-              //
             ))}
-
-          {/*  */}
         </Accordion>
-        {/*  */}
       </div>
     </div>
   );

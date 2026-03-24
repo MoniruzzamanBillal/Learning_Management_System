@@ -24,7 +24,7 @@ export default function EnrollCourseDetail({ id }: { id: string }) {
     },
   );
 
-  console.log("enrolledCourseData = ", enrolledCourseData);
+  //   console.log("enrolledCourseData = ", enrolledCourseData);
 
   const [videoDataObj, setVideoDataObj] = useState<{
     title: string;
