@@ -2,38 +2,74 @@
 
 import Wrapper from "@/components/shared/Wrapper";
 import { Button } from "@/components/ui/button";
-import { useFetchData } from "@/hooks/useApi";
+import { useFetchData, usePatch } from "@/hooks/useApi";
+import { TApiResponse } from "@/types/globalTypes";
 import MuxPlayer from "@mux/mux-player-react";
 import { Bookmark } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 import ModuleShowData from "./ModuleShowData";
 import NoVideoPlaceholder from "./NoVideoPlaceholder";
 import { TEnrollCourseDetail } from "./type";
 import VideoLoadingSkeleton from "./VideoLoadingSkeleton";
 
-export default function EnrollCourseDetail({ id }: { id: string }) {
-  const {
-    data: enrolledCourseData,
-    isLoading,
-    refetch: courseDataRefetch,
-  } = useFetchData<TEnrollCourseDetail>(
-    [`enroll-course-detail-${id}`, `enroll-course-${id}`],
-    `/enroll/my-enrolled-course/${id}`,
-    {
-      enabled: !!id,
-    },
-  );
+type TCompleteEnrollment = {
+  _id: string;
+  user: string;
+  course: string;
+  Payment: string;
+  completed: boolean;
+  isReviewed: boolean;
+  isDeleted: boolean;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+};
 
-  //   console.log("enrolledCourseData = ", enrolledCourseData);
+export default function EnrollCourseDetail({ id }: { id: string }) {
+  const { data: enrolledCourseData, isLoading } =
+    useFetchData<TEnrollCourseDetail>(
+      [`enroll-course-detail-${id}`, `enroll-course-${id}`],
+      `/enroll/my-enrolled-course/${id}`,
+      {
+        enabled: !!id,
+      },
+    );
 
   const [videoDataObj, setVideoDataObj] = useState<{
     title: string;
     videoUrl: string;
   } | null>(null);
   const [videoUrlLoading, setVideoLoading] = useState<boolean>(false);
+
   const [courseProgress, setCourseProgress] = useState<number | null>(
     enrolledCourseData?.data?.courseProgressData ?? null,
   );
+
+  if (
+    enrolledCourseData?.data?.courseProgressData !== undefined &&
+    courseProgress !== enrolledCourseData.data.courseProgressData
+  ) {
+    setCourseProgress(enrolledCourseData.data.courseProgressData);
+  }
+
+  const { mutateAsync, isPending } = usePatch([[`enroll-course-detail-${id}`]]);
+
+  // ! for completing course
+  const handleMarkCompleteCourse = async () => {
+    try {
+      const result = (await mutateAsync({
+        url: `/enroll/complete-my-course/${id}`,
+        payload: { id },
+      })) as TApiResponse<TCompleteEnrollment>;
+
+      if (result?.success) {
+        toast.success(result?.message);
+      }
+    } catch (error) {
+      console.log("error = ", error);
+    }
+  };
 
   let content = null;
 
@@ -93,15 +129,13 @@ export default function EnrollCourseDetail({ id }: { id: string }) {
 
           {!enrolledCourseData?.data?.completed && courseProgress === 100 && (
             <Button
-              // disabled={courseMarkCompleteLoading}
-              // onClick={() => handleMarkCompleteCourse()}
+              disabled={isPending}
+              onClick={() => handleMarkCompleteCourse()}
               className={` mt-2 w-full bg-prime-100 hover:bg-prime-200  `}
             >
               <Bookmark size={48} strokeWidth={2.25} />
-              Mark as Completed
-              {/* {courseMarkCompleteLoading
-                  ? "Marking as complete..."
-                  : "Mark as Completed"} */}
+
+              {isPending ? "Marking as complete..." : "Mark as Completed"}
             </Button>
           )}
         </div>

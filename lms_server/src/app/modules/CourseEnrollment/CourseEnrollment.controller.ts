@@ -126,7 +126,7 @@ const markCompleteCourse = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "Course Completed successfully !!!",
+    message: "congratulation , you successfully completed the course.",
     data: result,
   });
 });
