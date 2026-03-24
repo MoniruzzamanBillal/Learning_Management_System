@@ -1,5 +1,15 @@
-export default function page({ params }: { params: { id: string } }) {
-  const { id } = params;
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "MATS Academy | My Course",
+};
+
+type TpageProps = {
+  params: Promise<{ id: string }>;
+};
+
+export default async function page({ params }: TpageProps) {
+  const { id } = await params;
 
   return (
     <div>

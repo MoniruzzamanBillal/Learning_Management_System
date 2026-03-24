@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 
 import { Lightbulb, Sparkles, Users } from "lucide-react";
 import Link from "next/link";
-import TutorSection from "../publicPage/home/TutorSection";
+import TutorSection from "../home/TutorSection";
 
 const instructorCardsData = [
   {

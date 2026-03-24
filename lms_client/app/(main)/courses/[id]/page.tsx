@@ -6,11 +6,11 @@ export const metadata: Metadata = {
   title: "MATS Academy | Course Detail",
 };
 
-interface IPageProps {
+type TpageProps = {
   params: Promise<{ id: string }>;
-}
+};
 
-export default async function page({ params }: IPageProps) {
+export default async function page({ params }: TpageProps) {
   const { id } = await params;
 
   const CourseDetailPage = dynamic(
