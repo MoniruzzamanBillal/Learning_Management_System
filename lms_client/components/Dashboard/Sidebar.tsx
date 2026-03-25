@@ -21,8 +21,6 @@ const Sidebar = () => {
   const router = useRouter();
   const pathname = usePathname();
 
-  console.log("pathname = ", pathname);
-
   const userInfo = useGetUser();
 
   let links: Tsidebar[] = [];
