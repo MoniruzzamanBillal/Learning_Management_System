@@ -1,7 +1,9 @@
 "use client";
 
+import { authKey } from "@/constants/storageKey";
 import { useGetUser } from "@/hooks/useGetUser";
 import { userRoleConts } from "@/utils/constants";
+import Cookies from "js-cookie";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { ReactNode } from "react";
@@ -39,7 +41,8 @@ const Sidebar = () => {
 
   // ! for logout
   const handleLogout = () => {
-    router.push("/");
+    Cookies.remove(authKey);
+    window.location.href = "/";
   };
 
   return (
