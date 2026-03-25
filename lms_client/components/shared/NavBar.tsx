@@ -3,6 +3,7 @@
 import { useGetUser } from "@/hooks/useGetUser";
 import { userRoleConts } from "@/utils/constants";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { LuUser } from "react-icons/lu";
 import { RiCloseFill, RiMenu3Fill } from "react-icons/ri";
@@ -20,6 +21,8 @@ const Links = [
 ];
 
 const NavBar = () => {
+  const pathname = usePathname();
+
   const [open, setOpen] = useState(false);
   const userInfo = useGetUser();
 
@@ -63,25 +66,31 @@ const NavBar = () => {
           }}
         >
           {Links &&
-            Links.map((link, index) => (
-              <li
-                key={index}
-                className="  my-4 md:ml-5 md:my-0  font-bold uppercase"
-              >
-                <Link
-                  href={link.link}
-                  className=" hover:text-prime-50 duration-300  "
-                  onClick={() => setOpen(false)}
+            Links.map((link, index) => {
+              const isActive = pathname === link?.link;
+
+              return (
+                <li
+                  key={index}
+                  className="  my-4 md:ml-5 md:my-0  font-bold uppercase"
                 >
-                  {link.name}
-                </Link>
-              </li>
-            ))}
+                  <Link
+                    href={link.link}
+                    className={` ${
+                      isActive ? "text-prime-100 " : "hover:text-prime-100"
+                    } duration-300   `}
+                    onClick={() => setOpen(false)}
+                  >
+                    {link.name}
+                  </Link>
+                </li>
+              );
+            })}
 
           {userInfo?.userRole === userRoleConts.user && (
             <Link
               href={"/my-courses"}
-              className=" hover:text-prime50 duration-500 pl-4 font-bold uppercase "
+              className={` duration-300 pl-4 font-bold uppercase ${pathname === "/my-courses" ? "text-prime-100 " : "hover:text-prime-100 "} `}
               onClick={() => setOpen(false)}
             >
               My Courses

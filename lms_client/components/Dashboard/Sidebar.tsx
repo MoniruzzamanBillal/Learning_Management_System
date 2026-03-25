@@ -57,7 +57,7 @@ const Sidebar = () => {
 
       {/* dashboard links starts  */}
       <nav className="dashboardNavLinks mt-4">
-        {links.map((item) => {
+        {links?.map((item) => {
           const isActive = pathname === item.path;
 
           return (
