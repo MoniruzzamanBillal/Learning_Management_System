@@ -1,7 +1,8 @@
 "use client";
 
 import { DateRange } from "react-day-picker";
-import DateSelect from "../input/DateSelect";
+
+import DateSelect from "@/components/input/DateSelect";
 import TableFilter, { TTableFilterGroup } from "./TableFilter";
 import TableSearch from "./TableSearch";
 

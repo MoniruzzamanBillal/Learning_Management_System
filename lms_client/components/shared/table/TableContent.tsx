@@ -14,17 +14,17 @@ export default function TableContent<TData>({
   showSerialNumber = true,
 }: TableContentProps<TData>) {
   return (
-    <div className="  border border-neutral-900  bg-neutral-800 rounded-[8px] overflow-hidden  ">
+    <div className="  border border-prime-50 bg-prime-50/5 rounded-[8px] overflow-hidden  ">
       <div className=" w-full overflow-x-auto">
         <table className="min-w-max w-full">
           <thead>
             {table.getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id} className=" bg-neutral-600 ">
+              <tr key={headerGroup.id} className=" bg-prime-50/20 ">
                 {showSerialNumber && (
                   <th className=" px-4 py-3 first:flex first:items-center last:flex last:justify-center last:rounded-r-2xl">
                     <div>
                       <div className="flex items-center justify-start  ">
-                        <span className=" font-semibold text-[0.875rem] leading-5.25 text-neutral-50 ">
+                        <span className=" font-semibold text-[0.875rem] leading-5.25 text-gray-900 ">
                           SL. No.
                         </span>
                       </div>
@@ -43,7 +43,7 @@ export default function TableContent<TData>({
                           ? header.column.getToggleSortingHandler()
                           : undefined
                       }
-                      className={` font-semibold text-[0.875rem] leading-5.25 text-neutral-50 flex items-center justify-between 
+                      className={` font-semibold text-[0.875rem] text-gray-900  flex items-center justify-between 
     ${header.column.getCanSort() ? "cursor-pointer select-none" : ""}
   `}
                     >
@@ -81,10 +81,10 @@ export default function TableContent<TData>({
                 {table.getRowModel().rows.map((row, index: number) => (
                   <tr
                     key={row.id}
-                    className={`cursor-pointer border-b border-b-table-border  transition-colors last:border-0  h-20 `}
+                    className={`cursor-pointer border-b border-b-prime-50  transition-colors last:border-0  h-20 `}
                   >
                     {showSerialNumber && (
-                      <td className="  py-4 px-5 font-medium text-[0.875rem] leading-5.25 text-neutral-50 ">
+                      <td className="  py-4 px-5 font-medium text-[0.875rem] text-gray-800 ">
                         {String(
                           table.getState().pagination.pageIndex *
                             table.getState().pagination.pageSize +
@@ -97,7 +97,7 @@ export default function TableContent<TData>({
                     {row.getVisibleCells().map((cell) => (
                       <td
                         key={cell.id}
-                        className="  py-4 px-5 font-medium text-[0.875rem] leading-5.25 text-neutral-50 "
+                        className="  py-4 px-5 font-medium text-[0.875rem] text-gray-800 "
                       >
                         {flexRender(
                           cell.column.columnDef.cell,

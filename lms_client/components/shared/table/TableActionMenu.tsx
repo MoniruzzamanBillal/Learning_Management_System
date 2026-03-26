@@ -28,14 +28,14 @@ export default function TableActionMenu<T>({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild className="flex justify-center w-full">
-        <Button className=" bg-neutral-800 ">
+        <Button className="  text-gray-800 bg-[#E7F2F1] hover:bg-[#E7F2F1] border-none outline-none focus-visible:ring-0 ">
           <EllipsisVertical className="size-5" />
         </Button>
       </DropdownMenuTrigger>
 
       <DropdownMenuContent
         align="end"
-        className="rounded-[8px] py-4 px-3 space-y-3"
+        className="rounded-[8px] py-4 px-3 space-y-3 bg-red-300 "
       >
         {onEdit && (
           <DropdownMenuItem
