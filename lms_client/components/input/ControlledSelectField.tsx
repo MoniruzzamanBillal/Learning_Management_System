@@ -47,7 +47,11 @@ const ControlledSelectField: React.FC<ControlledSelectFieldProps> = ({
               </label>
             )}
 
-            <Select onValueChange={field.onChange} value={field.value ?? ""}>
+            <Select
+              onValueChange={field.onChange}
+              value={field.value ?? ""}
+              key={field?.value}
+            >
               <SelectTrigger
                 className={cn(
                   `flex h-[42px] w-full rounded-md border border-input bg-white px-3 py-1 text-base shadow-sm transition-colors file:border-0 focus:outline-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 md:text-sm ${
@@ -60,7 +64,7 @@ const ControlledSelectField: React.FC<ControlledSelectFieldProps> = ({
               >
                 <SelectValue placeholder={placeholder} />
               </SelectTrigger>
-              <SelectContent className=" bg-white ">
+              <SelectContent className=" bg-white " position="popper">
                 {options.map((opt) => (
                   <SelectItem key={opt.value} value={opt.value}>
                     {opt.label}
