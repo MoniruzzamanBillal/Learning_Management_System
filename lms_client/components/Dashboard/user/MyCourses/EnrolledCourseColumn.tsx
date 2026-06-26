@@ -5,7 +5,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -89,6 +88,7 @@ export const EnrolledCourseColumn: ColumnDef<TEnrollment>[] = [
   },
   {
     id: "actions",
+    header: "Action",
     cell: ({ row }) => {
       const rowData = row.original;
 
@@ -101,9 +101,8 @@ export const EnrolledCourseColumn: ColumnDef<TEnrollment>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem asChild>
-              <Link href={`/dashboard/user/my-courses/${rowData?.course?._id}`}>
+              <Link href={`/my-courses/${rowData?.course?._id}`}>
                 View Details
               </Link>
             </DropdownMenuItem>

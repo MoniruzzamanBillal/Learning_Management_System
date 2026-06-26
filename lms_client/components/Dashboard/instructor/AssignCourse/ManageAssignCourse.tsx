@@ -12,7 +12,7 @@ const ManageAssignCourse = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: isntructorAssignedCourses, isLoading } = useFetchData<any>(
     ["instructor-courses", `ins-${user?.userId}`],
-    "/course/instructor-courses",
+    `/course/instructor-courses/${user?.userId}`,
     { enabled: !!user?.userId },
   );
 

@@ -3,12 +3,12 @@
 import TableDataLoading from "@/components/shared/TableLoading";
 import GenericTableComponent from "@/components/shared/table/GenericTableComponent";
 import { useFetchData } from "@/hooks/useApi";
-import { CertificateTableColumn, TCertificateData } from "./CertificateTableColumn";
+import { CertificateTableColumn } from "./CertificateTableColumn";
 
 const MyCourseCertificates = () => {
   const { data: userFinishedCourse, isLoading } = useFetchData<any>(
     ["user-finish-course"],
-    "/enrollment/user-finish-course"
+    "/enroll/user-finished-course",
   );
 
   let content = null;

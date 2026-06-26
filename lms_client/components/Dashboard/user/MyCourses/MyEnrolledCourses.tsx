@@ -9,7 +9,7 @@ const MyEnrolledCourses = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: allEnrolledCourse, isLoading } = useFetchData<any>(
     ["user-enrolled-courses"],
-    "/enrollment/user-enrolled-courses",
+    "/enroll/user-all-enrolled-couses",
   );
 
   return (

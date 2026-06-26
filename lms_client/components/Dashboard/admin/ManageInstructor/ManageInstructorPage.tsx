@@ -82,28 +82,29 @@ export default function ManageInstructorPage() {
         header: "Email",
         enableSorting: true,
       },
-      {
-        id: "actions",
-        header: "Action",
-        enableSorting: false,
-        cell: ({ row }) => {
-          const instructor = row.original;
-          return (
-            <>
-              <button
-                onClick={() => {
-                  setIsDeleteModalOpen(true);
-                  setDeleteItemId(instructor._id);
-                }}
-                className="text-red-600 hover:underline text-sm"
-              >
-                Delete
-              </button>
-              {/* Placeholder for edit – could open a modal in future */}
-            </>
-          );
-        },
-      },
+
+      // {
+      //   id: "actions",
+      //   header: "Action",
+      //   enableSorting: false,
+      //   cell: ({ row }) => {
+      //     const instructor = row.original;
+      //     return (
+      //       <>
+      //         <button
+      //           onClick={() => {
+      //             setIsDeleteModalOpen(true);
+      //             setDeleteItemId(instructor._id);
+      //           }}
+      //           className="text-red-600 hover:underline text-sm"
+      //         >
+      //           Delete
+      //         </button>
+      //         {/* Placeholder for edit – could open a modal in future */}
+      //       </>
+      //     );
+      //   },
+      // },
     ],
     [],
   );

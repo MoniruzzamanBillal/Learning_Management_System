@@ -20,7 +20,12 @@ import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import { z } from "zod";
 
-const ReactQuill = dynamic(() => import("react-quill"), { ssr: false }) as any;
+const ReactQuill = dynamic(() => import("react-quill"), {
+  ssr: false,
+  loading: () => (
+    <div className="h-[200px] bg-gray-100 animate-pulse rounded" />
+  ),
+});
 
 const modules = {
   toolbar: [

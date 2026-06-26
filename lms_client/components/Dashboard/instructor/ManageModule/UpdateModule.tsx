@@ -35,7 +35,7 @@ const UpdateModule = () => {
     isLoading: fetchingCourseDataLoading,
   } = useFetchData<any>(
     ["instructor-courses", userInfo?.userId || ""],
-    `/course/instructor-courses`,
+    `/course/instructor-courses/${userInfo?.userId}`,
     { enabled: !!userInfo?.userId },
   );
 
