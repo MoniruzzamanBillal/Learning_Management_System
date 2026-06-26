@@ -1,9 +1,12 @@
-export default function page() {
-  return (
-    <div>
-      <h1>manage module </h1>
-      <h1>manage module </h1>
-      <h1>manage module </h1>
-    </div>
-  );
-}
+import ManageModule from "@/components/Dashboard/instructor/ManageModule/ManageModule";
+
+export const metadata = {
+  title: "Manage Modules | Instructor Dashboard",
+  description: "View and manage all modules.",
+};
+
+const ManageModulePage = () => {
+  return <ManageModule />;
+};
+
+export default ManageModulePage;

@@ -22,6 +22,8 @@ export default function CoursePage() {
     `/course/all-courses?searchTerm=${debounceTerm}&category=${categoryType}`,
   );
 
+  // console.log("allCourseData = ", allCourseData);
+
   let content = null;
 
   if (courseDataLoading) {

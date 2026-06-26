@@ -1,10 +1,5 @@
-export default function page() {
-  return (
-    <div>
-      <h1>enroll courses </h1>
-      <h1>enroll courses </h1>
-      <h1>enroll courses </h1>
-      <h1>enroll courses </h1>
-    </div>
-  );
+import Enrollment from "@/components/Dashboard/admin/Enrollment/Enrollment";
+
+export default function Page() {
+  return <Enrollment />;
 }

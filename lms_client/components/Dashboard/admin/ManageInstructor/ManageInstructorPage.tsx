@@ -1,11 +1,13 @@
 "use client";
 
+import DeleteModal from "@/components/shared/DeleteModal";
 import PageHeader from "@/components/shared/PageHeader/PageHeader";
 import GenericTableComponent from "@/components/shared/table/GenericTableComponent";
 import TableDataLoading from "@/components/shared/TableLoading";
-import { useFetchData } from "@/hooks/useApi";
+import { useDeleteData, useFetchData } from "@/hooks/useApi";
 import { ColumnDef } from "@tanstack/react-table";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 
 type TInstructorData = {
@@ -21,21 +23,30 @@ export default function ManageInstructorPage() {
     "/user/get-instructors",
   );
 
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
   const [deleteItemId, setDeleteItemId] = useState<string | null>(null);
   const [selectedInstructor, setSelectedInstructor] = useState<
     TInstructorData | undefined
   >();
+  const router = useRouter();
 
+  // Edit functionality placeholder (not implemented yet)
   const handleEditMenuClick = (instructor: TInstructorData) => {
+    console.log("Edit clicked for", instructor);
     setSelectedInstructor(instructor);
-    setIsModalOpen(true);
   };
 
-  const handleDeleteItem = () => {
-    console.log("delete instructor id =", deleteItemId);
-    // Add your delete API call here
+  const deleteInstructor = useDeleteData([["all-instructors"]]);
+  const handleDeleteItem = async (id: string) => {
+    if (!id) return;
+    try {
+      await deleteInstructor.mutateAsync({
+        url: `/user/delete-instructor/${id}`,
+      });
+      // Refresh will be handled by react-query invalidation
+    } catch (error) {
+      console.error("Failed to delete instructor", error);
+    }
     setIsDeleteModalOpen(false);
     setDeleteItemId(null);
   };
@@ -71,24 +82,28 @@ export default function ManageInstructorPage() {
         header: "Email",
         enableSorting: true,
       },
-      // {
-      //   id: "actions",
-      //   header: "Action",
-      //   enableSorting: false,
-      //   cell: ({ row }) => {
-      //     const instructor = row.original;
-      //     return (
-      //       <TableActionMenu
-      //         rowData={instructor}
-      //         onDelete={(data: TInstructorData) => {
-      //           setIsDeleteModalOpen(true);
-      //           setDeleteItemId(data._id);
-      //         }}
-      //         onEdit={(data: TInstructorData) => handleEditMenuClick(data)}
-      //       />
-      //     );
-      //   },
-      // },
+      {
+        id: "actions",
+        header: "Action",
+        enableSorting: false,
+        cell: ({ row }) => {
+          const instructor = row.original;
+          return (
+            <>
+              <button
+                onClick={() => {
+                  setIsDeleteModalOpen(true);
+                  setDeleteItemId(instructor._id);
+                }}
+                className="text-red-600 hover:underline text-sm"
+              >
+                Delete
+              </button>
+              {/* Placeholder for edit – could open a modal in future */}
+            </>
+          );
+        },
+      },
     ],
     [],
   );
@@ -116,12 +131,23 @@ export default function ManageInstructorPage() {
           <PageHeader
             btnText="Add Instructor"
             headerTitle="Manage Instructors"
-            // onClick={() => setIsModalOpen(true)}
+            onClick={() =>
+              router.push("/dashboard/admin/manage-instructor/add-instructor")
+            }
           />
         </div>
 
         {/* table section  */}
         {content}
+        {/* Delete confirmation modal */}
+        <DeleteModal
+          isOpen={isDeleteModalOpen}
+          setIsOpen={setIsDeleteModalOpen}
+          handleDeleteFunction={handleDeleteItem}
+          id={deleteItemId ?? ""}
+          alertMessage="Are you sure you want to delete this instructor?"
+          btnText="Delete"
+        />
       </div>
     </div>
   );

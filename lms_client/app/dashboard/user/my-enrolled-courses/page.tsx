@@ -1,9 +1,12 @@
-export default function page() {
-  return (
-    <div>
-      <h1>enrolled course</h1>
-      <h1>enrolled course</h1>
-      <h1>enrolled course</h1>
-    </div>
-  );
-}
+import MyEnrolledCourses from "@/components/Dashboard/user/MyCourses/MyEnrolledCourses";
+
+export const metadata = {
+  title: "My Enrolled Courses | User Dashboard",
+  description: "View all your enrolled courses.",
+};
+
+const MyEnrolledCoursesPage = () => {
+  return <MyEnrolledCourses />;
+};
+
+export default MyEnrolledCoursesPage;

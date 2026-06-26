@@ -1,10 +1,5 @@
-export default function page() {
-  return (
-    <div>
-      <h1>manage modules </h1>
-      <h1>manage modules </h1>
-      <h1>manage modules </h1>
-      <h1>manage modules </h1>
-    </div>
-  );
+import ManageModule from "@/components/Dashboard/admin/ManageModule/ManageModule";
+
+export default function Page() {
+  return <ManageModule />;
 }

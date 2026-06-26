@@ -1,10 +1,12 @@
-export default function page() {
-  return (
-    <div>
-      <h1>course certificate </h1>
-      <h1>course certificate </h1>
-      <h1>course certificate </h1>
-      <h1>course certificate </h1>
-    </div>
-  );
-}
+import MyCourseCertificates from "@/components/Dashboard/user/Certificates/MyCourseCertificates";
+
+export const metadata = {
+  title: "My Certificates | User Dashboard",
+  description: "View and download your course certificates.",
+};
+
+const CourseCertificatesPage = () => {
+  return <MyCourseCertificates />;
+};
+
+export default CourseCertificatesPage;

@@ -1,10 +1,12 @@
-export default function page() {
-  return (
-    <div>
-      <h1>assign courses </h1>
-      <h1>assign courses </h1>
-      <h1>assign courses </h1>
-      <h1>assign courses </h1>
-    </div>
-  );
-}
+import ManageAssignCourse from "@/components/Dashboard/instructor/AssignCourse/ManageAssignCourse";
+
+export const metadata = {
+  title: "Assigned Courses | Instructor Dashboard",
+  description: "View and manage your assigned courses.",
+};
+
+const AssignCoursesPage = () => {
+  return <ManageAssignCourse />;
+};
+
+export default AssignCoursesPage;

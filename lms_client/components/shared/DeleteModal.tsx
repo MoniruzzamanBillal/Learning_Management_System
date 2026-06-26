@@ -7,11 +7,12 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "../ui/alert-dialog";
 import { Button } from "../ui/button";
 
 type TDeleteModalProps = {
+  isOpen: boolean;
+  setIsOpen: (open: boolean) => void;
   handleDeleteFunction: (id: string) => void;
   id: string;
   alertMessage: string;
@@ -19,43 +20,34 @@ type TDeleteModalProps = {
 };
 
 const DeleteModal = ({
+  isOpen,
+  setIsOpen,
   handleDeleteFunction,
   id,
   alertMessage,
   btnText,
 }: TDeleteModalProps) => {
   return (
-    <div className="DeleteModalContainer">
-      {/* delete button  */}
+    <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
+      {/* alert content  */}
+      <AlertDialogContent>
+        {/* header and content type  */}
+        <AlertDialogHeader>
+          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+          <AlertDialogDescription className="font-medium">
+            {alertMessage}
+          </AlertDialogDescription>
+        </AlertDialogHeader>
 
-      <AlertDialog>
-        {/* alert trigger  */}
-        <AlertDialogTrigger asChild>
-          <Button className="px-3 xsm:px-4 sm:px-5 md:px-6 font-semibold text-xs sm:text-sm md:text-base bg-red-600 hover:bg-red-700 active:scale-95 duration-500">
+        {/* bottom button type  */}
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction onClick={() => handleDeleteFunction(id)}>
             {btnText ? btnText : "Delete"}
-          </Button>
-        </AlertDialogTrigger>
-
-        {/* alert content  */}
-        <AlertDialogContent>
-          {/* header and content type  */}
-          <AlertDialogHeader>
-            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-            <AlertDialogDescription className=" font-medium ">
-              {alertMessage}
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-
-          {/* bottom button type  */}
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={() => handleDeleteFunction(id)}>
-              Continue
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-    </div>
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 };
 

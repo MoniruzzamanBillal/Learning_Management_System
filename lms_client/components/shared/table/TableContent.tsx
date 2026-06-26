@@ -14,7 +14,7 @@ export default function TableContent<TData>({
   showSerialNumber = true,
 }: TableContentProps<TData>) {
   return (
-    <div className="  border border-prime-50 bg-prime-50/5 rounded-[8px] overflow-hidden  ">
+    <div className="  border border-prime-50/50 bg-prime-50/5 rounded-[8px] overflow-hidden  ">
       <div className=" w-full overflow-x-auto">
         <table className="min-w-max w-full">
           <thead>
@@ -81,7 +81,7 @@ export default function TableContent<TData>({
                 {table.getRowModel().rows.map((row, index: number) => (
                   <tr
                     key={row.id}
-                    className={`cursor-pointer border-b border-b-prime-50  transition-colors last:border-0  h-20 `}
+                    className={`cursor-pointer border-b border-b-prime-50/50  transition-colors last:border-0  h-20 `}
                   >
                     {showSerialNumber && (
                       <td className="  py-4 px-5 font-medium text-[0.875rem] text-gray-800 ">

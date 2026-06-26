@@ -1,10 +1,5 @@
-export default function page() {
-  return (
-    <div>
-      <h1>manage course </h1>
-      <h1>manage course </h1>
-      <h1>manage course </h1>
-      <h1>manage course </h1>
-    </div>
-  );
+import ManageCourse from "@/components/Dashboard/admin/ManageCourse/ManageCourse";
+
+export default function Page() {
+  return <ManageCourse />;
 }
