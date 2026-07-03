@@ -3,6 +3,7 @@
 import Wrapper from "@/components/shared/Wrapper";
 import { useFetchData, usePost } from "@/hooks/useApi";
 import { useGetUser } from "@/hooks/useGetUser";
+import { userRoleConts } from "@/utils/constants";
 import { useState } from "react";
 import { toast } from "sonner";
 import { TCourse } from "../course/Course.type";
@@ -27,13 +28,10 @@ export default function CourseDetailPage({ id }: { id: string }) {
 
   const { data: checkEnrolledData } = useFetchData<{
     enrolledIncourse: boolean;
-  }>(
-    [`user-enroll-course-${id}`],
-    `/enroll/check-user-enrolled?courseId=${id}&userId=${userData?.userId || ""}`,
-    {
-      enabled: !!id && !!userData?.userId,
-    },
-  );
+  }>([`user-enroll-course-${id}`], `/enroll/check-user-enrolled/${id}`, {
+    enabled:
+      !!id && !!userData?.userId && userData?.userRole === userRoleConts.user,
+  });
 
   // console.log("checkEnrolledData = ", checkEnrolledData);
 
@@ -51,17 +49,17 @@ export default function CourseDetailPage({ id }: { id: string }) {
 
   // console.log("courseReview = ", courseReview);
 
-  const {
-    data: reviewEligibility,
-    isLoading: reviewEligibleDataLoading,
-    refetch: eligibilityRefetch,
-  } = useFetchData<boolean | null>(
-    [`review-eligibility-${id}`],
-    `/review/check-review-eligibility?courseId=${id}&userId=${userData?.userId || ""}`,
-    {
-      enabled: !!id && !!userData?.userId,
-    },
-  );
+  const { data: reviewEligibility, isLoading: reviewEligibleDataLoading } =
+    useFetchData<boolean | null>(
+      [`review-eligibility-${id}`],
+      `/review/check-review-eligibility/${id}`,
+      {
+        enabled:
+          !!id &&
+          !!userData?.userId &&
+          userData?.userRole === userRoleConts.user,
+      },
+    );
 
   // console.log("reviewEligibility = ", reviewEligibility);
 
