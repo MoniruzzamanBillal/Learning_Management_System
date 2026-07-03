@@ -26,6 +26,7 @@ const ManageAssignCourse = () => {
         <GenericTableComponent
           columns={ManageCourseColumns}
           data={isntructorAssignedCourses?.data}
+          showToolbar={false}
         />
       </div>
     );

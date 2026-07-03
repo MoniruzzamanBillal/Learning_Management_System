@@ -34,6 +34,7 @@ const NavBar = () => {
 
   return (
     <div
+      className="  shadow-md w-full fixed top-0 left-0 z-10 "
       style={{
         backdropFilter: "blur(8px)",
       }}
@@ -103,34 +104,35 @@ const NavBar = () => {
           )}
 
           <div className="buttonSection mt-2 md:mt-0  md:ml-4 flex justify-end md:justify-center  items-center gap-x-0.5   ">
-            {mounted && (!userInfo ? (
-              <Link href={"/login"} onClick={() => setOpen(!open)}>
-                <Button
-                  size={"sm"}
-                  className=" -z-[1] text-xs sm:text-sm md:text-base bg-prime-50 hover:bg-prime-100 "
-                >
-                  Sign in
-                </Button>
-              </Link>
-            ) : (
-              <div className="relative">
-                <Link
-                  href="/dashboard/profile"
-                  className="inline-block p-1.5 rounded-full bg-orange-100 cursor-pointe"
-                >
-                  {userInfo?.profileImage ? (
-                    <Avatar>
-                      <AvatarImage src={userInfo?.profileImage} />
-                      <AvatarFallback>
-                        <LuUser className=" text-2xl font-bold text-gray-800 " />
-                      </AvatarFallback>
-                    </Avatar>
-                  ) : (
-                    <LuUser className=" text-2xl font-bold text-gray-800 " />
-                  )}
+            {mounted &&
+              (!userInfo ? (
+                <Link href={"/login"} onClick={() => setOpen(!open)}>
+                  <Button
+                    size={"sm"}
+                    className=" -z-[1] text-xs sm:text-sm md:text-base bg-prime-50 hover:bg-prime-100 "
+                  >
+                    Sign in
+                  </Button>
                 </Link>
-              </div>
-            ))}
+              ) : (
+                <div className="relative">
+                  <Link
+                    href="/dashboard/profile"
+                    className="inline-block p-1.5 rounded-full bg-orange-100 cursor-pointe"
+                  >
+                    {userInfo?.profileImage ? (
+                      <Avatar>
+                        <AvatarImage src={userInfo?.profileImage} />
+                        <AvatarFallback>
+                          <LuUser className=" text-2xl font-bold text-gray-800 " />
+                        </AvatarFallback>
+                      </Avatar>
+                    ) : (
+                      <LuUser className=" text-2xl font-bold text-gray-800 " />
+                    )}
+                  </Link>
+                </div>
+              ))}
           </div>
         </ul>
       </Wrapper>

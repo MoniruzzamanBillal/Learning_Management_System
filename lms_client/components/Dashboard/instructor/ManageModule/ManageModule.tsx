@@ -1,18 +1,18 @@
 "use client";
 
+import GenericTableComponent from "@/components/shared/table/GenericTableComponent";
 import TableDataLoading from "@/components/shared/TableLoading";
 import { Button } from "@/components/ui/button";
-import { ManageModuleColumns } from "./ManageModuleColumns";
-import GenericTableComponent from "@/components/shared/table/GenericTableComponent";
 import { useFetchData } from "@/hooks/useApi";
 import { useRouter } from "next/navigation";
+import { ManageModuleColumns } from "./ManageModuleColumns";
 
 const ManageModule = () => {
   const router = useRouter();
 
   const { data: moduleDataWithCourse, isLoading } = useFetchData<any>(
     ["all-modules"],
-    "/module/all-module"
+    "/module/all-module",
   );
 
   let content = null;
@@ -25,6 +25,7 @@ const ManageModule = () => {
         <GenericTableComponent
           columns={ManageModuleColumns}
           data={moduleDataWithCourse?.data}
+          showToolbar={false}
         />
       </div>
     );

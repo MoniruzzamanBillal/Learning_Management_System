@@ -1,33 +1,22 @@
 "use client";
 
-import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
-import { TCourseData } from "@/types/course.types";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
-import Link from "next/link";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { TCourseData } from "@/types/course.types";
+import { ColumnDef } from "@tanstack/react-table";
+import { MoreHorizontal } from "lucide-react";
+import Link from "next/link";
 
 export const CourseColumns: ColumnDef<TCourseData>[] = [
   {
     accessorKey: "name",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Name
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
+    header: "Name",
   },
   {
     accessorKey: "category",
@@ -35,31 +24,11 @@ export const CourseColumns: ColumnDef<TCourseData>[] = [
   },
   {
     accessorKey: "price",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Price
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
+    header: "Price",
   },
   {
     accessorKey: "published",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Published
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
+    header: "Status",
     cell: ({ row }) => {
       const isPublished = row.getValue("published");
       return (
@@ -77,6 +46,7 @@ export const CourseColumns: ColumnDef<TCourseData>[] = [
   },
   {
     id: "actions",
+    header: "Action",
     cell: ({ row }) => {
       const rowData = row.original;
       return (
@@ -88,7 +58,6 @@ export const CourseColumns: ColumnDef<TCourseData>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem>
               <Link href={`/dashboard/admin/course-detail/${rowData?._id}`}>
                 View Details

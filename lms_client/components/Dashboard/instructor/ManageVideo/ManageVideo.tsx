@@ -8,7 +8,7 @@ import { ManageVideoColumns } from "./ManageVideoColumns";
 const ManageVideo = () => {
   const { data: videoData, isLoading } = useFetchData<any>(
     ["all-videos"],
-    "/video/module-video"
+    "/video/module-video",
   );
 
   let content = null;
@@ -21,6 +21,7 @@ const ManageVideo = () => {
         <GenericTableComponent
           columns={ManageVideoColumns}
           data={videoData.data}
+          showToolbar={false}
         />
       </div>
     );
