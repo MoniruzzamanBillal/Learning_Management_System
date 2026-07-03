@@ -45,150 +45,122 @@ const CourseDetailTop = ({
     [`review-eligibility-${courseDetails?._id}`],
   ]);
 
-  // ! for enrolling into a course
   const handleEnrollCourse = async (courseId: string) => {
     if (!userInfo?.userId) {
-      toast.error("Login to enroll into this course !!!!");
+      toast.error("Login to enroll into this course!");
       return;
     }
 
     const payload = {
-      user: userInfo?.userId as string,
+      user: userInfo.userId,
       course: courseId,
     };
 
     try {
-      const taostId = toast.loading("Purchasing Course....");
+      const toastId = toast.loading("Purchasing Course...");
 
       const result = await enrollCourseMutaion({
         url: `/enroll/enroll-course`,
         payload,
       });
 
-      console.log("course enroll result = ", result);
-
       if (result?.error) {
         const errorMessage = (result?.error as any)?.data?.message;
-        console.log(errorMessage);
-        toast.error(errorMessage, {
-          id: taostId,
-          duration: 1400,
-        });
+        toast.error(errorMessage, { id: toastId, duration: 1400 });
       }
 
       if (result?.data) {
-        const successMsg = result?.message;
-        const paymentUrl = result?.data;
-
-        toast.success(successMsg, {
-          id: taostId,
-          duration: 2000,
-        });
-
-        window.location.href = paymentUrl;
+        toast.success(result?.message, { id: toastId, duration: 2000 });
+        window.location.href = result.data;
       }
     } catch (error: any) {
-      console.log(error);
       toast.error(
-        error?.message ||
-          "Something went wrong while purchasing the course !!!",
-        {
-          duration: 1400,
-        },
+        error?.message || "Something went wrong while purchasing the course!",
+        { duration: 1400 },
       );
     }
-
-    //
   };
 
+  const instructorNames = courseDetails?.instructors
+    ?.map((i) => i.name)
+    .join(", ");
+
   return (
-    <>
-      {/* {courseEnrollementLoading && <FormSubmitLoading />} */}
+    <div className="bg-gray-900 text-white py-12">
+      <Wrapper>
+        <div className="flex flex-col md:flex-row justify-between gap-8">
+          {/* Left — course info */}
+          <div className="flex-1 flex flex-col gap-4">
+            {/* Category badge */}
+            <span className="bg-indigo-500/20 text-prime-50 rounded-full px-3 py-1 text-xs font-medium w-fit">
+              {courseDetails?.category}
+            </span>
 
-      <div className="courseTopSection  py-8 bg-gray-200  ">
-        <Wrapper className="courseNameTopSection   flex justify-between gap-x-4     ">
-          {/* course name section  */}
-          <div className="courseNameSection  w-[70%] flex flex-col gap-y-4 ">
-            {/* course name  */}
-            <p className=" text-3xl font-semibold "> {courseDetails?.name} </p>
+            {/* Course name */}
+            <h1 className="text-3xl font-bold text-white leading-snug">
+              {courseDetails?.name}
+            </h1>
 
-            <p className=" text-lg font-medium ">
-              Course Category : {courseDetails?.category}{" "}
-            </p>
+            {/* Instructor */}
+            {instructorNames && (
+              <p className="text-indigo-200 text-sm">
+                By {instructorNames}
+              </p>
+            )}
 
-            <p className=" text-lg font-medium "> Course Level : Beginner</p>
-
-            {/* course instructors  */}
-            <div className="courseInstructors">
-              <p className=" text-lg font-semibold ">Course instructors : </p>
-              <ul className=" list-inside list-decimal ">
-                {courseDetails?.instructors &&
-                  courseDetails?.instructors?.map(
-                    (indtructor: InstructorType) => (
-                      <li
-                        key={indtructor?._id}
-                        className=" pl-3 font-medium text-prime-100 "
-                      >
-                        {indtructor?.name}
-                      </li>
-                    ),
-                  )}
-              </ul>
+            {/* Meta */}
+            <div className="flex flex-wrap gap-4 text-gray-400 text-sm">
+              <span>{courseDetails?.modules?.length} Modules</span>
+              <span>·</span>
+              <span>
+                Updated{" "}
+                {format(new Date(courseDetails?.updatedAt), "dd MMM yyyy")}
+              </span>
+              <span>·</span>
+              <span>Level: Beginner</span>
             </div>
-
-            {/* modle length  */}
-            <p className=" text-lg font-medium ">
-              Total Modules : {courseDetails?.modules?.length}{" "}
-            </p>
-
-            {/* last update  */}
-            <p className=" text-lg font-medium ">
-              Last update :{" "}
-              {format(new Date(`${courseDetails?.updatedAt}`), "dd-MMM-yyyy")}
-            </p>
-
-            {/*  */}
           </div>
 
-          {/* course cover , price  section  */}
-          <div className="courseCoverImg  w-[30%] border border-gray-200 rounded bg-gray-50 shadow p-3 flex flex-col gap-y-3 ">
-            {/* image section  */}
-            <div className="courseCover h-[12rem] rounded-t overflow-auto">
+          {/* Right — price card */}
+          <div className="w-full md:w-72 bg-white rounded-2xl shadow-xl p-4 flex flex-col gap-3 self-start shrink-0">
+            {/* Cover image */}
+            <div className="h-44 rounded-xl overflow-hidden">
               <Image
                 src={courseDetails?.courseCover}
                 height={1280}
                 width={1280}
-                className=" w-full h-full "
-                alt="course_cover"
+                className="w-full h-full object-cover"
+                alt={courseDetails?.name}
               />
             </div>
 
-            {/* course price section  */}
-            <p className=" py-2 text-2xl font-semibold text-prime-200 ">
-              Price : ${courseDetails?.price}
+            {/* Price */}
+            <p className="text-prime-100 font-bold text-2xl">
+              ${courseDetails?.price}
             </p>
 
-            {/* enroll button  */}
-            <Button
-              disabled={
-                alreadyEnrolled ||
-                isPending ||
-                userInfo?.userRole === userRoleConts.admin ||
-                userInfo?.userRole === userRoleConts?.instructor
-              }
-              onClick={() => handleEnrollCourse(courseDetails?._id)}
-              className={`  bg-prime-100 hover:bg-prime-200 cursor-pointer `}
-            >
-              {alreadyEnrolled ? "Course Enrolled" : "Enroll Now"}
-            </Button>
-
-            {/*  */}
+            {/* Enroll / enrolled state */}
+            {alreadyEnrolled ? (
+              <div className="bg-green-50 text-green-700 border border-green-200 rounded-lg py-2.5 text-center text-sm font-medium">
+                ✓ Course Enrolled
+              </div>
+            ) : (
+              <Button
+                disabled={
+                  isPending ||
+                  userInfo?.userRole === userRoleConts.admin ||
+                  userInfo?.userRole === userRoleConts?.instructor
+                }
+                onClick={() => handleEnrollCourse(courseDetails?._id)}
+                className="bg-prime-100 hover:bg-prime-200 text-white w-full cursor-pointer"
+              >
+                {isPending ? "Processing..." : "Enroll Now"}
+              </Button>
+            )}
           </div>
-
-          {/*  */}
-        </Wrapper>
-      </div>
-    </>
+        </div>
+      </Wrapper>
+    </div>
   );
 };
 

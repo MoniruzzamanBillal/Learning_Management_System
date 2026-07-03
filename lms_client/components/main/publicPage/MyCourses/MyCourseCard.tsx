@@ -5,55 +5,42 @@ import Link from "next/link";
 import { TUserEnrolledCourse } from "./type";
 
 const MyCourseCard = ({ courseData }: { courseData: TUserEnrolledCourse }) => {
-  // console.log(courseData);
-
   return (
-    <div className="enrolledCourseCard">
-      <div className="enrolledCourseCardWrapper w-full xmd:w-[90%] lg:w-[75%] rounded-md shadow bg-white border border-gray-200 flex justify-between gap-x-5  ">
-        {/* left course cover section  */}
-        <div className="courseLeftCover w-[40%] h-[10rem] xsm:h-[12rem] sm:h-[13rem] rounded-l-md overflow-auto ">
-          <Image
-            src={courseData?.course?.courseCover}
-            height={1280}
-            width={1280}
-            className=" w-full h-full "
-            alt={courseData?.course?.name}
-          />
-        </div>
-        {/*  */}
-
-        {/* course detail section  */}
-        <div className="detailSection rightSection py-2 w-[60%] flex flex-col gap-y-3  pr-3  ">
-          {/* courseName */}
-          <p className=" text-sm sc-500:text-lg sm:text-xl md:text-2xl font-medium ">
-            {courseData?.course?.name}
-          </p>
-          {/* platform name  */}
-          <p className=" text-xs sc-500:text-sm sm:text-base md:text-lg ">
-            MATS academy{" "}
-          </p>
-
-          {/* course progress section  */}
-          <div className="courseProgressSection sm:w-[95%] md:w-[90%] flex justify-center items-center gap-x-6  ">
-            <Progress value={courseData?.courseProgress} className="  " />
-            <p className=" text-xs xsm:text-sm sm:text-base md:text-lg font-medium ">
-              {courseData?.courseProgress}%
-            </p>
-          </div>
-
-          {/* button section  */}
-
-          <Link href={`/my-courses/${courseData?.course?._id}`}>
-            <Button className=" bg-prime-100 hover:bg-prime-200 cursor-pointer ">
-              Continue
-            </Button>
-          </Link>
-        </div>
-
-        {/*  */}
+    <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden flex flex-col sm:flex-row hover:shadow-md transition-all duration-200">
+      {/* Cover image */}
+      <div className="w-full sm:w-48 h-44 sm:h-auto shrink-0 overflow-hidden">
+        <Image
+          src={courseData?.course?.courseCover}
+          height={400}
+          width={400}
+          className="w-full h-full object-cover"
+          alt={courseData?.course?.name}
+        />
       </div>
 
-      {/*  */}
+      {/* Details */}
+      <div className="p-4 flex flex-col gap-2.5 flex-1">
+        <p className="font-semibold text-gray-900 text-base line-clamp-2">
+          {courseData?.course?.name}
+        </p>
+        <p className="text-gray-400 text-xs uppercase tracking-wide">
+          MATS Academy
+        </p>
+
+        {/* Progress */}
+        <div className="flex items-center gap-3">
+          <Progress value={courseData?.courseProgress} className="flex-1" />
+          <span className="text-prime-100 font-semibold text-sm shrink-0">
+            {courseData?.courseProgress}%
+          </span>
+        </div>
+
+        <Link href={`/my-courses/${courseData?.course?._id}`} className="w-fit">
+          <Button className="bg-prime-100 hover:bg-prime-200 text-white text-sm cursor-pointer">
+            Continue
+          </Button>
+        </Link>
+      </div>
     </div>
   );
 };

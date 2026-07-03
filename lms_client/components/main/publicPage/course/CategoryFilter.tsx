@@ -20,37 +20,25 @@ const CategoryFilter = ({
   setcategoryType,
 }: TCategoryFilterProps) => {
   return (
-    <div className="CategoryFilterContainer sticky top-[5rem]">
-      <div className="CategoryFilterWrapper shadow-md rounded bg-gray-50 border border-gray-200 py-2 px-3">
-        <p className=" text-xl font-medium mb-3 text-gray-800  ">Category :</p>
-
-        <div className="categoryData">
-          <ul className="text-sm font-medium ">
-            {categoryOptions?.map((item, ind: number) => (
-              <li key={ind} className="w-full border-b border-gray-400">
-                <div className="flex items-center ps-3">
-                  <input
-                    id={item?.value}
-                    type="radio"
-                    value={item?.value}
-                    onChange={() => setcategoryType(item?.value)}
-                    checked={categoryType === item?.value}
-                    name="list-radio"
-                    className="w-4 h-4  border-gray-300"
-                  />
-                  <label
-                    htmlFor={item?.value}
-                    className="w-full py-3 ms-2 text-xs font-medium text-gray-800"
-                  >
-                    {item?.label}
-                  </label>
-                </div>
-              </li>
-            ))}
-          </ul>
+    <div className="sticky top-20">
+      <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-4">
+        <p className="font-semibold text-gray-900 text-sm mb-3">Category</p>
+        <div className="flex flex-col gap-1">
+          {categoryOptions.map((item) => (
+            <button
+              key={item.value}
+              type="button"
+              onClick={() => setcategoryType(item.value)}
+              className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors cursor-pointer ${
+                categoryType === item.value
+                  ? "bg-indigo-50 text-prime-100 font-semibold"
+                  : "text-gray-600 hover:bg-gray-50"
+              }`}
+            >
+              {item.label}
+            </button>
+          ))}
         </div>
-
-        {/*  */}
       </div>
     </div>
   );

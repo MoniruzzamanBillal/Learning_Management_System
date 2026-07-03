@@ -131,10 +131,10 @@ export default function CourseDetailPage({ id }: { id: string }) {
         </Wrapper>
 
         {/* review section  */}
-        <div className="reviewContainer bg-gray-100 py-3 ">
-          <Wrapper className="reviewSection  ">
-            <h1 className="   font-semibold text-2xl py-5 underline ">
-              Review :
+        <div className="reviewContainer bg-gray-50 py-8">
+          <Wrapper className="reviewSection">
+            <h1 className="font-semibold text-xl text-gray-900 mb-4">
+              Reviews
             </h1>
 
             {/* review button section  */}

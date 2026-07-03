@@ -13,27 +13,30 @@ export default function MyCourses() {
   >([`user-enroll-courses`], `/enroll/user-all-enrolled-couses`);
 
   return (
-    <div className="MyCoursesContainer bg-gray-100 min-h-screen ">
-      <Wrapper className="MyCoursesWrapper py-8 ">
-        <h3 className="brand text-3xl font-medium mb-8 ">My Courses</h3>
+    <div className="bg-gray-50 min-h-screen">
+      <Wrapper className="py-10">
+        <div className="mb-8">
+          <p className="text-prime-50 text-xs font-semibold tracking-widest uppercase mb-2">
+            My Learning
+          </p>
+          <h1 className="text-3xl font-bold text-gray-900">My Courses</h1>
+        </div>
 
-        <div className="courseCardBody flex flex-col gap-y-8 ">
+        <div className="flex flex-col gap-5">
           {isLoading &&
-            Array.from({ length: 4 })?.map((_, ind) => (
+            Array.from({ length: 4 }).map((_, ind) => (
               <MyCourseCardSkeleton key={ind} />
             ))}
 
           {userEnrolledCourse?.data?.length === 0 && <NoEnrollCourse />}
 
           {userEnrolledCourse?.data &&
-            userEnrolledCourse?.data?.map(
-              (enrolledCourse: TUserEnrolledCourse) => (
-                <MyCourseCard
-                  key={enrolledCourse?._id}
-                  courseData={enrolledCourse}
-                />
-              ),
-            )}
+            userEnrolledCourse.data.map((enrolledCourse: TUserEnrolledCourse) => (
+              <MyCourseCard
+                key={enrolledCourse?._id}
+                courseData={enrolledCourse}
+              />
+            ))}
         </div>
       </Wrapper>
     </div>

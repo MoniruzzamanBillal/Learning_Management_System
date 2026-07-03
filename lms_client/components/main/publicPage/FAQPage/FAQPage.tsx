@@ -1,14 +1,13 @@
 import Wrapper from "@/components/shared/Wrapper";
-
 import { Button } from "@/components/ui/button";
 import { BookOpen, Mail, Users } from "lucide-react";
 import Link from "next/link";
 import FAQSection from "./FAQSection";
 
-const cardsData = [
+const quickLinks = [
   {
     id: 1,
-    icon: <BookOpen className="h-10 w-10 text-teal-600 mb-4" />,
+    Icon: BookOpen,
     title: "Explore Courses",
     description: "Browse our full catalog of tech courses.",
     buttonText: "View Courses",
@@ -16,7 +15,7 @@ const cardsData = [
   },
   {
     id: 2,
-    icon: <Users className="h-10 w-10 text-teal-600 mb-4" />,
+    Icon: Users,
     title: "Meet Our Instructors",
     description: "Learn from industry-leading experts.",
     buttonText: "Our Team",
@@ -24,7 +23,7 @@ const cardsData = [
   },
   {
     id: 3,
-    icon: <Mail className="h-10 w-10 text-teal-600 mb-4" />,
+    Icon: Mail,
     title: "Direct Support",
     description: "Can't find your answer? Contact us directly.",
     buttonText: "Get Support",
@@ -34,76 +33,101 @@ const cardsData = [
 
 export default function FAQPage() {
   return (
-    <main className="min-h-screen  ">
-      {" "}
-      {/* heading section  */}
-      <section className="bg-teal-600 text-white py-16 text-center">
-        <div className="  mx-auto   ">
+    <main className="min-h-screen">
+      {/* Hero */}
+      <section className="bg-prime-100 text-white py-20 text-center">
+        <div className="container mx-auto px-4">
+          <p className="text-indigo-200 text-xs font-semibold tracking-widest uppercase mb-4">
+            Help Center
+          </p>
           <h1 className="text-4xl font-bold mb-4">
             Frequently Asked Questions
           </h1>
-          <p className="text-xl mb-8 max-w-3xl mx-auto">
-            Find quick answers to the most common questions about DevMats
-            Academy, our courses, and platform.
+          <p className="text-indigo-200 text-lg max-w-2xl mx-auto mb-8">
+            Find quick answers to the most common questions about MATS Academy,
+            our courses, and platform.
           </p>
+          {/* Quick nav chips */}
+          <div className="flex flex-wrap justify-center gap-3">
+            {["Certificates", "Pricing", "Mobile Access", "Support", "Updates"].map(
+              (topic) => (
+                <span
+                  key={topic}
+                  className="bg-white/10 border border-white/20 text-indigo-100 text-xs px-4 py-1.5 rounded-full backdrop-blur-sm"
+                >
+                  {topic}
+                </span>
+              ),
+            )}
+          </div>
         </div>
       </section>
-      {/* 2nd text section  */}
-      <section className="py-12 bg-white">
-        <Wrapper className="  ">
-          <p className="text-xl text-gray-800 mb-10 text-center">
-            {
-              " We've compiled a list of common inquiries to help you navigate your learning journey with ease. If you can't find what you're looking for, don't hesitate to reach out to our support team."
-            }
-          </p>
-          <FAQSection />
-        </Wrapper>
-      </section>
-      <section className="py-16 bg-gray-50">
-        <Wrapper className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-8 text-teal-600">
-            Quick Links & Resources
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {cardsData &&
-              cardsData?.map((cardItem) => (
-                <div
-                  key={cardItem?.id}
-                  className="bg-gray-100 border border-gray-300 p-6 rounded-md shadow-md flex flex-col items-center"
-                >
-                  {cardItem?.icon}
-                  <h3 className="text-xl font-semibold mb-2">
-                    {" "}
-                    {cardItem?.title}
-                  </h3>
-                  <p className="text-gray-600 text-sm mb-4">
-                    {cardItem?.description}
-                  </p>
-                  <Link href={cardItem?.link}>
-                    <Button
-                      variant="outline"
-                      className="text-teal-600 border-teal-600 hover:bg-teal-50 bg-transparent"
-                    >
-                      {cardItem?.buttonText}
-                    </Button>
-                  </Link>
-                </div>
-              ))}
+
+      {/* FAQ body — two-col on desktop */}
+      <section className="bg-white py-16">
+        <Wrapper>
+          <div className="max-w-4xl mx-auto">
+            <p className="text-gray-500 text-sm mb-10 text-center max-w-2xl mx-auto">
+              We&apos;ve compiled answers to the most common inquiries. If you
+              can&apos;t find what you&apos;re looking for, our support team is
+              always happy to help.
+            </p>
+            <FAQSection />
           </div>
         </Wrapper>
       </section>
-      <section className="py-16 bg-gray-100 text-center">
+
+      {/* Quick Links */}
+      <section className="bg-gray-50 py-16">
+        <Wrapper>
+          <div className="text-center mb-12">
+            <p className="text-prime-50 text-xs font-semibold tracking-widest uppercase mb-3">
+              Quick Links
+            </p>
+            <h2 className="text-3xl font-bold text-gray-900">
+              Resources &amp; Support
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {quickLinks.map((item) => (
+              <div
+                key={item.id}
+                className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-200 flex flex-col items-center text-center group"
+              >
+                <div className="bg-indigo-50 group-hover:bg-prime-100 rounded-xl p-4 w-fit mb-4 transition-colors duration-200">
+                  <item.Icon className="h-6 w-6 text-prime-100 group-hover:text-white transition-colors duration-200" />
+                </div>
+                <h3 className="font-bold text-gray-900 mb-2">{item.title}</h3>
+                <p className="text-gray-500 text-sm mb-5 leading-relaxed">
+                  {item.description}
+                </p>
+                <Link href={item.link} className="mt-auto">
+                  <Button
+                    variant="outline"
+                    className="border-prime-100 text-prime-100 hover:bg-indigo-50 bg-transparent cursor-pointer"
+                  >
+                    {item.buttonText}
+                  </Button>
+                </Link>
+              </div>
+            ))}
+          </div>
+        </Wrapper>
+      </section>
+
+      {/* CTA */}
+      <section className="bg-gray-900 py-16 text-center">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold mb-4 text-teal-600">
+          <h2 className="text-3xl font-bold text-white mb-4">
             Still Have Questions?
           </h2>
-          <p className="text-lg text-gray-700 mb-8 max-w-2xl mx-auto">
-            {
-              "If you couldn't find the answer you were looking for, our support team is here to help."
-            }
+          <p className="text-gray-400 text-lg mb-8 max-w-2xl mx-auto">
+            If you couldn&apos;t find the answer you were looking for, our
+            support team is here to help within 24 hours.
           </p>
           <Link href="/contact">
-            <Button className="bg-teal-600 hover:bg-teal-700 text-white px-8 py-3 text-lg">
+            <Button className="bg-prime-100 hover:bg-prime-200 text-white px-8 py-3 text-base font-semibold cursor-pointer">
               Contact Support
             </Button>
           </Link>

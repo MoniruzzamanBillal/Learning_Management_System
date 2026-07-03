@@ -3,13 +3,13 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { X } from "lucide-react";
-import dynamic from "next/dynamic";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 
+import TextEditorTipTap from "@/components/input/ControlledTipTapTextEditor/TextEditorTipTap";
 import FormSubmitLoading from "@/components/shared/FormSubmitLoading";
 import { Button } from "@/components/ui/button";
 import { updateCourseFunction } from "@/functions/course.functions";
@@ -18,24 +18,7 @@ import { updateCourseValidationSchema } from "@/schemas/Course.schemas";
 import { TCourseData } from "@/types/course.types";
 import { TInstructor } from "@/types/user.types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import "react-quill/dist/quill.snow.css";
 import { z } from "zod";
-
-const ReactQuill = dynamic(() => import("react-quill"), { ssr: false }) as any;
-
-const modules = {
-  toolbar: [
-    [{ header: [1, 2, 3, 4, false] }],
-    [{ font: [] }],
-    ["bold", "italic", "underline", "strike"],
-    [
-      { list: "ordered" },
-      { list: "bullet" },
-      { indent: "-1" },
-      { indent: "+1" },
-    ],
-  ],
-};
 
 const animatedComponents = makeAnimated();
 
@@ -235,7 +218,7 @@ const UpdateCourse = () => {
                 )}
               </div>
 
-              <div className="descriptionContainer flex flex-col gap-y-1.5 h-[22rem]  ">
+              <div className="descriptionContainer flex flex-col gap-y-1.5">
                 <Label htmlFor="description">Course Description </Label>
 
                 <Controller
@@ -244,12 +227,9 @@ const UpdateCourse = () => {
                   defaultValue=""
                   rules={{ required: "Course Description is required" }}
                   render={({ field }) => (
-                    <ReactQuill
-                      theme="snow"
+                    <TextEditorTipTap
                       value={field.value}
                       onChange={field.onChange}
-                      className="h-full w-full font-medium bg-white "
-                      modules={modules}
                     />
                   )}
                 />
@@ -261,7 +241,7 @@ const UpdateCourse = () => {
                 )}
               </div>
 
-              <div className="priceContainer flex flex-col gap-y-1.5 mt-[4rem] ">
+              <div className="priceContainer flex flex-col gap-y-1.5">
                 <Label htmlFor="price">Course Price</Label>
                 <Input
                   id="price"
@@ -345,10 +325,10 @@ const UpdateCourse = () => {
 
               <Button
                 disabled={isSubmitting}
-                className={`px-3 xsm:px-4 sm:px-5 md:px-6 font-semibold text-xs sm:text-sm md:text-base  active:scale-95 duration-500  bg-prime50 hover:bg-prime100 ${
+                className={`px-3 xsm:px-4 sm:px-5 md:px-6 font-semibold text-xs sm:text-sm md:text-base  active:scale-95 duration-500  bg-prime-50 hover:bg-prime-100 ${
                   isSubmitting
                     ? " cursor-not-allowed bg-gray-600 "
-                    : "bg-prime50 hover:bg-prime100  "
+                    : "bg-prime-50 hover:bg-prime-100  "
                 }   `}
               >
                 {isSubmitting ? "Updating Course..." : "Update Course "}

@@ -109,7 +109,7 @@ export default function ManageInstructorPage() {
     [],
   );
 
-  console.log("isntructorData = ", instructorData?.data);
+  // console.log("isntructorData = ", instructorData?.data);
 
   let content = null;
 
@@ -132,9 +132,7 @@ export default function ManageInstructorPage() {
           <PageHeader
             btnText="Add Instructor"
             headerTitle="Manage Instructors"
-            onClick={() =>
-              router.push("/dashboard/admin/manage-instructor/add-instructor")
-            }
+            onClick={() => router.push("/dashboard/admin/add-instructor")}
           />
         </div>
 

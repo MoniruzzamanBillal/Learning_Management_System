@@ -1,45 +1,22 @@
 "use client";
 
+import TextEditorTipTap from "@/components/input/ControlledTipTapTextEditor/TextEditorTipTap";
+import FormSubmitLoading from "@/components/shared/FormSubmitLoading";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { addCourseFunction } from "@/functions/course.functions";
 import { useFetchData, usePost } from "@/hooks/useApi";
 import { addCourseValidationSchema } from "@/schemas/Course.schemas";
+import { TInstructor } from "@/types/user.types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { X } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-// react-quill needs dynamic import in next.js to avoid SSR window errors
-import FormSubmitLoading from "@/components/shared/FormSubmitLoading";
-import { addCourseFunction } from "@/functions/course.functions";
-import { TInstructor } from "@/types/user.types";
-import dynamic from "next/dynamic";
-import { useRouter } from "next/navigation";
-import "react-quill/dist/quill.snow.css";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import { z } from "zod";
-
-const ReactQuill = dynamic(() => import("react-quill"), {
-  ssr: false,
-  loading: () => (
-    <div className="h-[200px] bg-gray-100 animate-pulse rounded" />
-  ),
-});
-
-const modules = {
-  toolbar: [
-    [{ header: [1, 2, 3, 4, false] }],
-    [{ font: [] }],
-    ["bold", "italic", "underline", "strike"],
-    [
-      { list: "ordered" },
-      { list: "bullet" },
-      { indent: "-1" },
-      { indent: "+1" },
-    ],
-  ],
-};
 
 const animatedComponents = makeAnimated();
 
@@ -201,7 +178,7 @@ const AddCourse = () => {
                 )}
               </div>
 
-              <div className="descriptionContainer flex flex-col gap-y-1.5 h-[22rem]  ">
+              <div className="descriptionContainer flex flex-col gap-y-1.5">
                 <Label htmlFor="description">Course Description </Label>
 
                 <Controller
@@ -210,12 +187,9 @@ const AddCourse = () => {
                   defaultValue=""
                   rules={{ required: "Course Description is required" }}
                   render={({ field }) => (
-                    <ReactQuill
-                      theme="snow"
+                    <TextEditorTipTap
                       value={field.value}
                       onChange={field.onChange}
-                      className="h-full w-full font-medium bg-white "
-                      modules={modules}
                     />
                   )}
                 />
@@ -227,7 +201,7 @@ const AddCourse = () => {
                 )}
               </div>
 
-              <div className="priceContainer flex flex-col gap-y-1.5 mt-[4rem] ">
+              <div className="priceContainer flex flex-col gap-y-1.5">
                 <Label htmlFor="price">Course Price</Label>
                 <Input
                   id="price"
@@ -311,10 +285,10 @@ const AddCourse = () => {
 
               <Button
                 disabled={isSubmitting}
-                className={`px-3 xsm:px-4 sm:px-5 md:px-6 font-semibold text-xs sm:text-sm md:text-base  active:scale-95 duration-500  bg-prime50 hover:bg-prime100 ${
+                className={`px-3 xsm:px-4 sm:px-5 md:px-6 font-semibold text-xs sm:text-sm md:text-base  active:scale-95 duration-500  bg-prime-50 hover:bg-prime-100 ${
                   isSubmitting
                     ? " cursor-not-allowed bg-gray-600 "
-                    : "bg-prime50 hover:bg-prime100  "
+                    : "bg-prime-50 hover:bg-prime-100  "
                 }   `}
               >
                 {isSubmitting ? "Adding New Course..." : "Add Course "}

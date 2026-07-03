@@ -13,12 +13,12 @@ export const UserLinks = [
   },
   {
     name: "My Courses",
-    path: "/dashboard/user/my-courses",
+    path: "/dashboard/user/my-enrolled-courses",
     icon: <BookOpen className="w-5 h-5" />,
   },
   {
     name: "My Certificates",
-    path: "/dashboard/user/certificates",
+    path: "/dashboard/user/course-certificates",
     icon: <Award className="w-5 h-5" />,
   },
 ];

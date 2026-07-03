@@ -15,7 +15,7 @@ export const adminLinks = [
   },
   {
     name: "Statistics",
-    path: "/dashboard/admin/stat",
+    path: "/dashboard/admin/home",
     icon: <BarChart3 className="w-5 h-5" />,
   },
   {

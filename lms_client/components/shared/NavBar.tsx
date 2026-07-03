@@ -4,7 +4,7 @@ import { useGetUser } from "@/hooks/useGetUser";
 import { userRoleConts } from "@/utils/constants";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LuUser } from "react-icons/lu";
 import { RiCloseFill, RiMenu3Fill } from "react-icons/ri";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
@@ -26,9 +26,14 @@ const NavBar = () => {
   const [open, setOpen] = useState(false);
   const userInfo = useGetUser();
 
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   return (
     <div
-      className="  shadow-md w-full fixed top-0 left-0 z-10 "
       style={{
         backdropFilter: "blur(8px)",
       }}
@@ -87,7 +92,7 @@ const NavBar = () => {
               );
             })}
 
-          {userInfo?.userRole === userRoleConts.user && (
+          {mounted && userInfo?.userRole === userRoleConts.user && (
             <Link
               href={"/my-courses"}
               className={` duration-300 pl-4 font-bold uppercase ${pathname === "/my-courses" ? "text-prime-100 " : "hover:text-prime-100 "} `}
@@ -98,7 +103,7 @@ const NavBar = () => {
           )}
 
           <div className="buttonSection mt-2 md:mt-0  md:ml-4 flex justify-end md:justify-center  items-center gap-x-0.5   ">
-            {!userInfo ? (
+            {mounted && (!userInfo ? (
               <Link href={"/login"} onClick={() => setOpen(!open)}>
                 <Button
                   size={"sm"}
@@ -125,7 +130,7 @@ const NavBar = () => {
                   )}
                 </Link>
               </div>
-            )}
+            ))}
           </div>
         </ul>
       </Wrapper>

@@ -1,12 +1,12 @@
 "use client";
 
+import GenericTableComponent from "@/components/shared/table/GenericTableComponent";
 import TableDataLoading from "@/components/shared/TableLoading";
 import { Button } from "@/components/ui/button";
 import { useFetchData } from "@/hooks/useApi";
+import { TCourseData } from "@/types/course.types";
 import { useRouter } from "next/navigation";
 import { CourseColumns } from "./CourseColumns";
-import GenericTableComponent from "@/components/shared/table/GenericTableComponent";
-import { TCourseData } from "@/types/course.types";
 
 const ManageCourse = () => {
   const router = useRouter();
@@ -36,7 +36,7 @@ const ManageCourse = () => {
 
         <Button
           onClick={() => router.push("/dashboard/admin/add-course")}
-          className="mb-4 bg-prime100 hover:bg-prime200 cursor-pointer"
+          className="mb-4 bg-prime-100 hover:bg-prime-200 cursor-pointer"
         >
           Add Course
         </Button>

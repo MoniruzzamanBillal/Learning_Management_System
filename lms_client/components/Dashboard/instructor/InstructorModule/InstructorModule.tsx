@@ -7,14 +7,14 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-import { useFetchData, usePatch } from "@/hooks/useApi";
 import { deleteVideoFunction } from "@/functions/video.functions";
-import { userRoleConts } from "@/utils/constants";
+import { useFetchData, usePatch } from "@/hooks/useApi";
 import { useGetUser } from "@/hooks/useGetUser";
+import { userRoleConts } from "@/utils/constants";
 import MuxPlayer from "@mux/mux-player-react";
+import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { Loader2 } from "lucide-react";
 
 type TVideo = {
   _id: string;
@@ -30,13 +30,10 @@ const InstructorModule = () => {
   const router = useRouter();
   const { moduleId } = useParams();
 
-  const {
-    data: moduleData,
-    isLoading: moduleDataLoading,
-  } = useFetchData<any>(
+  const { data: moduleData, isLoading: moduleDataLoading } = useFetchData<any>(
     ["module-detail", moduleId as string],
     `/module/module-detail/${moduleId}`,
-    { enabled: !!moduleId }
+    { enabled: !!moduleId },
   );
 
   const deleteVideoMutation = usePatch([["module-detail", moduleId as string]]);
@@ -49,7 +46,7 @@ const InstructorModule = () => {
 
     await deleteVideoFunction(
       { url: "/video/delete-video", payload },
-      deleteVideoMutation.mutateAsync
+      deleteVideoMutation.mutateAsync,
     );
   };
 
@@ -96,11 +93,16 @@ const InstructorModule = () => {
                         </Link>
 
                         <Button
-                          disabled={moduleData?.data?.course?.published || deleteVideoMutation.isPending}
+                          disabled={
+                            moduleData?.data?.course?.published ||
+                            deleteVideoMutation.isPending
+                          }
                           onClick={() => handleDeleteVideo(videoData)}
                           className="bg-red-600 hover:bg-red-700"
                         >
-                          {deleteVideoMutation.isPending ? "Deleting..." : "Delete Video"}
+                          {deleteVideoMutation.isPending
+                            ? "Deleting..."
+                            : "Delete Video"}
                         </Button>
                       </div>
                     )}
@@ -174,7 +176,7 @@ const InstructorModule = () => {
                     className="bg-prime-100 hover:bg-prime-200"
                     onClick={() =>
                       router.push(
-                        `/dashboard/instructor/update-module/${moduleId}`
+                        `/dashboard/instructor/update-module/${moduleId}`,
                       )
                     }
                   >

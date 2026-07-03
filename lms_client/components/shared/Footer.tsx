@@ -13,7 +13,7 @@ const Footer = () => {
             href="/"
             className="text-2xl font-bold text-white font-headingFont mb-4 block"
           >
-            MATS <span className="text-teal-500">Academy</span>
+            MATS <span className="text-prime-50">Academy</span>
           </Link>
           <p className="text-sm leading-relaxed mb-4">
             Empowering the next generation of tech professionals through
@@ -24,7 +24,7 @@ const Footer = () => {
               href="https://www.facebook.com/MoniruzzamanBillal3018"
               target="_blank"
               aria-label="Facebook"
-              className="text-gray-400 hover:text-teal-500 transition-colors"
+              className="text-gray-400 hover:text-prime-50 transition-colors"
             >
               <Facebook className="h-6 w-6" />
             </a>
@@ -32,7 +32,7 @@ const Footer = () => {
               href="https://x.com/MdMoniruzz48991"
               target="_blank"
               aria-label="Twitter"
-              className="text-gray-400 hover:text-teal-500 transition-colors"
+              className="text-gray-400 hover:text-prime-50 transition-colors"
             >
               <Twitter className="h-6 w-6" />
             </a>
@@ -40,7 +40,7 @@ const Footer = () => {
               href="https://www.linkedin.com/in/MoniruzzamanBillal3018/"
               target="_blank"
               aria-label="LinkedIn"
-              className="text-gray-400 hover:text-teal-500 transition-colors"
+              className="text-gray-400 hover:text-prime-50 transition-colors"
             >
               <Linkedin className="h-6 w-6" />
             </a>
@@ -48,7 +48,7 @@ const Footer = () => {
             <a
               href="#"
               aria-label="YouTube"
-              className="text-gray-400 hover:text-teal-500 transition-colors"
+              className="text-gray-400 hover:text-prime-50 transition-colors"
             >
               <Youtube className="h-6 w-6" />
             </a>
@@ -62,7 +62,7 @@ const Footer = () => {
             <li>
               <Link
                 href="/courses"
-                className="hover:text-teal-500 transition-colors text-sm"
+                className="hover:text-prime-50 transition-colors text-sm"
               >
                 Courses
               </Link>
@@ -70,7 +70,7 @@ const Footer = () => {
             <li>
               <Link
                 href="/instructors"
-                className="hover:text-teal-500 transition-colors text-sm"
+                className="hover:text-prime-50 transition-colors text-sm"
               >
                 Instructors
               </Link>
@@ -78,7 +78,7 @@ const Footer = () => {
             <li>
               <Link
                 href="/features"
-                className="hover:text-teal-500 transition-colors text-sm"
+                className="hover:text-prime-50 transition-colors text-sm"
               >
                 Features
               </Link>
@@ -86,7 +86,7 @@ const Footer = () => {
             <li>
               <Link
                 href="/faq"
-                className="hover:text-teal-500 transition-colors text-sm"
+                className="hover:text-prime-50 transition-colors text-sm"
               >
                 FAQ
               </Link>
@@ -94,7 +94,7 @@ const Footer = () => {
             <li>
               <Link
                 href="/about-us"
-                className="hover:text-teal-500 transition-colors text-sm"
+                className="hover:text-prime-50 transition-colors text-sm"
               >
                 About Us
               </Link>
@@ -102,7 +102,7 @@ const Footer = () => {
             <li>
               <Link
                 href="/contact"
-                className="hover:text-teal-500 transition-colors text-sm"
+                className="hover:text-prime-50 transition-colors text-sm"
               >
                 Contact Us
               </Link>
@@ -116,7 +116,7 @@ const Footer = () => {
             Contact Info
           </h3>
           <p className="text-sm mb-2">123 Learning Lane, Tech City, TC 12345</p>
-          <p className="text-sm mb-2">Email: support@devmats.com</p>
+          <p className="text-sm mb-2">Email: support@matsacademy.com</p>
           <p className="text-sm mb-2">Phone: +1 (234) 567-890</p>
           <p className="text-sm">Hours: Mon-Fri, 9 AM - 5 PM (EST)</p>
         </div>

@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { BookOpen, GraduationCap } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { FaStar } from "react-icons/fa";
@@ -9,107 +10,90 @@ type TCourseDataProps = {
 };
 
 const CourseCard = ({ course }: TCourseDataProps) => {
-  // console.log(course?.reviewData);
+  const instructorNames = course.instructors
+    ?.map((i: TInstructor) => i.name)
+    .join(", ");
 
   return (
-    <div className="CourseCardContainer   m-auto sm:m-0 w-[92%] sc-500:w-[70%] sm:w-full bg-gray-50 border border-gray-300 shadow rounded  ">
-      <div className="CourseCardWrapper   flex flex-col  gap-y-1 ">
-        {/* course cover section  */}
-        <div className="courseCover h-52 rounded-t overflow-auto relative ">
-          <Image
-            height={1280}
-            width={1280}
-            src={course?.courseCover}
-            className=" w-full h-full "
-            alt="course_cover"
-          />
+    <div className="group bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl hover:border-indigo-100 transition-all duration-300 flex flex-col">
+      {/* Cover image */}
+      <div className="relative h-48 overflow-hidden shrink-0">
+        <Image
+          fill
+          src={course.courseCover}
+          className="object-cover group-hover:scale-105 transition-transform duration-500"
+          alt={course.name}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+        <span className="absolute top-3 left-3 bg-white/95 backdrop-blur-sm text-prime-100 text-xs font-semibold px-3 py-1 rounded-full shadow-sm">
+          {course.category}
+        </span>
+      </div>
 
-          <span className="  courseLabel absolute top-0 left-0 bg-prime-50 text-gray-50 text-xs py-1 px-2 rounded font-medium ">
-            Beginner
-          </span>
-        </div>
+      {/* Body */}
+      <div className="flex flex-col flex-1 p-4 gap-3">
+        {/* Title */}
+        <h3 className="font-bold text-gray-900 text-base leading-snug line-clamp-2 group-hover:text-prime-100 transition-colors duration-200">
+          {course.name}
+        </h3>
 
-        <div className="courseDetailBody px-3 flex flex-col justify-between h-64 ">
-          {/* course name  */}
-          <p className=" courseName  font-bold "> {course?.name} </p>
-
-          {/* course category  */}
-          <p className=" courseCategory  ">
-            <span className=" font-semibold text-sm ">Category : </span>
-
-            {course?.category}
+        {/* Description */}
+        {course.description && (
+          <p className="text-gray-400 text-xs leading-relaxed line-clamp-2">
+            {course.description}
           </p>
+        )}
 
-          {/* course instructors  */}
-          <div className="courseInstructors">
-            <p className=" font-semibold text-sm ">Instructors : </p>
-            <ul className=" list-inside list-disc text-xs ">
-              {course?.instructors &&
-                course?.instructors?.map((indtructor: TInstructor) => (
-                  <li
-                    key={indtructor?._id}
-                    className=" pl-3 font-medium text-prime-100 "
-                  >
-                    {indtructor?.name}
-                  </li>
-                ))}
-            </ul>
-          </div>
-
-          {/* review star section  */}
-          <div className="reviewStarSection flex items-center  ">
-            {renderStars(course?.reviewData)}
-            <span className=" pl-1 ">
-              (
-              {course?.reviewData?.totalReviews
-                ? course?.reviewData?.totalReviews
-                : 0}
-              )
+        {/* Instructor — labeled so it's clear who this person is */}
+        {instructorNames && (
+          <div className="flex items-center gap-1.5 text-xs">
+            <GraduationCap className="h-3.5 w-3.5 text-prime-50 shrink-0" />
+            <span className="text-gray-400 shrink-0">Instructor:</span>
+            <span className="text-gray-700 font-medium line-clamp-1">
+              {instructorNames}
             </span>
           </div>
+        )}
 
-          {/* button section  */}
-          <div className="bottomSection py-3 flex justify-between items-center ">
-            {/* course price  */}
-            <p className=" coursePrice  text-prime-200 font-bold ">
-              Price : ${course?.price}
-            </p>
-
-            {/* button  */}
-            <div className="btn ">
-              <Link href={`/courses/${course?._id}`}>
-                <Button
-                  size={"sm"}
-                  className=" bg-prime-100 hover:bg-prime-200 text-sm "
-                >
-                  See Details
-                </Button>
-              </Link>
-            </div>
-
-            {/*  */}
+        {/* Rating + modules in one compact row */}
+        <div className="flex items-center gap-2 text-xs text-gray-500">
+          <div className="flex items-center gap-0.5">
+            {renderStars(course.reviewData)}
           </div>
-
-          {/*  */}
+          <span className="text-gray-400">
+            ({course.reviewData?.totalReviews ?? 0})
+          </span>
+          <span className="text-gray-300">·</span>
+          <BookOpen className="h-3 w-3 text-gray-400 shrink-0" />
+          <span>{course.modules?.length ?? 0} Modules</span>
         </div>
 
-        {/*  */}
+        {/* Price + CTA */}
+        <div className="mt-auto pt-3 border-t border-gray-100 flex items-center justify-between gap-2">
+          <span className="text-prime-100 font-bold text-lg">
+            ${course.price}
+          </span>
+          <Link href={`/courses/${course._id}`}>
+            <Button
+              size="sm"
+              className="bg-prime-100 hover:bg-prime-200 text-white text-xs px-4 rounded-lg cursor-pointer"
+            >
+              View Course
+            </Button>
+          </Link>
+        </div>
       </div>
     </div>
   );
 };
 
 const renderStars = (reviewData?: TReview) => {
-  const totalLength = 5;
-
-  const filledStars = Math.floor(reviewData?.averageRating || 0);
-
-  return Array.from({ length: totalLength }, (_, index) => (
+  const filled = Math.floor(reviewData?.averageRating ?? 0);
+  return Array.from({ length: 5 }, (_, i) => (
     <FaStar
-      key={index}
-      className={`  ${
-        index < filledStars ? "text-orange-400" : "text-gray-400"
-      }`}
+      key={i}
+      className={i < filled ? "text-orange-400" : "text-gray-200"}
+      size={11}
     />
   ));
 };

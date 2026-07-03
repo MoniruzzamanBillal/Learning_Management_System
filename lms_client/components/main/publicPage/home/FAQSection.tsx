@@ -10,17 +10,17 @@ const faqs = [
   {
     question: "Can I get a certificate upon course completion?",
     answer:
-      "Yes, upon successful completion of most courses, you will receive a verifiable digital certificate.",
+      "Yes, upon successful completion of most courses, you will receive a verifiable digital certificate that you can share on LinkedIn or add to your portfolio.",
   },
   {
     question: "Are the courses free?",
     answer:
-      "DevMats offers a mix of free introductory courses and premium paid courses. You can check each course's details for pricing information.",
+      "MATS Academy offers a mix of free introductory courses and premium paid courses. You can check each course's details page for pricing information.",
   },
   {
     question: "Can I access this on mobile?",
     answer:
-      "DevMats is fully responsive and optimized for mobile devices, allowing you to learn on the go.",
+      "MATS Academy is fully responsive and optimized for mobile devices, allowing you to learn on the go from any smartphone or tablet.",
   },
   {
     question: "What kind of support is available?",
@@ -30,28 +30,39 @@ const faqs = [
   {
     question: "How often are new courses added?",
     answer:
-      "We regularly update our course catalog with new and trending topics to ensure you always have access to the latest skills.",
+      "We regularly update our course catalog with new and trending topics to ensure you always have access to the latest in-demand skills.",
   },
 ];
 
 const FAQSection = () => {
   return (
-    <section className="py-16 bg-gray-100 ">
-      <Wrapper className="container mx-auto  ">
-        <h2 className="text-3xl font-bold text-center mb-4 text-teal-600">
-          Frequently Asked Questions
-        </h2>
-        <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
-          Find answers to common questions about DevMats and our learning
-          platform.
-        </p>
-        <Accordion type="single" collapsible className="w-full">
+    <section className="bg-gray-50 py-16">
+      <Wrapper>
+        {/* Section header */}
+        <div className="text-center mb-12">
+          <p className="text-prime-50 text-xs font-semibold tracking-widest uppercase mb-3">
+            FAQ
+          </p>
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">
+            Frequently Asked Questions
+          </h2>
+          <p className="text-gray-500 max-w-2xl mx-auto text-base">
+            Find answers to common questions about MATS Academy and our
+            learning platform.
+          </p>
+        </div>
+
+        <Accordion type="single" collapsible className="max-w-3xl mx-auto space-y-3">
           {faqs.map((faq, index) => (
-            <AccordionItem key={index} value={`item-${index}`}>
-              <AccordionTrigger className="text-left text-lg font-medium">
+            <AccordionItem
+              key={index}
+              value={`item-${index}`}
+              className="border border-gray-200 rounded-xl overflow-hidden px-2 shadow-sm"
+            >
+              <AccordionTrigger className="text-left font-semibold text-gray-900 text-base py-4 hover:no-underline">
                 {faq.question}
               </AccordionTrigger>
-              <AccordionContent className="text-gray-800">
+              <AccordionContent className="text-gray-500 text-sm leading-relaxed pb-4">
                 {faq.answer}
               </AccordionContent>
             </AccordionItem>

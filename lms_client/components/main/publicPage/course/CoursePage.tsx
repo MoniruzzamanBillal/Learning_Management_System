@@ -4,6 +4,7 @@ import Wrapper from "@/components/shared/Wrapper";
 import { Input } from "@/components/ui/input";
 import { useFetchData } from "@/hooks/useApi";
 import useDebounce from "@/utils/useDebounce";
+import { BookOpen, Search } from "lucide-react";
 import { useState } from "react";
 import CategoryFilter from "./CategoryFilter";
 import { TCourse } from "./Course.type";
@@ -22,65 +23,77 @@ export default function CoursePage() {
     `/course/all-courses?searchTerm=${debounceTerm}&category=${categoryType}`,
   );
 
-  // console.log("allCourseData = ", allCourseData);
-
   let content = null;
 
   if (courseDataLoading) {
     content = (
       <>
-        {Array.from({ length: 6 })?.map((_, ind) => (
+        {Array.from({ length: 6 }).map((_, ind) => (
           <CourseCardSkeleton key={ind} />
         ))}
       </>
     );
   } else if (!allCourseData?.data?.data?.length) {
     content = (
-      <div className="   h-[60vh] w-[80vw] xl:w-[60vw]  flex  robotoFont mt-6 flex-col items-center justify-center   px-4">
-        <h1 className=" text-3xl sm:text-4xl font-bold text-prime100 mb-4">
-          No course available
-        </h1>
+      <div className="col-span-full flex flex-col items-center justify-center py-20 text-center">
+        <BookOpen className="h-16 w-16 text-gray-300 mb-4" />
+        <h2 className="text-xl font-semibold text-gray-900 mb-2">
+          No courses found
+        </h2>
+        <p className="text-gray-500 text-sm">
+          Try a different search term or category.
+        </p>
       </div>
     );
   } else if (allCourseData?.data?.data?.length) {
-    content = allCourseData?.data?.data?.map((course: TCourse) => (
-      <CourseCard key={course?._id} course={course} />
+    content = allCourseData.data.data.map((course: TCourse) => (
+      <CourseCard key={course._id} course={course} />
     ));
   }
 
   return (
-    <div className="CoursesContainer bg-gray-100 py-8 min-h-screen ">
-      <Wrapper className="CoursesWrapper">
-        {/* search section   */}
-        <div className="searchSection bg-white border border-gray-300  w-[50%] m-auto py-1 px-5 rounded-full flex justify-center items-center mb-8  ">
-          <Input
-            type="text"
-            placeholder="Looking for...."
-            className="border-none outline-none ring-0 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none active:ring-0"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+    <div className="bg-gray-50 min-h-screen py-10">
+      <Wrapper>
+        {/* Page header */}
+        <div className="text-center mb-8">
+          <p className="text-prime-50 text-xs font-semibold tracking-widest uppercase mb-3">
+            Courses
+          </p>
+          <h1 className="text-3xl font-bold text-gray-900">
+            Explore All Courses
+          </h1>
         </div>
 
-        {/* main body section starts  */}
-        <div className="mainBody flex flex-col xl:flex-row justify-between  gap-x-6 gap-y-8">
-          {/* left category section  */}
-          <div className="categorySection  w-full xl:w-[16%] ">
+        {/* Search bar */}
+        <div className="max-w-xl mx-auto mb-10">
+          <div className="bg-white border border-gray-200 rounded-xl shadow-sm flex items-center gap-2 px-4 py-2">
+            <Search className="h-4 w-4 text-gray-400 shrink-0" />
+            <Input
+              type="text"
+              placeholder="Search courses..."
+              className="border-none outline-none ring-0 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none p-0 h-auto bg-transparent text-sm"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+        </div>
+
+        {/* Body */}
+        <div className="flex flex-col xl:flex-row gap-6">
+          {/* Category filter sidebar */}
+          <div className="w-full xl:w-56 shrink-0">
             <CategoryFilter
               categoryType={categoryType}
               setcategoryType={setcategoryType}
             />
           </div>
 
-          {/* right course section   */}
-          <div className="courseSection w-full xl:w-[84%]">
-            {/* course card section  */}
-            <div className="courseCard grid  grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-6  ">
+          {/* Course grid */}
+          <div className="flex-1">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
               {content}
             </div>
           </div>
-
-          {/*  */}
         </div>
       </Wrapper>
     </div>

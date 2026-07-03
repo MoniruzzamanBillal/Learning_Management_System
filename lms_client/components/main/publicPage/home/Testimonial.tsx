@@ -4,8 +4,6 @@ import Wrapper from "@/components/shared/Wrapper";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 import "swiper/css";
-import "swiper/css/effect-coverflow";
-import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 import { Autoplay, Pagination } from "swiper/modules";
@@ -33,7 +31,7 @@ const testimonialData: TTestimonial[] = [
   {
     review:
       "The course dashboard is very intuitive. I loved how each video unlocks as I make progress. It kept me motivated to complete the modules!",
-    name: "Mahfuz ahmed",
+    name: "Mahfuz Ahmed",
     img: "https://i.postimg.cc/8cJF75hY/425321265-122100582938203050-1203191898968956264-n.jpg",
   },
   {
@@ -44,7 +42,7 @@ const testimonialData: TTestimonial[] = [
   },
   {
     review:
-      "What I love most is the flexibility. I can learn at my own pace, revisit videos, and even track which ones I’ve completed. Truly a learner-friendly platform!",
+      "What I love most is the flexibility. I can learn at my own pace, revisit videos, and even track which ones I've completed. Truly a learner-friendly platform!",
     name: "Md Mahmudul Hasan",
     img: "https://i.postimg.cc/MThVw445/499168714-1465365904628987-4897850097428601686-n.jpg",
   },
@@ -64,41 +62,34 @@ const testimonialData: TTestimonial[] = [
 
 const Testimonial = () => {
   return (
-    <div className="TestimonialContainer bg-gray-50 py-8 ">
-      <Wrapper className=" TestimonialWrapper">
-        <h1 className="  text-center font-semibold text-prime100  text-xl xsm:text-2xl md:text-3xl  ">
-          What others say about us
-        </h1>
-
-        <div className="testimonialCardContainer">
-          <Swiper
-            spaceBetween={30}
-            centeredSlides={true}
-            autoplay={{
-              delay: 2500,
-              disableOnInteraction: false,
-            }}
-            pagination={{
-              clickable: true,
-            }}
-            // navigation={true}
-            modules={[Autoplay, Pagination]}
-            className="mySwiper"
-          >
-            {testimonialData &&
-              testimonialData?.map((testimonial: TTestimonial, ind: number) => (
-                <SwiperSlide key={ind}>
-                  <TestimonialCard testimonial={testimonial} />
-                </SwiperSlide>
-              ))}
-
-            {/*  */}
-
-            {/*  */}
-          </Swiper>
+    <section className="bg-gray-50 py-16">
+      <Wrapper>
+        {/* Section header */}
+        <div className="text-center mb-10">
+          <p className="text-prime-50 text-xs font-semibold tracking-widest uppercase mb-3">
+            Testimonials
+          </p>
+          <h2 className="text-3xl font-bold text-gray-900">
+            What our students say
+          </h2>
         </div>
+
+        <Swiper
+          spaceBetween={30}
+          centeredSlides={true}
+          autoplay={{ delay: 2800, disableOnInteraction: false }}
+          pagination={{ clickable: true }}
+          modules={[Autoplay, Pagination]}
+          className="mySwiper pb-10"
+        >
+          {testimonialData.map((testimonial, i) => (
+            <SwiperSlide key={i}>
+              <TestimonialCard testimonial={testimonial} />
+            </SwiperSlide>
+          ))}
+        </Swiper>
       </Wrapper>
-    </div>
+    </section>
   );
 };
 

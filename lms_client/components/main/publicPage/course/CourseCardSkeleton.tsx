@@ -2,31 +2,27 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 const CourseCardSkeleton = () => {
   return (
-    <div className="CourseCardSkeletonContainer bg-gray-50 border border-gray-300 shadow rounded">
-      <div className="CourseCardSkeletonWrapper flex flex-col gap-y-2">
-        {/* Course Cover Skeleton */}
-        <div className="h-[14rem] rounded-t overflow-hidden relative">
-          <Skeleton className="w-full h-full bg-gray-200  " />
-          <Skeleton className="absolute top-2 left-2 w-16 h-6 rounded bg-prime50" />
-        </div>
+    <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden flex flex-col">
+      {/* Cover image */}
+      <Skeleton className="h-44 w-full rounded-none bg-gray-200" />
 
-        <div className="px-3 flex flex-col gap-y-2 py-2">
-          {/* Course Name */}
-          <Skeleton className="w-3/4 h-5 bg-gray-200 " />
+      <div className="flex flex-col gap-2.5 p-4">
+        {/* Course name */}
+        <Skeleton className="h-5 w-3/4 bg-gray-200" />
+        <Skeleton className="h-4 w-full bg-gray-200" />
+        <Skeleton className="h-4 w-5/6 bg-gray-200" />
 
-          {/* Category */}
-          <Skeleton className="w-1/2 h-4 bg-gray-200 " />
+        {/* Instructor + modules */}
+        <Skeleton className="h-4 w-1/2 bg-gray-200" />
+        <Skeleton className="h-4 w-1/3 bg-gray-200" />
 
-          {/* Instructors */}
-          <Skeleton className="w-1/3 h-4 bg-gray-200 " />
-          <Skeleton className="w-2/3 h-4 bg-gray-200 " />
-          <Skeleton className="w-2/4 h-4 bg-gray-200 " />
+        {/* Stars */}
+        <Skeleton className="h-4 w-24 bg-gray-200" />
 
-          {/* Bottom Section */}
-          <div className="flex justify-between items-center pt-3">
-            <Skeleton className="w-20 h-5 bg-gray-200 " />
-            <Skeleton className="w-24 h-9 rounded-md bg-gray-200 " />
-          </div>
+        {/* Price + CTA */}
+        <div className="flex justify-between items-center pt-3 border-t border-gray-100 mt-auto">
+          <Skeleton className="h-5 w-16 bg-gray-200" />
+          <Skeleton className="h-8 w-28 rounded-lg bg-gray-200" />
         </div>
       </div>
     </div>

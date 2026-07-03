@@ -18,36 +18,37 @@ const ReviewInput = ({
   reviewGivingLoading = false,
 }: TProps) => {
   return (
-    <div className="ReviewInputContainer  ">
-      <div className="ReviewInputWrapper w-full mb-4 border border-gray-300  rounded-md bg-gray-50 shadow ">
-        <div className="px-4 py-2   ">
+    <div className="mb-6">
+      <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        {/* Textarea */}
+        <div className="px-4 py-3">
           <label htmlFor="review" className="sr-only">
             Your Review
           </label>
           <textarea
             id="comment"
-            rows={5}
+            rows={4}
             value={review as string}
             onChange={(e) => setReview(e.target.value)}
-            className="w-full px-0 text-sm bg-gray-50  border-none outline-none  "
+            className="w-full text-sm text-gray-700 bg-white border-none outline-none resize-none placeholder:text-gray-400"
             required
-            placeholder="Give Your Review..."
-          ></textarea>
+            placeholder="Share your experience with this course..."
+          />
         </div>
 
-        {/* Rating Section */}
-        <div className="px-4 py-2">
-          <label className="block mb-2 text-sm font-medium text-gray-700">
-            Rating (1-5)
-          </label>
-          <div className="flex items-center space-x-2">
+        {/* Stars */}
+        <div className="px-4 py-2 border-t border-gray-100">
+          <p className="text-xs font-medium text-gray-600 mb-2">
+            Your rating
+          </p>
+          <div className="flex items-center gap-1">
             {[1, 2, 3, 4, 5].map((star) => (
               <button
                 key={star}
                 type="button"
                 onClick={() => setRating(star)}
-                className={`text-2xl ${
-                  rating >= star ? "text-yellow-400" : "text-gray-300"
+                className={`text-2xl transition-colors ${
+                  rating >= star ? "text-yellow-400" : "text-gray-200"
                 }`}
               >
                 ★
@@ -56,15 +57,15 @@ const ReviewInput = ({
           </div>
         </div>
 
-        {/* button  */}
-        <div className="flex items-center justify-between px-3 py-2 border-t  ">
+        {/* Submit */}
+        <div className="flex items-center justify-end px-4 py-3 border-t border-gray-100 bg-gray-50">
           <Button
             disabled={reviewGivingLoading}
             type="submit"
-            onClick={() => handleAddReview()}
-            className=" text-sm font-medium  text-white bg-prime-100 hover:bg-prime-200 rounded-md   "
+            onClick={handleAddReview}
+            className="bg-prime-100 hover:bg-prime-200 text-white text-sm cursor-pointer"
           >
-            {reviewGivingLoading ? "Giving Review " : "Give Review "}
+            {reviewGivingLoading ? "Submitting..." : "Submit Review"}
           </Button>
         </div>
       </div>

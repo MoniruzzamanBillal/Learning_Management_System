@@ -1,5 +1,6 @@
 "use client";
 
+import GenericTableComponent from "@/components/shared/table/GenericTableComponent";
 import TableDataLoading from "@/components/shared/TableLoading";
 import {
   Accordion,
@@ -11,8 +12,10 @@ import { Button } from "@/components/ui/button";
 import { publishCourseFunction } from "@/functions/course.functions";
 import { useFetchData, useUpdateData } from "@/hooks/useApi";
 import { useParams, useRouter } from "next/navigation";
-import GenericTableComponent from "@/components/shared/table/GenericTableComponent";
-import { CourseDetailModuleColumn, InstructorColumn } from "./CourseDetailColumns";
+import {
+  CourseDetailModuleColumn,
+  InstructorColumn,
+} from "./CourseDetailColumns";
 
 const CourseDetail = () => {
   const router = useRouter();
@@ -30,7 +33,10 @@ const CourseDetail = () => {
     data: courseData,
     isLoading: courseDataLoading,
     refetch: courseDataRefetch,
-  } = useFetchData<any>(["admin-course-detail", courseId], `/course/admin-course-detail/${courseId}`);
+  } = useFetchData<any>(
+    ["admin-course-detail", courseId],
+    `/course/admin-course-detail/${courseId}`,
+  );
 
   // ! for publishing a course
   const publishAdminCourse = async () => {
@@ -54,7 +60,10 @@ const CourseDetail = () => {
         {/* heading section  */}
         <div className="headingSection mb-8 flex justify-between items-center">
           <div className="headingLeft">
-            <h1 className=" font-medium text-xl  "> Course id : #{courseId} </h1>
+            <h1 className=" font-medium text-xl  ">
+              {" "}
+              Course id : #{courseId}{" "}
+            </h1>
           </div>
 
           <div className=" rightSection btnSection flex justify-between items-center gap-x-4  ">
@@ -73,7 +82,9 @@ const CourseDetail = () => {
             <Button
               disabled={courseData?.data?.published}
               onClick={() =>
-                router.push(`/dashboard/admin/update-course/${courseData?.data?._id}`)
+                router.push(
+                  `/dashboard/admin/update-course/${courseData?.data?._id}`,
+                )
               }
               className={`    ${
                 courseData?.data?.published
@@ -107,7 +118,9 @@ const CourseDetail = () => {
             <span className={` font-bold  `}>Course Published : </span>{" "}
             <span
               className={` ${
-                courseData?.data?.published ? "text-green-600 " : "text-red-600 "
+                courseData?.data?.published
+                  ? "text-green-600 "
+                  : "text-red-600 "
               } `}
             >
               {courseData?.data?.published ? "Published " : "Unpublished "}

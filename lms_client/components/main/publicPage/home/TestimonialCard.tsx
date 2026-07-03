@@ -7,40 +7,30 @@ type TTestimonialProps = {
 
 const TestimonialCard = ({ testimonial }: TTestimonialProps) => {
   return (
-    <div className="TestimonialCardContainer">
-      <div className="TestimonialCardWrapper">
-        {/* card starts  */}
-        <div className="bg-white py-8 ">
-          <div className="mx-auto max-w-screen-2xl px-4 md:px-8">
-            {/* quote - start  */}
-            <div className="flex flex-col items-center gap-4 md:gap-6">
-              <div className="max-w-md text-center text-gray-600 text-sm sm:text-base md:text-lg">
-                {testimonial?.review}
-              </div>
+    <div className="bg-white rounded-2xl shadow-sm mx-4 mb-4 p-8 flex flex-col items-center text-center max-w-2xl mx-auto">
+      {/* Large quote mark */}
+      <span className="text-6xl text-indigo-100 font-serif leading-none select-none mb-2">
+        &ldquo;
+      </span>
 
-              <div className="flex flex-col items-center gap-2 sm:flex-row md:gap-3">
-                <div className=" overflow-hidden rounded-full bg-gray-100 shadow-lg size-10  xsm:size-12  md:size-14 ">
-                  <Image
-                    height={1280}
-                    width={1280}
-                    src={testimonial?.img}
-                    loading="lazy"
-                    alt="Avatar Photo "
-                    className="h-full w-full object-cover object-center"
-                  />
-                </div>
+      {/* Review text */}
+      <p className="text-gray-600 text-base leading-relaxed max-w-xl mx-auto mb-6">
+        {testimonial.review}
+      </p>
 
-                <div>
-                  <div className="text-center text-sm font-bold text-indigo-500 sm:text-left md:text-base">
-                    {testimonial?.name}
-                  </div>
-                </div>
-              </div>
-            </div>
-            {/* quote - end  */}
-          </div>
+      {/* Avatar + name */}
+      <div className="flex items-center justify-center gap-3">
+        <div className="size-12 rounded-full overflow-hidden border-2 border-indigo-100 shrink-0">
+          <Image
+            height={96}
+            width={96}
+            src={testimonial.img}
+            loading="lazy"
+            alt={testimonial.name}
+            className="h-full w-full object-cover object-center"
+          />
         </div>
-        {/* card ends  */}
+        <p className="font-semibold text-gray-900 text-sm">{testimonial.name}</p>
       </div>
     </div>
   );
