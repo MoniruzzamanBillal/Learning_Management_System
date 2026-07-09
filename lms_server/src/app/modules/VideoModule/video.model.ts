@@ -24,6 +24,11 @@ videoSchema.pre("findOne", async function (next) {
   next();
 });
 
+videoSchema.index(
+  { module: 1, videoOrder: 1 },
+  { unique: true, partialFilterExpression: { isDeleted: false } }
+);
+
 //
 
 export const videoModel = model<TVideo>("Video", videoSchema);

@@ -419,8 +419,14 @@ const getUserEnrolledModuleVideos = async (
       module: moduleId,
       user: userId,
     })
-    .populate("video", " _id title ")
+    .populate("video", " _id title videoOrder ")
     .select("  _id  videoStatus ");
+
+  videoData.sort((a, b) => {
+    const aOrder = (a.video as unknown as { videoOrder: number })?.videoOrder;
+    const bOrder = (b.video as unknown as { videoOrder: number })?.videoOrder;
+    return aOrder - bOrder;
+  });
 
   return videoData;
 };

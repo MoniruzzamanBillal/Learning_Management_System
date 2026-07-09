@@ -6,4 +6,4 @@ This file exists so future backend feature work can be planned the same way: whe
 
 ## Units
 
-_(none yet)_
+- [`01-fix-sequential-video-unlock-order.md`](./01-fix-sequential-video-unlock-order.md) — fixes `videoOrder` assignment/unlock-list sorting bugs causing the wrong video to unlock, plus a data backfill for already-corrupted modules.

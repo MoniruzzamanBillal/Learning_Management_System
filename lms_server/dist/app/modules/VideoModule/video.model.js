@@ -31,5 +31,6 @@ videoSchema.pre("findOne", function (next) {
         next();
     });
 });
+videoSchema.index({ module: 1, videoOrder: 1 }, { unique: true, partialFilterExpression: { isDeleted: false } });
 //
 exports.videoModel = (0, mongoose_1.model)("Video", videoSchema);

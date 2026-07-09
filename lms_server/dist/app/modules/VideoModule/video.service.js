@@ -38,9 +38,10 @@ const addVideo = (payload, videoUrl) => __awaiter(void 0, void 0, void 0, functi
     if (!instructorData) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "This instructor don't exist !!!");
     }
-    const videoCount = yield video_model_1.videoModel.countDocuments({ module });
+    const lastVideo = yield video_model_1.videoModel.findOne({ module }).sort({ videoOrder: -1 });
+    const nextOrder = lastVideo ? lastVideo.videoOrder + 1 : 0;
     payload.videoUrl = videoUrl;
-    payload.videoOrder = videoCount;
+    payload.videoOrder = nextOrder;
     const enrolledCourseUsers = yield CourseEnrollment_model_1.courseEnrollmentModel.find({
         course: courseId,
     });
@@ -57,7 +58,7 @@ const addVideo = (payload, videoUrl) => __awaiter(void 0, void 0, void 0, functi
                 enrolledCourseUsers,
                 courseId,
                 videoId: (_d = (_c = videoData[0]) === null || _c === void 0 ? void 0 : _c._id) === null || _d === void 0 ? void 0 : _d.toString(),
-                videoCount,
+                videoCount: nextOrder,
                 moduleId: module === null || module === void 0 ? void 0 : module.toString(),
                 session,
             });

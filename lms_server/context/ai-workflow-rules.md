@@ -26,6 +26,7 @@ This is a live, already-built codebase (not a greenfield build) — the priority
 
 - If an implementation decision changes something documented in `architecture.md` or `code-standards.md` (a new module, a new invariant, a resolved "known gap"), update that file in the same change.
 - Update `context/progress-tracker.md` after each meaningful change.
+- **Spec status tracking:** before starting implementation of any `context/specs/*.md` file, mark it **In Progress** in `progress-tracker.md`'s "Spec Implementation Status" table. For specs with multiple implementation steps, work through them in order; the spec stays **In Progress** until all steps (and its Verify-when-done checklist) are done. Once a spec is fully implemented and verified, mark it **Complete** in the same table.
 
 ## Verification Checklist Before Moving On
 
