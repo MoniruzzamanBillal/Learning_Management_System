@@ -6,4 +6,6 @@ This file exists so future frontend feature work can be planned the same way: wh
 
 ## Units
 
-_(none yet)_
+1. **[01: My Courses — List Page Redesign](./01-my-courses-list-redesign.md)** — visual redesign of `/my-courses` to match the `/courses` catalog's card/grid style. Not yet implemented.
+2. **[02: My Course Detail / Player Page Redesign](./02-my-course-detail-redesign.md)** — visual redesign of `/my-courses/[id]` (header, visible progress, card surfaces, consistent module-list styling). Not yet implemented.
+3. **[03: Certificate PDF Design](./03-certificate-pdf-design.md)** — replace the broken-image, plain-text certificate PDF with a fully code-drawn, branded certificate. Not yet implemented.

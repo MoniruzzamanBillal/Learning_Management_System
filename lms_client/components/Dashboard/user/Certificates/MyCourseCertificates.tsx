@@ -27,6 +27,7 @@ const MyCourseCertificates = () => {
         <GenericTableComponent
           columns={CertificateTableColumn as any}
           data={userFinishedCourse?.data}
+          showToolbar={false}
         />
       </div>
     );
