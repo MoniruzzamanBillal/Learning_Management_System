@@ -28,7 +28,7 @@ type TVideoDetail = {
   __v: number;
 };
 
-type TVideo = { _id: string; title: string };
+type TVideo = { _id: string; title: string; videoOrder: number };
 
 type TModuleVideo = {
   _id: string;
@@ -140,7 +140,9 @@ const ModuleShowData = ({
 
                 {moduleVideosLoading && <ModuleItemSkeleton />}
                 {moduleVideosData &&
-                  moduleVideosData?.data?.map((video: TModuleVideo) => (
+                  [...(moduleVideosData?.data ?? [])]
+                    .sort((a, b) => a.video?.videoOrder - b.video?.videoOrder)
+                    .map((video: TModuleVideo) => (
                     <AccordionContent
                       key={video?._id}
                       className={` text-sm lg:text-lg py-3 pl-4 font-medium border-y border-y-gray-300 flex items-center gap-x-2 cursor-pointer   ${

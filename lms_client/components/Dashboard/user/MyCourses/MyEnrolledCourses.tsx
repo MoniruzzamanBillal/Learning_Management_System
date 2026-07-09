@@ -26,6 +26,7 @@ const MyEnrolledCourses = () => {
                 <GenericTableComponent
                   columns={EnrolledCourseColumn}
                   data={allEnrolledCourse?.data}
+                  showToolbar={false}
                 />
               </div>
             )}

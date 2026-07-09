@@ -38,10 +38,11 @@ const addVideo = async (payload: TVideo, videoUrl: string) => {
     );
   }
 
-  const videoCount = await videoModel.countDocuments({ module });
+  const lastVideo = await videoModel.findOne({ module }).sort({ videoOrder: -1 });
+  const nextOrder = lastVideo ? lastVideo.videoOrder + 1 : 0;
 
   payload.videoUrl = videoUrl;
-  payload.videoOrder = videoCount;
+  payload.videoOrder = nextOrder;
 
   const enrolledCourseUsers: TEnrolledCourseUsers[] =
     await courseEnrollmentModel.find({
@@ -69,7 +70,7 @@ const addVideo = async (payload: TVideo, videoUrl: string) => {
         enrolledCourseUsers,
         courseId,
         videoId: videoData[0]?._id?.toString(),
-        videoCount,
+        videoCount: nextOrder,
         moduleId: module?.toString(),
         session,
       });
