@@ -2,10 +2,12 @@
 
 import Wrapper from "@/components/shared/Wrapper";
 import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
 import { useFetchData, usePatch } from "@/hooks/useApi";
 import { TApiResponse } from "@/types/globalTypes";
 import MuxPlayer from "@mux/mux-player-react";
-import { Bookmark } from "lucide-react";
+import { ArrowLeft, Bookmark, CheckCircle2 } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 import { toast } from "sonner";
 import ModuleShowData from "./ModuleShowData";
@@ -93,53 +95,101 @@ export default function EnrollCourseDetail({ id }: { id: string }) {
     );
   }
 
-  return (
-    <div className="EnrolledCourseDetailContainer   bg-gray-100 min-h-screen ">
-      <Wrapper className="EnrolledCourseDetailWrapper py-5 flex flex-col sm:flex-row justify-between gap-x-4 ">
-        {/* left video section  */}
-        <div className="leftVideoSection w-full sm:w-[70%] lg:w-[60%] ">
-          <div className="videoPreviewContainer mt-4">
-            {videoDataObj && (
-              <p className=" text-xl font-medium mb-2 ">
-                {videoDataObj?.title}
-              </p>
-            )}
+  const isCompleted = enrolledCourseData?.data?.completed;
 
-            {/* video content  */}
-            {content}
+  return (
+    <div className="EnrolledCourseDetailContainer bg-gray-100 min-h-screen">
+      <Wrapper className="EnrolledCourseDetailWrapper py-8">
+        {/* Page header */}
+        <div className="mb-6">
+          <Link
+            href="/my-courses"
+            className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-prime-100 transition-colors mb-4"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to My Courses
+          </Link>
+
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+            <div>
+              {enrolledCourseData?.data?.course?.category && (
+                <p className="text-prime-50 text-xs font-semibold tracking-widest uppercase mb-2">
+                  {enrolledCourseData?.data?.course?.category}
+                </p>
+              )}
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
+                {enrolledCourseData?.data?.course?.name}
+              </h1>
+            </div>
+
+            {!isLoading && enrolledCourseData?.data && (
+              <div className="w-full sm:w-64 shrink-0 flex items-center gap-3">
+                <Progress value={courseProgress ?? 0} className="flex-1" />
+                <span className="text-prime-100 font-semibold text-sm shrink-0">
+                  {courseProgress ?? 0}%
+                </span>
+              </div>
+            )}
           </div>
         </div>
-        {/*  */}
 
-        {/* right module section  */}
-        <div className="rightSection w-full sm:w-[30%] lg:w-[40%]  ">
-          {enrolledCourseData?.data?.course?.modules &&
-            enrolledCourseData?.data?.course?._id && (
-              <ModuleShowData
-                modules={enrolledCourseData?.data?.course?.modules}
-                setVideoLoading={setVideoLoading}
-                courseId={enrolledCourseData?.data?.course?._id}
-                setCourseProgress={setCourseProgress}
-                setVideoDataObj={setVideoDataObj}
-                videoDataObj={videoDataObj}
-              />
+        {/* Body */}
+        <div className="flex flex-col lg:grid lg:grid-cols-[1fr_360px] gap-6">
+          {/* left video section  */}
+          <div className="leftVideoSection">
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden p-4">
+              <div className="videoPreviewContainer">
+                {videoDataObj && (
+                  <p className=" text-xl font-medium mb-2 ">
+                    {videoDataObj?.title}
+                  </p>
+                )}
+
+                {/* video content  */}
+                {content}
+              </div>
+            </div>
+          </div>
+          {/*  */}
+
+          {/* right module section  */}
+          <div className="rightSection">
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
+              {enrolledCourseData?.data?.course?.modules &&
+                enrolledCourseData?.data?.course?._id && (
+                  <ModuleShowData
+                    modules={enrolledCourseData?.data?.course?.modules}
+                    setVideoLoading={setVideoLoading}
+                    courseId={enrolledCourseData?.data?.course?._id}
+                    setCourseProgress={setCourseProgress}
+                    setVideoDataObj={setVideoDataObj}
+                    videoDataObj={videoDataObj}
+                  />
+                )}
+            </div>
+
+            {/* completion state  */}
+            {isCompleted ? (
+              <div className="mt-3 flex items-center justify-center gap-2 bg-green-50 text-green-600 font-semibold text-sm rounded-lg py-3">
+                <CheckCircle2 className="h-4 w-4" />
+                Course Completed
+              </div>
+            ) : (
+              courseProgress === 100 && (
+                <Button
+                  disabled={isPending}
+                  onClick={() => handleMarkCompleteCourse()}
+                  className={` mt-3 w-full bg-prime-100 hover:bg-prime-200  `}
+                >
+                  <Bookmark size={48} strokeWidth={2.25} />
+
+                  {isPending ? "Marking as complete..." : "Mark as Completed"}
+                </Button>
+              )
             )}
-
-          {/* complete course button  */}
-
-          {!enrolledCourseData?.data?.completed && courseProgress === 100 && (
-            <Button
-              disabled={isPending}
-              onClick={() => handleMarkCompleteCourse()}
-              className={` mt-2 w-full bg-prime-100 hover:bg-prime-200  `}
-            >
-              <Bookmark size={48} strokeWidth={2.25} />
-
-              {isPending ? "Marking as complete..." : "Mark as Completed"}
-            </Button>
-          )}
+          </div>
+          {/*  */}
         </div>
-        {/*  */}
       </Wrapper>
     </div>
   );

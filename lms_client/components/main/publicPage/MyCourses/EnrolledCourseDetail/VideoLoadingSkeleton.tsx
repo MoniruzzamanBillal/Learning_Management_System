@@ -2,7 +2,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 const VideoLoadingSkeleton = () => {
   return (
-    <div className=" bg-white border  border-gray-300 shadow-md rounded-md relative  ">
+    <div className="relative rounded-xl overflow-hidden">
       <div className=" absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-x-2 ">
         {/*  */}
         <svg
@@ -88,7 +88,7 @@ const VideoLoadingSkeleton = () => {
         </p>
       </div>
 
-      <Skeleton className="h-[26rem] bg-gray-200 w-full rounded-md" />
+      <Skeleton className="h-[26rem] bg-gray-200 w-full rounded-xl" />
     </div>
   );
 };
