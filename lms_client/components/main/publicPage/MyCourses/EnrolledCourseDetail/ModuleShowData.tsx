@@ -117,7 +117,7 @@ const ModuleShowData = ({
   };
 
   return (
-    <div className="ModuleShowDataContainer mt-10  ">
+    <div className="ModuleShowDataContainer">
       <div className="ModuleShowDataWrapper">
         {/*  */}
         <Accordion type="single" collapsible className="w-full">
@@ -126,7 +126,7 @@ const ModuleShowData = ({
               <AccordionItem
                 key={module?._id}
                 value={module?._id}
-                className=" bg-prime-50/10 rounded-md border shadow p-2 my-5 "
+                className=" bg-gray-50 rounded-lg border border-gray-100 p-2 my-3 "
               >
                 {/* module name  */}
                 <AccordionTrigger
@@ -152,17 +152,17 @@ const ModuleShowData = ({
                     >
                       {video?.videoStatus ===
                         videoProgressStatusConsts?.locked && (
-                        <Lock className=" text-red-600 font-bold  size-5 lg:size-6 " />
+                        <Lock className=" text-gray-400 font-bold  size-5 lg:size-6 " />
                       )}
 
                       {video?.videoStatus ===
                         videoProgressStatusConsts?.watched && (
-                        <CircleCheckBig className=" text-green-700 font-bold size-5 lg:size-6 " />
+                        <CircleCheckBig className=" text-green-600 font-bold size-5 lg:size-6 " />
                       )}
 
                       {video?.videoStatus ===
                         videoProgressStatusConsts?.unlocked && (
-                        <LockOpen className=" text-blue-600 font-bold size-5 lg:size-6 " />
+                        <LockOpen className=" text-prime-100 font-bold size-5 lg:size-6 " />
                       )}
 
                       <p onClick={() => handleGetVideo(video?.video?._id)}>

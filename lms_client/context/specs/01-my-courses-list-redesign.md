@@ -49,10 +49,12 @@ The public catalog (`components/main/publicPage/course/CoursePage.tsx` + `Course
 
 ## Verify When Done
 
-- [ ] `/my-courses` renders enrolled courses in a responsive grid (1 col mobile, 2 col `sm`, 3 col `md+`), matching `/courses`' breakpoints.
-- [ ] Cards show a category badge, hover zoom/shadow, and gradient overlay consistent with `/courses`.
-- [ ] A completed course is visually distinguishable from an in-progress one.
-- [ ] Loading skeleton shape matches the new card layout (no layout shift between skeleton and loaded card).
-- [ ] Empty state (`NoEnrollCourse`) still renders correctly when the user has zero enrollments.
-- [ ] "Continue"/CTA still links to `/my-courses/[id]` with the correct course id.
-- [ ] `npm run lint` and `npm run build` pass cleanly.
+- [x] `/my-courses` renders enrolled courses in a responsive grid (1 col mobile, 2 col `sm`, 3 col `md+`), matching `/courses`' breakpoints.
+- [x] Cards show a category badge, hover zoom/shadow, and gradient overlay consistent with `/courses`.
+- [x] A completed course is visually distinguishable from an in-progress one.
+- [x] Loading skeleton shape matches the new card layout (no layout shift between skeleton and loaded card).
+- [x] Empty state (`NoEnrollCourse`) still renders correctly when the user has zero enrollments.
+- [x] "Continue"/CTA still links to `/my-courses/[id]` with the correct course id.
+- [x] `npm run lint` and `npm run build` pass cleanly.
+
+Visual pass confirmed by the user. Spec complete.

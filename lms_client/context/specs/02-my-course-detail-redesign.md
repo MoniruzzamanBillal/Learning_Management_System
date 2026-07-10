@@ -44,11 +44,13 @@ Give the enrolled-course video-player page (`/my-courses/[id]`) a real page head
 
 ## Verify When Done
 
-- [ ] Course name and category are visible on page load, without needing to select a video.
-- [ ] A back-link to `/my-courses` is present and works.
-- [ ] The progress bar reflects `courseProgress` and updates after watching/completing a video, matching the existing state-update behavior.
-- [ ] Video area and module sidebar are visually consistent (white rounded card) with the rest of the site.
-- [ ] Locked / unlocked / watched module-video states remain functionally identical (same click behavior, same icons) — only the color treatment changes.
-- [ ] Completing a course still calls `PATCH /enroll/complete-my-course/:id` and now shows a persistent "completed" visual state afterward, not just a toast.
-- [ ] Responsive: single column on mobile, two-column layout on `lg`+ (or whichever breakpoint is chosen), with no layout shift versus the skeleton states.
-- [ ] `npm run lint` and `npm run build` pass cleanly.
+- [x] Course name and category are visible on page load, without needing to select a video.
+- [x] A back-link to `/my-courses` is present and works.
+- [x] The progress bar reflects `courseProgress` and updates after watching/completing a video, matching the existing state-update behavior.
+- [x] Video area and module sidebar are visually consistent (white rounded card) with the rest of the site.
+- [x] Locked / unlocked / watched module-video states remain functionally identical (same click behavior, same icons) — only the color treatment changes.
+- [x] Completing a course still calls `PATCH /enroll/complete-my-course/:id` and now shows a persistent "completed" visual state afterward, not just a toast.
+- [x] Responsive: single column on mobile, two-column layout on `lg`+, with no layout shift versus the skeleton states.
+- [x] `npm run lint` and `npm run build` pass cleanly.
+
+Visual pass confirmed by the user. Spec complete.

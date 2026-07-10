@@ -6,6 +6,15 @@ Update this file after every meaningful implementation change.
 
 Live / in production (`devmats.vercel.app`) — ongoing maintenance & feature iteration, not initial build-out. The app was recently migrated to Next.js (see Recent Activity).
 
+## Spec Implementation Status
+
+Tracks work items defined in `context/specs/`. Update the moment implementation starts or finishes on a spec.
+
+| Spec                                                                     | Status      | Notes                                                                                                                                                                     |
+| ------------------------------------------------------------------------ | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`01-my-courses-list-redesign.md`](specs/01-my-courses-list-redesign.md) | ✅ Complete | `MyCourses.tsx`, `MyCourseCard.tsx`, `MyCourseCardSkeleton.tsx` redesigned to match `/courses`' grid/card pattern; lint + build clean; visual pass confirmed by the user. |
+| [`02-my-course-detail-redesign.md`](specs/02-my-course-detail-redesign.md) | ✅ Complete | `EnrollCourseDetail.tsx`, `NoVideoPlaceholder.tsx`, `VideoLoadingSkeleton.tsx`, `ModuleShowData.tsx`, `EnrolledCourseDetailSkeleton.tsx` redesigned (header, progress bar, card surfaces, grid layout, restyled module status colors, persistent completed badge); lint + build clean; visual pass confirmed by the user. |
+
 ## Completed (already implemented)
 
 - Public site: home, course catalog + detail, about-us, contact, faqs, instructors, login/sign-up, SSLCOMMERZ payment-outcome pages.

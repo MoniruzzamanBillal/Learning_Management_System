@@ -22,21 +22,27 @@ export default function MyCourses() {
           <h1 className="text-3xl font-bold text-gray-900">My Courses</h1>
         </div>
 
-        <div className="flex flex-col gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
           {isLoading &&
             Array.from({ length: 4 }).map((_, ind) => (
               <MyCourseCardSkeleton key={ind} />
             ))}
 
-          {userEnrolledCourse?.data?.length === 0 && <NoEnrollCourse />}
+          {userEnrolledCourse?.data?.length === 0 && (
+            <div className="col-span-full">
+              <NoEnrollCourse />
+            </div>
+          )}
 
           {userEnrolledCourse?.data &&
-            userEnrolledCourse.data.map((enrolledCourse: TUserEnrolledCourse) => (
-              <MyCourseCard
-                key={enrolledCourse?._id}
-                courseData={enrolledCourse}
-              />
-            ))}
+            userEnrolledCourse.data.map(
+              (enrolledCourse: TUserEnrolledCourse) => (
+                <MyCourseCard
+                  key={enrolledCourse?._id}
+                  courseData={enrolledCourse}
+                />
+              ),
+            )}
         </div>
       </Wrapper>
     </div>
