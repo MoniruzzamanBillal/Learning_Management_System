@@ -10,6 +10,7 @@ import { ArrowLeft, Bookmark, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { toast } from "sonner";
+import AiStudyAssistant from "./AiStudyAssistant";
 import ModuleShowData from "./ModuleShowData";
 import NoVideoPlaceholder from "./NoVideoPlaceholder";
 import { TEnrollCourseDetail } from "./type";
@@ -191,6 +192,8 @@ export default function EnrollCourseDetail({ id }: { id: string }) {
           {/*  */}
         </div>
       </Wrapper>
+
+      {id && <AiStudyAssistant courseId={id} />}
     </div>
   );
 }

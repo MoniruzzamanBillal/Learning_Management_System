@@ -16,3 +16,7 @@ export type TCourseAdvisorRecommendation = {
 export type TCourseAdvisorResponse = {
   recommendations: TCourseAdvisorRecommendation[];
 };
+
+export type TChatMessage = { role: "user" | "assistant"; content: string };
+
+export type TStudyAssistantResponse = { reply: string };
