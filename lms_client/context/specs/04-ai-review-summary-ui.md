@@ -6,11 +6,11 @@ Show a short AI-generated "what students are saying" digest on the public course
 
 ## Scope
 
-| File | Role |
-| --- | --- |
-| `components/main/publicPage/courseDetail/CourseDetailPage.tsx` | Existing page component; already fetches `GET /review/course-review/:id` and renders `<CourseDetailTop>`, a description `Wrapper`, and a `reviewContainer` with `<ReviewInput>` + mapped `<UserReviewCard>`. The new summary is a sibling block, placed above the `reviewContainer`. |
-| `components/main/publicPage/courseDetail/AiReviewSummary.tsx` (new) | Fetches and renders the summary. |
-| `types/ai.types.ts` (new) | `TReviewSummaryResponse` type mirroring the backend `ai.interface.ts` shape. |
+| File                                                                | Role                                                                                                                                                                                                                                                                                 |
+| ------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `components/main/publicPage/courseDetail/CourseDetailPage.tsx`      | Existing page component; already fetches `GET /review/course-review/:id` and renders `<CourseDetailTop>`, a description `Wrapper`, and a `reviewContainer` with `<ReviewInput>` + mapped `<UserReviewCard>`. The new summary is a sibling block, placed above the `reviewContainer`. |
+| `components/main/publicPage/courseDetail/AiReviewSummary.tsx` (new) | Fetches and renders the summary.                                                                                                                                                                                                                                                     |
+| `types/ai.types.ts` (new)                                           | `TReviewSummaryResponse` type mirroring the backend `ai.interface.ts` shape.                                                                                                                                                                                                         |
 
 ## Current State
 
