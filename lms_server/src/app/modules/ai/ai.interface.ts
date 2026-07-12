@@ -1,3 +1,5 @@
+import { TChatMessage } from "../../util/openRouterClient";
+
 export type TReviewSummaryResponse = {
   summary: string;
   totalReviews: number;
@@ -15,4 +17,12 @@ export type TCourseAdvisorRecommendation = {
 
 export type TCourseAdvisorResponse = {
   recommendations: TCourseAdvisorRecommendation[];
+};
+
+export type TStudyAssistantRequest = {
+  messages: TChatMessage[];
+};
+
+export type TStudyAssistantResponse = {
+  reply: string;
 };

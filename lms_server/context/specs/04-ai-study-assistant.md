@@ -4,7 +4,7 @@
 
 A chat endpoint scoped to one enrolled course, so a paying student can ask syllabus-level questions — "what's covered in module 3?", "how much do I have left?", "what should I watch next?" — grounded in that course's real structure and their own real progress. Depends on the `ai` module scaffolded in `02-ai-review-summarizer.md`.
 
-**Explicit non-goal:** it cannot answer questions about what a video actually *says* — there's no transcript/caption text stored anywhere in the data model (`Video` only has `title`, `videoUrl`, `videoOrder`). The system prompt must tell the model to say so honestly if asked, rather than making something up.
+**Explicit non-goal:** it cannot answer questions about what a video actually _says_ — there's no transcript/caption text stored anywhere in the data model (`Video` only has `title`, `videoUrl`, `videoOrder`). The system prompt must tell the model to say so honestly if asked, rather than making something up.
 
 ## Design
 
@@ -13,6 +13,7 @@ A chat endpoint scoped to one enrolled course, so a paying student can ask sylla
 **Stateless chat:** no new Mongoose model for conversation history. The client holds the running conversation and resends the full history each turn, using the `TChatMessage[]` shape already exported from `openRouterClient.ts` (`{ role: "system" | "user" | "assistant", content: string }`) — this is the same pattern any OpenAI-style chat client uses, so the frontend doesn't need anything new either.
 
 **Context to ground the assistant (built server-side every request, not client-supplied):**
+
 - Course `name` + `description` (`courseModel.findById(courseId)`).
 - Ordered module → video titles for the course. Reuse the populate pattern already used in `CourseEnrollment.service.ts` (`moduleModel.find({ course: courseId, isDeleted: false }).populate({ path: "videos", model: "Video", select: "_id title videoOrder" })`), sorting each module's videos by `videoOrder`.
 - This user's progress: `courseEnrollmentService.courseProgressPercentage(courseId, userId)` (already exported from `CourseEnrollment.service.ts`) for the overall %, plus a per-video watched/unlocked/locked breakdown via `videoProgressModel.find({ course: courseId, user: userId }).populate("video", "_id title videoOrder").select("videoStatus")`.
@@ -20,6 +21,7 @@ A chat endpoint scoped to one enrolled course, so a paying student can ask sylla
 ## Implementation
 
 1. `ai.validation.ts` — add:
+
    ```ts
    const chatMessageSchema = z.object({
      role: z.enum(["user", "assistant"]), // client never sends "system"
@@ -29,9 +31,11 @@ A chat endpoint scoped to one enrolled course, so a paying student can ask sylla
      messages: z.array(chatMessageSchema).min(1).max(20),
    });
    ```
+
    (Cap of 20 messages / 2000 chars each is a basic abuse guard against runaway prompt size on a free-tier model — not a full rate limiter, just a sanity bound.)
 
 2. `ai.interface.ts` — add:
+
    ```ts
    export type TStudyAssistantRequest = {
      messages: TChatMessage[]; // imported from openRouterClient.ts

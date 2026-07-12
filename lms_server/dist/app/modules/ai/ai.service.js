@@ -8,11 +8,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.aiServices = void 0;
+const http_status_1 = __importDefault(require("http-status"));
+const AppError_1 = __importDefault(require("../../Error/AppError"));
 const openRouterClient_1 = require("../../util/openRouterClient");
 const course_model_1 = require("../course/course.model");
+const CourseEnrollment_service_1 = require("../CourseEnrollment/CourseEnrollment.service");
+const module_model_1 = require("../courseModule/module.model");
 const review_service_1 = require("../review/review.service");
+const VideoProgress_model_1 = require("../VideoProgress/VideoProgress.model");
 const NOT_ENOUGH_REVIEWS_MESSAGE = "Not enough reviews yet to summarize.";
 // ! for getting (or generating + caching) a course's AI review summary
 const getReviewSummary = (courseId) => __awaiter(void 0, void 0, void 0, function* () {
@@ -126,7 +134,76 @@ ${JSON.stringify(courseList, null, 2)}`;
     });
     return { recommendations };
 });
+// ! for getting a chat reply from the in-course study assistant, grounded in course structure + this user's progress
+const getStudyAssistantReply = (courseId, userId, messages) => __awaiter(void 0, void 0, void 0, function* () {
+    const course = yield course_model_1.courseModel
+        .findById(courseId)
+        .select("name description");
+    if (!course) {
+        throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "This course don't exist !!!");
+    }
+    const modules = yield module_model_1.moduleModel
+        .find({ course: courseId, isDeleted: false })
+        .populate({
+        path: "videos",
+        model: "Video",
+        select: "_id title videoOrder",
+    })
+        .select("_id title videos");
+    const outline = modules.map((moduleData) => {
+        const videos = moduleData.videos
+            .slice()
+            .sort((a, b) => a.videoOrder - b.videoOrder);
+        return {
+            title: moduleData.title,
+            videoTitles: videos.map((video) => video.title),
+        };
+    });
+    const overallProgress = yield CourseEnrollment_service_1.courseEnrollmentService.courseProgressPercentage(courseId, userId);
+    const progressRecords = yield VideoProgress_model_1.videoProgressModel
+        .find({ course: courseId, user: userId })
+        .populate("video", "_id title videoOrder")
+        .select("videoStatus");
+    const videoBreakdown = progressRecords
+        .map((record) => {
+        const video = record.video;
+        return {
+            title: video === null || video === void 0 ? void 0 : video.title,
+            videoOrder: video === null || video === void 0 ? void 0 : video.videoOrder,
+            status: record.videoStatus,
+        };
+    })
+        .sort((a, b) => a.videoOrder - b.videoOrder)
+        .map(({ title, status }) => `${title}: ${status}`);
+    const systemPrompt = `You are a study assistant for the course "${course.name}".
+
+Course description: ${course.description}
+
+Course outline (in order):
+${outline
+        .map((module, index) => `${index + 1}. ${module.title}\n${module.videoTitles
+        .map((title, videoIndex) => `   ${videoIndex + 1}. ${title}`)
+        .join("\n")}`)
+        .join("\n")}
+
+This student's overall progress: ${overallProgress}%
+
+This student's per-video status:
+${videoBreakdown.join("\n")}
+
+Rules:
+- Answer only using the course outline and progress data above.
+- You do NOT have access to what is actually said inside any video (no transcripts/captions are stored). If asked what a video says or covers in detail beyond its title, honestly say you don't have access to the video content instead of making something up.
+- Keep answers concise and grounded in the real course structure and this student's real progress.`;
+    const systemMessage = {
+        role: "system",
+        content: systemPrompt,
+    };
+    const reply = yield (0, openRouterClient_1.askOpenRouter)([systemMessage, ...messages]);
+    return { reply };
+});
 exports.aiServices = {
     getReviewSummary,
     getCourseAdvice,
+    getStudyAssistantReply,
 };

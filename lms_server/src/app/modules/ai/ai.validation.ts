@@ -7,6 +7,16 @@ const courseAdvisorSchema = z.object({
     .max(500),
 });
 
+const chatMessageSchema = z.object({
+  role: z.enum(["user", "assistant"]),
+  content: z.string().min(1).max(2000),
+});
+
+const studyAssistantSchema = z.object({
+  messages: z.array(chatMessageSchema).min(1).max(20),
+});
+
 export const aiValidation = {
   courseAdvisorSchema,
+  studyAssistantSchema,
 };

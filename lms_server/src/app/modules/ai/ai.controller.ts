@@ -30,7 +30,24 @@ const getCourseAdvice = catchAsync(async (req, res) => {
   });
 });
 
+// ! for getting a chat reply from the in-course study assistant
+const getStudyAssistantReply = catchAsync(async (req, res) => {
+  const result = await aiServices.getStudyAssistantReply(
+    req?.params?.courseId as string,
+    req?.user?.userId,
+    req.body.messages,
+  );
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Study assistant reply generated successfully",
+    data: result,
+  });
+});
+
 export const aiController = {
   getReviewSummary,
   getCourseAdvice,
+  getStudyAssistantReply,
 };

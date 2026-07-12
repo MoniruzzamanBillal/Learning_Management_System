@@ -39,7 +39,19 @@ const getCourseAdvice = (0, catchAsync_1.default)((req, res) => __awaiter(void 0
         data: result,
     });
 }));
+// ! for getting a chat reply from the in-course study assistant
+const getStudyAssistantReply = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b;
+    const result = yield ai_service_1.aiServices.getStudyAssistantReply((_a = req === null || req === void 0 ? void 0 : req.params) === null || _a === void 0 ? void 0 : _a.courseId, (_b = req === null || req === void 0 ? void 0 : req.user) === null || _b === void 0 ? void 0 : _b.userId, req.body.messages);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "Study assistant reply generated successfully",
+        data: result,
+    });
+}));
 exports.aiController = {
     getReviewSummary,
     getCourseAdvice,
+    getStudyAssistantReply,
 };
