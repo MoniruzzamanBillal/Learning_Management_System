@@ -33,8 +33,8 @@ This is a live, already-built codebase — the priority is fitting new work into
 
 ## Verification Checklist Before Moving On
 
-- [ ] No TypeScript errors (`npm run build` type-checks as part of the Next.js build).
-- [ ] `npm run lint` is clean.
+- [ ] No TypeScript errors (`yarn build` type-checks as part of the Next.js build).
+- [ ] `yarn lint` is clean.
 - [ ] The feature is responsive (check mobile and desktop, including the custom `sc-430`/`sc-500`/`sc-laptop` breakpoints where relevant).
 - [ ] UI reflects TanStack Query loading/error states, not just the happy path.
-- [ ] `npm run build` succeeds locally.
+- [ ] `yarn build` succeeds locally.

@@ -9,4 +9,6 @@ export type TCourse = {
   published: boolean;
   instructors: ObjectId[];
   modules?: ObjectId[];
+  aiReviewSummary?: string;
+  aiReviewSummaryReviewCount?: number;
 };

@@ -11,6 +11,7 @@ import CourseDetailSkeleton from "./CourseDetailSkeleton";
 import CourseDetailTop from "./CourseDetailTop";
 import ReviewInput from "./ReviewInput";
 import UserReviewCard, { TPopulatedReview } from "./UserReviewCard";
+import AiReviewSummary from "./AiReviewSummary";
 
 export default function CourseDetailPage({ id }: { id: string }) {
   const userData = useGetUser();
@@ -126,6 +127,11 @@ export default function CourseDetailPage({ id }: { id: string }) {
               __html: courseDetail?.data?.description as string,
             }}
           ></div>
+        </Wrapper>
+
+        {/* AI Review Summary */}
+        <Wrapper className="reviewSection">
+          <AiReviewSummary courseId={id} />
         </Wrapper>
 
         {/* review section  */}

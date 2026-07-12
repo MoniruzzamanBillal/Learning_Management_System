@@ -18,16 +18,19 @@ Defined in `UserRole` (`src/app/modules/user/user.constants.ts`): `admin`, `inst
 ## Core Flows
 
 ### Admin
+
 1. Registers instructors (`POST /api/auth/register-instructor`, admin-only).
 2. Creates and publishes courses (`POST /api/course/add-course`, `PATCH /api/course/publish-course/:id`), uploading a cover image via Cloudinary.
 3. Views platform-wide course/enrollment statistics and admin-facing course/module/video listings.
 
 ### Instructor
+
 1. Is assigned to a course (assignment is implicit via being set as the course's instructor by an admin).
 2. Adds/updates modules under a course (`/api/module/*`) and videos under a module (`/api/video/*`, uploaded via a dedicated video-upload util).
 3. Views their assigned courses and course/module detail.
 
 ### User (student)
+
 1. Registers (`POST /api/auth/register`) and logs in (`POST /api/auth/login`) to receive a JWT.
 2. Browses published courses (`GET /api/course/all-courses`, no auth required).
 3. Enrolls in a course (`POST /api/enroll/enroll-course`) and completes payment through SSLCOMMERZ (`/api/payment/*`, `SSL` module).
@@ -51,7 +54,7 @@ Defined in `UserRole` (`src/app/modules/user/user.constants.ts`): `admin`, `inst
 
 ## Out of Scope (as currently built)
 
-- No automated test suite (`npm test` in `lms_server/package.json` is a stub that just exits with an error).
+- No automated test suite (`yarn test` in `lms_server/package.json` is a stub that just exits with an error).
 - No self-service instructor signup — instructors are only created by an admin via `/auth/register-instructor`.
 - No dedicated public router for `VideoProgress` — it is used only as an internal service by the `CourseEnrollment` module.
 

@@ -25,4 +25,5 @@ exports.default = {
     CANCEL_URL: process.env.CANCEL_URL,
     SSL_PAYMENT_URL: process.env.SSL_PAYMENT_URL,
     SSL_VALIDATION_URL: process.env.SSL_VALIDATION_URL,
+    openRouterApiKey: process.env.openRouterApiKey,
 };

@@ -23,6 +23,8 @@ const courseSchema = new mongoose_1.Schema({
             ref: "Module",
         },
     ],
+    aiReviewSummary: { type: String },
+    aiReviewSummaryReviewCount: { type: Number },
 }, { timestamps: true });
 //
 exports.courseModel = (0, mongoose_1.model)("Course", courseSchema);

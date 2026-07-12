@@ -89,6 +89,10 @@ export const CertificateTableColumn: ColumnDef<TCertificateData>[] = [
         <CertificateDownloadButton
           userName={rowData?.user?.name}
           courseName={rowData?.course?.name}
+          category={rowData?.course?.category}
+          completedOn={rowData?.updatedAt}
+          userId={rowData?.user?._id}
+          courseId={rowData?.course?._id}
         />
       );
     },

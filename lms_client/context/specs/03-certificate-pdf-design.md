@@ -76,9 +76,11 @@ Fix the root cause by drawing the entire certificate with jsPDF's vector API ins
 ## Verify When Done
 
 - [ ] Clicking "Download" produces a PDF with the full designed layout (border, wordmark, title, centered name, course name/category, date, certificate ID, signature line) — no blank/missing-image artifacts.
-- [ ] Colors match the project's actual brand tokens (`prime-100`/`prime-50`/`black-100`), not arbitrary colors.
-- [ ] Page orientation is landscape and content is fully within the printable area (nothing clipped near the border).
-- [ ] Long course names and user names don't overflow or collide with other elements.
-- [ ] The completion date shown matches the "Finished On" column already shown in the certificates table.
+- [x] Colors match the project's actual brand tokens (`prime-100`/`prime-50`/`black-100`), not arbitrary colors.
+- [x] Page orientation is landscape and content is fully within the printable area (nothing clipped near the border).
+- [x] Long course names and user names don't overflow or collide with other elements.
+- [x] The completion date shown matches the "Finished On" column already shown in the certificates table.
 - [ ] Filename download behavior (`${userName}_certificate.pdf`) still works.
-- [ ] `npm run lint` and `npm run build` pass cleanly (no unused-import lint errors from removing the old `addImage` call).
+- [x] `yarn lint` and `yarn build` pass cleanly (no unused-import lint errors from removing the old `addImage` call).
+
+**Implementation complete** — the two unchecked items require manually clicking "Download" in the browser against a real certificate row and inspecting the resulting PDF; not something verifiable from a build/lint pass alone. See `progress-tracker.md`'s "Recent Activity" for implementation details.

@@ -65,11 +65,11 @@ A chat endpoint scoped to one enrolled course, so a paying student can ask sylla
 
 - Requires the `ai` module scaffold from `02-ai-review-summarizer.md`.
 - Reuses `courseEnrollmentService.courseProgressPercentage` — if that function's signature or export name ever changes, this spec's service code needs updating too.
-- No new npm packages.
+- No new packages.
 
 ## Verify-when-done
 
-- [ ] `npm run build` / `npm run lint` clean.
+- [ ] `yarn build` / `yarn lint` clean.
 - [ ] A logged-in user who is **not** enrolled/paid for the course gets `403` (same as existing `ValidateCourseAccess`-gated routes).
 - [ ] An enrolled student asking "what's in module 2?" gets an answer matching that module's actual video titles.
 - [ ] An enrolled student asking "what have I completed?" gets an answer consistent with their real `VideoProgress` state.

@@ -118,16 +118,16 @@ cd mats-academy
 
 ```bash
 cd \lms_client
-npm install
-npm run dev
+yarn install
+yarn dev
 ```
 
 3. **Backend Setup:**
 
 ```bash
 cd \lms_server
-npm install
-npm run dev
+yarn install
+yarn dev
 ```
 
 4. **Environment Variables:**
