@@ -14,6 +14,7 @@ Tracks work items defined in `context/specs/`. Update the moment implementation 
 | ------------------------------------------------------------------------------------------ | ----------- |
 | [`01-fix-sequential-video-unlock-order.md`](specs/01-fix-sequential-video-unlock-order.md) | ✅ Complete |
 | [`02-ai-review-summarizer.md`](specs/02-ai-review-summarizer.md)                           | ✅ Complete |
+| [`03-ai-course-advisor.md`](specs/03-ai-course-advisor.md)                                 | ✅ Complete |
 
 ## Completed (already implemented, wired into `router/index.ts`)
 
@@ -26,11 +27,12 @@ Tracks work items defined in `context/specs/`. Update the moment implementation 
 - `VideoProgress` — internal only (no router); used by `CourseEnrollment` to compute progress.
 - `payment` / `SSL` — SSLCOMMERZ success/fail/cancel callbacks.
 - `review` — add/update review, course review list + average, eligibility check.
-- `ai` — `GET /ai/review-summary/:courseId`: cached AI-generated pros/cons digest of a course's reviews (falls back to a fixed "not enough reviews" message under 3 reviews, no LLM call burned). First endpoint in the shared `ai` module that `03-ai-course-advisor.md` and `04-ai-study-assistant.md` will extend.
+- `ai` — `GET /ai/review-summary/:courseId`: cached AI-generated pros/cons digest of a course's reviews (falls back to a fixed "not enough reviews" message under 3 reviews, no LLM call burned). `POST /ai/course-advisor`: public endpoint that accepts a plain-English learning goal and returns 2-3 recommended published courses with one-line reasons, hallucination-guarded (server-side cross-check against the fetched course list). First endpoints in the shared `ai` module that `04-ai-study-assistant.md` will extend.
 
 ## Recent Activity (this session)
 
 - Implemented [`02-ai-review-summarizer.md`](specs/02-ai-review-summarizer.md): scaffolded `src/app/modules/ai/` (`ai.interface.ts`, `ai.service.ts`, `ai.controller.ts`, `ai.route.ts`; no model/validation needed yet), registered `/ai` in `router/index.ts`, and added `aiReviewSummary`/`aiReviewSummaryReviewCount` cache fields to `Course` (`course.interface.ts`, `course.model.ts`). Reuses `reviewServices.getAverageReviewOfCourse`/`getCourseReview` and `askOpenRouter` — no new packages, no duplicated logic. `yarn build` and `yarn lint` are clean (lint has 14 pre-existing errors/11 warnings in unrelated files, none introduced by this change). **Not yet manually verified against a live courseId** — this environment's `DATABASE_URL` points at the live/production database and the LLM calls hit a real (rate-limited free-tier) API, so live-endpoint verification was left for the user to run rather than done automatically.
+- Implemented [`03-ai-course-advisor.md`](specs/03-ai-course-advisor.md): added `ai.validation.ts` with Zod schema for the `query` body field; extended `ai.interface.ts` with `TCourseAdvisorRecommendation` and `TCourseAdvisorResponse` types; added `getCourseAdvice(query)` in `ai.service.ts` that fetches up to 50 published courses (`_id, name, description, category, price`), builds a system prompt instructing the model to choose ≤3 from the provided list and respond in strict JSON, calls `askOpenRouter` with `jsonMode: true`, parses with try/catch (returns empty array on parse failure), filters recommendations against the fetched course list (hallucination guard), and merges real `name`/`category`/`price` from the DB; added `getCourseAdvice` controller and `POST /course-advisor` route with validation. `yarn build` passes; `yarn lint` shows no new errors in AI module files (all pre-existing).
 - Fixed sequential video-unlock bug — clicking video N sometimes unlocked video N+2/N+3 instead of N+1. Root cause: `VideoModule.addVideo` assigned `videoOrder` via `countDocuments`, which isn't covered by the `isDeleted:false` query hooks and isn't atomic, so deletes/re-adds/races could produce duplicate `videoOrder` values within a module; separately, `CourseEnrollment.getUserEnrolledModuleVideos` returned the video list unsorted and without `videoOrder`, so the UI's item order didn't match the real order anyway. See [`context/specs/01-fix-sequential-video-unlock-order.md`](specs/01-fix-sequential-video-unlock-order.md) for full details.
   - `video.service.ts` — `addVideo` now derives `videoOrder` from `max(existing videoOrder) + 1` instead of `countDocuments`.
   - `video.model.ts` — added a partial unique index on `{module, videoOrder}` (only over `isDeleted:false` docs) to reject duplicates at the DB level.
@@ -55,3 +57,5 @@ Backend-specific commits are sparse recently — most of the last several commit
 ## Next Up
 
 Open — driven by whatever feature/fix is requested next.
+
+(End of file - total 60 lines)

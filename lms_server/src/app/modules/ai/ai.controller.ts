@@ -17,7 +17,20 @@ const getReviewSummary = catchAsync(async (req, res) => {
   });
 });
 
-//
+// ! for getting AI course recommendations based on a learning goal
+const getCourseAdvice = catchAsync(async (req, res) => {
+  const query = req.body.query as string;
+  const result = await aiServices.getCourseAdvice(query);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Course recommendations retrieved successfully",
+    data: result,
+  });
+});
+
 export const aiController = {
   getReviewSummary,
+  getCourseAdvice,
 };

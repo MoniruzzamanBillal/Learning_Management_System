@@ -10,6 +10,7 @@ import CategoryFilter from "./CategoryFilter";
 import { TCourse } from "./Course.type";
 import CourseCard from "./CourseCard";
 import CourseCardSkeleton from "./CourseCardSkeleton";
+import AiCourseAdvisor from "./AiCourseAdvisor";
 
 export default function CoursePage() {
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -77,6 +78,9 @@ export default function CoursePage() {
             />
           </div>
         </div>
+
+        {/* AI Course Advisor */}
+        <AiCourseAdvisor />
 
         {/* Body */}
         <div className="flex flex-col xl:flex-row gap-6">
