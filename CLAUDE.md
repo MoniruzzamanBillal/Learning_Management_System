@@ -11,6 +11,18 @@ MATS Academy — a full-stack LMS with three roles (admin, instructor, user/stud
 
 There is no root-level package.json or workspace tooling — always `cd` into the relevant app directory before running commands.
 
+### Living documentation in `context/`
+
+Both `lms_server/context/` and `lms_client/context/` contain actively-maintained docs that are more detailed than this file and take precedence for their app:
+- `project-overview.md` — goals, user flows, feature inventory.
+- `architecture.md` — stack table, system boundaries, invariants, and known gaps (e.g. a few routes have `authCheck(...)` commented out rather than removed — don't silently "fix" these, ask first).
+- `code-standards.md` — naming/typing conventions and the verification checklist for "done."
+- `ai-workflow-rules.md` — scoping rules for AI-assisted changes (no speculative refactors, protected files, when to stop and ask).
+- `progress-tracker.md` — current phase, what's implemented, recent activity, open questions; **update this after every meaningful change**.
+- `specs/NN-<feature-name>.md` — per-feature Goal/Design/Implementation/Verify docs; check here before implementing anything that might already be scoped, and mark spec status in `progress-tracker.md` when starting/finishing one.
+
+Read the relevant app's `context/` docs before making non-trivial changes, and keep them in sync (per `ai-workflow-rules.md`) when a change alters something they document.
+
 ## Commands
 
 ### lms_server (run from `lms_server/`)
@@ -59,6 +71,8 @@ Cross-cutting pieces:
 
 Payments go through SSLCOMMERZ (`payment` + `SSL` modules); enrollment access is gated on `payment.paymentStatus === Completed` (see `ValidateCourseAccess`).
 
+AI features are in progress: `src/app/util/openRouterClient.ts` exports `askOpenRouter(messages, options)`, a single choke point that calls OpenRouter's free-tier models with automatic fallback across a `FREE_MODELS` list, reading `config.openRouterApiKey`. No `ai` module exists yet — planned endpoints (`review-summary`, `course-advisor`, `study-assistant`) are scoped in `lms_server/context/specs/02-*` through `04-*` but not yet implemented; check `progress-tracker.md`'s spec status table before starting one.
+
 Route files often JSON-parse a `data` field out of multipart bodies before validation (see the inline middleware in `course.routes.ts` that does `req.body = JSON.parse(req.body?.data)` between `upload.single(...)` and `validateRequest`) — follow this pattern for any new endpoint that accepts a file alongside structured JSON fields.
 
 ### Frontend (`lms_client`)
@@ -92,3 +106,4 @@ JWT-based; roles are `admin`, `instructor`, `user` (`UserRole` in `lms_server/sr
 - New backend endpoints: add files following the existing `route/controller/service/model/interface/validation` split inside `src/app/modules/<name>/`, register the router in `src/app/router/index.ts`, and use `authCheck(...)` + `validateRequest(...)` + `catchAsync` + `sendResponse` consistently with existing modules.
 - New frontend data fetching/mutations: use `hooks/useApi.ts` (TanStack Query) rather than calling `axiosInstance` directly from components; put multi-step create/update/delete orchestration (toast + navigate) in `functions/*.functions.ts`.
 - Env vars are centralized: backend via `src/app/config/index.ts`, frontend base URL via `config/envConfig.ts` — don't read `process.env` ad hoc elsewhere.
+- After any meaningful change, update the relevant app's `context/progress-tracker.md` (and `architecture.md`/`code-standards.md` if the change alters something they document) — see "Living documentation" above.
