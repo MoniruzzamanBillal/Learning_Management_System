@@ -55,6 +55,6 @@ The public catalog (`components/main/publicPage/course/CoursePage.tsx` + `Course
 - [x] Loading skeleton shape matches the new card layout (no layout shift between skeleton and loaded card).
 - [x] Empty state (`NoEnrollCourse`) still renders correctly when the user has zero enrollments.
 - [x] "Continue"/CTA still links to `/my-courses/[id]` with the correct course id.
-- [x] `npm run lint` and `npm run build` pass cleanly.
+- [x] `yarn lint` and `yarn build` pass cleanly.
 
 Visual pass confirmed by the user. Spec complete.

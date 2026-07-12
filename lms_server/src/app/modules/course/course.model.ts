@@ -23,6 +23,8 @@ const courseSchema = new Schema<TCourse>(
         ref: "Module",
       },
     ],
+    aiReviewSummary: { type: String },
+    aiReviewSummaryReviewCount: { type: Number },
   },
   { timestamps: true }
 );

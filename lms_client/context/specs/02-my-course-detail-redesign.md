@@ -51,6 +51,6 @@ Give the enrolled-course video-player page (`/my-courses/[id]`) a real page head
 - [x] Locked / unlocked / watched module-video states remain functionally identical (same click behavior, same icons) — only the color treatment changes.
 - [x] Completing a course still calls `PATCH /enroll/complete-my-course/:id` and now shows a persistent "completed" visual state afterward, not just a toast.
 - [x] Responsive: single column on mobile, two-column layout on `lg`+, with no layout shift versus the skeleton states.
-- [x] `npm run lint` and `npm run build` pass cleanly.
+- [x] `yarn lint` and `yarn build` pass cleanly.
 
 Visual pass confirmed by the user. Spec complete.

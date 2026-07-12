@@ -51,7 +51,7 @@ Defined in `UserRole` (`src/app/modules/user/user.constants.ts`): `admin`, `inst
 
 ## Out of Scope (as currently built)
 
-- No automated test suite (`npm test` in `lms_server/package.json` is a stub that just exits with an error).
+- No automated test suite (`yarn test` in `lms_server/package.json` is a stub that just exits with an error).
 - No self-service instructor signup — instructors are only created by an admin via `/auth/register-instructor`.
 - No dedicated public router for `VideoProgress` — it is used only as an internal service by the `CourseEnrollment` module.
 

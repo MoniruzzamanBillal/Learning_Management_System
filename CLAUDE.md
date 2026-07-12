@@ -14,6 +14,7 @@ There is no root-level package.json or workspace tooling — always `cd` into th
 ### Living documentation in `context/`
 
 Both `lms_server/context/` and `lms_client/context/` contain actively-maintained docs that are more detailed than this file and take precedence for their app:
+
 - `project-overview.md` — goals, user flows, feature inventory.
 - `architecture.md` — stack table, system boundaries, invariants, and known gaps (e.g. a few routes have `authCheck(...)` commented out rather than removed — don't silently "fix" these, ask first).
 - `code-standards.md` — naming/typing conventions and the verification checklist for "done."
@@ -26,18 +27,20 @@ Read the relevant app's `context/` docs before making non-trivial changes, and k
 ## Commands
 
 ### lms_server (run from `lms_server/`)
-- `npm run dev` — start dev server with ts-node-dev (auto-restart)
-- `npm run build` — compile TypeScript to `dist/`
-- `npm run start:prod` — run compiled `dist/server.js`
-- `npm run lint` / `npm run lint:fix` — ESLint over `src`
-- `npm run prettier:fix` — format `src`
-- No test suite is configured (`npm test` is a stub that exits 1).
+
+- `yarn dev` — start dev server with ts-node-dev (auto-restart)
+- `yarn build` — compile TypeScript to `dist/`
+- `yarn start:prod` — run compiled `dist/server.js`
+- `yarn lint` / `yarn lint:fix` — ESLint over `src`
+- `yarn prettier:fix` — format `src`
+- No test suite is configured (`yarn test` is a stub that exits 1).
 
 ### lms_client (run from `lms_client/`)
-- `npm run dev` — Next.js dev server (http://localhost:3000)
-- `npm run build` — production build
-- `npm run start` — serve production build
-- `npm run lint` — ESLint (flat config, `eslint-config-next`)
+
+- `yarn dev` — Next.js dev server (http://localhost:3000)
+- `yarn build` — production build
+- `yarn start` — serve production build
+- `yarn lint` — ESLint (flat config, `eslint-config-next`)
 - No test suite is configured.
 
 ## Architecture
@@ -59,6 +62,7 @@ Everything domain-specific lives under `src/app/modules/<name>/`, one module per
 All module routers are aggregated in `src/app/router/index.ts` and mounted under their own path prefix (e.g. `/api/course`, `/api/enroll`, `/api/payment`).
 
 Cross-cutting pieces:
+
 - `src/app/middleware/authCheck.ts` — `authCheck(...requiredRoles)` verifies the JWT from the `Authorization: Bearer <token>` header and attaches `req.user`; pass no roles to just require auth, or specific `UserRole` values to restrict.
 - `src/app/middleware/ValidateCourseAccess.ts` — checks the user has both a `CourseEnrollment` and a completed `payment` record for a course before allowing access to protected course content.
 - `src/app/middleware/validateRequest.ts` — runs a Zod schema against `req.body`.
@@ -71,19 +75,21 @@ Cross-cutting pieces:
 
 Payments go through SSLCOMMERZ (`payment` + `SSL` modules); enrollment access is gated on `payment.paymentStatus === Completed` (see `ValidateCourseAccess`).
 
-AI features are in progress: `src/app/util/openRouterClient.ts` exports `askOpenRouter(messages, options)`, a single choke point that calls OpenRouter's free-tier models with automatic fallback across a `FREE_MODELS` list, reading `config.openRouterApiKey`. No `ai` module exists yet — planned endpoints (`review-summary`, `course-advisor`, `study-assistant`) are scoped in `lms_server/context/specs/02-*` through `04-*` but not yet implemented; check `progress-tracker.md`'s spec status table before starting one.
+AI features are in progress: `src/app/util/openRouterClient.ts` exports `askOpenRouter(messages, options)`, a single choke point that calls OpenRouter's free-tier models with automatic fallback across a `FREE_MODELS` list, reading `config.openRouterApiKey`. The `ai` module (`src/app/modules/ai/`) now exists with one endpoint, `GET /api/ai/review-summary/:courseId` (cached AI digest of a course's reviews, caching on `Course.aiReviewSummary`/`aiReviewSummaryReviewCount`) — implemented per `lms_server/context/specs/02-ai-review-summarizer.md`. Two more planned endpoints (`course-advisor`, `study-assistant`) are scoped in `specs/03-*`/`04-*` but not yet implemented; check `progress-tracker.md`'s spec status table before starting one.
 
 Route files often JSON-parse a `data` field out of multipart bodies before validation (see the inline middleware in `course.routes.ts` that does `req.body = JSON.parse(req.body?.data)` between `upload.single(...)` and `validateRequest`) — follow this pattern for any new endpoint that accepts a file alongside structured JSON fields.
 
 ### Frontend (`lms_client`)
 
 Next.js App Router. Route groups:
+
 - `app/(main)/` — public/marketing + auth pages (home, courses, login, sign-up, contact, etc.)
 - `app/dashboard/` — role-scoped dashboard, split into `admin/`, `instructor/`, `user/`, `profile/` subtrees, each with its own nested pages for CRUD flows (add/update/manage course, module, video, etc.)
 
 `middleware.ts` (repo root of `lms_client`) gates `/admin/:path*` and `/user/:path*` plus `/login` and `/`: it reads the `accessToken` cookie, decodes the JWT (`services/jwt.ts`), and redirects based on `role` (`admin` vs `user`) — keep new protected routes' path prefixes in sync with the `matcher` config and the role checks here.
 
 Data layer conventions:
+
 - `utils/axiosInstance.ts` — single Axios instance; base URL from `config/envConfig.ts` (`NEXT_PUBLIC_API_BASE_URL`, falls back to the deployed server). Request interceptor attaches `Authorization: Bearer <accessToken>` from cookies (via `utils/GetCookies.ts` and `constants/storageKey.ts`) except for the login endpoint, and switches `Content-Type` between JSON and multipart automatically based on whether the payload is `FormData`. Response interceptor unwraps `{data, meta}`, force-logs-out and redirects to `/login` on 401, toasts on 403, and normalizes errors to `{statusCode, message, errorMessages, errors}`.
 - `utils/api.ts` — thin `apiGet/apiPost/apiPut/apiPatch/apiDelete` wrappers around `axiosInstance`.
 - `hooks/useApi.ts` — TanStack Query wrappers built on `utils/api.ts`: `useFetchData(key, endpoint, options)` for GET, and `usePost`/`useUpdateData`/`usePatch`/`useDeleteData` mutation hooks that take `{ url, payload }` and optionally a list of query keys to invalidate on success.

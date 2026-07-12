@@ -41,4 +41,4 @@ A floating chat widget on the enrolled-course video page, so a student can ask s
 - [ ] Asking about a real module/video in the enrolled course returns an answer matching the actual syllabus.
 - [ ] Asking what a specific video "says" gets an honest "I don't have access to video content" style answer (per the backend spec's system prompt), not a hallucinated one.
 - [ ] Conversation history persists across multiple turns within the same page visit (multi-turn context works).
-- [ ] `npm run lint` and `npm run build` pass cleanly.
+- [ ] `yarn lint` and `yarn build` pass cleanly.

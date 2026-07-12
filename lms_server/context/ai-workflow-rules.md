@@ -30,7 +30,7 @@ This is a live, already-built codebase (not a greenfield build) — the priority
 
 ## Verification Checklist Before Moving On
 
-- [ ] `npm run build` (TypeScript compile) succeeds.
-- [ ] `npm run lint` is clean (no new errors/warnings).
+- [ ] `yarn build` (TypeScript compile) succeeds.
+- [ ] `yarn lint` is clean (no new errors/warnings).
 - [ ] New/changed endpoints manually verified (via Postman collection or a quick curl) against expected request/response shape.
 - [ ] If the change affects auth/role gating, confirm the correct `authCheck(...)` roles are applied.

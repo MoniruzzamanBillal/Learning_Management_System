@@ -23,8 +23,8 @@
 
 ## Linting
 
-`lms_server/eslint.config.mjs` enforces: `no-unused-vars: error`, `no-unused-expressions: error`, `prefer-const: error`, `no-console: warn`, `no-undef: error`, plus `@eslint/js` recommended and `typescript-eslint` recommended rule sets. Run `npm run lint` (or `npm run lint:fix`) before considering backend work done.
+`lms_server/eslint.config.mjs` enforces: `no-unused-vars: error`, `no-unused-expressions: error`, `prefer-const: error`, `no-console: warn`, `no-undef: error`, plus `@eslint/js` recommended and `typescript-eslint` recommended rule sets. Run `yarn lint` (or `yarn lint:fix`) before considering backend work done.
 
 ## Testing
 
-There is no automated test suite — `npm test` is a stub (`echo "Error: no test specified" && exit 1`). "Verification" for backend changes means a successful `npm run build` + clean `npm run lint`, plus manual/Postman verification of the affected endpoint (see `LMS_system.postman_collection.json` at the repo root) — not a test run.
+There is no automated test suite — `yarn test` is a stub (`echo "Error: no test specified" && exit 1`). "Verification" for backend changes means a successful `yarn build` + clean `yarn lint`, plus manual/Postman verification of the affected endpoint (see `LMS_system.postman_collection.json` at the repo root) — not a test run.

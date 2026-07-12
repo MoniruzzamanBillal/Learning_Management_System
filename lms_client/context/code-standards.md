@@ -33,8 +33,8 @@
 
 ## Linting
 
-`lms_client/eslint.config.mjs` uses the flat `eslint-config-next` (`core-web-vitals` + `typescript`) config. Run `npm run lint` before considering frontend work done.
+`lms_client/eslint.config.mjs` uses the flat `eslint-config-next` (`core-web-vitals` + `typescript`) config. Run `yarn lint` before considering frontend work done.
 
 ## Testing
 
-No automated test suite is configured. "Verification" means a clean `npm run lint`, a successful `npm run build` (which also type-checks), and manual verification in the browser (see `context/ai-workflow-rules.md`).
+No automated test suite is configured. "Verification" means a clean `yarn lint`, a successful `yarn build` (which also type-checks), and manual verification in the browser (see `context/ai-workflow-rules.md`).

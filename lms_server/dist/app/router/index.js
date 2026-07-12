@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MainRouter = void 0;
 const express_1 = require("express");
+const ai_route_1 = require("../modules/ai/ai.route");
 const auth_route_1 = require("../modules/auth/auth.route");
 const course_routes_1 = require("../modules/course/course.routes");
 const CourseEnrollment_routes_1 = require("../modules/CourseEnrollment/CourseEnrollment.routes");
@@ -43,6 +44,10 @@ const routeArray = [
     {
         path: "/review",
         route: review_route_1.reviewRouter,
+    },
+    {
+        path: "/ai",
+        route: ai_route_1.aiRouter,
     },
 ];
 routeArray.forEach((item) => {

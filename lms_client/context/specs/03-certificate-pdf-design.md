@@ -81,4 +81,4 @@ Fix the root cause by drawing the entire certificate with jsPDF's vector API ins
 - [ ] Long course names and user names don't overflow or collide with other elements.
 - [ ] The completion date shown matches the "Finished On" column already shown in the certificates table.
 - [ ] Filename download behavior (`${userName}_certificate.pdf`) still works.
-- [ ] `npm run lint` and `npm run build` pass cleanly (no unused-import lint errors from removing the old `addImage` call).
+- [ ] `yarn lint` and `yarn build` pass cleanly (no unused-import lint errors from removing the old `addImage` call).

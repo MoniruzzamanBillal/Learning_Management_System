@@ -313,7 +313,12 @@ const getUserEnrolledModuleVideos = (moduleId, userId) => __awaiter(void 0, void
     })
         .populate("video", " _id title videoOrder ")
         .select("  _id  videoStatus ");
-    videoData.sort((a, b) => { var _a, _b; return ((_a = a.video) === null || _a === void 0 ? void 0 : _a.videoOrder) - ((_b = b.video) === null || _b === void 0 ? void 0 : _b.videoOrder); });
+    videoData.sort((a, b) => {
+        var _a, _b;
+        const aOrder = (_a = a.video) === null || _a === void 0 ? void 0 : _a.videoOrder;
+        const bOrder = (_b = b.video) === null || _b === void 0 ? void 0 : _b.videoOrder;
+        return aOrder - bOrder;
+    });
     return videoData;
 });
 //  ! for marking course as complete

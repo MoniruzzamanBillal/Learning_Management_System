@@ -18,8 +18,8 @@
 
 - `src/server.ts` — process entry point: connects Mongoose (`config.database_url`), then starts the HTTP listener.
 - `src/app.ts` — Express app composition, in order: CORS (explicit origin allowlist) → `express.json()` → `morgan("dev")` → `cookieParser()` → `body-parser` urlencoded → `MainRouter` mounted at `/api` → root `GET /` health check → `globalErrorHandler` → catch-all 404 handler. This order matters — the error handler must come after routes and before the 404 handler.
-- `src/app/router/index.ts` — aggregates every module's router and mounts it under a path prefix (`/user`, `/auth`, `/course`, `/module`, `/video`, `/enroll`, `/payment`, `/review`), all under the `/api` base from `app.ts`.
-- `src/app/modules/<name>/` — one directory per domain resource: `auth`, `user`, `course`, `courseModule`, `VideoModule`, `VideoProgress`, `CourseEnrollment`, `payment`, `SSL`, `review`. Not every module has every file below, but the split is consistent:
+- `src/app/router/index.ts` — aggregates every module's router and mounts it under a path prefix (`/user`, `/auth`, `/course`, `/module`, `/video`, `/enroll`, `/payment`, `/review`, `/ai`), all under the `/api` base from `app.ts`.
+- `src/app/modules/<name>/` — one directory per domain resource: `auth`, `user`, `course`, `courseModule`, `VideoModule`, `VideoProgress`, `CourseEnrollment`, `payment`, `SSL`, `review`, `ai`. Not every module has every file below, but the split is consistent:
   - `*.route.ts` / `*.routes.ts` — Express router; wires middleware (`authCheck`, `validateRequest`, `upload`) to controller methods.
   - `*.controller.ts` — thin; wraps a service call with `catchAsync` and responds via `sendResponse`.
   - `*.service.ts` — business logic and Mongoose queries.
@@ -28,6 +28,7 @@
   - `*.validation.ts` — Zod schemas.
   - `*.constants.ts` — enums/constants (e.g. `UserRole`, `PAYMENTSTATUS`).
   - `VideoProgress` and `SSL` have no `route.ts` — they're internal-only, consumed by `CourseEnrollment`'s service and the `payment` module respectively, not exposed as their own HTTP surface.
+  - `ai` has no `ai.model.ts` or `ai.validation.ts` — it's stateless per-request (no dedicated collection), and its first endpoint (`GET /ai/review-summary/:courseId`) takes no body to validate. It calls `askOpenRouter` (`src/app/util/openRouterClient.ts`) and caches results directly on the `Course` document (`aiReviewSummary`, `aiReviewSummaryReviewCount`) rather than its own collection.
 - `src/app/middleware/` — cross-cutting middleware (see below).
 - `src/app/util/` — shared helpers: `catchAsync.ts`, `sendResponse.ts`, `SendImageCloudinary.ts` (Multer/Cloudinary storage config for images), `VideoUpload.ts` (video-specific upload config), `sendEmail.ts`.
 - `src/app/Error/` — `AppError` class plus normalizers for Zod/Mongoose validation/cast/duplicate-key errors, consumed by `globalErrorHandler`.

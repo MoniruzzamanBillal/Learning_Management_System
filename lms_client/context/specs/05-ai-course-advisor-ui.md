@@ -50,4 +50,4 @@ On the `/courses` catalog page, let a visitor type a plain-English learning goal
 - [ ] Submitting a clear goal (e.g. "I want to learn backend development") returns and renders relevant course cards linking to the right course detail pages.
 - [ ] Submitting a very short/off-topic query doesn't crash the UI — shows the "no close match" state gracefully.
 - [ ] Pending state disables the submit button and gives visible feedback (no double-submit).
-- [ ] `npm run lint` and `npm run build` pass cleanly.
+- [ ] `yarn lint` and `yarn build` pass cleanly.

@@ -44,4 +44,4 @@ Show a short AI-generated "what students are saying" digest on the public course
 - [ ] On a course with 3+ reviews, the AI summary renders above the review list.
 - [ ] On a course with fewer than 3 reviews, no broken/empty summary card is shown.
 - [ ] Loading state shows a skeleton, not a layout jump.
-- [ ] `npm run lint` and `npm run build` pass cleanly.
+- [ ] `yarn lint` and `yarn build` pass cleanly.

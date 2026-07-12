@@ -88,7 +88,7 @@ Bug A has been live since videos were first added/deleted, so any module that ha
 
 ## Verify-when-done
 
-- [ ] `npm run build` and `npm run lint` clean in `lms_server`.
+- [ ] `yarn build` and `yarn lint` clean in `lms_server`.
 - [ ] Delete a video from a module, add a new one, confirm its `videoOrder` doesn't collide with any remaining active video in that module.
 - [ ] Manually attempt to create two `Video` docs with the same `{module, videoOrder}` — confirm the unique partial index rejects the second.
 - [ ] As a test enrolled student, click through a 3+ video module and confirm each click unlocks exactly the next video, both in the DB (`VideoProgress.videoStatus`) and in the rendered `ModuleShowData` list order.
