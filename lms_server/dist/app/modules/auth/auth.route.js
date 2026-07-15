@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.authRouter = void 0;
 const express_1 = require("express");
 const authCheck_1 = __importDefault(require("../../middleware/authCheck"));
+const rateLimiter_1 = require("../../middleware/rateLimiter");
 const validateRequest_1 = __importDefault(require("../../middleware/validateRequest"));
 const SendImageCloudinary_1 = require("../../util/SendImageCloudinary");
 const user_constants_1 = require("../user/user.constants");
@@ -26,7 +27,7 @@ router.post("/register-instructor", (0, authCheck_1.default)(user_constants_1.Us
     next();
 }, (0, validateRequest_1.default)(user_validation_1.userValidationSchemas.createInstructorValidationSchema), auth_controller_1.authControllers.createInstructor);
 // ! for login
-router.post("/login", (0, validateRequest_1.default)(auth_validation_1.authValidations.loginValidationSchema), auth_controller_1.authControllers.loginUser);
+router.post("/login", rateLimiter_1.loginLimiter, (0, validateRequest_1.default)(auth_validation_1.authValidations.loginValidationSchema), auth_controller_1.authControllers.loginUser);
 // ! for update password
 router.patch("/update-password", (0, authCheck_1.default)(user_constants_1.UserRole.admin), auth_controller_1.authControllers.updatePassword);
 //

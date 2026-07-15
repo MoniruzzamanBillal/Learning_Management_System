@@ -40,6 +40,7 @@
 - `ValidateCourseAccess` — used on `CourseEnrollment` routes that serve paid content; requires both a matching `CourseEnrollment` document and a `payment` document with `paymentStatus === Completed` for that user+course, else throws `403`.
 - `validateRequest(zodSchema)` — parses/validates `req.body` against a Zod schema, throwing `ZodError` on failure (normalized by `globalErrorHandler`).
 - `globalErrorHandler` — normalizes `ZodError`, Mongoose `ValidationError`/`CastError`, MongoDB duplicate-key (`code: 11000`), and `AppError` into one JSON error shape (`{ success: false, message, errorSources, stack }`).
+- `rateLimiter.ts` — `aiLimiter` (10 req / 10 min per IP, applied to `POST /ai/course-advisor` and `GET /ai/review-summary/:courseId`) and `loginLimiter` (10 req / 15 min per IP, applied to `POST /auth/login`), both built on `express-rate-limit`. Runs first in each route's middleware chain so no DB/LLM work happens before the count. In-memory store — would need Redis if the backend scales past one instance. See [`context/specs/06-rate-limiting.md`](specs/06-rate-limiting.md).
 
 ## Auth & Access Model
 

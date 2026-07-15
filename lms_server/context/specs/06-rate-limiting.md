@@ -26,8 +26,8 @@ Protect the two unauthenticated, LLM-backed AI endpoints from cost/abuse, and ad
 
 ## Verify When Done
 
-- [ ] `yarn build` and `yarn lint` clean.
-- [ ] Scripted loop of 15 rapid requests to `POST /ai/course-advisor` gets a 429 after the threshold, with a JSON body matching the existing error envelope shape.
-- [ ] Same for `GET /ai/review-summary/:courseId` and `POST /auth/login`.
-- [ ] Normal single-digit usage (a real user browsing the course page, or a few login attempts) is never blocked.
-- [ ] Confirm the rate limiter does not interfere with the existing `authCheck`/`validateRequest` chain on `/ai/course-advisor` and `/auth/login` (order of middleware matters — rate limiter should run first, before any DB/LLM work happens).
+- [x] `yarn build` and `yarn lint` clean (lint shows the same 14 pre-existing errors / 11 warnings baseline — none introduced by `rateLimiter.ts` or the route changes).
+- [x] Scripted loop of 15 rapid requests to `POST /ai/course-advisor` gets a 429 after the threshold, with a JSON body matching the existing error envelope shape (`{"success":false,"message":"Too many AI requests from this IP, please try again later.","data":null}`). Verified locally: requests 1-10 returned 400 (deliberately invalid body — fails `validateRequest` before any LLM call, so no API budget spent), requests 11-15 returned 429.
+- [x] Same for `GET /ai/review-summary/:courseId` (shares `aiLimiter`'s per-IP counter with `course-advisor` — confirmed already-tripped state returns 429 immediately) and `POST /auth/login` (verified locally with 15 rapid wrong-credential attempts: 1-10 returned 404 user-not-found, safe read-only lookup, 11-15 returned 429 with `{"success":false,"message":"Too many login attempts from this IP, please try again later.","data":null}`).
+- [x] Normal single-digit usage (a real user browsing the course page, or a few login attempts) is never blocked — confirmed by the first ~10 requests in each test above completing normally (400/404, not 429) before the limiter engaged.
+- [x] Confirmed by code inspection: `aiLimiter` is listed first in both AI routes' middleware arrays (before `validateRequest`/controller) in `ai.route.ts`, and `loginLimiter` is first in `/login`'s chain (before `validateRequest`) in `auth.route.ts` — no DB/LLM work happens before the rate limiter runs.
