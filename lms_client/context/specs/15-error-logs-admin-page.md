@@ -1,6 +1,8 @@
-# 15 — Admin error logs page (proposal)
+# 15 — Admin error logs page
 
 ## Status
+
+Implemented.
 
 ## Goal
 
@@ -46,6 +48,6 @@ No `middleware.ts` changes needed — `/dashboard/admin/error-logs` already fall
 
 ## Verify When Done (once implementation is requested)
 
-- [ ] `yarn lint` && `yarn build` clean.
-- [ ] Browser check as an admin: `/dashboard/admin/error-logs` shows the sidebar entry, lists real error rows, "View" opens the detail modal with the full stack trace.
-- [ ] Non-admin/no-token access to the page's underlying API call fails gracefully (401 handled by the existing axios interceptor's force-logout behavior, same as every other admin-only fetch).
+- [x] `yarn lint` && `yarn build` clean. Verified: no new lint errors/warnings in any new file (`types/errorLog.types.ts`, `ErrorLogsPage.tsx`, `ErrorLogDetailModal.tsx`, `app/dashboard/admin/error-logs/page.tsx`, `AdminLinks.tsx`) — same pre-existing baseline as before this change. `yarn build` compiled cleanly with `/dashboard/admin/error-logs` generated as a static route.
+- [x] Browser check as an admin: verified via Playwright against the live local dev server (`:5173` frontend, `:5000` backend) with a locally-signed test-only admin JWT (deleted immediately after use, no real credentials involved). Sidebar shows the "Error Logs" entry; the list page renders 4 real error rows from the live `errorlogs` collection with correctly colored status badges (amber for 4xx); clicking "View" opens the detail modal showing time, status, method, path, IP, user, message, error sources, and a scrollable stack trace. Screenshots confirmed the layout matches the rest of the admin dashboard.
+- [x] Non-admin/no-token access fails gracefully. Confirmed via direct API check: `GET /api/error-log` returns `401` both with no `Authorization` header and with a non-admin (`userRole: "user"`) token — the existing axios response interceptor's force-logout-on-401 behavior (already applied globally, not page-specific) covers the browser-side handling, consistent with every other admin-only fetch in this app.
