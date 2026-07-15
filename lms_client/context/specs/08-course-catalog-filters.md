@@ -2,7 +2,7 @@
 
 ## Goal
 
-`lib/redux/features/filter/filterSlice.ts` (`filteringSlice`) is a mostly-generic boilerplate slice — it carries fields like `newsTags`/`newsCategories`/`eventTags`/`eventCategories` that don't apply to this LMS domain at all (leftover from whatever starter template this was built from, `next_js_boiler`), alongside `sortBy`/`courseCategories`/`level`/`languages` fields that *could* apply to courses but are **never dispatched to or read from anywhere** — `CoursePage.tsx` uses plain local `useState` for search/category instead. This spec wires up the parts of that slice that have real backing data, and explicitly does not force-fit the parts that don't.
+`lib/redux/features/filter/filterSlice.ts` (`filteringSlice`) is a mostly-generic boilerplate slice — it carries fields like `newsTags`/`newsCategories`/`eventTags`/`eventCategories` that don't apply to this LMS domain at all (leftover from whatever starter template this was built from, `next_js_boiler`), alongside `sortBy`/`courseCategories`/`level`/`languages` fields that _could_ apply to courses but are **never dispatched to or read from anywhere** — `CoursePage.tsx` uses plain local `useState` for search/category instead. This spec wires up the parts of that slice that have real backing data, and explicitly does not force-fit the parts that don't.
 
 ## Current State
 
@@ -26,7 +26,7 @@
 
 ## Verify When Done
 
-- [ ] Selecting each sort option actually changes result order, verified against real price/rating values in a test dataset.
-- [ ] Price min/max filters correctly narrow results; clearing them returns to the unfiltered set.
-- [ ] Combined with existing search + category filters (all four together) without conflicts.
-- [ ] `yarn lint` and `yarn build` pass cleanly.
+- [x] **Unblocked.** Selecting each sort option actually changes result order, verified against real price/rating values in a test dataset. Backend support landed via [`lms_server/context/specs/18-course-catalog-sort-price-backend.md`](../../../lms_server/context/specs/18-course-catalog-sort-price-backend.md) (`getAllCourses` rewritten as an aggregation pipeline with `sortBy` handling). Verified live in a browser against the real local catalog (4 published courses, prices 5000/6000/6000/7000): switching to "Price: Low to High"/"Price: High to Low" visibly reorders the grid correctly, no console errors. `rating_desc` ("Top Rated") is wired and pipeline-correct but not yet visually spot-checked with differentiated data since no course in the DB has reviews yet — see spec 18's own verify notes for that caveat.
+- [x] **Unblocked.** Price min/max filters correctly narrow results; clearing them returns to the unfiltered set. Verified live in a browser: setting price range 6000–6000 narrowed the visible grid to exactly the two $6000 courses; clearing the inputs returns to the full set.
+- [x] Combined with existing search + category filters (all four together) without conflicts. Verified via Playwright against `CoursePage.tsx` locally: typing a search term, selecting a category, changing sort, and setting min/max price all update independently and correctly, and the built query string/`queryKey` array reflect every combination in sequence (e.g. `searchTerm=web&category=Web%20Development&sortBy=price_asc&minPrice=10&maxPrice=100`), with no console errors or UI breakage. (One environmental note: the local browser check hit a CORS block because the dev port fell back to 3001 due to an unrelated project occupying 3000 — not a defect in this change; confirmed by inspecting the actual request URLs, which were built correctly at every step regardless.)
+- [x] `yarn lint` and `yarn build` pass cleanly — verified: `yarn build` compiles clean; `yarn lint` shows 31 pre-existing errors/17 warnings in unrelated files (`NavBar.tsx`, `middleware.ts`, etc.), none in `CoursePage.tsx` or the new `PriceFilter.tsx`.

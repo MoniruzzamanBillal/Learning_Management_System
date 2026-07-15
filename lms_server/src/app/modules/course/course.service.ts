@@ -3,7 +3,6 @@ import httpStatus from "http-status";
 import AppError from "../../Error/AppError";
 import { SendImageCloudinary } from "../../util/SendImageCloudinary";
 import { paymentModel } from "../payment/payment.model";
-import { reviewServices } from "../review/review.service";
 import { UserRole } from "../user/user.constants";
 import { userModel } from "../user/user.model";
 import { TCourse } from "./course.interface";
@@ -44,9 +43,25 @@ const addCourse = async (payload: TCourse, file: any) => {
   return result;
 };
 
+// ! sort option -> mongo sort stage, used by getAllCourses
+const courseSortMap: Record<string, Record<string, 1 | -1>> = {
+  createdAt_desc: { createdAt: -1 },
+  price_asc: { price: 1 },
+  price_desc: { price: -1 },
+  rating_desc: { averageRating: -1 },
+};
+
 // ! for getting all course data
 const getAllCourses = async (query: Record<string, unknown>) => {
-  const { searchTerm, category, limit = 10, page = 1 } = query;
+  const {
+    searchTerm,
+    category,
+    limit = 10,
+    page = 1,
+    sortBy,
+    minPrice,
+    maxPrice,
+  } = query;
 
   const params: Record<string, unknown> = {};
 
@@ -63,31 +78,74 @@ const getAllCourses = async (query: Record<string, unknown>) => {
     ];
   }
 
+  if (minPrice || maxPrice) {
+    const priceFilter: Record<string, number> = {};
+    if (minPrice) priceFilter.$gte = Number(minPrice);
+    if (maxPrice) priceFilter.$lte = Number(maxPrice);
+    params.price = priceFilter;
+  }
+
   const numaricLimit = Number(limit);
   const numaricPage = Number(page);
   const skip = (numaricPage - 1) * numaricLimit;
 
+  const sortStage = courseSortMap[sortBy as string] ?? { createdAt: -1 };
+
   // console.log(params);
 
-  const allCourseData = await courseModel
-    .find(params)
-    .populate("instructors", " name   ")
-    .limit(numaricLimit)
-    .skip(skip)
-    .select(" -published -createdAt -__v  -description -modules -updatedAt ");
+  const aggregatedCourses = await courseModel.aggregate([
+    { $match: params },
+    {
+      $lookup: {
+        from: "reviews",
+        localField: "_id",
+        foreignField: "courseId",
+        as: "reviews",
+      },
+    },
+    {
+      $addFields: {
+        averageRating: { $avg: "$reviews.rating" },
+        totalReviews: { $size: "$reviews" },
+      },
+    },
+    { $sort: sortStage },
+    { $skip: skip },
+    { $limit: numaricLimit },
+    {
+      $addFields: {
+        reviewData: {
+          $cond: [
+            { $eq: ["$totalReviews", 0] },
+            "$$REMOVE",
+            {
+              averageRating: "$averageRating",
+              totalReviews: "$totalReviews",
+              _id: "$_id",
+            },
+          ],
+        },
+      },
+    },
+    {
+      $project: {
+        reviews: 0,
+        averageRating: 0,
+        totalReviews: 0,
+        published: 0,
+        createdAt: 0,
+        __v: 0,
+        description: 0,
+        modules: 0,
+        updatedAt: 0,
+      },
+    },
+  ]);
 
-  const result = await Promise.all(
-    allCourseData?.map(async (courseData) => {
-      const reviewData = await reviewServices.getAverageReviewOfCourse(
-        courseData?._id?.toString(),
-      );
-
-      return {
-        ...courseData.toObject(),
-        reviewData,
-      };
-    }),
-  );
+  const result = await courseModel.populate(aggregatedCourses, {
+    path: "instructors",
+    select: "name",
+  });
 
   const totalCourses = await courseModel.countDocuments({ published: true });
 

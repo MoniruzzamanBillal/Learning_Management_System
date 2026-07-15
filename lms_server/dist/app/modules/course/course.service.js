@@ -18,7 +18,6 @@ const http_status_1 = __importDefault(require("http-status"));
 const AppError_1 = __importDefault(require("../../Error/AppError"));
 const SendImageCloudinary_1 = require("../../util/SendImageCloudinary");
 const payment_model_1 = require("../payment/payment.model");
-const review_service_1 = require("../review/review.service");
 const user_constants_1 = require("../user/user.constants");
 const user_model_1 = require("../user/user.model");
 const course_model_1 = require("./course.model");
@@ -41,9 +40,17 @@ const addCourse = (payload, file) => __awaiter(void 0, void 0, void 0, function*
     const result = yield course_model_1.courseModel.create(payload);
     return result;
 });
+// ! sort option -> mongo sort stage, used by getAllCourses
+const courseSortMap = {
+    createdAt_desc: { createdAt: -1 },
+    price_asc: { price: 1 },
+    price_desc: { price: -1 },
+    rating_desc: { averageRating: -1 },
+};
 // ! for getting all course data
 const getAllCourses = (query) => __awaiter(void 0, void 0, void 0, function* () {
-    const { searchTerm, category, limit = 10, page = 1 } = query;
+    var _a;
+    const { searchTerm, category, limit = 10, page = 1, sortBy, minPrice, maxPrice, } = query;
     const params = {};
     params.published = true;
     if (category) {
@@ -55,21 +62,71 @@ const getAllCourses = (query) => __awaiter(void 0, void 0, void 0, function* () 
             { detail: { $regex: new RegExp(searchTerm, "i") } },
         ];
     }
+    if (minPrice || maxPrice) {
+        const priceFilter = {};
+        if (minPrice)
+            priceFilter.$gte = Number(minPrice);
+        if (maxPrice)
+            priceFilter.$lte = Number(maxPrice);
+        params.price = priceFilter;
+    }
     const numaricLimit = Number(limit);
     const numaricPage = Number(page);
     const skip = (numaricPage - 1) * numaricLimit;
+    const sortStage = (_a = courseSortMap[sortBy]) !== null && _a !== void 0 ? _a : { createdAt: -1 };
     // console.log(params);
-    const allCourseData = yield course_model_1.courseModel
-        .find(params)
-        .populate("instructors", " name   ")
-        .limit(numaricLimit)
-        .skip(skip)
-        .select(" -published -createdAt -__v  -description -modules -updatedAt ");
-    const result = yield Promise.all(allCourseData === null || allCourseData === void 0 ? void 0 : allCourseData.map((courseData) => __awaiter(void 0, void 0, void 0, function* () {
-        var _a;
-        const reviewData = yield review_service_1.reviewServices.getAverageReviewOfCourse((_a = courseData === null || courseData === void 0 ? void 0 : courseData._id) === null || _a === void 0 ? void 0 : _a.toString());
-        return Object.assign(Object.assign({}, courseData.toObject()), { reviewData });
-    })));
+    const aggregatedCourses = yield course_model_1.courseModel.aggregate([
+        { $match: params },
+        {
+            $lookup: {
+                from: "reviews",
+                localField: "_id",
+                foreignField: "courseId",
+                as: "reviews",
+            },
+        },
+        {
+            $addFields: {
+                averageRating: { $avg: "$reviews.rating" },
+                totalReviews: { $size: "$reviews" },
+            },
+        },
+        { $sort: sortStage },
+        { $skip: skip },
+        { $limit: numaricLimit },
+        {
+            $addFields: {
+                reviewData: {
+                    $cond: [
+                        { $eq: ["$totalReviews", 0] },
+                        "$$REMOVE",
+                        {
+                            averageRating: "$averageRating",
+                            totalReviews: "$totalReviews",
+                            _id: "$_id",
+                        },
+                    ],
+                },
+            },
+        },
+        {
+            $project: {
+                reviews: 0,
+                averageRating: 0,
+                totalReviews: 0,
+                published: 0,
+                createdAt: 0,
+                __v: 0,
+                description: 0,
+                modules: 0,
+                updatedAt: 0,
+            },
+        },
+    ]);
+    const result = yield course_model_1.courseModel.populate(aggregatedCourses, {
+        path: "instructors",
+        select: "name",
+    });
     const totalCourses = yield course_model_1.courseModel.countDocuments({ published: true });
     return { data: result, meta: { totalCourses } };
 });
