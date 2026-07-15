@@ -21,7 +21,7 @@ router.get(
 // ! for getting admin statistics
 router.get(
   "/admin-stats",
-  // authCheck(UserRole.admin),
+  authCheck(UserRole.admin),
   courseController.adminStatistics,
 );
 

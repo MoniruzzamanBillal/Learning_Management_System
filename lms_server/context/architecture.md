@@ -46,7 +46,7 @@
 - Users authenticate via `POST /api/auth/login`, receiving a JWT signed with `config.jwt_secret` and containing at least `userId` and `userRole`.
 - Every protected route calls `authCheck(...)` with the roles allowed to hit it.
 - Course-content routes additionally require `ValidateCourseAccess` (enrollment + completed payment), independent of role.
-- **Known gap (as of this writing):** a handful of routes have `authCheck(...)` calls commented out rather than removed — e.g. `course.controller.adminStatistics` (`/course/admin-stats`), `moduleController.addModule` (`/module/add-module`), and `videoController.addVideo` (`/video/add-video`) in their respective `*.routes.ts` files. Treat these as real, currently-open security gaps to flag rather than silently "fix" — confirm with the user before re-enabling or removing the commented checks, since removing them could be an intentional (if undocumented) temporary state.
+- **Resolved gap:** `course.controller.adminStatistics` (`/course/admin-stats`), `moduleController.addModule` (`/module/add-module`), and `videoController.addVideo` (`/video/add-video`) previously had `authCheck(...)` commented out; re-enabled per [`context/specs/05-security-authcheck-and-hardening.md`](specs/05-security-authcheck-and-hardening.md) — `/course/admin-stats` requires `UserRole.admin`, the other two require `UserRole.admin`/`UserRole.instructor`, matching sibling routes in the same files.
 
 ## Invariants
 

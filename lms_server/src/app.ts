@@ -1,5 +1,6 @@
 import cors from "cors";
 import express, { Application, NextFunction, Request, Response } from "express";
+import helmet from "helmet";
 import morgan from "morgan";
 
 import bodyParser from "body-parser";
@@ -9,6 +10,8 @@ import globalErrorHandler from "./app/middleware/globalErrorHandler";
 import { MainRouter } from "./app/router";
 
 const app: Application = express();
+
+app.use(helmet());
 
 app.use(
   cors({

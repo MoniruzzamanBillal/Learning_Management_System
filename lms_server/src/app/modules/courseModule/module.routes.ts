@@ -13,7 +13,7 @@ router.get("/all-module", moduleController.getAllModuleData);
 // ! for adding a module
 router.post(
   "/add-module",
-  //   authCheck(UserRole.admin, UserRole.instructor),
+  authCheck(UserRole.admin, UserRole.instructor),
   validateRequest(moduleValidations.createModuleValidationSchema),
   moduleController.addModule
 );

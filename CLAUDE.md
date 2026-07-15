@@ -21,8 +21,9 @@ Both `lms_server/context/` and `lms_client/context/` contain actively-maintained
 - `ai-workflow-rules.md` — scoping rules for AI-assisted changes (no speculative refactors, protected files, when to stop and ask).
 - `progress-tracker.md` — current phase, what's implemented, recent activity, open questions; **update this after every meaningful change**.
 - `specs/NN-<feature-name>.md` — per-feature Goal/Design/Implementation/Verify docs; check here before implementing anything that might already be scoped, and mark spec status in `progress-tracker.md` when starting/finishing one.
+- `lms_client/context/` additionally has `ui-context.md` — theme, colors, typography, and component conventions for the frontend.
 
-Read the relevant app's `context/` docs before making non-trivial changes, and keep them in sync (per `ai-workflow-rules.md`) when a change alters something they document.
+Read the relevant app's `context/` docs before making non-trivial changes, and keep them in sync (per `ai-workflow-rules.md`) when a change alters something they document. Each app also has an `AGENTS.md` pointing at this same `context/` reading order, for tools that read that file instead.
 
 ## Commands
 
