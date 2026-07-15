@@ -5,6 +5,7 @@ import { authRouter } from "../modules/auth/auth.route";
 import { courseRouter } from "../modules/course/course.routes";
 import { courseEnrollmentRouter } from "../modules/CourseEnrollment/CourseEnrollment.routes";
 import { moduleRouter } from "../modules/courseModule/module.routes";
+import { errorLogRouter } from "../modules/errorLog/errorLog.route";
 import { paymentRoute } from "../modules/payment/payment.routes";
 import { reviewRouter } from "../modules/review/review.route";
 import { userRouter } from "../modules/user/user.route";
@@ -48,6 +49,10 @@ const routeArray = [
   {
     path: "/ai",
     route: aiRouter,
+  },
+  {
+    path: "/error-log",
+    route: errorLogRouter,
   },
 ];
 

@@ -16,7 +16,7 @@ There is no root-level package.json or workspace tooling — always `cd` into th
 Both `lms_server/context/` and `lms_client/context/` contain actively-maintained docs that are more detailed than this file and take precedence for their app:
 
 - `project-overview.md` — goals, user flows, feature inventory.
-- `architecture.md` — stack table, system boundaries, invariants, and known gaps (e.g. a few routes have `authCheck(...)` commented out rather than removed — don't silently "fix" these, ask first).
+- `architecture.md` — stack table, system boundaries, invariants, and known gaps (e.g. `auth.service.ts::createInstructor` hardcodes a default instructor password — deliberately kept as-is, don't "fix" it without asking first).
 - `code-standards.md` — naming/typing conventions and the verification checklist for "done."
 - `ai-workflow-rules.md` — scoping rules for AI-assisted changes (no speculative refactors, protected files, when to stop and ask).
 - `progress-tracker.md` — current phase, what's implemented, recent activity, open questions; **update this after every meaningful change**.
@@ -67,7 +67,9 @@ Cross-cutting pieces:
 - `src/app/middleware/authCheck.ts` — `authCheck(...requiredRoles)` verifies the JWT from the `Authorization: Bearer <token>` header and attaches `req.user`; pass no roles to just require auth, or specific `UserRole` values to restrict.
 - `src/app/middleware/ValidateCourseAccess.ts` — checks the user has both a `CourseEnrollment` and a completed `payment` record for a course before allowing access to protected course content.
 - `src/app/middleware/validateRequest.ts` — runs a Zod schema against `req.body`.
+- `src/app/middleware/rateLimiter.ts` — `aiLimiter` (10 req/10 min per IP, on both AI endpoints) and `loginLimiter` (10 req/15 min per IP, on `/auth/login`), built on `express-rate-limit`; always the first middleware in its route's chain so rate-limited requests never reach DB/LLM work. In-memory store, per-instance only.
 - `src/app/middleware/globalErrorHandler.ts` — normalizes `ZodError`, Mongoose `ValidationError`/`CastError`, duplicate-key (11000), and `AppError` into a consistent JSON error shape; must be registered after routes, before the 404 handler.
+- `helmet()` is applied first in `src/app.ts`'s middleware stack (before `cors`) for baseline security headers.
 - `src/app/util/catchAsync.ts` — wraps async route handlers so thrown errors reach `next(error)`.
 - `src/app/util/sendResponse.ts` — standard `{ success, message, data, token? }` response envelope.
 - `src/app/util/SendImageCloudinary.ts` — Multer + Cloudinary storage config (`upload.single(...)`) used for course covers, etc.
@@ -76,7 +78,7 @@ Cross-cutting pieces:
 
 Payments go through SSLCOMMERZ (`payment` + `SSL` modules); enrollment access is gated on `payment.paymentStatus === Completed` (see `ValidateCourseAccess`).
 
-AI features are in progress: `src/app/util/openRouterClient.ts` exports `askOpenRouter(messages, options)`, a single choke point that calls OpenRouter's free-tier models with automatic fallback across a `FREE_MODELS` list, reading `config.openRouterApiKey`. The `ai` module (`src/app/modules/ai/`) has two endpoints: `GET /api/ai/review-summary/:courseId` (cached AI digest of a course's reviews, caching on `Course.aiReviewSummary`/`aiReviewSummaryReviewCount`, per `specs/02-ai-review-summarizer.md`) and `POST /api/ai/course-advisor` (public endpoint accepting a plain-English learning goal, returns 2-3 recommended published courses with hallucination-guarded server-side cross-checking against the fetched course list, per `specs/03-ai-course-advisor.md`). A third endpoint (`study-assistant`) is scoped in `specs/04-ai-study-assistant.md` but not yet implemented; check `progress-tracker.md`'s spec status table before starting one.
+AI features: `src/app/util/openRouterClient.ts` exports `askOpenRouter(messages, options)`, a single choke point that calls OpenRouter's free-tier models with automatic fallback across a `FREE_MODELS` list, reading `config.openRouterApiKey`. The `ai` module (`src/app/modules/ai/`) has three endpoints, all rate-limited by `aiLimiter` where public: `GET /api/ai/review-summary/:courseId` (cached AI digest of a course's reviews, caching on `Course.aiReviewSummary`/`aiReviewSummaryReviewCount`, per `specs/02-ai-review-summarizer.md`), `POST /api/ai/course-advisor` (public endpoint accepting a plain-English learning goal, returns 2-3 recommended published courses with hallucination-guarded server-side cross-checking against the fetched course list, per `specs/03-ai-course-advisor.md`), and `POST /api/ai/study-assistant/:courseId` (enrolled+paid-only via `authCheck(UserRole.user)` + `ValidateCourseAccess`, stateless per-course chat grounded in the student's real module/video outline and progress, per `specs/04-ai-study-assistant.md`). Check `progress-tracker.md`'s spec status table before starting new AI work — several follow-on specs exist under `context/specs/`.
 
 Route files often JSON-parse a `data` field out of multipart bodies before validation (see the inline middleware in `course.routes.ts` that does `req.body = JSON.parse(req.body?.data)` between `upload.single(...)` and `validateRequest`) — follow this pattern for any new endpoint that accepts a file alongside structured JSON fields.
 
