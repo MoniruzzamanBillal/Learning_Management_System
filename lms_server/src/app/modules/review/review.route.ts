@@ -37,4 +37,18 @@ router.get(
   reviewController.checkReviewEligibility,
 );
 
+// ! for admin: listing all reviews across all courses
+router.get(
+  "/all",
+  authCheck(UserRole.admin),
+  reviewController.getAllReviewsForAdmin,
+);
+
+// ! for admin: deleting a review
+router.delete(
+  "/:reviewId",
+  authCheck(UserRole.admin),
+  reviewController.deleteReview,
+);
+
 export const reviewRouter = router;

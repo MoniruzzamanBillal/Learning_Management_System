@@ -91,7 +91,7 @@ Next.js App Router. Route groups:
 - `app/(main)/` — public/marketing + auth pages (home, courses, login, sign-up, contact, etc.)
 - `app/dashboard/` — role-scoped dashboard, split into `admin/`, `instructor/`, `user/`, `profile/` subtrees, each with its own nested pages for CRUD flows (add/update/manage course, module, video, etc.)
 
-`middleware.ts` (repo root of `lms_client`) gates `/admin/:path*` and `/user/:path*` plus `/login` and `/`: it reads the `accessToken` cookie, decodes the JWT (`services/jwt.ts`), and redirects based on `role` (`admin` vs `user`) — keep new protected routes' path prefixes in sync with the `matcher` config and the role checks here.
+`middleware.ts` (repo root of `lms_client`) gates `/admin/:path*` and `/user/:path*` plus `/login` and `/`: it reads the `accessToken` cookie, decodes the JWT (`services/jwt.ts`), and redirects based on `role` (`admin` vs `user`) — keep new protected routes' path prefixes in sync with the `matcher` config and the role checks here. **Known gap:** every real dashboard route lives under `/dashboard/admin/...` or `/dashboard/user/...`, not `/admin/...`/`/user/...`, so this matcher never actually matches them — edge-level gating is effectively a no-op for the whole dashboard today. In practice, protection comes from the API rejecting unauthorized requests with `401` and the axios response interceptor force-logging-out on `401` (see below), not from this middleware. Don't assume adding a new `/dashboard/...` page is edge-protected just because it's under `/dashboard/admin/`.
 
 Data layer conventions:
 

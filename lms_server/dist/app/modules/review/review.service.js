@@ -88,7 +88,10 @@ const getCourseReview = (courseId) => __awaiter(void 0, void 0, void 0, function
 const getAverageReviewOfCourse = (courseId) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield review_model_1.reviewModel.aggregate([
         {
-            $match: { courseId: new mongoose_1.default.Types.ObjectId(courseId) },
+            $match: {
+                courseId: new mongoose_1.default.Types.ObjectId(courseId),
+                isDeleted: false,
+            },
         },
         {
             $group: {
@@ -102,6 +105,41 @@ const getAverageReviewOfCourse = (courseId) => __awaiter(void 0, void 0, void 0,
     ]);
     return result[0];
 });
+// ! for admin: listing all reviews across all courses
+const getAllReviewsForAdmin = () => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield review_model_1.reviewModel
+        .find()
+        .populate("userId", "_id name")
+        .populate("courseId", "_id name")
+        .sort({ createdAt: -1 });
+    return result;
+});
+// ! for admin: soft-deleting a review
+const deleteReview = (reviewId) => __awaiter(void 0, void 0, void 0, function* () {
+    const review = yield review_model_1.reviewModel.findById(reviewId);
+    if (!review) {
+        throw new AppError_1.default(http_status_1.default.NOT_FOUND, "Review not found !!!");
+    }
+    const session = yield mongoose_1.default.startSession();
+    try {
+        session.startTransaction();
+        yield review_model_1.reviewModel.findByIdAndUpdate(reviewId, { isDeleted: true }, { session });
+        yield CourseEnrollment_model_1.courseEnrollmentModel.findOneAndUpdate({
+            user: review.userId,
+            course: review.courseId,
+            isDeleted: false,
+        }, { isReviewed: false }, { session });
+        yield session.commitTransaction();
+        yield session.endSession();
+    }
+    catch (error) {
+        yield session.abortTransaction();
+        yield session.endSession();
+        console.error("Error during deleting the review : ", error);
+        throw new Error("Failed to delete the review!!");
+    }
+    return review;
+});
 //
 exports.reviewServices = {
     addReview,
@@ -109,4 +147,6 @@ exports.reviewServices = {
     getCourseReview,
     checkReviewEligibility,
     getAverageReviewOfCourse,
+    getAllReviewsForAdmin,
+    deleteReview,
 };

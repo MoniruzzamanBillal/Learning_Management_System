@@ -17,9 +17,13 @@ const date_fns_1 = require("date-fns");
 const http_status_1 = __importDefault(require("http-status"));
 const AppError_1 = __importDefault(require("../../Error/AppError"));
 const SendImageCloudinary_1 = require("../../util/SendImageCloudinary");
+const CourseEnrollment_model_1 = require("../CourseEnrollment/CourseEnrollment.model");
+const payment_constant_1 = require("../payment/payment.constant");
 const payment_model_1 = require("../payment/payment.model");
 const user_constants_1 = require("../user/user.constants");
 const user_model_1 = require("../user/user.model");
+const VideoProgress_constants_1 = require("../VideoProgress/VideoProgress.constants");
+const VideoProgress_model_1 = require("../VideoProgress/VideoProgress.model");
 const course_model_1 = require("./course.model");
 // ! for crating a course
 const addCourse = (payload, file) => __awaiter(void 0, void 0, void 0, function* () {
@@ -221,7 +225,7 @@ const publishCourse = (courseId) => __awaiter(void 0, void 0, void 0, function* 
 });
 // ! admin stat
 const adminStatistics = () => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
+    var _a, _b;
     const totalCourses = yield course_model_1.courseModel.countDocuments();
     const totalStudents = yield user_model_1.userModel.countDocuments({
         userRole: user_constants_1.UserRole.user,
@@ -237,6 +241,7 @@ const adminStatistics = () => __awaiter(void 0, void 0, void 0, function* () {
         {
             $match: {
                 createdAt: { $gte: thirtyDaysAgo },
+                paymentStatus: payment_constant_1.PAYMENTSTATUS.Completed,
             },
         },
         {
@@ -247,12 +252,82 @@ const adminStatistics = () => __awaiter(void 0, void 0, void 0, function* () {
         },
         //
     ]);
+    const revenueOverTime = yield payment_model_1.paymentModel.aggregate([
+        {
+            $match: {
+                createdAt: { $gte: thirtyDaysAgo },
+                paymentStatus: payment_constant_1.PAYMENTSTATUS.Completed,
+            },
+        },
+        {
+            $group: {
+                _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+                total: { $sum: "$amount" },
+            },
+        },
+        { $sort: { _id: 1 } },
+        { $project: { _id: 0, date: "$_id", total: 1 } },
+    ]);
+    const enrollmentsOverTime = yield CourseEnrollment_model_1.courseEnrollmentModel.aggregate([
+        {
+            $match: {
+                createdAt: { $gte: thirtyDaysAgo },
+                isDeleted: false,
+            },
+        },
+        {
+            $group: {
+                _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+                count: { $sum: 1 },
+            },
+        },
+        { $sort: { _id: 1 } },
+        { $project: { _id: 0, date: "$_id", count: 1 } },
+    ]);
+    const completionAgg = yield VideoProgress_model_1.videoProgressModel.aggregate([
+        {
+            $group: {
+                _id: { user: "$user", course: "$course" },
+                total: { $sum: 1 },
+                watched: {
+                    $sum: {
+                        $cond: [
+                            { $eq: ["$videoStatus", VideoProgress_constants_1.videoProgressStatus.watched] },
+                            1,
+                            0,
+                        ],
+                    },
+                },
+            },
+        },
+        {
+            $project: {
+                _id: 0,
+                pct: {
+                    $cond: [
+                        { $eq: ["$total", 0] },
+                        0,
+                        { $multiply: [{ $divide: ["$watched", "$total"] }, 100] },
+                    ],
+                },
+            },
+        },
+        {
+            $group: {
+                _id: null,
+                avgCompletion: { $avg: "$pct" },
+            },
+        },
+    ]);
     const result = {
         totalCourses,
         totalStudents,
         totalInstructors,
         publishedCourses,
         revenue: ((_a = revenueLast30Day[0]) === null || _a === void 0 ? void 0 : _a.total) || 0,
+        revenueOverTime,
+        enrollmentsOverTime,
+        averageCompletion: Math.round(((_b = completionAgg[0]) === null || _b === void 0 ? void 0 : _b.avgCompletion) || 0),
     };
     return result;
     //

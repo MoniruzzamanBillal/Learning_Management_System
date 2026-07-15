@@ -70,6 +70,27 @@ const getAverageReviewOfCourse = (0, catchAsync_1.default)((req, res) => __await
         data: result,
     });
 }));
+// ! for admin: listing all reviews across all courses
+const getAllReviewsForAdmin = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield review_service_1.reviewServices.getAllReviewsForAdmin();
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "All reviews retrived successfully !!!",
+        data: result,
+    });
+}));
+// ! for admin: deleting a review
+const deleteReview = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    const result = yield review_service_1.reviewServices.deleteReview((_a = req === null || req === void 0 ? void 0 : req.params) === null || _a === void 0 ? void 0 : _a.reviewId);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "Review deleted successfully !!!",
+        data: result,
+    });
+}));
 //
 exports.reviewController = {
     addReview,
@@ -77,4 +98,6 @@ exports.reviewController = {
     getCourseReview,
     checkReviewEligibility,
     getAverageReviewOfCourse,
+    getAllReviewsForAdmin,
+    deleteReview,
 };

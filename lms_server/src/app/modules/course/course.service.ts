@@ -2,9 +2,13 @@ import { startOfDay, subDays } from "date-fns";
 import httpStatus from "http-status";
 import AppError from "../../Error/AppError";
 import { SendImageCloudinary } from "../../util/SendImageCloudinary";
+import { courseEnrollmentModel } from "../CourseEnrollment/CourseEnrollment.model";
+import { PAYMENTSTATUS } from "../payment/payment.constant";
 import { paymentModel } from "../payment/payment.model";
 import { UserRole } from "../user/user.constants";
 import { userModel } from "../user/user.model";
+import { videoProgressStatus } from "../VideoProgress/VideoProgress.constants";
+import { videoProgressModel } from "../VideoProgress/VideoProgress.model";
 import { TCourse } from "./course.interface";
 import { courseModel } from "./course.model";
 
@@ -306,6 +310,7 @@ const adminStatistics = async () => {
     {
       $match: {
         createdAt: { $gte: thirtyDaysAgo },
+        paymentStatus: PAYMENTSTATUS.Completed,
       },
     },
     {
@@ -317,12 +322,85 @@ const adminStatistics = async () => {
     //
   ]);
 
+  const revenueOverTime = await paymentModel.aggregate([
+    {
+      $match: {
+        createdAt: { $gte: thirtyDaysAgo },
+        paymentStatus: PAYMENTSTATUS.Completed,
+      },
+    },
+    {
+      $group: {
+        _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+        total: { $sum: "$amount" },
+      },
+    },
+    { $sort: { _id: 1 } },
+    { $project: { _id: 0, date: "$_id", total: 1 } },
+  ]);
+
+  const enrollmentsOverTime = await courseEnrollmentModel.aggregate([
+    {
+      $match: {
+        createdAt: { $gte: thirtyDaysAgo },
+        isDeleted: false,
+      },
+    },
+    {
+      $group: {
+        _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+        count: { $sum: 1 },
+      },
+    },
+    { $sort: { _id: 1 } },
+    { $project: { _id: 0, date: "$_id", count: 1 } },
+  ]);
+
+  const completionAgg = await videoProgressModel.aggregate([
+    {
+      $group: {
+        _id: { user: "$user", course: "$course" },
+        total: { $sum: 1 },
+        watched: {
+          $sum: {
+            $cond: [
+              { $eq: ["$videoStatus", videoProgressStatus.watched] },
+              1,
+              0,
+            ],
+          },
+        },
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        pct: {
+          $cond: [
+            { $eq: ["$total", 0] },
+            0,
+            { $multiply: [{ $divide: ["$watched", "$total"] }, 100] },
+          ],
+        },
+      },
+    },
+    {
+      $group: {
+        _id: null,
+        avgCompletion: { $avg: "$pct" },
+      },
+    },
+  ]);
+
   const result = {
     totalCourses,
     totalStudents,
     totalInstructors,
     publishedCourses,
     revenue: revenueLast30Day[0]?.total || 0,
+    revenueOverTime,
+    enrollmentsOverTime,
+    averageCompletion: Math.round(completionAgg[0]?.avgCompletion || 0),
   };
 
   return result;

@@ -1,6 +1,7 @@
 "use client";
 
 import { useFetchData } from "@/hooks/useApi";
+import { TAdminStats } from "@/types/stat.types";
 import {
   BookOpen,
   CheckCircle,
@@ -11,17 +12,12 @@ import {
 } from "lucide-react";
 import AdminStatCard from "./AdminStatCard";
 import AdminStatCardSkeleton from "./AdminStatCardSkeleton";
-
-type TData = {
-  publishedCourses: number;
-  revenue: number;
-  totalCourses: number;
-  totalInstructors: number;
-  totalStudents: number;
-};
+import ChartSkeleton from "./ChartSkeleton";
+import EnrollmentChart from "./EnrollmentChart";
+import RevenueChart from "./RevenueChart";
 
 export default function StatPage() {
-  const { data: statsData, isLoading } = useFetchData<TData>(
+  const { data: statsData, isLoading } = useFetchData<TAdminStats>(
     ["admin-stat"],
     `/course/admin-stats`,
   );
@@ -68,11 +64,27 @@ export default function StatPage() {
           />
           <AdminStatCard
             title="Average Course Completion"
-            value="78%"
+            value={`${statsData?.data?.averageCompletion ?? 0}%`}
             icon={Clock}
           />
         </div>
       )}
+
+      <div className="grid gap-4 md:grid-cols-2 mt-4">
+        {isLoading ? (
+          <>
+            <ChartSkeleton title="Revenue (Last 30 Days)" />
+            <ChartSkeleton title="Enrollments (Last 30 Days)" />
+          </>
+        ) : (
+          statsData?.data && (
+            <>
+              <RevenueChart data={statsData.data.revenueOverTime} />
+              <EnrollmentChart data={statsData.data.enrollmentsOverTime} />
+            </>
+          )
+        )}
+      </div>
     </main>
   );
 }
