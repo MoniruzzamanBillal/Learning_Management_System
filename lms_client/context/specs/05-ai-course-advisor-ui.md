@@ -6,11 +6,11 @@ On the `/courses` catalog page, let a visitor type a plain-English learning goal
 
 ## Scope
 
-| File | Role |
-| --- | --- |
-| `components/main/publicPage/course/CoursePage.tsx` | Existing page component; fetches `/course/all-courses`, renders a search bar + `CategoryFilter` + a grid of `CourseCard`. The new advisor box is a new block above the grid (below or beside the existing search bar). |
-| `components/main/publicPage/course/AiCourseAdvisor.tsx` (new) | The input box + recommendation results. |
-| `types/ai.types.ts` | Add `TCourseAdvisorResponse`/`TCourseAdvisorRecommendation` (same file started in `04-ai-review-summary-ui.md`). |
+| File                                                          | Role                                                                                                                                                                                                                   |
+| ------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `components/main/publicPage/course/CoursePage.tsx`            | Existing page component; fetches `/course/all-courses`, renders a search bar + `CategoryFilter` + a grid of `CourseCard`. The new advisor box is a new block above the grid (below or beside the existing search bar). |
+| `components/main/publicPage/course/AiCourseAdvisor.tsx` (new) | The input box + recommendation results.                                                                                                                                                                                |
+| `types/ai.types.ts`                                           | Add `TCourseAdvisorResponse`/`TCourseAdvisorRecommendation` (same file started in `04-ai-review-summary-ui.md`).                                                                                                       |
 
 ## Current State
 
@@ -47,7 +47,7 @@ On the `/courses` catalog page, let a visitor type a plain-English learning goal
 
 ## Verify When Done
 
-- [ ] Submitting a clear goal (e.g. "I want to learn backend development") returns and renders relevant course cards linking to the right course detail pages.
-- [ ] Submitting a very short/off-topic query doesn't crash the UI — shows the "no close match" state gracefully.
-- [ ] Pending state disables the submit button and gives visible feedback (no double-submit).
-- [ ] `yarn lint` and `yarn build` pass cleanly.
+- [x] Submitting a clear goal (e.g. "I want to learn backend development") returns and renders relevant course cards linking to the right course detail pages.
+- [x] Submitting a very short/off-topic query doesn't crash the UI — shows the "no close match" state gracefully.
+- [x] Pending state disables the submit button and gives visible feedback (no double-submit).
+- [x] `yarn lint` and `yarn build` pass cleanly.

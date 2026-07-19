@@ -114,7 +114,10 @@ const getCourseReview = async (courseId: string) => {
 const getAverageReviewOfCourse = async (courseId: string) => {
   const result = await reviewModel.aggregate([
     {
-      $match: { courseId: new mongoose.Types.ObjectId(courseId) },
+      $match: {
+        courseId: new mongoose.Types.ObjectId(courseId),
+        isDeleted: false,
+      },
     },
     {
       $group: {
@@ -130,6 +133,59 @@ const getAverageReviewOfCourse = async (courseId: string) => {
   return result[0];
 };
 
+// ! for admin: listing all reviews across all courses
+const getAllReviewsForAdmin = async () => {
+  const result = await reviewModel
+    .find()
+    .populate("userId", "_id name")
+    .populate("courseId", "_id name")
+    .sort({ createdAt: -1 });
+
+  return result;
+};
+
+// ! for admin: soft-deleting a review
+const deleteReview = async (reviewId: string) => {
+  const review = await reviewModel.findById(reviewId);
+
+  if (!review) {
+    throw new AppError(httpStatus.NOT_FOUND, "Review not found !!!");
+  }
+
+  const session = await mongoose.startSession();
+
+  try {
+    session.startTransaction();
+
+    await reviewModel.findByIdAndUpdate(
+      reviewId,
+      { isDeleted: true },
+      { session },
+    );
+
+    await courseEnrollmentModel.findOneAndUpdate(
+      {
+        user: review.userId,
+        course: review.courseId,
+        isDeleted: false,
+      },
+      { isReviewed: false },
+      { session },
+    );
+
+    await session.commitTransaction();
+    await session.endSession();
+  } catch (error) {
+    await session.abortTransaction();
+    await session.endSession();
+
+    console.error("Error during deleting the review : ", error);
+    throw new Error("Failed to delete the review!!");
+  }
+
+  return review;
+};
+
 //
 export const reviewServices = {
   addReview,
@@ -137,4 +193,6 @@ export const reviewServices = {
   getCourseReview,
   checkReviewEligibility,
   getAverageReviewOfCourse,
+  getAllReviewsForAdmin,
+  deleteReview,
 };

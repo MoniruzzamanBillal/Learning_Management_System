@@ -18,7 +18,9 @@ const handleCatError_1 = require("../Error/handleCatError");
 const handleDuplicateError_1 = require("../Error/handleDuplicateError");
 const handleValidationError_1 = require("../Error/handleValidationError");
 const handleZodError_1 = require("../Error/handleZodError");
+const errorLog_service_1 = require("../modules/errorLog/errorLog.service");
 const globalErrorHandler = (error, req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b;
     let status = error.status || 500;
     let message = error.message || "Something went wrong!!";
     let errorSources = [
@@ -61,6 +63,17 @@ const globalErrorHandler = (error, req, res, next) => __awaiter(void 0, void 0, 
         message = error === null || error === void 0 ? void 0 : error.message;
         errorSources = [{ path: "", message: error === null || error === void 0 ? void 0 : error.message }];
     }
+    yield errorLog_service_1.errorLogServices.logError({
+        message,
+        statusCode: status,
+        errorSources,
+        stack: error === null || error === void 0 ? void 0 : error.stack,
+        method: req.method,
+        path: req.originalUrl,
+        ip: req.ip,
+        userId: (_a = req.user) === null || _a === void 0 ? void 0 : _a.userId,
+        userRole: (_b = req.user) === null || _b === void 0 ? void 0 : _b.userRole,
+    });
     return res.status(status).json({
         success: false,
         message,

@@ -14,6 +14,7 @@
 | **Forms** | React Hook Form + Zod (`schemas/`) | Form state and schema validation. |
 | **Rich Text** | Tiptap | Course/module content editing. |
 | **Video Playback** | `@mux/mux-player-react` | Course video playback. |
+| **Charts** | Recharts | Admin dashboard revenue/enrollment time-series charts. |
 
 ## System Boundaries
 

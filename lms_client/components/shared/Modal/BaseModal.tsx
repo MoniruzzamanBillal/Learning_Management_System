@@ -32,7 +32,7 @@ export default function BaseModal({
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent
         className={cn(
-          "p-6 rounded-[8px] border border-table-border  w-full bg-surface max-h-[92vh] overflow-y-auto ",
+          "p-6 rounded-[8px] border border-border w-full bg-background text-foreground max-h-[92vh] overflow-y-auto ",
           className,
         )}
       >
@@ -46,7 +46,7 @@ export default function BaseModal({
 
         {title && (
           <DialogHeader>
-            <DialogTitle className=" font-semibold text-[1.5rem] leading-[1.5rem] text-neutral-50  ">
+            <DialogTitle className=" font-semibold text-[1.5rem] leading-[1.5rem] text-neutral-900 dark:text-neutral-100  ">
               {title}
             </DialogTitle>
           </DialogHeader>

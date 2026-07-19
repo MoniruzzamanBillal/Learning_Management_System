@@ -2,25 +2,62 @@
 
 import Wrapper from "@/components/shared/Wrapper";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useFetchData } from "@/hooks/useApi";
+import { buildUrl } from "@/utils/buildUrl";
 import useDebounce from "@/utils/useDebounce";
 import { BookOpen, Search } from "lucide-react";
 import { useState } from "react";
+import AiCourseAdvisor from "./AiCourseAdvisor";
 import CategoryFilter from "./CategoryFilter";
 import { TCourse } from "./Course.type";
 import CourseCard from "./CourseCard";
 import CourseCardSkeleton from "./CourseCardSkeleton";
+import PriceFilter from "./PriceFilter";
+
+const sortOptions = [
+  { value: "createdAt_desc", label: "Newest" },
+  { value: "price_asc", label: "Price: Low to High" },
+  { value: "price_desc", label: "Price: High to Low" },
+  { value: "rating_desc", label: "Top Rated" },
+];
 
 export default function CoursePage() {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [categoryType, setcategoryType] = useState<string>("");
-  const debounceTerm = useDebounce(searchTerm, 400);
+  const [sortBy, setSortBy] = useState<string>("createdAt_desc");
+  const [minPrice, setMinPrice] = useState<string>("");
+  const [maxPrice, setMaxPrice] = useState<string>("");
+  const debounceTerm = useDebounce(searchTerm, 500);
+  const debounceMinPrice = useDebounce(minPrice, 500);
+  const debounceMaxPrice = useDebounce(maxPrice, 500);
+
+  const apiUrl = buildUrl("/course/all-courses", {
+    searchTerm: debounceTerm,
+    category: categoryType,
+    sortBy: sortBy,
+    minPrice: debounceMinPrice,
+    maxPrice: debounceMaxPrice,
+  });
 
   const { data: allCourseData, isLoading: courseDataLoading } = useFetchData<{
     data: TCourse[];
   }>(
-    ["all-courses", `${debounceTerm}`, `${categoryType}`],
-    `/course/all-courses?searchTerm=${debounceTerm}&category=${categoryType}`,
+    [
+      "all-courses",
+      `${debounceTerm}`,
+      `${categoryType}`,
+      `${sortBy}`,
+      `${debounceMinPrice}`,
+      `${debounceMaxPrice}`,
+    ],
+    apiUrl,
   );
 
   let content = null;
@@ -65,8 +102,8 @@ export default function CoursePage() {
         </div>
 
         {/* Search bar */}
-        <div className="max-w-xl mx-auto mb-10">
-          <div className="bg-white border border-gray-200 rounded-xl shadow-sm flex items-center gap-2 px-4 py-2">
+        <div className="max-w-xl mx-auto mb-10 flex flex-col sm:flex-row gap-3">
+          <div className="flex-1 bg-white border border-gray-200 rounded-xl shadow-sm flex items-center gap-2 px-4 py-2">
             <Search className="h-4 w-4 text-gray-400 shrink-0" />
             <Input
               type="text"
@@ -76,7 +113,22 @@ export default function CoursePage() {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
+          <Select value={sortBy} onValueChange={setSortBy}>
+            <SelectTrigger className="w-full sm:w-48 bg-white">
+              <SelectValue placeholder="Sort by" />
+            </SelectTrigger>
+            <SelectContent position="popper">
+              {sortOptions.map((option) => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
+
+        {/* AI Course Advisor */}
+        <AiCourseAdvisor />
 
         {/* Body */}
         <div className="flex flex-col xl:flex-row gap-6">
@@ -85,6 +137,12 @@ export default function CoursePage() {
             <CategoryFilter
               categoryType={categoryType}
               setcategoryType={setcategoryType}
+            />
+            <PriceFilter
+              minPrice={minPrice}
+              maxPrice={maxPrice}
+              setMinPrice={setMinPrice}
+              setMaxPrice={setMaxPrice}
             />
           </div>
 

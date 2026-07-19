@@ -14,7 +14,7 @@ router.get("/module-video", videoController.getAllVideo);
 // ! for adding a video
 router.post(
   "/add-video",
-  //   authCheck(UserRole.admin, UserRole.instructor),
+  authCheck(UserRole.admin, UserRole.instructor),
   uploadVideo.single("video"),
   (req: Request, res: Response, next: NextFunction) => {
     req.body = JSON.parse(req?.body?.data);

@@ -6,11 +6,11 @@ A floating chat widget on the enrolled-course video page, so a student can ask s
 
 ## Scope
 
-| File | Role |
-| --- | --- |
-| `components/main/publicPage/MyCourses/EnrolledCourseDetail/EnrollCourseDetail.tsx` | Existing page component (confirmed by reading it). Receives `id` (the courseId) as a prop already, and renders `ModuleShowData` + the video player inside `EnrolledCourseDetailContainer`. The widget mounts here as a sibling, using the `id` prop directly — **not** inside `ModuleShowData.tsx`, since `id`/courseId is already available at this level. |
-| `components/main/publicPage/MyCourses/EnrolledCourseDetail/AiStudyAssistant.tsx` (new) | The floating chat widget itself. |
-| `types/ai.types.ts` | Add `TChatMessage`, `TStudyAssistantResponse` (same file started in `04-ai-review-summary-ui.md`). |
+| File                                                                                   | Role                                                                                                                                                                                                                                                                                                                                                        |
+| -------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `components/main/publicPage/MyCourses/EnrolledCourseDetail/EnrollCourseDetail.tsx`     | Existing page component (confirmed by reading it). Receives `id` (the courseId) as a prop already, and renders `ModuleShowData` + the video player inside `EnrolledCourseDetailContainer`. The widget mounts here as a sibling, using the `id` prop directly — **not** inside `ModuleShowData.tsx`, since `id`/courseId is already available at this level. |
+| `components/main/publicPage/MyCourses/EnrolledCourseDetail/AiStudyAssistant.tsx` (new) | The floating chat widget itself.                                                                                                                                                                                                                                                                                                                            |
+| `types/ai.types.ts`                                                                    | Add `TChatMessage`, `TStudyAssistantResponse` (same file started in `04-ai-review-summary-ui.md`).                                                                                                                                                                                                                                                          |
 
 ## Current State
 

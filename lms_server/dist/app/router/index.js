@@ -7,6 +7,7 @@ const auth_route_1 = require("../modules/auth/auth.route");
 const course_routes_1 = require("../modules/course/course.routes");
 const CourseEnrollment_routes_1 = require("../modules/CourseEnrollment/CourseEnrollment.routes");
 const module_routes_1 = require("../modules/courseModule/module.routes");
+const errorLog_route_1 = require("../modules/errorLog/errorLog.route");
 const payment_routes_1 = require("../modules/payment/payment.routes");
 const review_route_1 = require("../modules/review/review.route");
 const user_route_1 = require("../modules/user/user.route");
@@ -48,6 +49,10 @@ const routeArray = [
     {
         path: "/ai",
         route: ai_route_1.aiRouter,
+    },
+    {
+        path: "/error-log",
+        route: errorLog_route_1.errorLogRouter,
     },
 ];
 routeArray.forEach((item) => {

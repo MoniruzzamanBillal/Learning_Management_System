@@ -8,6 +8,7 @@ import { handleDuplicateError } from "../Error/handleDuplicateError";
 import { handleValidationError } from "../Error/handleValidationError";
 import { handleZodError } from "../Error/handleZodError";
 import { TerrorSource } from "../interface/error";
+import { errorLogServices } from "../modules/errorLog/errorLog.service";
 
 const globalErrorHandler = async (
   error: any,
@@ -63,6 +64,18 @@ const globalErrorHandler = async (
     message = error?.message;
     errorSources = [{ path: "", message: error?.message }];
   }
+
+  await errorLogServices.logError({
+    message,
+    statusCode: status,
+    errorSources,
+    stack: error?.stack,
+    method: req.method,
+    path: req.originalUrl,
+    ip: req.ip,
+    userId: req.user?.userId,
+    userRole: req.user?.userRole,
+  });
 
   return res.status(status).json({
     success: false,

@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response, Router } from "express";
 import authCheck from "../../middleware/authCheck";
+import { loginLimiter } from "../../middleware/rateLimiter";
 import validateRequest from "../../middleware/validateRequest";
 import { upload } from "../../util/SendImageCloudinary";
 import { UserRole } from "../user/user.constants";
@@ -37,6 +38,7 @@ router.post(
 // ! for login
 router.post(
   "/login",
+  loginLimiter,
   validateRequest(authValidations.loginValidationSchema),
   authControllers.loginUser
 );

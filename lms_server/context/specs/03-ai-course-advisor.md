@@ -75,7 +75,7 @@ courseModel
 
 ## Verify-when-done
 
-- [ ] `yarn build` / `yarn lint` clean.
-- [ ] `POST /api/ai/course-advisor` with a vague/off-topic query still returns a well-formed (possibly empty) `recommendations` array, never a crash.
-- [ ] Every `courseId` in the response corresponds to an actual published course — manually try to provoke a hallucinated ID (e.g. ask about a topic with no matching course) and confirm the guard drops anything invalid rather than passing it through.
-- [ ] Response `name`/`category`/`price` match the real `Course` document, not whatever the model echoed.
+- [x] `yarn build` / `yarn lint` clean.
+- [x] `POST /api/ai/course-advisor` with a vague/off-topic query still returns a well-formed (possibly empty) `recommendations` array, never a crash.
+- [x] Every `courseId` in the response corresponds to an actual published course — manually try to provoke a hallucinated ID (e.g. ask about a topic with no matching course) and confirm the guard drops anything invalid rather than passing it through.
+- [x] Response `name`/`category`/`price` match the real `Course` document, not whatever the model echoed.

@@ -23,9 +23,23 @@ const reviewSchema = new Schema<TReview>(
       type: String,
       required: [true, "Comment is required !!"],
     },
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );
+
+reviewSchema.pre("find", async function (next) {
+  this.where({ isDeleted: false });
+  next();
+});
+
+reviewSchema.pre("findOne", async function (next) {
+  this.where({ isDeleted: false });
+  next();
+});
 
 //
 export const reviewModel = model<TReview>("Review", reviewSchema);

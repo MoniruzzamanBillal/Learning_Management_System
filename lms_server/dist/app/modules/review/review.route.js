@@ -21,4 +21,8 @@ router.get("/course-review/:courseId", review_controller_1.reviewController.getC
 router.get("/average-course-review/:courseId", review_controller_1.reviewController.getAverageReviewOfCourse);
 // ! for checking review eligibility
 router.get("/check-review-eligibility", review_controller_1.reviewController.checkReviewEligibility);
+// ! for admin: listing all reviews across all courses
+router.get("/all", (0, authCheck_1.default)(user_constants_1.UserRole.admin), review_controller_1.reviewController.getAllReviewsForAdmin);
+// ! for admin: deleting a review
+router.delete("/:reviewId", (0, authCheck_1.default)(user_constants_1.UserRole.admin), review_controller_1.reviewController.deleteReview);
 exports.reviewRouter = router;

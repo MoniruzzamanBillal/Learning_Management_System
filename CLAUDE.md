@@ -16,13 +16,14 @@ There is no root-level package.json or workspace tooling — always `cd` into th
 Both `lms_server/context/` and `lms_client/context/` contain actively-maintained docs that are more detailed than this file and take precedence for their app:
 
 - `project-overview.md` — goals, user flows, feature inventory.
-- `architecture.md` — stack table, system boundaries, invariants, and known gaps (e.g. a few routes have `authCheck(...)` commented out rather than removed — don't silently "fix" these, ask first).
+- `architecture.md` — stack table, system boundaries, invariants, and known gaps (e.g. `auth.service.ts::createInstructor` hardcodes a default instructor password — deliberately kept as-is, don't "fix" it without asking first).
 - `code-standards.md` — naming/typing conventions and the verification checklist for "done."
 - `ai-workflow-rules.md` — scoping rules for AI-assisted changes (no speculative refactors, protected files, when to stop and ask).
 - `progress-tracker.md` — current phase, what's implemented, recent activity, open questions; **update this after every meaningful change**.
 - `specs/NN-<feature-name>.md` — per-feature Goal/Design/Implementation/Verify docs; check here before implementing anything that might already be scoped, and mark spec status in `progress-tracker.md` when starting/finishing one.
+- `lms_client/context/` additionally has `ui-context.md` — theme, colors, typography, and component conventions for the frontend.
 
-Read the relevant app's `context/` docs before making non-trivial changes, and keep them in sync (per `ai-workflow-rules.md`) when a change alters something they document.
+Read the relevant app's `context/` docs before making non-trivial changes, and keep them in sync (per `ai-workflow-rules.md`) when a change alters something they document. Each app also has an `AGENTS.md` pointing at this same `context/` reading order, for tools that read that file instead.
 
 ## Commands
 
@@ -49,7 +50,7 @@ Read the relevant app's `context/` docs before making non-trivial changes, and k
 
 Express app entry is `src/server.ts` (connects Mongoose, then `app.listen`); the Express app itself is assembled in `src/app.ts` (CORS allowlist, JSON/body-parser, morgan, cookie-parser, mounts `MainRouter` at `/api`, global error handler, 404 handler last).
 
-Everything domain-specific lives under `src/app/modules/<name>/`, one module per REST resource: `auth`, `user`, `course`, `courseModule`, `VideoModule`, `VideoProgress`, `CourseEnrollment`, `payment`, `SSL`, `review`. Each module follows the same file split — **not every module has every file**, but the naming is consistent:
+Everything domain-specific lives under `src/app/modules/<name>/`, one module per REST resource: `auth`, `user`, `course`, `courseModule`, `VideoModule`, `VideoProgress`, `CourseEnrollment`, `payment`, `SSL`, `review`, `ai`, `errorLog`. Each module follows the same file split — **not every module has every file**, but the naming is consistent:
 
 - `*.route.ts` / `*.routes.ts` — Express router, wires middleware + controller
 - `*.controller.ts` — thin, wraps service calls with `catchAsync` + `sendResponse`
@@ -66,7 +67,9 @@ Cross-cutting pieces:
 - `src/app/middleware/authCheck.ts` — `authCheck(...requiredRoles)` verifies the JWT from the `Authorization: Bearer <token>` header and attaches `req.user`; pass no roles to just require auth, or specific `UserRole` values to restrict.
 - `src/app/middleware/ValidateCourseAccess.ts` — checks the user has both a `CourseEnrollment` and a completed `payment` record for a course before allowing access to protected course content.
 - `src/app/middleware/validateRequest.ts` — runs a Zod schema against `req.body`.
+- `src/app/middleware/rateLimiter.ts` — `aiLimiter` (10 req/10 min per IP, on both AI endpoints) and `loginLimiter` (10 req/15 min per IP, on `/auth/login`), built on `express-rate-limit`; always the first middleware in its route's chain so rate-limited requests never reach DB/LLM work. In-memory store, per-instance only.
 - `src/app/middleware/globalErrorHandler.ts` — normalizes `ZodError`, Mongoose `ValidationError`/`CastError`, duplicate-key (11000), and `AppError` into a consistent JSON error shape; must be registered after routes, before the 404 handler.
+- `helmet()` is applied first in `src/app.ts`'s middleware stack (before `cors`) for baseline security headers.
 - `src/app/util/catchAsync.ts` — wraps async route handlers so thrown errors reach `next(error)`.
 - `src/app/util/sendResponse.ts` — standard `{ success, message, data, token? }` response envelope.
 - `src/app/util/SendImageCloudinary.ts` — Multer + Cloudinary storage config (`upload.single(...)`) used for course covers, etc.
@@ -75,7 +78,9 @@ Cross-cutting pieces:
 
 Payments go through SSLCOMMERZ (`payment` + `SSL` modules); enrollment access is gated on `payment.paymentStatus === Completed` (see `ValidateCourseAccess`).
 
-AI features are in progress: `src/app/util/openRouterClient.ts` exports `askOpenRouter(messages, options)`, a single choke point that calls OpenRouter's free-tier models with automatic fallback across a `FREE_MODELS` list, reading `config.openRouterApiKey`. The `ai` module (`src/app/modules/ai/`) now exists with one endpoint, `GET /api/ai/review-summary/:courseId` (cached AI digest of a course's reviews, caching on `Course.aiReviewSummary`/`aiReviewSummaryReviewCount`) — implemented per `lms_server/context/specs/02-ai-review-summarizer.md`. Two more planned endpoints (`course-advisor`, `study-assistant`) are scoped in `specs/03-*`/`04-*` but not yet implemented; check `progress-tracker.md`'s spec status table before starting one.
+AI features: `src/app/util/openRouterClient.ts` exports `askOpenRouter(messages, options)`, a single choke point that calls OpenRouter's free-tier models with automatic fallback across a `FREE_MODELS` list, reading `config.openRouterApiKey`. The `ai` module (`src/app/modules/ai/`) has three endpoints, all rate-limited by `aiLimiter` where public: `GET /api/ai/review-summary/:courseId` (cached AI digest of a course's reviews, caching on `Course.aiReviewSummary`/`aiReviewSummaryReviewCount`, per `specs/02-ai-review-summarizer.md`), `POST /api/ai/course-advisor` (public endpoint accepting a plain-English learning goal, returns 2-3 recommended published courses with hallucination-guarded server-side cross-checking against the fetched course list, per `specs/03-ai-course-advisor.md`), and `POST /api/ai/study-assistant/:courseId` (enrolled+paid-only via `authCheck(UserRole.user)` + `ValidateCourseAccess`, stateless per-course chat grounded in the student's real module/video outline and progress, per `specs/04-ai-study-assistant.md`). Check `progress-tracker.md`'s spec status table before starting new AI work — several follow-on specs exist under `context/specs/`.
+
+Error logging: `src/app/modules/errorLog/` persists every error that reaches `globalErrorHandler` (all 4xx/5xx, not just unexpected bugs) into MongoDB — message, status, method, path, IP, and the requesting user when authenticated. Reads are admin-only (`GET /api/error-log`, `GET /api/error-log/:id`, both behind `authCheck(UserRole.admin)`); there's no public write endpoint, rows are only ever created internally from `globalErrorHandler`. `errorLog.model.ts` carries this codebase's only TTL index (`{ createdAt: 1 }, { expireAfterSeconds: 60 * 60 * 24 * 30 }`), so rows auto-expire 30 days after creation with no cron/cleanup job needed. See `context/specs/09-observability-logging-and-error-tracking.md`.
 
 Route files often JSON-parse a `data` field out of multipart bodies before validation (see the inline middleware in `course.routes.ts` that does `req.body = JSON.parse(req.body?.data)` between `upload.single(...)` and `validateRequest`) — follow this pattern for any new endpoint that accepts a file alongside structured JSON fields.
 
@@ -86,7 +91,7 @@ Next.js App Router. Route groups:
 - `app/(main)/` — public/marketing + auth pages (home, courses, login, sign-up, contact, etc.)
 - `app/dashboard/` — role-scoped dashboard, split into `admin/`, `instructor/`, `user/`, `profile/` subtrees, each with its own nested pages for CRUD flows (add/update/manage course, module, video, etc.)
 
-`middleware.ts` (repo root of `lms_client`) gates `/admin/:path*` and `/user/:path*` plus `/login` and `/`: it reads the `accessToken` cookie, decodes the JWT (`services/jwt.ts`), and redirects based on `role` (`admin` vs `user`) — keep new protected routes' path prefixes in sync with the `matcher` config and the role checks here.
+`middleware.ts` (repo root of `lms_client`) gates `/admin/:path*` and `/user/:path*` plus `/login` and `/`: it reads the `accessToken` cookie, decodes the JWT (`services/jwt.ts`), and redirects based on `role` (`admin` vs `user`) — keep new protected routes' path prefixes in sync with the `matcher` config and the role checks here. **Known gap:** every real dashboard route lives under `/dashboard/admin/...` or `/dashboard/user/...`, not `/admin/...`/`/user/...`, so this matcher never actually matches them — edge-level gating is effectively a no-op for the whole dashboard today. In practice, protection comes from the API rejecting unauthorized requests with `401` and the axios response interceptor force-logging-out on `401` (see below), not from this middleware. Don't assume adding a new `/dashboard/...` page is edge-protected just because it's under `/dashboard/admin/`.
 
 Data layer conventions:
 

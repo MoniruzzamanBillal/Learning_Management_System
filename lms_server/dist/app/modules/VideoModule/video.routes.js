@@ -15,9 +15,7 @@ const router = (0, express_1.Router)();
 // ! for getting all video
 router.get("/module-video", video_controller_1.videoController.getAllVideo);
 // ! for adding a video
-router.post("/add-video", 
-//   authCheck(UserRole.admin, UserRole.instructor),
-VideoUpload_1.uploadVideo.single("video"), (req, res, next) => {
+router.post("/add-video", (0, authCheck_1.default)(user_constants_1.UserRole.admin, user_constants_1.UserRole.instructor), VideoUpload_1.uploadVideo.single("video"), (req, res, next) => {
     var _a;
     req.body = JSON.parse((_a = req === null || req === void 0 ? void 0 : req.body) === null || _a === void 0 ? void 0 : _a.data);
     next();

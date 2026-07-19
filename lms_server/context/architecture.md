@@ -18,8 +18,8 @@
 
 - `src/server.ts` — process entry point: connects Mongoose (`config.database_url`), then starts the HTTP listener.
 - `src/app.ts` — Express app composition, in order: CORS (explicit origin allowlist) → `express.json()` → `morgan("dev")` → `cookieParser()` → `body-parser` urlencoded → `MainRouter` mounted at `/api` → root `GET /` health check → `globalErrorHandler` → catch-all 404 handler. This order matters — the error handler must come after routes and before the 404 handler.
-- `src/app/router/index.ts` — aggregates every module's router and mounts it under a path prefix (`/user`, `/auth`, `/course`, `/module`, `/video`, `/enroll`, `/payment`, `/review`, `/ai`), all under the `/api` base from `app.ts`.
-- `src/app/modules/<name>/` — one directory per domain resource: `auth`, `user`, `course`, `courseModule`, `VideoModule`, `VideoProgress`, `CourseEnrollment`, `payment`, `SSL`, `review`, `ai`. Not every module has every file below, but the split is consistent:
+- `src/app/router/index.ts` — aggregates every module's router and mounts it under a path prefix (`/user`, `/auth`, `/course`, `/module`, `/video`, `/enroll`, `/payment`, `/review`, `/ai`, `/error-log`), all under the `/api` base from `app.ts`.
+- `src/app/modules/<name>/` — one directory per domain resource: `auth`, `user`, `course`, `courseModule`, `VideoModule`, `VideoProgress`, `CourseEnrollment`, `payment`, `SSL`, `review`, `ai`, `errorLog`. Not every module has every file below, but the split is consistent:
   - `*.route.ts` / `*.routes.ts` — Express router; wires middleware (`authCheck`, `validateRequest`, `upload`) to controller methods.
   - `*.controller.ts` — thin; wraps a service call with `catchAsync` and responds via `sendResponse`.
   - `*.service.ts` — business logic and Mongoose queries.
@@ -29,6 +29,8 @@
   - `*.constants.ts` — enums/constants (e.g. `UserRole`, `PAYMENTSTATUS`).
   - `VideoProgress` and `SSL` have no `route.ts` — they're internal-only, consumed by `CourseEnrollment`'s service and the `payment` module respectively, not exposed as their own HTTP surface.
   - `ai` has no `ai.model.ts` or `ai.validation.ts` — it's stateless per-request (no dedicated collection), and its first endpoint (`GET /ai/review-summary/:courseId`) takes no body to validate. It calls `askOpenRouter` (`src/app/util/openRouterClient.ts`) and caches results directly on the `Course` document (`aiReviewSummary`, `aiReviewSummaryReviewCount`) rather than its own collection.
+  - `errorLog` has no `errorLog.validation.ts` (GET-only, no request body). Its `route.ts` only exposes reads (`GET /`, `GET /:id`, both `authCheck(UserRole.admin)`) — rows are written exclusively from inside `globalErrorHandler`, never via a public write endpoint. `errorLog.model.ts` carries this codebase's only TTL index (`{ createdAt: 1 }`, `expireAfterSeconds: 60 * 60 * 24 * 30`), auto-expiring rows 30 days after creation.
+  - `review` supports soft-delete moderation: `review.model.ts` has an `isDeleted` field plus `pre("find")`/`pre("findOne")` hooks filtering it out (mirroring `user.model.ts`'s pattern) — since `.aggregate()` bypasses these hooks, any aggregation over `reviewModel` needs an explicit `isDeleted: false` in its `$match`. `GET /review/all` and `DELETE /review/:reviewId` are both `authCheck(UserRole.admin)`; deleting a review resets the underlying enrollment's `isReviewed` flag so the student can leave a new one.
 - `src/app/middleware/` — cross-cutting middleware (see below).
 - `src/app/util/` — shared helpers: `catchAsync.ts`, `sendResponse.ts`, `SendImageCloudinary.ts` (Multer/Cloudinary storage config for images), `VideoUpload.ts` (video-specific upload config), `sendEmail.ts`.
 - `src/app/Error/` — `AppError` class plus normalizers for Zod/Mongoose validation/cast/duplicate-key errors, consumed by `globalErrorHandler`.
@@ -39,14 +41,15 @@
 - `authCheck(...requiredRoles: TUserRole[])` — verifies the `Authorization: Bearer <token>` JWT, attaches the decoded payload to `req.user`. Called with no roles to just require *some* valid token, or specific `UserRole` values to restrict access.
 - `ValidateCourseAccess` — used on `CourseEnrollment` routes that serve paid content; requires both a matching `CourseEnrollment` document and a `payment` document with `paymentStatus === Completed` for that user+course, else throws `403`.
 - `validateRequest(zodSchema)` — parses/validates `req.body` against a Zod schema, throwing `ZodError` on failure (normalized by `globalErrorHandler`).
-- `globalErrorHandler` — normalizes `ZodError`, Mongoose `ValidationError`/`CastError`, MongoDB duplicate-key (`code: 11000`), and `AppError` into one JSON error shape (`{ success: false, message, errorSources, stack }`).
+- `globalErrorHandler` — normalizes `ZodError`, Mongoose `ValidationError`/`CastError`, MongoDB duplicate-key (`code: 11000`), and `AppError` into one JSON error shape (`{ success: false, message, errorSources, stack }`), and persists every error (all 4xx/5xx, not just unexpected bugs) via `errorLogServices.logError(...)` before responding — see [`context/specs/09-observability-logging-and-error-tracking.md`](specs/09-observability-logging-and-error-tracking.md).
+- `rateLimiter.ts` — `aiLimiter` (10 req / 10 min per IP, applied to `POST /ai/course-advisor` and `GET /ai/review-summary/:courseId`) and `loginLimiter` (10 req / 15 min per IP, applied to `POST /auth/login`), both built on `express-rate-limit`. Runs first in each route's middleware chain so no DB/LLM work happens before the count. In-memory store — would need Redis if the backend scales past one instance. See [`context/specs/06-rate-limiting.md`](specs/06-rate-limiting.md).
 
 ## Auth & Access Model
 
 - Users authenticate via `POST /api/auth/login`, receiving a JWT signed with `config.jwt_secret` and containing at least `userId` and `userRole`.
 - Every protected route calls `authCheck(...)` with the roles allowed to hit it.
 - Course-content routes additionally require `ValidateCourseAccess` (enrollment + completed payment), independent of role.
-- **Known gap (as of this writing):** a handful of routes have `authCheck(...)` calls commented out rather than removed — e.g. `course.controller.adminStatistics` (`/course/admin-stats`), `moduleController.addModule` (`/module/add-module`), and `videoController.addVideo` (`/video/add-video`) in their respective `*.routes.ts` files. Treat these as real, currently-open security gaps to flag rather than silently "fix" — confirm with the user before re-enabling or removing the commented checks, since removing them could be an intentional (if undocumented) temporary state.
+- **Resolved gap:** `course.controller.adminStatistics` (`/course/admin-stats`), `moduleController.addModule` (`/module/add-module`), and `videoController.addVideo` (`/video/add-video`) previously had `authCheck(...)` commented out; re-enabled per [`context/specs/05-security-authcheck-and-hardening.md`](specs/05-security-authcheck-and-hardening.md) — `/course/admin-stats` requires `UserRole.admin`, the other two require `UserRole.admin`/`UserRole.instructor`, matching sibling routes in the same files.
 
 ## Invariants
 
