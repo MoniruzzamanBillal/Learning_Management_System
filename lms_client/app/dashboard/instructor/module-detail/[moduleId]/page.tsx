@@ -1,4 +1,4 @@
-import InstructorModule from "@/components/Dashboard/instructor/InstructorModule/InstructorModule";
+import InstructorModule from "@/components/main/(Instructor)/InstructorModule/InstructorModule";
 
 export const metadata = {
   title: "Module Detail | Instructor Dashboard",

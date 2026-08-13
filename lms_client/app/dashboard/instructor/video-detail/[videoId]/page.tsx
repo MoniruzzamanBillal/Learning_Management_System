@@ -1,4 +1,4 @@
-import InstructorVideoDetail from "@/components/Dashboard/instructor/InstructorVideoDetail/InstructorVideoDetail";
+import InstructorVideoDetail from "@/components/main/(Instructor)/InstructorVideoDetail/InstructorVideoDetail";
 
 export default function Page() {
   return <InstructorVideoDetail />;

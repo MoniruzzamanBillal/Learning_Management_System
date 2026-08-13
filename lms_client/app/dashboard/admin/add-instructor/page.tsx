@@ -1,4 +1,4 @@
-import AddInstructor from "@/components/Dashboard/admin/ManageInstructor/AddInstructor";
+import AddInstructor from "@/components/main/(Admin)/ManageInstructor/AddInstructor";
 
 export default function Page() {
   return <AddInstructor />;

@@ -1,4 +1,4 @@
-import { apiDelete, apiGet, apiPatch, apiPost, apiPut } from "@/utils/api";
+import { apiDelete, apiGet, apiPatch, apiPost, apiPut } from "@/lib/api";
 import {
   useMutation,
   useQuery,

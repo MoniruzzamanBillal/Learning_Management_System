@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { DialogClose } from "@/components/ui/dialog";
-import PrimaryButton from "../PrimaryButton/PrimaryButton";
+import PrimaryButton from "../buttons/PrimaryButton";
 
 type TModalActionButtonsProps = {
   confirmText?: string;

@@ -1,4 +1,4 @@
-import CourseDetail from "@/components/Dashboard/admin/ManageCourse/CourseDetail";
+import CourseDetail from "@/components/main/(Admin)/ManageCourse/CourseDetail";
 
 export default function Page() {
   return <CourseDetail />;

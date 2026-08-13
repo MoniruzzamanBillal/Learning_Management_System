@@ -1,4 +1,4 @@
-import UpdateVideo from "@/components/Dashboard/instructor/ManageVideo/UpdateVideo";
+import UpdateVideo from "@/components/main/(Instructor)/ManageVideo/UpdateVideo";
 
 export const metadata = {
   title: "Update Video | Instructor Dashboard",

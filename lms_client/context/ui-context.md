@@ -21,7 +21,7 @@ Defined as raw hex custom properties (not part of the shadcn semantic token set)
 | `--black-50` | `#070f2b` | Mid navy. |
 | `--black-20` | `#040b24` | Navy. |
 
-Confirmed real usage in `components/Dashboard/Sidebar.tsx`, `components/Dashboard/admin/ManageInstructor/AddInstructor.tsx`, `components/Dashboard/admin/ManageCourse/UpdateCourse.tsx`, `components/Dashboard/admin/ManageModule/ModuleDetail.tsx`, `components/Dashboard/user/Certificates/MyCourseCertificates.tsx`.
+Confirmed real usage in `components/dashboard/sidebar/Sidebar.tsx`, `components/main/(Admin)/ManageInstructor/AddInstructor.tsx`, `components/main/(Admin)/ManageCourse/UpdateCourse.tsx`, `components/main/(Admin)/ManageModule/ModuleDetail.tsx`, `components/main/(User)/Certificates/MyCourseCertificates.tsx`.
 
 ## Semantic Tokens (shadcn/Tailwind theme, light + `.dark`)
 

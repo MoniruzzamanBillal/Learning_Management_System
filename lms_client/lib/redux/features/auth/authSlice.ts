@@ -1,4 +1,4 @@
-import { logout } from "@/services/auth.service";
+import { logout } from "@/lib/auth.service";
 import { createSlice } from "@reduxjs/toolkit";
 import { IInitialState } from "./authTypes";
 

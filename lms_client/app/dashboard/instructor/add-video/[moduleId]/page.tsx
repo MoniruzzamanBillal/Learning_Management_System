@@ -1,4 +1,4 @@
-import AddVideo from "@/components/Dashboard/instructor/ManageVideo/AddVideo";
+import AddVideo from "@/components/main/(Instructor)/ManageVideo/AddVideo";
 
 export const metadata = {
   title: "Add Video | Instructor Dashboard",

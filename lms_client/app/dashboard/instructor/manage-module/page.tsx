@@ -1,4 +1,4 @@
-import ManageModule from "@/components/Dashboard/instructor/ManageModule/ManageModule";
+import ManageModule from "@/components/main/(Instructor)/ManageModule/ManageModule";
 
 export const metadata = {
   title: "Manage Modules | Instructor Dashboard",

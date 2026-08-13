@@ -1,4 +1,4 @@
-import ManageAssignCourse from "@/components/Dashboard/instructor/AssignCourse/ManageAssignCourse";
+import ManageAssignCourse from "@/components/main/(Instructor)/AssignCourse/ManageAssignCourse";
 
 export const metadata = {
   title: "Assigned Courses | Instructor Dashboard",

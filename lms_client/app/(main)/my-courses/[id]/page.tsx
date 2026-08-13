@@ -1,4 +1,4 @@
-import EnrolledCourseDetailSkeleton from "@/components/main/publicPage/MyCourses/EnrolledCourseDetail/EnrolledCourseDetailSkeleton";
+import EnrolledCourseDetailSkeleton from "@/components/main/MyCourses/EnrolledCourseDetail/EnrolledCourseDetailSkeleton";
 import { Metadata } from "next";
 import dynamic from "next/dynamic";
 
@@ -15,7 +15,7 @@ export default async function page({ params }: TpageProps) {
 
   const EnrollCourseDetail = dynamic(
     () =>
-      import("@/components/main/publicPage/MyCourses/EnrolledCourseDetail/EnrollCourseDetail"),
+      import("@/components/main/MyCourses/EnrolledCourseDetail/EnrollCourseDetail"),
     {
       loading: () => <EnrolledCourseDetailSkeleton />,
     },

@@ -1,4 +1,4 @@
-import ManageCourse from "@/components/Dashboard/admin/ManageCourse/ManageCourse";
+import ManageCourse from "@/components/main/(Admin)/ManageCourse/ManageCourse";
 
 export default function Page() {
   return <ManageCourse />;

@@ -1,4 +1,4 @@
-import Sidebar from "@/components/Dashboard/Sidebar";
+import Sidebar from "@/components/dashboard/sidebar/Sidebar";
 import NavBar from "@/components/shared/NavBar";
 import Wrapper from "@/components/shared/Wrapper";
 

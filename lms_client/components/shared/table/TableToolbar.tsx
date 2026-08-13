@@ -2,7 +2,7 @@
 
 import { DateRange } from "react-day-picker";
 
-import DateSelect from "@/components/input/DateSelect";
+import DateSelect from "@/components/shared/input/DateSelect";
 import TableFilter, { TTableFilterGroup } from "./TableFilter";
 import TableSearch from "./TableSearch";
 

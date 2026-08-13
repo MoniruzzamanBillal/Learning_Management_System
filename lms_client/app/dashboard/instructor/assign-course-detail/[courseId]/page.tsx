@@ -1,4 +1,4 @@
-import AssignCourseDetail from "@/components/Dashboard/instructor/AssignCourse/AssignCourseDetail";
+import AssignCourseDetail from "@/components/main/(Instructor)/AssignCourse/AssignCourseDetail";
 
 export const metadata = {
   title: "Course Detail | Instructor Dashboard",

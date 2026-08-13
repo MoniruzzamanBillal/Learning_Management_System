@@ -3,12 +3,12 @@
 ## TypeScript & Next.js Patterns
 
 - `page.tsx`/`layout.tsx` files are generally left as server components; interactivity (state, hooks, event handlers) is pushed into imported client components marked `"use client"`. The codebase is not strictly server-first everywhere — many feature components (forms, tables, dashboard views) are client components by necessity (they use TanStack Query hooks, Redux, or form state) — but keep new top-level `page.tsx` files as server shells where the page itself doesn't need interactivity, matching the existing pattern.
-- Use React Hook Form + Zod (`schemas/*.schemas.ts`, `@hookform/resolvers`) for all form handling and validation — don't hand-roll form state.
+- Use React Hook Form + Zod (a feature's own colocated `schema/*.schemas.ts`, `@hookform/resolvers`) for all form handling and validation — don't hand-roll form state.
 
 ## File Organization & Naming
 
 - **Pages:** `app/[route]/page.tsx`; **Layouts:** `app/[route]/layout.tsx`.
-- **Feature components:** PascalCase, grouped by role/feature under `components/Dashboard/<role>/<Feature>/` (e.g. `components/Dashboard/admin/ManageCourse/AddCourse.tsx`).
+- **Feature components:** PascalCase, colocated under `components/main/<Group>/<Feature>/` — `<Group>` is a parenthesized role folder for dashboard features (`(Admin)/`, `(Instructor)/`, `(User)/`, e.g. `components/main/(Admin)/ManageCourse/AddCourse.tsx`) or omitted entirely for public pages (e.g. `components/main/Course/CoursePage.tsx`). Subfolders within a feature: `column/` (table columns), `schema/` (Zod schema), `type/` (entity type), `functions/` (single-feature orchestration file).
 - **Generic UI components:** `components/ui/` (shadcn-generated).
 - **Hooks:** camelCase, prefixed `use` (`hooks/useApi.ts`, `hooks/useAuth.ts`).
 - **Data orchestration:** `functions/<domain>.functions.ts` (or `.function.ts` — both suffixes exist in the codebase; match whichever the target domain file already uses rather than introducing a third variant).
@@ -28,7 +28,7 @@
 
 ## Error Handling
 
-- `utils/axiosInstance.ts` already normalizes API errors to `{statusCode, message, errorMessages, errors}` and handles `401`/`403` globally — don't duplicate that logic per-component.
+- `lib/axiosInstance.ts` already normalizes API errors to `{statusCode, message, errorMessages, errors}` and handles `401`/`403` globally — don't duplicate that logic per-component.
 - Surface errors/success via `sonner` toast (`toast.loading(...)` → `toast.success/error(...)`), matching the pattern in `functions/*.functions.ts`.
 
 ## Linting

@@ -1,6 +1,6 @@
 "use client";
 
-import ControlledInput from "@/components/input/ControlledInput";
+import ControlledInput from "@/components/shared/input/ControlledInput";
 import { Button } from "@/components/ui/button";
 import { usePost } from "@/hooks/useApi";
 import { zodResolver } from "@hookform/resolvers/zod";

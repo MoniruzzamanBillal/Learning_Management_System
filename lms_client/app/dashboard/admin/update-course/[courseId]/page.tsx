@@ -1,4 +1,4 @@
-import UpdateCourse from "@/components/Dashboard/admin/ManageCourse/UpdateCourse";
+import UpdateCourse from "@/components/main/(Admin)/ManageCourse/UpdateCourse";
 
 export default function Page() {
   return <UpdateCourse />;

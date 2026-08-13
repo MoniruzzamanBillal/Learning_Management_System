@@ -1,4 +1,4 @@
-import UpdateModule from "@/components/Dashboard/instructor/ManageModule/UpdateModule";
+import UpdateModule from "@/components/main/(Instructor)/ManageModule/UpdateModule";
 
 export const metadata = {
   title: "Update Module | Instructor Dashboard",
