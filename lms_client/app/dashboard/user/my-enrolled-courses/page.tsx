@@ -1,4 +1,4 @@
-import MyEnrolledCourses from "@/components/Dashboard/user/MyCourses/MyEnrolledCourses";
+import MyEnrolledCourses from "@/components/main/(User)/MyCourses/MyEnrolledCourses";
 
 export const metadata = {
   title: "My Enrolled Courses | User Dashboard",

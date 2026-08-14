@@ -2,7 +2,7 @@
 
 import { Plus } from "lucide-react";
 
-import PrimaryButton from "../PrimaryButton/PrimaryButton";
+import PrimaryButton from "../buttons/PrimaryButton";
 
 type TpageProps = {
   headerTitle?: string;

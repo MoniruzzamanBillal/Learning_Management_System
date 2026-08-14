@@ -1,0 +1,159 @@
+"use client";
+
+import Wrapper from "@/components/shared/Wrapper";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useFetchData } from "@/hooks/useApi";
+import { buildUrl } from "@/utils/buildUrl";
+import useDebounce from "@/hooks/useDebounce";
+import { BookOpen, Search } from "lucide-react";
+import { useState } from "react";
+import AiCourseAdvisor from "./AiCourseAdvisor";
+import CategoryFilter from "./CategoryFilter";
+import { TCourse } from "./type/Course.type";
+import CourseCard from "./CourseCard";
+import CourseCardSkeleton from "./CourseCardSkeleton";
+import PriceFilter from "./PriceFilter";
+
+const sortOptions = [
+  { value: "createdAt_desc", label: "Newest" },
+  { value: "price_asc", label: "Price: Low to High" },
+  { value: "price_desc", label: "Price: High to Low" },
+  { value: "rating_desc", label: "Top Rated" },
+];
+
+export default function CoursePage() {
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [categoryType, setcategoryType] = useState<string>("");
+  const [sortBy, setSortBy] = useState<string>("createdAt_desc");
+  const [minPrice, setMinPrice] = useState<string>("");
+  const [maxPrice, setMaxPrice] = useState<string>("");
+  const debounceTerm = useDebounce(searchTerm, 500);
+  const debounceMinPrice = useDebounce(minPrice, 500);
+  const debounceMaxPrice = useDebounce(maxPrice, 500);
+
+  const apiUrl = buildUrl("/course/all-courses", {
+    searchTerm: debounceTerm,
+    category: categoryType,
+    sortBy: sortBy,
+    minPrice: debounceMinPrice,
+    maxPrice: debounceMaxPrice,
+  });
+
+  const { data: allCourseData, isLoading: courseDataLoading } = useFetchData<{
+    data: TCourse[];
+  }>(
+    [
+      "all-courses",
+      `${debounceTerm}`,
+      `${categoryType}`,
+      `${sortBy}`,
+      `${debounceMinPrice}`,
+      `${debounceMaxPrice}`,
+    ],
+    apiUrl,
+  );
+
+  let content = null;
+
+  if (courseDataLoading) {
+    content = (
+      <>
+        {Array.from({ length: 6 }).map((_, ind) => (
+          <CourseCardSkeleton key={ind} />
+        ))}
+      </>
+    );
+  } else if (!allCourseData?.data?.data?.length) {
+    content = (
+      <div className="col-span-full flex flex-col items-center justify-center py-20 text-center">
+        <BookOpen className="h-16 w-16 text-gray-300 mb-4" />
+        <h2 className="text-xl font-semibold text-gray-900 mb-2">
+          No courses found
+        </h2>
+        <p className="text-gray-500 text-sm">
+          Try a different search term or category.
+        </p>
+      </div>
+    );
+  } else if (allCourseData?.data?.data?.length) {
+    content = allCourseData.data.data.map((course: TCourse) => (
+      <CourseCard key={course._id} course={course} />
+    ));
+  }
+
+  return (
+    <div className="bg-gray-50 min-h-screen py-10">
+      <Wrapper>
+        {/* Page header */}
+        <div className="text-center mb-8">
+          <p className="text-prime-50 text-xs font-semibold tracking-widest uppercase mb-3">
+            Courses
+          </p>
+          <h1 className="text-3xl font-bold text-gray-900">
+            Explore All Courses
+          </h1>
+        </div>
+
+        {/* Search bar */}
+        <div className="max-w-xl mx-auto mb-10 flex flex-col sm:flex-row gap-3">
+          <div className="flex-1 bg-white border border-gray-200 rounded-xl shadow-sm flex items-center gap-2 px-4 py-2">
+            <Search className="h-4 w-4 text-gray-400 shrink-0" />
+            <Input
+              type="text"
+              placeholder="Search courses..."
+              className="border-none outline-none ring-0 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none p-0 h-auto bg-transparent text-sm"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+          <Select value={sortBy} onValueChange={setSortBy}>
+            <SelectTrigger className="w-full sm:w-48 bg-white">
+              <SelectValue placeholder="Sort by" />
+            </SelectTrigger>
+            <SelectContent position="popper">
+              {sortOptions.map((option) => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* AI Course Advisor */}
+        <AiCourseAdvisor />
+
+        {/* Body */}
+        <div className="flex flex-col xl:flex-row gap-6">
+          {/* Category filter sidebar */}
+          <div className="w-full xl:w-56 shrink-0">
+            <CategoryFilter
+              categoryType={categoryType}
+              setcategoryType={setcategoryType}
+            />
+            <PriceFilter
+              minPrice={minPrice}
+              maxPrice={maxPrice}
+              setMinPrice={setMinPrice}
+              setMaxPrice={setMaxPrice}
+            />
+          </div>
+
+          {/* Course grid */}
+          <div className="flex-1">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+              {content}
+            </div>
+          </div>
+        </div>
+      </Wrapper>
+    </div>
+  );
+}

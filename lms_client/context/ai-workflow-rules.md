@@ -7,7 +7,7 @@ This is a live, already-built codebase — the priority is fitting new work into
 ## Scoping Rules
 
 1. **One feature at a time.** Don't bundle unrelated fixes/refactors into a feature change.
-2. **No speculative changes.** Don't refactor unrelated components, don't build placeholder UI for unrequested features, don't touch `services/` (legacy) unless specifically asked to migrate something off it.
+2. **No speculative changes.** Don't refactor unrelated components, don't build placeholder UI for unrequested features, don't touch `lib/auth.ts`/`lib/auth.service.ts` (legacy) unless specifically asked to migrate something off them.
 3. **Strict boundaries.** Frontend changes should consume the existing API contract (see `lms_server/context/architecture.md` and `LMS_system.postman_collection.json`) rather than assuming a backend change — if a needed endpoint doesn't exist, say so and ask, don't invent client-side workarounds for missing backend behavior.
 
 ## Splitting Work

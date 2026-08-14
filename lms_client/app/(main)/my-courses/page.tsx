@@ -1,4 +1,4 @@
-import MyCourses from "@/components/main/publicPage/MyCourses/MyCourses";
+import MyCourses from "@/components/main/MyCourses/MyCourses";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

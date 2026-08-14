@@ -1,4 +1,4 @@
-import CoursePage from "@/components/main/publicPage/course/CoursePage";
+import CoursePage from "@/components/main/Course/CoursePage";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

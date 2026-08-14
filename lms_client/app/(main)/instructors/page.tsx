@@ -1,4 +1,4 @@
-import InstructorPage from "@/components/main/publicPage/instructor/Instructor";
+import InstructorPage from "@/components/main/Instructor/Instructor";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

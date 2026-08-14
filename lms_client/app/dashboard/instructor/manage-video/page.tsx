@@ -1,4 +1,4 @@
-import ManageVideo from "@/components/Dashboard/instructor/ManageVideo/ManageVideo";
+import ManageVideo from "@/components/main/(Instructor)/ManageVideo/ManageVideo";
 
 export default function Page() {
   return <ManageVideo />;

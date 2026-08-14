@@ -1,4 +1,4 @@
-import Enrollment from "@/components/Dashboard/admin/Enrollment/Enrollment";
+import Enrollment from "@/components/main/(Admin)/Enrollment/Enrollment";
 
 export default function Page() {
   return <Enrollment />;

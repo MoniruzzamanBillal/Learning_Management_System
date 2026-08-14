@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { authKey } from "./constants/storageKey";
-import { decodedToken } from "./services/jwt";
+import { decodedToken } from "./lib/jwt";
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;

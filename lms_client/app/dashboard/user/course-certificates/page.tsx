@@ -1,4 +1,4 @@
-import MyCourseCertificates from "@/components/Dashboard/user/Certificates/MyCourseCertificates";
+import MyCourseCertificates from "@/components/main/(User)/Certificates/MyCourseCertificates";
 
 export const metadata = {
   title: "My Certificates | User Dashboard",

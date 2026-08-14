@@ -1,5 +1,5 @@
 import { authKey, refreshTokenKey, userIdKey } from "@/constants/storageKey";
-import { authService } from "@/services/auth";
+import { authService } from "@/lib/auth";
 
 import { useMutation } from "@tanstack/react-query";
 import Cookies from "js-cookie";
