@@ -6,7 +6,7 @@ import Image from "next/image";
 import TutorSkeleton from "./TutorSkeleton";
 
 type TUser = {
-  _id: string;
+  id: string;
   name: string;
   email: string;
   profilePicture: string;
@@ -25,7 +25,7 @@ export default function TutorSection() {
   } else if (instructorData?.data) {
     content = instructorData.data.map((instructor: TUser) => (
       <div
-        key={instructor._id}
+        key={instructor.id}
         className="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-all duration-200 p-5 flex flex-col items-center text-center"
       >
         {/* Avatar */}

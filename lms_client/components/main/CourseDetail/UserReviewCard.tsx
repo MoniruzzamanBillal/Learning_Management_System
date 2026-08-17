@@ -5,12 +5,12 @@ import { FaStar } from "react-icons/fa";
 import { toast } from "sonner";
 
 export type TPopulatedReview = {
-  _id: string;
+  id: string;
   comment: string;
   rating: number;
   createdAt: string;
   userId: {
-    _id: string;
+    id: string;
     name: string;
     profilePicture: string;
   };

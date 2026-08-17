@@ -17,10 +17,10 @@ import { TEnrollCourseDetail } from "./type/EnrolledCourseDetail.type";
 import VideoLoadingSkeleton from "./VideoLoadingSkeleton";
 
 type TCompleteEnrollment = {
-  _id: string;
-  user: string;
-  course: string;
-  Payment: string;
+  id: string;
+  userId: string;
+  courseId: string;
+  paymentId: string;
   completed: boolean;
   isReviewed: boolean;
   isDeleted: boolean;
@@ -157,11 +157,11 @@ export default function EnrollCourseDetail({ id }: { id: string }) {
           <div className="rightSection">
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
               {enrolledCourseData?.data?.course?.modules &&
-                enrolledCourseData?.data?.course?._id && (
+                enrolledCourseData?.data?.course?.id && (
                   <ModuleShowData
                     modules={enrolledCourseData?.data?.course?.modules}
                     setVideoLoading={setVideoLoading}
-                    courseId={enrolledCourseData?.data?.course?._id}
+                    courseId={enrolledCourseData?.data?.course?.id}
                     setCourseProgress={setCourseProgress}
                     setVideoDataObj={setVideoDataObj}
                     videoDataObj={videoDataObj}

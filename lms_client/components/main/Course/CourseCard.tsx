@@ -73,7 +73,7 @@ const CourseCard = ({ course }: TCourseDataProps) => {
           <span className="text-prime-100 font-bold text-lg">
             ${course.price}
           </span>
-          <Link href={`/courses/${course._id}`}>
+          <Link href={`/courses/${course.id}`}>
             <Button
               size="sm"
               className="bg-prime-100 hover:bg-prime-200 text-white text-xs px-4 rounded-lg cursor-pointer"

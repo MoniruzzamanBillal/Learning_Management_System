@@ -1,5 +1,5 @@
 export interface IUserInformation {
-  _id: string;
+  id: string;
   fullName?: string;
   firstName?: string;
   lastName?: string;

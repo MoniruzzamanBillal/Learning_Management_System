@@ -218,6 +218,7 @@ const getSingleCoureData = (courseId) => __awaiter(void 0, void 0, void 0, funct
             courseCover: true,
             aiReviewSummary: true,
             aiReviewSummaryReviewCount: true,
+            updatedAt: true,
             instructors: {
                 select: { instructor: { select: { id: true, name: true } } },
             },

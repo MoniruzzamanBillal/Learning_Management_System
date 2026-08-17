@@ -267,6 +267,7 @@ const getSingleCoureData = async (courseId: string) => {
       courseCover: true,
       aiReviewSummary: true,
       aiReviewSummaryReviewCount: true,
+      updatedAt: true,
       instructors: {
         select: { instructor: { select: { id: true, name: true } } },
       },

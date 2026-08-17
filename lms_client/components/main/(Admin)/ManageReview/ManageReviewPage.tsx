@@ -94,7 +94,7 @@ export default function ManageReviewPage() {
           <button
             onClick={() => {
               setIsDeleteModalOpen(true);
-              setDeleteItemId(row.original._id);
+              setDeleteItemId(row.original.id);
             }}
             className="text-red-600 hover:text-red-800"
             title="Delete review"

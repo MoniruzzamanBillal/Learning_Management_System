@@ -72,7 +72,7 @@ const UpdateModule = () => {
     if (instructorAssignedCourses?.data) {
       const courseOptionsData = instructorAssignedCourses?.data?.map(
         (course: TCourseData) => ({
-          value: course?._id,
+          value: course?.id,
           label: course?.name,
         }),
       );
@@ -86,7 +86,7 @@ const UpdateModule = () => {
       const module = moduleData.data;
 
       reset({
-        course: module?.course?._id,
+        course: module?.course?.id,
         title: module?.title,
       });
     }

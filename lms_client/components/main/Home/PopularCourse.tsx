@@ -20,7 +20,7 @@ export default function PopularCourse() {
     ));
   } else if (allCourseData?.data?.data) {
     content = allCourseData.data.data.map((course: TCourse) => (
-      <CourseCard key={course._id} course={course} />
+      <CourseCard key={course.id} course={course} />
     ));
   }
 

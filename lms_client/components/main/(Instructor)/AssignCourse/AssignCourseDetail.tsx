@@ -67,7 +67,7 @@ const AssignCourseDetail = () => {
             disabled={courseDetail?.data?.published}
             onClick={() =>
               router.push(
-                `/dashboard/instructor/add-module?courseId=${courseDetail?.data?._id}`
+                `/dashboard/instructor/add-module?courseId=${courseDetail?.data?.id}`
               )
             }
             className={`${

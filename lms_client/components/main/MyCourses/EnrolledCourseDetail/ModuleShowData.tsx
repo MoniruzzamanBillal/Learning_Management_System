@@ -16,22 +16,22 @@ import ModuleItemSkeleton from "./ModuleItemSkeleton";
 import { TModule } from "./type/EnrolledCourseDetail.type";
 
 type TVideoDetail = {
-  _id: string;
+  id: string;
   title: string;
   videoUrl: string;
   videoOrder: number;
-  module: string;
-  instructor: string;
+  moduleId: string;
+  instructorId: string;
   createdAt: string;
   updatedAt: string;
   isDeleted: boolean;
   __v: number;
 };
 
-type TVideo = { _id: string; title: string; videoOrder: number };
+type TVideo = { id: string; title: string; videoOrder: number };
 
 type TModuleVideo = {
-  _id: string;
+  id: string;
   video: TVideo;
   videoStatus: keyof typeof videoProgressStatusConsts;
 };
@@ -74,7 +74,7 @@ const ModuleShowData = ({
 
   // ! for getting module video , after clicking a module name
   const handleClickModule = async (module: TModule) => {
-    setSelectedModuleId(module._id);
+    setSelectedModuleId(module.id);
   };
 
   // ! for getting video data
@@ -104,7 +104,7 @@ const ModuleShowData = ({
         setCourseProgress(courseProgressResult?.data);
       }
 
-      const moduleId = result?.data?.module;
+      const moduleId = result?.data?.moduleId;
 
       setSelectedModuleId(moduleId);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -124,8 +124,8 @@ const ModuleShowData = ({
           {modules &&
             modules?.map((module: TModule) => (
               <AccordionItem
-                key={module?._id}
-                value={module?._id}
+                key={module?.id}
+                value={module?.id}
                 className=" bg-gray-50 rounded-lg border border-gray-100 p-2 my-3 "
               >
                 {/* module name  */}
@@ -144,7 +144,7 @@ const ModuleShowData = ({
                     .sort((a, b) => a.video?.videoOrder - b.video?.videoOrder)
                     .map((video: TModuleVideo) => (
                     <AccordionContent
-                      key={video?._id}
+                      key={video?.id}
                       className={` text-sm lg:text-lg py-3 pl-4 font-medium border-y border-y-gray-300 flex items-center gap-x-2 cursor-pointer   ${
                         video?.video?.title === videoDataObj?.title &&
                         "bg-prime-50/25 rounded "
@@ -165,7 +165,7 @@ const ModuleShowData = ({
                         <LockOpen className=" text-prime-100 font-bold size-5 lg:size-6 " />
                       )}
 
-                      <p onClick={() => handleGetVideo(video?.video?._id)}>
+                      <p onClick={() => handleGetVideo(video?.video?.id)}>
                         {video?.video?.title}
                       </p>
                     </AccordionContent>

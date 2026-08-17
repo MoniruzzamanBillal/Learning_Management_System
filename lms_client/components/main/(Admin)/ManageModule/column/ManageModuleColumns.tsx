@@ -92,7 +92,7 @@ export const ManageModuleColumns: ColumnDef<any>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem>
-              <Link href={`/dashboard/admin/module-detail/${rowData?._id}`}>
+              <Link href={`/dashboard/admin/module-detail/${rowData?.id}`}>
                 View Details
               </Link>
             </DropdownMenuItem>

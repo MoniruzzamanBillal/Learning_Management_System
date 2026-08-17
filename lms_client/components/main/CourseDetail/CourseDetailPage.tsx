@@ -166,7 +166,7 @@ export default function CourseDetailPage({ id }: { id: string }) {
               {courseReview?.data &&
                 courseReview?.data?.map((reviewData: TPopulatedReview) => (
                   <UserReviewCard
-                    key={reviewData?._id}
+                    key={reviewData?.id}
                     reviewData={reviewData}
                     reviewDataRefetch={reviewDataRefetch}
                   />

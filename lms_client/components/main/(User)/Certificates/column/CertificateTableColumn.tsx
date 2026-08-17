@@ -8,13 +8,13 @@ import CertificateDownloadButton from "../CertificateDownloadButton";
 
 type TUser = {
   name: string;
-  _id: string;
+  id: string;
 };
 
 type TCourse = {
   category: string;
   name: string;
-  _id: string;
+  id: string;
 };
 
 export type TCertificateData = {
@@ -91,8 +91,8 @@ export const CertificateTableColumn: ColumnDef<TCertificateData>[] = [
           courseName={rowData?.course?.name}
           category={rowData?.course?.category}
           completedOn={rowData?.updatedAt}
-          userId={rowData?.user?._id}
-          courseId={rowData?.course?._id}
+          userId={rowData?.user?.id}
+          courseId={rowData?.course?.id}
         />
       );
     },

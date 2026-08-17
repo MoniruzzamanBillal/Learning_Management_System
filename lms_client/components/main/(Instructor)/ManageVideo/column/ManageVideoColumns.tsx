@@ -14,15 +14,15 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export type TVideo = {
-  _id: string;
+  id: string;
   title: string;
   videoUrl: string;
   videoOrder: number;
   module: {
-    _id: string;
+    id: string;
     title: string;
     course: {
-      _id: string;
+      id: string;
       name: string;
       published: boolean;
     };
@@ -85,14 +85,14 @@ export const ManageVideoColumns: ColumnDef<TVideo>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem asChild>
-              <Link href={`/dashboard/instructor/video-detail/${video._id}`}>
+              <Link href={`/dashboard/instructor/video-detail/${video.id}`}>
                 View Details
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             {!video.module?.course?.published && (
               <DropdownMenuItem asChild>
-                <Link href={`/dashboard/instructor/update-video/${video._id}`}>
+                <Link href={`/dashboard/instructor/update-video/${video.id}`}>
                   Update Video
                 </Link>
               </DropdownMenuItem>

@@ -1,16 +1,16 @@
 export type TInstructor = {
-  _id: string;
+  id: string;
   name: string;
 };
 
 export type TReview = {
   averageRating: number;
   totalReviews: number;
-  _id: string;
+  id: string;
 };
 
 export type TCourse = {
-  _id: string;
+  id: string;
   name: string;
   category: string;
   courseCover: string;

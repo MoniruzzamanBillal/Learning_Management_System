@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 type TCourseData = {
-  _id: string;
+  id: string;
   name: string;
   category: string;
   courseCover: string;
@@ -107,7 +107,7 @@ export const ManageCourseColumns: ColumnDef<TCourseData>[] = [
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem asChild>
               <Link
-                href={`/dashboard/instructor/assign-course-detail/${rowData?._id}`}
+                href={`/dashboard/instructor/assign-course-detail/${rowData?.id}`}
               >
                 View Details
               </Link>
@@ -117,7 +117,7 @@ export const ManageCourseColumns: ColumnDef<TCourseData>[] = [
             {!isPublished && (
               <DropdownMenuItem asChild>
                 <Link
-                  href={`/dashboard/instructor/add-module?courseId=${rowData?._id}`}
+                  href={`/dashboard/instructor/add-module?courseId=${rowData?.id}`}
                 >
                   Add New Module
                 </Link>

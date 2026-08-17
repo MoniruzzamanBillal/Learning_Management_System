@@ -23,10 +23,14 @@ const getAllErrorLogs = async () => {
   const result = await prisma.errorLog.findMany({
     orderBy: { createdAt: "desc" },
     take: 200,
-    include: { user: { select: { name: true, email: true } } },
+    include: { user: { select: { id: true, name: true, email: true } } },
   });
 
-  return result;
+  // Reshapes `user` into the `userId` key, matching the original Mongoose
+  // `.populate("userId", "name email")`'s in-place-replacement behavior —
+  // keeps the frontend contract (`userId: {id, name, email} | null`)
+  // unchanged by this migration.
+  return result.map(({ user, ...rest }) => ({ ...rest, userId: user }));
 };
 
 // ! for getting a single error log's detail (admin only)

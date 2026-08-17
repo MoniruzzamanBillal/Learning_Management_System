@@ -14,15 +14,15 @@ import Image from "next/image";
 import Link from "next/link";
 
 type TCourse = {
-  _id: string;
+  id: string;
   name: string;
   category: string;
   courseCover: string;
 };
 
 type TEnrollment = {
-  _id: string;
-  user: string;
+  id: string;
+  userId: string;
   course: TCourse;
   completed: boolean;
 };
@@ -102,7 +102,7 @@ export const EnrolledCourseColumn: ColumnDef<TEnrollment>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem asChild>
-              <Link href={`/my-courses/${rowData?.course?._id}`}>
+              <Link href={`/my-courses/${rowData?.course?.id}`}>
                 View Details
               </Link>
             </DropdownMenuItem>

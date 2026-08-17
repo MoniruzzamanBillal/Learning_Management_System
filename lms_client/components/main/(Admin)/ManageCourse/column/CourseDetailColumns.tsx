@@ -13,7 +13,7 @@ import { MoreHorizontal } from "lucide-react";
 import Link from "next/link";
 
 export type TInstructor = {
-  _id: string;
+  id: string;
   name: string;
   email: string;
   profilePicture: string;
@@ -45,9 +45,9 @@ export const InstructorColumn: ColumnDef<TInstructor>[] = [
 ];
 
 type TModule = {
-  _id: string;
-  course: string;
-  instructor: string;
+  id: string;
+  courseId: string;
+  instructorId: string;
   title: string;
   videos: string[];
 };
@@ -84,7 +84,7 @@ export const CourseDetailModuleColumn: ColumnDef<TModule>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem>
-              <Link href={`/dashboard/admin/module-detail/${rowData?._id}`}>
+              <Link href={`/dashboard/admin/module-detail/${rowData?.id}`}>
                 View Details
               </Link>
             </DropdownMenuItem>

@@ -126,7 +126,7 @@ const UpdateCourse = () => {
     if (instructorData?.data) {
       const instructorOptionsData = instructorData?.data?.map(
         (instructor: TInstructor) => ({
-          value: instructor?._id,
+          value: instructor?.id,
           label: instructor?.name,
         }),
       );

@@ -59,14 +59,14 @@ export const CourseColumns: ColumnDef<TCourseData>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem>
-              <Link href={`/dashboard/admin/course-detail/${rowData?._id}`}>
+              <Link href={`/dashboard/admin/course-detail/${rowData?.id}`}>
                 View Details
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             {!rowData?.published && (
               <DropdownMenuItem>
-                <Link href={`/dashboard/admin/update-course/${rowData?._id}`}>
+                <Link href={`/dashboard/admin/update-course/${rowData?.id}`}>
                   Update Course
                 </Link>
               </DropdownMenuItem>

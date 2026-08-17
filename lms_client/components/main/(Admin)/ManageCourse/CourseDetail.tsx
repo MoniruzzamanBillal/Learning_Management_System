@@ -83,7 +83,7 @@ const CourseDetail = () => {
               disabled={courseData?.data?.published}
               onClick={() =>
                 router.push(
-                  `/dashboard/admin/update-course/${courseData?.data?._id}`,
+                  `/dashboard/admin/update-course/${courseData?.data?.id}`,
                 )
               }
               className={`    ${

@@ -38,7 +38,7 @@ export default function MyCourses() {
             userEnrolledCourse.data.map(
               (enrolledCourse: TUserEnrolledCourse) => (
                 <MyCourseCard
-                  key={enrolledCourse?._id}
+                  key={enrolledCourse?.id}
                   courseData={enrolledCourse}
                 />
               ),

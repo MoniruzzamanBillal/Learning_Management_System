@@ -88,7 +88,7 @@ export default function ErrorLogsPage() {
         enableSorting: false,
         cell: ({ row }) => (
           <button
-            onClick={() => setSelectedErrorId(row.original._id)}
+            onClick={() => setSelectedErrorId(row.original.id)}
             className="text-neutral-500 hover:text-neutral-900"
             title="View details"
           >
@@ -101,7 +101,7 @@ export default function ErrorLogsPage() {
   );
 
   const selectedError = errorLogData?.data?.find(
-    (log) => log._id === selectedErrorId,
+    (log) => log.id === selectedErrorId,
   );
 
   let content = null;

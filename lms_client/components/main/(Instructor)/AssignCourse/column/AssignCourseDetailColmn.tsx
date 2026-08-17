@@ -14,14 +14,14 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export type TModule = {
-  _id: string;
+  id: string;
   title: string;
   course: {
-    _id: string;
+    id: string;
     name: string;
     published: boolean;
   };
-  instructor: string;
+  instructorId: string;
   videos: string[];
   createdAt: string;
   updatedAt: string;
@@ -97,7 +97,7 @@ export const AssignCourseDetailColmn: ColumnDef<TModule>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem asChild>
-              <Link href={`/dashboard/instructor/module-detail/${rowData?._id}`}>
+              <Link href={`/dashboard/instructor/module-detail/${rowData?.id}`}>
                 View Details
               </Link>
             </DropdownMenuItem>
@@ -106,7 +106,7 @@ export const AssignCourseDetailColmn: ColumnDef<TModule>[] = [
             {!rowData?.course?.published && (
               <DropdownMenuItem asChild>
                 <Link
-                  href={`/dashboard/instructor/update-module/${rowData?._id}`}
+                  href={`/dashboard/instructor/update-module/${rowData?.id}`}
                 >
                   Update Module
                 </Link>
@@ -116,7 +116,7 @@ export const AssignCourseDetailColmn: ColumnDef<TModule>[] = [
             <DropdownMenuSeparator />
             {!rowData?.course?.published && (
               <DropdownMenuItem asChild>
-                <Link href={`/dashboard/instructor/add-video/${rowData?._id}`}>
+                <Link href={`/dashboard/instructor/add-video/${rowData?.id}`}>
                   Add New Video
                 </Link>
               </DropdownMenuItem>

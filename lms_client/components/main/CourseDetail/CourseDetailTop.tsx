@@ -8,12 +8,12 @@ import Image from "next/image";
 import { toast } from "sonner";
 
 export type InstructorType = {
-  _id: string;
+  id: string;
   name: string;
 };
 
 export type CourseDetailType = {
-  _id: string;
+  id: string;
   name: string;
   description: string;
   price: number;
@@ -39,10 +39,10 @@ const CourseDetailTop = ({
   userInfo,
 }: TCourseDetailProps) => {
   const { mutateAsync: enrollCourseMutaion, isPending } = usePost([
-    [`course-${courseDetails?._id}`],
-    [`course-detail-${courseDetails?._id}`],
-    [`course-review-${courseDetails?._id}`],
-    [`review-eligibility-${courseDetails?._id}`],
+    [`course-${courseDetails?.id}`],
+    [`course-detail-${courseDetails?.id}`],
+    [`course-review-${courseDetails?.id}`],
+    [`review-eligibility-${courseDetails?.id}`],
   ]);
 
   const handleEnrollCourse = async (courseId: string) => {
@@ -151,7 +151,7 @@ const CourseDetailTop = ({
                   userInfo?.userRole === userRoleConts.admin ||
                   userInfo?.userRole === userRoleConts?.instructor
                 }
-                onClick={() => handleEnrollCourse(courseDetails?._id)}
+                onClick={() => handleEnrollCourse(courseDetails?.id)}
                 className="bg-prime-100 hover:bg-prime-200 text-white w-full cursor-pointer"
               >
                 {isPending ? "Processing..." : "Enroll Now"}
