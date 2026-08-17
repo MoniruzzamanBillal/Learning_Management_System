@@ -1,10 +1,3 @@
-import { ObjectId } from "mongoose";
+import { CourseEnrollment } from "@prisma/client";
 
-export type TEnrollment = {
-  user: ObjectId;
-  course: ObjectId;
-  Payment: ObjectId;
-  completed: boolean;
-  isDeleted?: boolean;
-  isReviewed?: boolean;
-};
+export type TEnrollment = CourseEnrollment;

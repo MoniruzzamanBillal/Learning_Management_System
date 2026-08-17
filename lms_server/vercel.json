@@ -11,5 +11,11 @@
       "src": "/(.*)",
       "dest": "dist/server.js"
     }
+  ],
+  "crons": [
+    {
+      "path": "/api/error-log/cleanup",
+      "schedule": "0 3 * * *"
+    }
   ]
 }

@@ -33,8 +33,7 @@ const loginUser = catchAsync(async (req, res) => {
 
   const { token, userData } = result;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const modifiedUser = userData.toObject() as any;
+  const modifiedUser: Partial<typeof userData> = { ...userData };
   delete modifiedUser.password;
 
   sendResponse(res, {

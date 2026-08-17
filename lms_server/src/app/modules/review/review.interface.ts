@@ -1,9 +1,3 @@
-import { Types } from "mongoose";
+import { Review } from "@prisma/client";
 
-export type TReview = {
-  userId: Types.ObjectId;
-  courseId: Types.ObjectId;
-  rating: number;
-  comment: string;
-  isDeleted?: boolean;
-};
+export type TReview = Review;

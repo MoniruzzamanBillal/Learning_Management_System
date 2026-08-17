@@ -1,10 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import httpStatus from "http-status";
-import mongoose from "mongoose";
 import AppError from "../../Error/AppError";
-import { courseEnrollmentModel } from "../CourseEnrollment/CourseEnrollment.model";
+import prisma from "../../util/prisma";
 import { PAYMENTSTATUS } from "./payment.constant";
-import { paymentModel } from "./payment.model";
 
 // ! after successfully payment
 const successfullyPayment = async (payload: any) => {
@@ -14,11 +12,18 @@ const successfullyPayment = async (payload: any) => {
     throw new AppError(httpStatus.BAD_REQUEST, "Payment Failed !!!");
   }
 
-  const updatedPaymentResult = await paymentModel.findOneAndUpdate(
-    { transactionId: tran_id },
-    { paymentStatus: PAYMENTSTATUS.Completed },
-    { new: true, runValidators: true }
-  );
+  const existingPayment = await prisma.payment.findFirst({
+    where: { transactionId: tran_id },
+  });
+
+  if (!existingPayment) {
+    return null;
+  }
+
+  const updatedPaymentResult = await prisma.payment.update({
+    where: { id: existingPayment.id },
+    data: { paymentStatus: PAYMENTSTATUS.Completed },
+  });
 
   return updatedPaymentResult;
 
@@ -31,35 +36,37 @@ const failPayment = async (payload: any) => {
 
   if (status === "FAILED") {
     //
+    const existingPayment = await prisma.payment.findFirst({
+      where: { transactionId: tran_id, paymentStatus: PAYMENTSTATUS.Pending },
+    });
 
-    const session = await mongoose.startSession();
-
-    try {
-      session.startTransaction();
-
-      const updatedPaymentData = await paymentModel.findOneAndUpdate(
-        { transactionId: tran_id, paymentStatus: PAYMENTSTATUS.Pending },
-        { isDeleted: true },
-        { new: true, runValidators: true, session }
-      );
-
-      const courseEnrollmentData = await courseEnrollmentModel.findOneAndUpdate(
-        { Payment: updatedPaymentData?._id },
-        { isDeleted: true },
-        { new: true, runValidators: true, session }
-      );
-
-      await session.commitTransaction();
-      await session.endSession();
-
-      return courseEnrollmentData;
-    } catch (error: any) {
-      await session.abortTransaction();
-      await session.endSession();
-
-      console.log(error);
-      throw new Error(error);
+    if (!existingPayment) {
+      return null;
     }
+
+    const courseEnrollmentData = await prisma.$transaction(async (tx) => {
+      await tx.payment.update({
+        where: { id: existingPayment.id },
+        data: { isDeleted: true },
+      });
+
+      // paymentId is unique on CourseEnrollment (one payment -> at most one
+      // enrollment), so this is a safe unique lookup.
+      const enrollment = await tx.courseEnrollment.findUnique({
+        where: { paymentId: existingPayment.id },
+      });
+
+      if (!enrollment) {
+        return null;
+      }
+
+      return tx.courseEnrollment.update({
+        where: { id: enrollment.id },
+        data: { isDeleted: true },
+      });
+    });
+
+    return courseEnrollmentData;
 
     //
   }

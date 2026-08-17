@@ -1,10 +1,3 @@
-import { ObjectId } from "mongoose";
+import { Video } from "@prisma/client";
 
-export type TVideo = {
-  module: ObjectId;
-  title: string;
-  videoUrl: string;
-  instructor: ObjectId;
-  videoOrder: number;
-  isDeleted?: boolean;
-};
+export type TVideo = Video;

@@ -1,62 +1,72 @@
+import { Prisma } from "@prisma/client";
 import httpStatus from "http-status";
-import mongoose from "mongoose";
 import AppError from "../../Error/AppError";
-import { courseEnrollmentModel } from "../CourseEnrollment/CourseEnrollment.model";
-import { userModel } from "../user/user.model";
-import { TReview } from "./review.interface";
-import { reviewModel } from "./review.model";
+import prisma from "../../util/prisma";
+
+type TAddReviewPayload = {
+  userId: string;
+  courseId: string;
+  rating: number;
+  comment: string;
+};
 
 // ! for adding a review
-const addReview = async (payload: TReview) => {
-  const courseEnrolledCompletedData = await courseEnrollmentModel.findOne({
-    user: payload?.userId,
-    course: payload?.courseId,
-    isDeleted: false,
-    completed: true,
+const addReview = async (payload: TAddReviewPayload) => {
+  const courseEnrolledCompletedData = await prisma.courseEnrollment.findFirst({
+    where: {
+      userId: payload?.userId,
+      courseId: payload?.courseId,
+      isDeleted: false,
+      completed: true,
+    },
   });
 
   if (!courseEnrolledCompletedData) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
-      "You did not complete this course !!!",
+      "You did not complete this course !!!"
     );
   }
 
   if (courseEnrolledCompletedData?.isReviewed) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
-      "You already reivewed this course !!!",
+      "You already reivewed this course !!!"
     );
   }
 
-  const session = await mongoose.startSession();
-
   try {
-    session.startTransaction();
+    await prisma.$transaction(async (tx) => {
+      // * for creating review data
+      await tx.review.create({
+        data: {
+          userId: payload.userId,
+          courseId: payload.courseId,
+          rating: payload.rating,
+          comment: payload.comment,
+        },
+      });
 
-    // * for creating review data
-    await reviewModel.create([payload], { session });
-
-    // * for updating course enrollment isReview Column
-    await courseEnrollmentModel.findOneAndUpdate(
-      {
-        user: payload?.userId,
-        course: payload?.courseId,
-        isDeleted: false,
-        completed: true,
-      },
-      { isReviewed: true },
-      { new: true, session },
-    );
-
-    await session.commitTransaction();
-    await session.endSession();
+      // * for updating course enrollment isReview Column
+      await tx.courseEnrollment.update({
+        where: { id: courseEnrolledCompletedData.id },
+        data: { isReviewed: true },
+      });
+    });
   } catch (error) {
-    await session.abortTransaction();
-    await session.endSession();
-
-    console.error("Error during review  the course : ", error);
-    throw new Error("Failed to review the course!!");
+    // Friendly mapped error for the new @@unique([userId, courseId])
+    // constraint (spec decision #3) — not present in the old Mongo schema,
+    // so this couldn't happen before.
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === "P2002"
+    ) {
+      throw new AppError(
+        httpStatus.BAD_REQUEST,
+        "You already reivewed this course !!!"
+      );
+    }
+    throw error;
   }
 
   //
@@ -70,11 +80,18 @@ const updateReview = async (payload: {
 }) => {
   const { reviewId, comment, rating } = payload;
 
-  const updateResult = await reviewModel.findByIdAndUpdate(
-    reviewId,
-    { comment, rating },
-    { new: true },
-  );
+  const existingReview = await prisma.review.findFirst({
+    where: { id: reviewId, isDeleted: false },
+  });
+
+  if (!existingReview) {
+    throw new AppError(httpStatus.NOT_FOUND, "Review not found !!!");
+  }
+
+  const updateResult = await prisma.review.update({
+    where: { id: reviewId },
+    data: { comment, rating },
+  });
 
   return updateResult;
 };
@@ -82,19 +99,18 @@ const updateReview = async (payload: {
 // ! check review eligibility
 const checkReviewEligibility = async (
   courseId: string,
-  userId: string | undefined,
+  userId: string | undefined
 ) => {
-  const userData = await userModel.findById(userId);
+  const userData = userId
+    ? await prisma.user.findFirst({ where: { id: userId, isDeleted: false } })
+    : null;
 
   if (!userData) {
     return false;
   }
 
-  const result = await courseEnrollmentModel.findOne({
-    user: userId,
-    course: courseId,
-    completed: true,
-    isReviewed: false,
+  const result = await prisma.courseEnrollment.findFirst({
+    where: { userId, courseId, completed: true, isReviewed: false },
   });
 
   return result;
@@ -102,86 +118,88 @@ const checkReviewEligibility = async (
 
 // ! for getting course review
 const getCourseReview = async (courseId: string) => {
-  const result = await reviewModel
-    .find({ courseId: courseId })
-    .populate("userId", "_id name profilePicture ")
-    .select(" _id  rating  comment   createdAt ");
+  const result = await prisma.review.findMany({
+    where: { courseId, isDeleted: false },
+    select: {
+      id: true,
+      rating: true,
+      comment: true,
+      createdAt: true,
+      user: { select: { id: true, name: true, profilePicture: true } },
+    },
+  });
 
-  return result;
+  return result.map(({ user, ...rest }) => ({ ...rest, userId: user }));
 };
 
 // ! for getting average review
 const getAverageReviewOfCourse = async (courseId: string) => {
-  const result = await reviewModel.aggregate([
-    {
-      $match: {
-        courseId: new mongoose.Types.ObjectId(courseId),
-        isDeleted: false,
-      },
-    },
-    {
-      $group: {
-        _id: "$courseId",
-        averageRating: {
-          $avg: "$rating",
-        },
-        totalReviews: { $sum: 1 },
-      },
-    },
-  ]);
+  const result = await prisma.review.aggregate({
+    where: { courseId, isDeleted: false },
+    _avg: { rating: true },
+    _count: { _all: true },
+  });
 
-  return result[0];
+  if (!result._count._all) {
+    return undefined;
+  }
+
+  return {
+    _id: courseId,
+    averageRating: result._avg.rating,
+    totalReviews: result._count._all,
+  };
 };
 
 // ! for admin: listing all reviews across all courses
 const getAllReviewsForAdmin = async () => {
-  const result = await reviewModel
-    .find()
-    .populate("userId", "_id name")
-    .populate("courseId", "_id name")
-    .sort({ createdAt: -1 });
+  const result = await prisma.review.findMany({
+    where: { isDeleted: false },
+    orderBy: { createdAt: "desc" },
+    include: {
+      user: { select: { id: true, name: true } },
+      course: { select: { id: true, name: true } },
+    },
+  });
 
-  return result;
+  return result.map(({ user, course, ...rest }) => ({
+    ...rest,
+    userId: user,
+    courseId: course,
+  }));
 };
 
 // ! for admin: soft-deleting a review
 const deleteReview = async (reviewId: string) => {
-  const review = await reviewModel.findById(reviewId);
+  const review = await prisma.review.findFirst({
+    where: { id: reviewId, isDeleted: false },
+  });
 
   if (!review) {
     throw new AppError(httpStatus.NOT_FOUND, "Review not found !!!");
   }
 
-  const session = await mongoose.startSession();
+  await prisma.$transaction(async (tx) => {
+    await tx.review.update({
+      where: { id: reviewId },
+      data: { isDeleted: true },
+    });
 
-  try {
-    session.startTransaction();
-
-    await reviewModel.findByIdAndUpdate(
-      reviewId,
-      { isDeleted: true },
-      { session },
-    );
-
-    await courseEnrollmentModel.findOneAndUpdate(
-      {
-        user: review.userId,
-        course: review.courseId,
+    const enrollment = await tx.courseEnrollment.findFirst({
+      where: {
+        userId: review.userId,
+        courseId: review.courseId,
         isDeleted: false,
       },
-      { isReviewed: false },
-      { session },
-    );
+    });
 
-    await session.commitTransaction();
-    await session.endSession();
-  } catch (error) {
-    await session.abortTransaction();
-    await session.endSession();
-
-    console.error("Error during deleting the review : ", error);
-    throw new Error("Failed to delete the review!!");
-  }
+    if (enrollment) {
+      await tx.courseEnrollment.update({
+        where: { id: enrollment.id },
+        data: { isReviewed: false },
+      });
+    }
+  });
 
   return review;
 };

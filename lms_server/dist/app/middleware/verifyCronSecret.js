@@ -12,21 +12,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-/* eslint-disable no-console */
-const app_1 = __importDefault(require("./app"));
-const config_1 = __importDefault(require("./app/config"));
-const prisma_1 = __importDefault(require("./app/util/prisma"));
-function Main() {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            yield prisma_1.default.$connect();
-            app_1.default.listen(config_1.default.port, () => {
-                console.log(`listening from port ${config_1.default.port}`);
-            });
-        }
-        catch (error) {
-            console.log(error);
-        }
-    });
-}
-Main();
+const http_status_1 = __importDefault(require("http-status"));
+const AppError_1 = __importDefault(require("../Error/AppError"));
+const config_1 = __importDefault(require("../config"));
+const catchAsync_1 = __importDefault(require("../util/catchAsync"));
+// ! verifies Vercel's own cron-invocation auth — the `Authorization: Bearer
+// <CRON_SECRET>` header Vercel automatically sends on scheduled cron
+// requests (per spec decision #7), not a user JWT / authCheck flow.
+const verifyCronSecret = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const header = req.headers.authorization;
+    if (!config_1.default.cron_secret || header !== `Bearer ${config_1.default.cron_secret}`) {
+        throw new AppError_1.default(http_status_1.default.UNAUTHORIZED, "Unauthorized cron request");
+    }
+    next();
+}));
+exports.default = verifyCronSecret;

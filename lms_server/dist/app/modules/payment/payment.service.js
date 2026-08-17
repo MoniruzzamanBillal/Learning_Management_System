@@ -15,18 +15,25 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.paymentServices = void 0;
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const http_status_1 = __importDefault(require("http-status"));
-const mongoose_1 = __importDefault(require("mongoose"));
 const AppError_1 = __importDefault(require("../../Error/AppError"));
-const CourseEnrollment_model_1 = require("../CourseEnrollment/CourseEnrollment.model");
+const prisma_1 = __importDefault(require("../../util/prisma"));
 const payment_constant_1 = require("./payment.constant");
-const payment_model_1 = require("./payment.model");
 // ! after successfully payment
 const successfullyPayment = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const { tran_id, status } = payload;
     if (status !== "VALID") {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "Payment Failed !!!");
     }
-    const updatedPaymentResult = yield payment_model_1.paymentModel.findOneAndUpdate({ transactionId: tran_id }, { paymentStatus: payment_constant_1.PAYMENTSTATUS.Completed }, { new: true, runValidators: true });
+    const existingPayment = yield prisma_1.default.payment.findFirst({
+        where: { transactionId: tran_id },
+    });
+    if (!existingPayment) {
+        return null;
+    }
+    const updatedPaymentResult = yield prisma_1.default.payment.update({
+        where: { id: existingPayment.id },
+        data: { paymentStatus: payment_constant_1.PAYMENTSTATUS.Completed },
+    });
     return updatedPaymentResult;
     //
 });
@@ -35,21 +42,31 @@ const failPayment = (payload) => __awaiter(void 0, void 0, void 0, function* () 
     const { tran_id, status } = payload;
     if (status === "FAILED") {
         //
-        const session = yield mongoose_1.default.startSession();
-        try {
-            session.startTransaction();
-            const updatedPaymentData = yield payment_model_1.paymentModel.findOneAndUpdate({ transactionId: tran_id, paymentStatus: payment_constant_1.PAYMENTSTATUS.Pending }, { isDeleted: true }, { new: true, runValidators: true, session });
-            const courseEnrollmentData = yield CourseEnrollment_model_1.courseEnrollmentModel.findOneAndUpdate({ Payment: updatedPaymentData === null || updatedPaymentData === void 0 ? void 0 : updatedPaymentData._id }, { isDeleted: true }, { new: true, runValidators: true, session });
-            yield session.commitTransaction();
-            yield session.endSession();
-            return courseEnrollmentData;
+        const existingPayment = yield prisma_1.default.payment.findFirst({
+            where: { transactionId: tran_id, paymentStatus: payment_constant_1.PAYMENTSTATUS.Pending },
+        });
+        if (!existingPayment) {
+            return null;
         }
-        catch (error) {
-            yield session.abortTransaction();
-            yield session.endSession();
-            console.log(error);
-            throw new Error(error);
-        }
+        const courseEnrollmentData = yield prisma_1.default.$transaction((tx) => __awaiter(void 0, void 0, void 0, function* () {
+            yield tx.payment.update({
+                where: { id: existingPayment.id },
+                data: { isDeleted: true },
+            });
+            // paymentId is unique on CourseEnrollment (one payment -> at most one
+            // enrollment), so this is a safe unique lookup.
+            const enrollment = yield tx.courseEnrollment.findUnique({
+                where: { paymentId: existingPayment.id },
+            });
+            if (!enrollment) {
+                return null;
+            }
+            return tx.courseEnrollment.update({
+                where: { id: enrollment.id },
+                data: { isDeleted: true },
+            });
+        }));
+        return courseEnrollmentData;
         //
     }
     //

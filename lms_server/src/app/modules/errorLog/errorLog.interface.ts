@@ -1,7 +1,9 @@
-import { ObjectId } from "mongoose";
+import { ErrorLog } from "@prisma/client";
 import { TerrorSource } from "../../interface/error";
 
-export type TErrorLog = {
+export type TErrorLog = ErrorLog;
+
+export type TCreateErrorLog = {
   message: string;
   statusCode: number;
   errorSources: TerrorSource;
@@ -9,6 +11,6 @@ export type TErrorLog = {
   method: string;
   path: string;
   ip?: string;
-  userId?: ObjectId | string;
+  userId?: string;
   userRole?: string;
 };

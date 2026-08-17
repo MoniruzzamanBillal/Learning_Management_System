@@ -1,12 +1,3 @@
-import { ObjectId } from "mongoose";
-import { PAYMENTSTATUS } from "./payment.constant";
+import { Payment } from "@prisma/client";
 
-export type TPayment = {
-  user: ObjectId;
-  course: ObjectId;
-  CourseEnrollment: ObjectId;
-  paymentStatus: keyof typeof PAYMENTSTATUS;
-  amount: number;
-  transactionId: string;
-  isDeleted?: boolean;
-};
+export type TPayment = Payment;

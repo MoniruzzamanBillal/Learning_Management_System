@@ -27,7 +27,20 @@ const getErrorLogById = catchAsync(async (req, res) => {
   });
 });
 
+// ! for deleting error logs older than 30 days (Vercel Cron only)
+const cleanupOldErrorLogs = catchAsync(async (req, res) => {
+  const result = await errorLogServices.cleanupOldErrorLogs();
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Old error logs cleaned up successfully !!!",
+    data: result,
+  });
+});
+
 export const errorLogController = {
   getAllErrorLogs,
   getErrorLogById,
+  cleanupOldErrorLogs,
 };

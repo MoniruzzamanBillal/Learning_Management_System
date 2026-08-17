@@ -18,21 +18,31 @@ const http_status_1 = __importDefault(require("http-status"));
 const config_1 = __importDefault(require("../../config"));
 const AppError_1 = __importDefault(require("../../Error/AppError"));
 const SendImageCloudinary_1 = require("../../util/SendImageCloudinary");
+const prisma_1 = __importDefault(require("../../util/prisma"));
 const user_constants_1 = require("./user.constants");
-const user_model_1 = require("./user.model");
 // ! for getting all instructor
 const getAllInstructor = () => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield user_model_1.userModel
-        .find({
-        userRole: user_constants_1.UserRole === null || user_constants_1.UserRole === void 0 ? void 0 : user_constants_1.UserRole.instructor,
-        isDeleted: false,
-    })
-        .select(" _id name email profilePicture  ");
+    const result = yield prisma_1.default.user.findMany({
+        where: {
+            userRole: user_constants_1.UserRole.instructor,
+            isDeleted: false,
+        },
+        select: {
+            id: true,
+            name: true,
+            email: true,
+            profilePicture: true,
+        },
+    });
     return result;
 });
 // ! for changing password
 const changePassword = (payload, userId) => __awaiter(void 0, void 0, void 0, function* () {
-    const userData = yield user_model_1.userModel.findById(userId);
+    // findFirst, not findUnique: combining the unique `id` lookup with
+    // `isDeleted: false` isn't allowed on findUnique.
+    const userData = yield prisma_1.default.user.findFirst({
+        where: { id: userId, isDeleted: false },
+    });
     if (!userData) {
         throw new AppError_1.default(http_status_1.default.NOT_FOUND, "User dont exist!!!");
     }
@@ -41,26 +51,47 @@ const changePassword = (payload, userId) => __awaiter(void 0, void 0, void 0, fu
         throw new AppError_1.default(http_status_1.default.FORBIDDEN, "Password don't match !!");
     }
     const hashedPassword = yield bcrypt_1.default.hash(payload === null || payload === void 0 ? void 0 : payload.newPassword, Number(config_1.default.bcrypt_salt_rounds));
-    const result = yield user_model_1.userModel.findByIdAndUpdate(userId, { password: hashedPassword, needsPasswordChange: false }, { new: true });
+    const result = yield prisma_1.default.user.update({
+        where: { id: userId },
+        data: { password: hashedPassword, needsPasswordChange: false },
+    });
     return result;
     //
 });
 // ! for getting logged in user data
 const getLoggedInUser = (userId) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield user_model_1.userModel
-        .findById(userId)
-        .select(" _id name profilePicture userRole createdAt email ");
+    const result = yield prisma_1.default.user.findFirst({
+        where: { id: userId, isDeleted: false },
+        select: {
+            id: true,
+            name: true,
+            profilePicture: true,
+            userRole: true,
+            createdAt: true,
+            email: true,
+        },
+    });
     return result;
 });
 // ! for getting user based on user id
 const getSpecificUser = (userId) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield user_model_1.userModel
-        .findById(userId)
-        .select(" _id name profilePicture userRole createdAt email ");
+    const result = yield prisma_1.default.user.findFirst({
+        where: { id: userId, isDeleted: false },
+        select: {
+            id: true,
+            name: true,
+            profilePicture: true,
+            userRole: true,
+            createdAt: true,
+            email: true,
+        },
+    });
     return result;
 });
 // ! for updating a user
-const updateUser = (payload, file, userId) => __awaiter(void 0, void 0, void 0, function* () {
+const updateUser = (payload, 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+file, userId) => __awaiter(void 0, void 0, void 0, function* () {
     if (file) {
         const name = (payload === null || payload === void 0 ? void 0 : payload.name).trim();
         const path = (file === null || file === void 0 ? void 0 : file.path).trim();
@@ -68,8 +99,9 @@ const updateUser = (payload, file, userId) => __awaiter(void 0, void 0, void 0, 
         const profilePicture = cloudinaryResponse === null || cloudinaryResponse === void 0 ? void 0 : cloudinaryResponse.secure_url;
         payload.profilePicture = profilePicture;
     }
-    const result = yield user_model_1.userModel.findByIdAndUpdate(userId, payload, {
-        new: true,
+    const result = yield prisma_1.default.user.update({
+        where: { id: userId },
+        data: payload,
     });
     return result;
 });

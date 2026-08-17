@@ -16,11 +16,9 @@ exports.aiServices = void 0;
 const http_status_1 = __importDefault(require("http-status"));
 const AppError_1 = __importDefault(require("../../Error/AppError"));
 const openRouterClient_1 = require("../../util/openRouterClient");
-const course_model_1 = require("../course/course.model");
+const prisma_1 = __importDefault(require("../../util/prisma"));
 const CourseEnrollment_service_1 = require("../CourseEnrollment/CourseEnrollment.service");
-const module_model_1 = require("../courseModule/module.model");
 const review_service_1 = require("../review/review.service");
-const VideoProgress_model_1 = require("../VideoProgress/VideoProgress.model");
 const NOT_ENOUGH_REVIEWS_MESSAGE = "Not enough reviews yet to summarize.";
 // ! for getting (or generating + caching) a course's AI review summary
 const getReviewSummary = (courseId) => __awaiter(void 0, void 0, void 0, function* () {
@@ -36,9 +34,10 @@ const getReviewSummary = (courseId) => __awaiter(void 0, void 0, void 0, functio
             generated: false,
         };
     }
-    const course = yield course_model_1.courseModel
-        .findById(courseId)
-        .select("aiReviewSummary aiReviewSummaryReviewCount");
+    const course = yield prisma_1.default.course.findUnique({
+        where: { id: courseId },
+        select: { aiReviewSummary: true, aiReviewSummaryReviewCount: true },
+    });
     if ((course === null || course === void 0 ? void 0 : course.aiReviewSummary) &&
         (course === null || course === void 0 ? void 0 : course.aiReviewSummaryReviewCount) === totalReviews) {
         return {
@@ -63,9 +62,12 @@ const getReviewSummary = (courseId) => __awaiter(void 0, void 0, void 0, functio
         },
     ];
     const summary = yield (0, openRouterClient_1.askOpenRouter)(messages);
-    yield course_model_1.courseModel.findByIdAndUpdate(courseId, {
-        aiReviewSummary: summary,
-        aiReviewSummaryReviewCount: totalReviews,
+    yield prisma_1.default.course.update({
+        where: { id: courseId },
+        data: {
+            aiReviewSummary: summary,
+            aiReviewSummaryReviewCount: totalReviews,
+        },
     });
     return {
         summary,
@@ -77,20 +79,26 @@ const getReviewSummary = (courseId) => __awaiter(void 0, void 0, void 0, functio
 // ! for getting AI course recommendations based on a user's learning goal
 const getCourseAdvice = (query) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
-    const courses = yield course_model_1.courseModel
-        .find({ published: true })
-        .select("_id name description category price")
-        .limit(50)
-        .lean();
+    const courses = yield prisma_1.default.course.findMany({
+        where: { published: true },
+        select: {
+            id: true,
+            name: true,
+            description: true,
+            category: true,
+            price: true,
+        },
+        take: 50,
+    });
     if (!courses.length) {
         return { recommendations: [] };
     }
     const courseList = courses.map((c) => ({
-        _id: c._id.toString(),
+        id: c.id,
         name: c.name,
         description: c.description,
         category: c.category,
-        price: c.price,
+        price: Number(c.price),
     }));
     const systemPrompt = `You are a helpful course advisor. A student will describe what they want to learn, and you must recommend at most 3 courses from the provided list.
 
@@ -118,14 +126,14 @@ ${JSON.stringify(courseList, null, 2)}`;
     catch (_b) {
         return { recommendations: [] };
     }
-    const validCourseIds = new Set(courseList.map((c) => c._id));
+    const validCourseIds = new Set(courseList.map((c) => c.id));
     const filtered = ((_a = parsed.recommendations) !== null && _a !== void 0 ? _a : [])
         .filter((r) => validCourseIds.has(r.courseId))
         .slice(0, 3);
     const recommendations = filtered.map((r) => {
-        const course = courseList.find((c) => c._id === r.courseId);
+        const course = courseList.find((c) => c.id === r.courseId);
         return {
-            courseId: course._id,
+            courseId: course.id,
             reason: r.reason,
             name: course.name,
             category: course.category,
@@ -136,43 +144,42 @@ ${JSON.stringify(courseList, null, 2)}`;
 });
 // ! for getting a chat reply from the in-course study assistant, grounded in course structure + this user's progress
 const getStudyAssistantReply = (courseId, userId, messages) => __awaiter(void 0, void 0, void 0, function* () {
-    const course = yield course_model_1.courseModel
-        .findById(courseId)
-        .select("name description");
+    const course = yield prisma_1.default.course.findUnique({
+        where: { id: courseId },
+        select: { name: true, description: true },
+    });
     if (!course) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "This course don't exist !!!");
     }
-    const modules = yield module_model_1.moduleModel
-        .find({ course: courseId, isDeleted: false })
-        .populate({
-        path: "videos",
-        model: "Video",
-        select: "_id title videoOrder",
-    })
-        .select("_id title videos");
-    const outline = modules.map((moduleData) => {
-        const videos = moduleData.videos
-            .slice()
-            .sort((a, b) => a.videoOrder - b.videoOrder);
-        return {
-            title: moduleData.title,
-            videoTitles: videos.map((video) => video.title),
-        };
+    const modules = yield prisma_1.default.module.findMany({
+        where: { courseId, isDeleted: false },
+        select: {
+            title: true,
+            videos: {
+                where: { isDeleted: false },
+                select: { title: true, videoOrder: true },
+                orderBy: { videoOrder: "asc" },
+            },
+        },
     });
+    const outline = modules.map((moduleData) => ({
+        title: moduleData.title,
+        videoTitles: moduleData.videos.map((video) => video.title),
+    }));
     const overallProgress = yield CourseEnrollment_service_1.courseEnrollmentService.courseProgressPercentage(courseId, userId);
-    const progressRecords = yield VideoProgress_model_1.videoProgressModel
-        .find({ course: courseId, user: userId })
-        .populate("video", "_id title videoOrder")
-        .select("videoStatus");
+    const progressRecords = yield prisma_1.default.videoProgress.findMany({
+        where: { courseId, userId },
+        select: {
+            videoStatus: true,
+            video: { select: { title: true, videoOrder: true } },
+        },
+    });
     const videoBreakdown = progressRecords
-        .map((record) => {
-        const video = record.video;
-        return {
-            title: video === null || video === void 0 ? void 0 : video.title,
-            videoOrder: video === null || video === void 0 ? void 0 : video.videoOrder,
-            status: record.videoStatus,
-        };
-    })
+        .map((record) => ({
+        title: record.video.title,
+        videoOrder: record.video.videoOrder,
+        status: record.videoStatus,
+    }))
         .sort((a, b) => a.videoOrder - b.videoOrder)
         .map(({ title, status }) => `${title}: ${status}`);
     const systemPrompt = `You are a study assistant for the course "${course.name}".

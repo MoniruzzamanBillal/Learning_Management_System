@@ -1,0 +1,229 @@
+// Pinned to Prisma 6 (not the latest major, 7) — Prisma 7 removed schema-level
+// `url`/`directUrl` and the classic `@prisma/client` import in favor of a
+// driver-adapter model (`prisma.config.ts` + `@prisma/adapter-pg`), which
+// context/specs/19-postgres-prisma-migration.md does not specify. Pinning to
+// 6.x keeps this migration's setup steps executable exactly as documented.
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "rhel-openssl-3.0.x"]
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+ 
+}
+
+enum UserRole {
+  admin
+  instructor
+  user
+}
+
+enum PaymentStatus {
+  Completed
+  Pending
+  Failed
+}
+
+enum VideoStatus {
+  locked
+  unlocked
+  watched
+}
+
+model User {
+  id                  String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                String
+  email               String   @unique
+  password            String
+  profilePicture      String?
+  isDeleted           Boolean  @default(false)
+  needsPasswordChange Boolean  @default(false)
+  userRole            UserRole @default(user)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  coursesAsInstructor CourseInstructor[]
+  modulesAsInstructor Module[]           @relation("ModuleInstructor")
+  videosAsInstructor  Video[]            @relation("VideoInstructor")
+  videoProgress       VideoProgress[]
+  courseEnrollments   CourseEnrollment[]
+  payments            Payment[]
+  reviews             Review[]
+  errorLogs           ErrorLog[]
+}
+
+model Course {
+  id                         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                       String   @unique
+  description                String
+  price                      Decimal  @db.Decimal(10, 2)
+  category                   String
+  published                  Boolean  @default(false)
+  courseCover                String?
+  aiReviewSummary            String?
+  aiReviewSummaryReviewCount Int?
+  createdAt                  DateTime @default(now())
+  updatedAt                  DateTime @updatedAt
+
+  // No `isDeleted` — matches current Mongo schema (hard delete only), don't add it.
+  instructors   CourseInstructor[]
+  modules       Module[]
+  enrollments   CourseEnrollment[]
+  payments      Payment[]
+  reviews       Review[]
+  videoProgress VideoProgress[]
+}
+
+// New explicit join model, Course<->User many-to-many. Replaces Mongo's
+// denormalized `Course.instructors: [ObjectId]` array — not ported.
+model CourseInstructor {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  courseId  String   @db.Uuid
+  userId    String   @db.Uuid
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  course     Course @relation(fields: [courseId], references: [id])
+  instructor User   @relation(fields: [userId], references: [id])
+
+  @@unique([courseId, userId])
+}
+
+// Backend module dir stays `courseModule`.
+model Module {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  courseId     String   @db.Uuid
+  instructorId String   @db.Uuid
+  title        String
+  isDeleted    Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Denormalized `videos: [ObjectId]` array from Mongo dropped — derive via Video.moduleId.
+  course        Course          @relation(fields: [courseId], references: [id])
+  instructor    User            @relation("ModuleInstructor", fields: [instructorId], references: [id])
+  videos        Video[]
+  videoProgress VideoProgress[]
+}
+
+// Backend module dir stays `VideoModule`.
+model Video {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  moduleId     String   @db.Uuid
+  title        String
+  instructorId String   @db.Uuid
+  videoUrl     String
+  videoOrder   Int
+  isDeleted    Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  module        Module          @relation(fields: [moduleId], references: [id])
+  instructor    User            @relation("VideoInstructor", fields: [instructorId], references: [id])
+  videoProgress VideoProgress[]
+
+  // Prisma's schema DSL can't express `WHERE isDeleted = false`, so this plain
+  // index is for query performance only. The real uniqueness guarantee is a
+  // hand-added partial unique index in the generated init migration's SQL —
+  // see context/specs/19-postgres-prisma-migration.md Stage 1.2 (Video model)
+  // for the exact statement and the `prisma migrate reset` re-apply caveat.
+  @@index([moduleId, videoOrder])
+}
+
+model VideoProgress {
+  id          String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId      String       @db.Uuid
+  courseId    String       @db.Uuid
+  moduleId    String       @db.Uuid
+  videoId     String       @db.Uuid
+  videoStatus VideoStatus?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  user   User   @relation(fields: [userId], references: [id])
+  course Course @relation(fields: [courseId], references: [id])
+  module Module @relation(fields: [moduleId], references: [id])
+  video  Video  @relation(fields: [videoId], references: [id])
+
+  @@unique([userId, videoId])
+}
+
+model CourseEnrollment {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId     String   @db.Uuid
+  courseId   String   @db.Uuid
+  // @unique required: Prisma needs the FK-holding side unique to represent
+  // Payment.enrollment as singular (`CourseEnrollment?`, not an array) per
+  // the spec's one-Payment-to-one-enrollment design.
+  paymentId  String   @unique @db.Uuid
+  completed  Boolean  @default(false)
+  // Present per schema, but NOT auto-filtered by default in service queries —
+  // CourseEnrollment never had the Mongoose soft-delete hook. See spec decision #2.
+  isDeleted  Boolean  @default(false)
+  isReviewed Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  // Owns the physical FK to Payment — a Payment is created first in the real
+  // enrollment flow, then CourseEnrollment references it. See spec Stage 1.2
+  // (Payment model) for the full circular-ref resolution note.
+  user    User    @relation(fields: [userId], references: [id])
+  course  Course  @relation(fields: [courseId], references: [id])
+  payment Payment @relation(fields: [paymentId], references: [id])
+}
+
+model Payment {
+  id            String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId        String        @db.Uuid
+  courseId      String        @db.Uuid
+  paymentStatus PaymentStatus @default(Pending)
+  amount        Decimal       @db.Decimal(10, 2)
+  transactionId String
+  // Present per schema, but NOT auto-filtered by default — same caution as
+  // CourseEnrollment.isDeleted above. See spec decision #2.
+  isDeleted     Boolean       @default(false)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  user   User   @relation(fields: [userId], references: [id])
+  course Course @relation(fields: [courseId], references: [id])
+
+  // Derived inverse accessor only — no physical column added to this table.
+  enrollment CourseEnrollment?
+}
+
+model Review {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String   @db.Uuid
+  courseId  String   @db.Uuid
+  rating    Int
+  comment   String
+  isDeleted Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user   User   @relation(fields: [userId], references: [id])
+  course Course @relation(fields: [courseId], references: [id])
+
+  @@unique([userId, courseId])
+}
+
+model ErrorLog {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  message      String
+  statusCode   Int
+  errorSources Json
+  stack        String?
+  method       String
+  path         String
+  ip           String?
+  userId       String?  @db.Uuid
+  userRole     String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // No expiry field — cleanup is entirely the Vercel Cron route (Stage 2, 2.9).
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+}

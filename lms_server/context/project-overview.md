@@ -2,7 +2,7 @@
 
 ## Overview
 
-MATS Academy's backend is a REST API built with Express, TypeScript, and MongoDB (Mongoose) that powers a course-based Learning Management System. It serves the `lms_client` Next.js frontend and handles authentication, course/module/video content, enrollment, SSLCOMMERZ payments, watch-progress tracking, and reviews. Originally built as part of the C470 Software Engineering course; currently deployed and live.
+MATS Academy's backend is a REST API built with Express, TypeScript, and PostgreSQL (Prisma) that powers a course-based Learning Management System. It was built on MongoDB/Mongoose originally and migrated per [`context/specs/19-postgres-prisma-migration.md`](specs/19-postgres-prisma-migration.md). It serves the `lms_client` Next.js frontend and handles authentication, course/module/video content, enrollment, SSLCOMMERZ payments, watch-progress tracking, and reviews. Originally built as part of the C470 Software Engineering course; currently deployed and live.
 
 ## Goals
 
@@ -49,7 +49,7 @@ Defined in `UserRole` (`src/app/modules/user/user.constants.ts`): `admin`, `inst
 ## In Scope
 
 - Express REST API for the above flows, backing the `lms_client` Next.js app.
-- MongoDB/Mongoose as the sole persistence layer.
+- PostgreSQL/Prisma as the sole persistence layer.
 - Cloudinary for image/video asset storage, SSLCOMMERZ for payments.
 
 ## Out of Scope (as currently built)

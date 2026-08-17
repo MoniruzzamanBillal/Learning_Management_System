@@ -14,330 +14,296 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.courseEnrollmentService = void 0;
 const http_status_1 = __importDefault(require("http-status"));
-const mongoose_1 = __importDefault(require("mongoose"));
 const AppError_1 = __importDefault(require("../../Error/AppError"));
-const course_model_1 = require("../course/course.model");
-const module_model_1 = require("../courseModule/module.model");
-const payment_model_1 = require("../payment/payment.model");
+const prisma_1 = __importDefault(require("../../util/prisma"));
 const SSL_service_1 = require("../SSL/SSL.service");
-const user_model_1 = require("../user/user.model");
-const video_constants_1 = require("../VideoModule/video.constants");
-const video_model_1 = require("../VideoModule/video.model");
 const VideoProgress_constants_1 = require("../VideoProgress/VideoProgress.constants");
-const VideoProgress_model_1 = require("../VideoProgress/VideoProgress.model");
-const CourseEnrollment_model_1 = require("./CourseEnrollment.model");
 // ! for enrolling into a course
 const enrollInCourse = (payload) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b, _c;
     const { user, course } = payload;
-    const userData = yield user_model_1.userModel.findById(user);
+    const userData = yield prisma_1.default.user.findFirst({
+        where: { id: user, isDeleted: false },
+    });
     if (!userData) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "This user don't exist !!!");
     }
-    const courseData = yield course_model_1.courseModel.findById(course);
+    const courseData = yield prisma_1.default.course.findUnique({ where: { id: course } });
     if (!courseData) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "This course don't exist !!!");
     }
     if (!(courseData === null || courseData === void 0 ? void 0 : courseData.published)) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "This course is not published yet!!!");
     }
-    const previousEnrolledData = yield CourseEnrollment_model_1.courseEnrollmentModel.findOne({
-        user,
-        course,
-        isDeleted: false,
+    const previousEnrolledData = yield prisma_1.default.courseEnrollment.findFirst({
+        where: { userId: user, courseId: course, isDeleted: false },
     });
     if (previousEnrolledData) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "This course is already enrolled by the user !!!");
     }
-    const session = yield mongoose_1.default.startSession();
-    try {
-        session.startTransaction();
-        const transactionId = `TXN-${Date.now()}`;
-        const paymentData = {
-            user,
-            course,
-            amount: courseData === null || courseData === void 0 ? void 0 : courseData.price,
-            transactionId,
-        };
-        // * create payment record
-        const paymentRecord = yield payment_model_1.paymentModel.create([paymentData], { session });
-        const courseEnrollmentData = {
-            user,
-            course,
-            Payment: (_a = paymentRecord[0]) === null || _a === void 0 ? void 0 : _a._id,
-        };
-        // * create course enrollment record
-        const courseEnrollmentRecord = yield CourseEnrollment_model_1.courseEnrollmentModel.create([courseEnrollmentData], { session });
-        // * update payment record
-        yield payment_model_1.paymentModel.findByIdAndUpdate((_b = paymentRecord[0]) === null || _b === void 0 ? void 0 : _b._id, { CourseEnrollment: (_c = courseEnrollmentRecord[0]) === null || _c === void 0 ? void 0 : _c._id }, { session });
-        const modules = yield module_model_1.moduleModel
-            .find({ isDeleted: false, course })
-            .select("_id");
-        const moduleIds = modules.map((m) => { var _a; return (_a = m === null || m === void 0 ? void 0 : m._id) === null || _a === void 0 ? void 0 : _a.toString(); });
-        // * create video progress data
-        const videoDatas = yield video_model_1.videoModel
-            .find({ isDeleted: false, module: { $in: moduleIds } })
-            .sort({ videoOrder: 1 });
-        // console.log(videoDatas);
-        const videoProgressData = videoDatas === null || videoDatas === void 0 ? void 0 : videoDatas.map((video) => {
-            var _a, _b;
-            return ({
-                user,
-                course,
-                module: (_a = video === null || video === void 0 ? void 0 : video.module) === null || _a === void 0 ? void 0 : _a._id.toString(),
-                video: (_b = video === null || video === void 0 ? void 0 : video._id) === null || _b === void 0 ? void 0 : _b.toString(),
-                videoStatus: (video === null || video === void 0 ? void 0 : video.videoOrder) === 0
-                    ? VideoProgress_constants_1.videoProgressStatus === null || VideoProgress_constants_1.videoProgressStatus === void 0 ? void 0 : VideoProgress_constants_1.videoProgressStatus.unlocked
-                    : VideoProgress_constants_1.videoProgressStatus === null || VideoProgress_constants_1.videoProgressStatus === void 0 ? void 0 : VideoProgress_constants_1.videoProgressStatus.locked,
-            });
+    const transactionId = `TXN-${Date.now()}`;
+    // Per spec decision #4: keep the SSLCommerz HTTP call inside the DB
+    // transaction exactly as today — a documented smell, not something to fix
+    // as part of this migration.
+    const result = yield prisma_1.default.$transaction((tx) => __awaiter(void 0, void 0, void 0, function* () {
+        const payment = yield tx.payment.create({
+            data: {
+                userId: user,
+                courseId: course,
+                amount: courseData.price,
+                transactionId,
+            },
         });
-        // console.log(videoProgressData);
-        // * create video progress record
-        yield VideoProgress_model_1.videoProgressModel.insertMany(videoProgressData, { session });
+        // Payment has no physical FK back to CourseEnrollment (see spec Stage
+        // 1.2, Payment model, circular-ref resolution) — CourseEnrollment.paymentId
+        // is the only physical FK, set once at creation. No follow-up
+        // payment-record update is needed here, unlike the old Mongoose version.
+        yield tx.courseEnrollment.create({
+            data: {
+                userId: user,
+                courseId: course,
+                paymentId: payment.id,
+            },
+        });
+        const modules = yield tx.module.findMany({
+            where: { isDeleted: false, courseId: course },
+            select: { id: true },
+        });
+        const moduleIds = modules.map((m) => m.id);
+        const videos = yield tx.video.findMany({
+            where: { isDeleted: false, moduleId: { in: moduleIds } },
+            orderBy: { videoOrder: "asc" },
+        });
+        if (videos.length) {
+            yield tx.videoProgress.createMany({
+                data: videos.map((video) => ({
+                    userId: user,
+                    courseId: course,
+                    moduleId: video.moduleId,
+                    videoId: video.id,
+                    videoStatus: video.videoOrder === 0
+                        ? VideoProgress_constants_1.videoProgressStatus.unlocked
+                        : VideoProgress_constants_1.videoProgressStatus.locked,
+                })),
+            });
+        }
         const paymentRequestData = {
-            price: courseData === null || courseData === void 0 ? void 0 : courseData.price,
+            price: Number(courseData.price),
             transactionId,
-            productName: courseData === null || courseData === void 0 ? void 0 : courseData.name,
-            productCategory: courseData === null || courseData === void 0 ? void 0 : courseData.category,
-            userName: userData === null || userData === void 0 ? void 0 : userData.name,
-            userEmail: userData === null || userData === void 0 ? void 0 : userData.email,
+            productName: courseData.name,
+            productCategory: courseData.category,
+            userName: userData.name,
+            userEmail: userData.email,
         };
-        const result = yield SSL_service_1.sslServices.initPayment(paymentRequestData);
-        yield session.commitTransaction();
-        yield session.endSession();
-        return result;
-    }
-    catch (error) {
-        yield session.abortTransaction();
-        yield session.endSession();
-        console.error("Error during enrolling into the course : ", error);
-        throw new Error("Failed to enroll into the course!!");
-    }
+        return SSL_service_1.sslServices.initPayment(paymentRequestData);
+    }));
+    return result;
     //
 });
 // ! for getting all user's enrolled course
 const getAllUserEnrolledCourse = (userId) => __awaiter(void 0, void 0, void 0, function* () {
-    const courseEnrolledData = yield CourseEnrollment_model_1.courseEnrollmentModel
-        .find({
-        user: userId,
-        isDeleted: false,
-    })
-        .populate("course", " _id name category courseCover ")
-        .select(" -Payment -isDeleted -createdAt -updatedAt -__v ");
+    const courseEnrolledData = yield prisma_1.default.courseEnrollment.findMany({
+        where: { userId, isDeleted: false },
+        select: {
+            id: true,
+            userId: true,
+            completed: true,
+            isReviewed: true,
+            course: {
+                select: { id: true, name: true, category: true, courseCover: true },
+            },
+        },
+    });
     const progressResult = yield Promise.all(courseEnrolledData.map((enrollmentData) => __awaiter(void 0, void 0, void 0, function* () {
-        const courseData = enrollmentData === null || enrollmentData === void 0 ? void 0 : enrollmentData.course;
-        const progressData = yield courseProgressPercentage(courseData === null || courseData === void 0 ? void 0 : courseData._id, userId);
-        return Object.assign(Object.assign({}, enrollmentData.toObject()), { courseProgress: progressData });
+        const progressData = yield courseProgressPercentage(enrollmentData.course.id, userId);
+        return Object.assign(Object.assign({}, enrollmentData), { courseProgress: progressData });
     })));
     return progressResult;
 });
 // ! for checking user enrolled a coure or not
 const checkUserEnrolledInCourse = (courseId, userId) => __awaiter(void 0, void 0, void 0, function* () {
-    const userData = yield user_model_1.userModel.findById(userId);
-    let enrolledIncourse = false;
+    const userData = userId
+        ? yield prisma_1.default.user.findFirst({ where: { id: userId, isDeleted: false } })
+        : null;
     if (!userData) {
         return {
             enrolledIncourse: false,
         };
     }
-    const courseData = yield course_model_1.courseModel.findById(courseId);
+    const courseData = yield prisma_1.default.course.findUnique({ where: { id: courseId } });
     if (!courseData) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "This course don't exist !!!");
     }
     if (!(courseData === null || courseData === void 0 ? void 0 : courseData.published)) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "This course is not published yet!!!");
     }
-    const previousEnrolledData = yield CourseEnrollment_model_1.courseEnrollmentModel.findOne({
-        user: userId,
-        course: courseId,
-        isDeleted: false,
+    const previousEnrolledData = yield prisma_1.default.courseEnrollment.findFirst({
+        where: { userId, courseId, isDeleted: false },
     });
-    enrolledIncourse = previousEnrolledData ? true : false;
-    return { enrolledIncourse };
+    return { enrolledIncourse: !!previousEnrolledData };
 });
 // ! get user single enrolled  course data
 const getUserEnrolledCourse = (userId, courseId) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield CourseEnrollment_model_1.courseEnrollmentModel
-        .findOne({ user: userId, course: courseId, isDeleted: false })
-        .populate({
-        path: "course",
-        select: " _id name category modules ",
-        populate: {
-            path: "modules",
-            model: "Module",
-            select: "_id  title videos",
+    const result = yield prisma_1.default.courseEnrollment.findFirst({
+        where: { userId, courseId, isDeleted: false },
+        select: {
+            id: true,
+            userId: true,
+            courseId: true,
+            paymentId: true,
+            completed: true,
+            course: {
+                select: {
+                    id: true,
+                    name: true,
+                    category: true,
+                    modules: {
+                        select: {
+                            id: true,
+                            title: true,
+                            videos: { select: { id: true } },
+                        },
+                    },
+                },
+            },
         },
-    })
-        .select(" _id user course Payment completed ");
+    });
     if (!result) {
         throw new Error("Enrollment not found");
     }
     const courseProgressData = yield courseProgressPercentage(courseId, userId);
-    const updaedResult = result === null || result === void 0 ? void 0 : result.toObject();
-    updaedResult.courseProgressData = courseProgressData;
-    return updaedResult;
+    return Object.assign(Object.assign({}, result), { course: Object.assign(Object.assign({}, result.course), { modules: result.course.modules.map((m) => (Object.assign(Object.assign({}, m), { videos: m.videos.map((v) => v.id) }))) }), courseProgressData });
 });
 // ! get module data for enrolled course
 const getModuleDataEnrlledCourse = (userId, courseId) => __awaiter(void 0, void 0, void 0, function* () {
-    const previousEnrolledData = yield CourseEnrollment_model_1.courseEnrollmentModel.findOne({
-        user: userId,
-        course: courseId,
-        isDeleted: false,
+    const previousEnrolledData = yield prisma_1.default.courseEnrollment.findFirst({
+        where: { userId, courseId, isDeleted: false },
     });
     if (!previousEnrolledData) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "You have no access of this course content!!!");
     }
-    const moduleData = yield module_model_1.moduleModel
-        .find({
-        course: courseId,
-        isDeleted: false,
-    })
-        .populate({
-        path: "videos",
-        model: "Video",
-        select: " _id module title videoUrl ",
-    })
-        .select(" _id course title videos ");
+    const moduleData = yield prisma_1.default.module.findMany({
+        where: { courseId, isDeleted: false },
+        select: {
+            id: true,
+            courseId: true,
+            title: true,
+            videos: {
+                where: { isDeleted: false },
+                select: { id: true, moduleId: true, title: true, videoUrl: true },
+            },
+        },
+    });
     return moduleData;
 });
 // ! watch video
 const watchVideo = (videoId, userId) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b;
-    const videoData = yield video_model_1.videoModel.findOne({
-        _id: videoId,
-        isDeleted: false,
+    const videoData = yield prisma_1.default.video.findFirst({
+        where: {
+            id: videoId,
+            isDeleted: false,
+        },
     });
     if (!videoData) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "This Video don't exist !!!");
     }
-    const currentProgressData = yield VideoProgress_model_1.videoProgressModel.findOne({
-        user: userId,
-        video: videoId,
+    const currentProgressData = yield prisma_1.default.videoProgress.findFirst({
+        where: { userId, videoId },
     });
-    // console.log(currentProgressData);
     if (!currentProgressData) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "Video progress not found for this user!");
     }
     if ((currentProgressData === null || currentProgressData === void 0 ? void 0 : currentProgressData.videoStatus) === (VideoProgress_constants_1.videoProgressStatus === null || VideoProgress_constants_1.videoProgressStatus === void 0 ? void 0 : VideoProgress_constants_1.videoProgressStatus.locked)) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "This video is locked , complete previous video to unlock this video !!!");
     }
-    const session = yield mongoose_1.default.startSession();
-    try {
-        session.startTransaction();
+    yield prisma_1.default.$transaction((tx) => __awaiter(void 0, void 0, void 0, function* () {
         // * update current video status to watched
-        currentProgressData.videoStatus = VideoProgress_constants_1.videoProgressStatus === null || VideoProgress_constants_1.videoProgressStatus === void 0 ? void 0 : VideoProgress_constants_1.videoProgressStatus.watched;
-        yield currentProgressData.save({ session });
+        yield tx.videoProgress.update({
+            where: { id: currentProgressData.id },
+            data: { videoStatus: VideoProgress_constants_1.videoProgressStatus.watched },
+        });
         // * Find next video by order
-        const nextVideo = yield video_model_1.videoModel.findOne({
-            module: videoData === null || videoData === void 0 ? void 0 : videoData.module,
-            videoOrder: (videoData === null || videoData === void 0 ? void 0 : videoData.videoOrder) + 1,
+        const nextVideo = yield tx.video.findFirst({
+            where: {
+                moduleId: videoData.moduleId,
+                videoOrder: videoData.videoOrder + 1,
+                isDeleted: false,
+            },
         });
         if (nextVideo) {
-            const videoProgressData = yield VideoProgress_model_1.videoProgressModel.findOne({
-                user: userId,
-                video: (_a = nextVideo === null || nextVideo === void 0 ? void 0 : nextVideo._id) === null || _a === void 0 ? void 0 : _a.toString(),
+            const nextProgress = yield tx.videoProgress.findFirst({
+                where: { userId, videoId: nextVideo.id },
             });
             // * change the video status if status is locked
-            if ((videoProgressData === null || videoProgressData === void 0 ? void 0 : videoProgressData.videoStatus) === (video_constants_1.videoStatus === null || video_constants_1.videoStatus === void 0 ? void 0 : video_constants_1.videoStatus.locked)) {
-                yield VideoProgress_model_1.videoProgressModel.findOneAndUpdate({ user: userId, video: (_b = nextVideo === null || nextVideo === void 0 ? void 0 : nextVideo._id) === null || _b === void 0 ? void 0 : _b.toString() }, { videoStatus: VideoProgress_constants_1.videoProgressStatus === null || VideoProgress_constants_1.videoProgressStatus === void 0 ? void 0 : VideoProgress_constants_1.videoProgressStatus.unlocked }, { session });
+            if ((nextProgress === null || nextProgress === void 0 ? void 0 : nextProgress.videoStatus) === (VideoProgress_constants_1.videoProgressStatus === null || VideoProgress_constants_1.videoProgressStatus === void 0 ? void 0 : VideoProgress_constants_1.videoProgressStatus.locked)) {
+                yield tx.videoProgress.update({
+                    where: { id: nextProgress.id },
+                    data: { videoStatus: VideoProgress_constants_1.videoProgressStatus.unlocked },
+                });
             }
         }
-        yield session.commitTransaction();
-        yield session.endSession();
-        return videoData;
-    }
-    catch (error) {
-        yield session.abortTransaction();
-        yield session.endSession();
-        console.log(error);
-        throw new Error(error);
-    }
+    }));
+    return videoData;
 });
 // ! for tracking course progress
 const courseProgressPercentage = (courseId, userId) => __awaiter(void 0, void 0, void 0, function* () {
-    const totalContent = yield VideoProgress_model_1.videoProgressModel.countDocuments({
-        user: userId,
-        course: courseId,
+    const totalContent = yield prisma_1.default.videoProgress.count({
+        where: { userId, courseId },
     });
-    const watchedVideo = yield VideoProgress_model_1.videoProgressModel.countDocuments({
-        user: userId,
-        course: courseId,
-        videoStatus: VideoProgress_constants_1.videoProgressStatus === null || VideoProgress_constants_1.videoProgressStatus === void 0 ? void 0 : VideoProgress_constants_1.videoProgressStatus.watched,
+    const watchedVideo = yield prisma_1.default.videoProgress.count({
+        where: { userId, courseId, videoStatus: VideoProgress_constants_1.videoProgressStatus === null || VideoProgress_constants_1.videoProgressStatus === void 0 ? void 0 : VideoProgress_constants_1.videoProgressStatus.watched },
     });
     const progressPercentage = Math.round((watchedVideo / totalContent) * 100);
     return progressPercentage;
 });
 // ! for getting enrolled course info
 const enrollmentsPerCourse = () => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield CourseEnrollment_model_1.courseEnrollmentModel.aggregate([
-        {
-            $match: {
-                isDeleted: false,
-            },
-        },
-        {
-            $group: {
-                _id: "$course",
-                totalEnrollments: { $sum: 1 },
-            },
-        },
-        {
-            $lookup: {
-                from: "courses",
-                localField: "_id",
-                foreignField: "_id",
-                as: "courseInfo",
-            },
-        },
-        {
-            $unwind: "$courseInfo",
-        },
-        {
-            $project: {
-                _id: 0,
-                courseId: "$courseInfo._id",
-                courseTitle: "$courseInfo.name",
-                totalEnrollments: 1,
-            },
-        },
-    ]);
+    const grouped = yield prisma_1.default.courseEnrollment.groupBy({
+        by: ["courseId"],
+        where: { isDeleted: false },
+        _count: { _all: true },
+    });
+    const courses = yield prisma_1.default.course.findMany({
+        where: { id: { in: grouped.map((g) => g.courseId) } },
+        select: { id: true, name: true },
+    });
+    const courseNameById = new Map(courses.map((c) => [c.id, c.name]));
+    return grouped.map((g) => ({
+        courseId: g.courseId,
+        courseTitle: courseNameById.get(g.courseId),
+        totalEnrollments: g._count._all,
+    }));
     //
-    return result;
 });
 // ! based on module id , find video data for enrolled user
 const getUserEnrolledModuleVideos = (moduleId, userId) => __awaiter(void 0, void 0, void 0, function* () {
-    const videoData = yield VideoProgress_model_1.videoProgressModel
-        .find({
-        module: moduleId,
-        user: userId,
-    })
-        .populate("video", " _id title videoOrder ")
-        .select("  _id  videoStatus ");
-    videoData.sort((a, b) => {
-        var _a, _b;
-        const aOrder = (_a = a.video) === null || _a === void 0 ? void 0 : _a.videoOrder;
-        const bOrder = (_b = b.video) === null || _b === void 0 ? void 0 : _b.videoOrder;
-        return aOrder - bOrder;
+    const videoData = yield prisma_1.default.videoProgress.findMany({
+        where: { moduleId, userId },
+        select: {
+            id: true,
+            videoStatus: true,
+            video: { select: { id: true, title: true, videoOrder: true } },
+        },
     });
+    videoData.sort((a, b) => a.video.videoOrder - b.video.videoOrder);
     return videoData;
 });
 //  ! for marking course as complete
 const markCompleteCourse = (courseId, userId) => __awaiter(void 0, void 0, void 0, function* () {
-    const userData = yield user_model_1.userModel.findById(userId);
+    const userData = yield prisma_1.default.user.findFirst({
+        where: { id: userId, isDeleted: false },
+    });
     if (!userData) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "This user don't exist !!!");
     }
-    const courseData = yield course_model_1.courseModel.findById(courseId);
+    const courseData = yield prisma_1.default.course.findUnique({ where: { id: courseId } });
     if (!courseData) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "This course don't exist !!!");
     }
     if (!(courseData === null || courseData === void 0 ? void 0 : courseData.published)) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "This course is not published yet!!!");
     }
-    const previousEnrolledData = yield CourseEnrollment_model_1.courseEnrollmentModel.findOne({
-        user: userId,
-        course: courseId,
-        isDeleted: false,
+    const previousEnrolledData = yield prisma_1.default.courseEnrollment.findFirst({
+        where: { userId, courseId, isDeleted: false },
     });
     if (!previousEnrolledData) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "You did not enrolled into this course !!!");
@@ -346,25 +312,31 @@ const markCompleteCourse = (courseId, userId) => __awaiter(void 0, void 0, void 
     if (coursePercentageProgress !== 100) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "You did not complete the full course !!!");
     }
-    const result = yield CourseEnrollment_model_1.courseEnrollmentModel.findOneAndUpdate({ course: courseId, user: userId }, { completed: true }, { new: true });
+    const result = yield prisma_1.default.courseEnrollment.update({
+        where: { id: previousEnrolledData.id },
+        data: { completed: true },
+    });
     return result;
     //
 });
 // ! get user's finished course
 const usersFinishedCourses = (userId) => __awaiter(void 0, void 0, void 0, function* () {
-    const userData = yield user_model_1.userModel.findById(userId);
+    const userData = yield prisma_1.default.user.findFirst({
+        where: { id: userId, isDeleted: false },
+    });
     if (!userData) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "This user don't exist !!!");
     }
-    const result = yield CourseEnrollment_model_1.courseEnrollmentModel
-        .find({
-        user: userId,
-        completed: true,
-        isDeleted: false,
-    })
-        .populate("user", " _id name  ")
-        .populate("course", " _id name category  ")
-        .select(" _id isReviewed updatedAt ");
+    const result = yield prisma_1.default.courseEnrollment.findMany({
+        where: { userId, completed: true, isDeleted: false },
+        select: {
+            id: true,
+            isReviewed: true,
+            updatedAt: true,
+            user: { select: { id: true, name: true } },
+            course: { select: { id: true, name: true, category: true } },
+        },
+    });
     return result;
 });
 //

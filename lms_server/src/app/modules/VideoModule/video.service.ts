@@ -1,35 +1,33 @@
+import { Prisma } from "@prisma/client";
 import httpStatus from "http-status";
-import mongoose from "mongoose";
 import AppError from "../../Error/AppError";
-import { courseEnrollmentModel } from "../CourseEnrollment/CourseEnrollment.model";
-import { moduleModel } from "../courseModule/module.model";
-import { userModel } from "../user/user.model";
+import prisma from "../../util/prisma";
 import { addVideoCoursePublish } from "../VideoProgress/videoProgress.functions";
-import { TEnrolledCourseUsers } from "../VideoProgress/VideoProgress.interface";
-import { TVideo } from "./video.interface";
-import { videoModel } from "./video.model";
+
+type TAddVideoPayload = {
+  module: string;
+  title: string;
+  instructor: string;
+};
 
 // ! for adding a video
-const addVideo = async (payload: TVideo, videoUrl: string) => {
+const addVideo = async (payload: TAddVideoPayload, videoUrl: string) => {
   const { module, instructor } = payload;
 
-  const moduleData = await moduleModel
-    .findOne({ _id: module, instructor })
-    .populate("course", " _id published");
-
-  const courseInfo = moduleData?.course as unknown as {
-    _id: string;
-    published: boolean;
-  };
-
-  const courseId = courseInfo?._id?.toString();
-  const coursePublished = courseInfo?.published;
+  // findFirst, not findUnique: combining the unique `id` lookup with
+  // instructorId/isDeleted isn't allowed on findUnique.
+  const moduleData = await prisma.module.findFirst({
+    where: { id: module, instructorId: instructor, isDeleted: false },
+    include: { course: { select: { id: true, published: true } } },
+  });
 
   if (!moduleData) {
     throw new AppError(httpStatus.BAD_REQUEST, "This module don't exist !!!");
   }
 
-  const instructorData = await userModel.findById(instructor);
+  const instructorData = await prisma.user.findFirst({
+    where: { id: instructor, isDeleted: false },
+  });
 
   if (!instructorData) {
     throw new AppError(
@@ -38,75 +36,84 @@ const addVideo = async (payload: TVideo, videoUrl: string) => {
     );
   }
 
-  const lastVideo = await videoModel.findOne({ module }).sort({ videoOrder: -1 });
-  const nextOrder = lastVideo ? lastVideo.videoOrder + 1 : 0;
+  // videoOrder derived from max(existing active videoOrder) + 1, per the fix
+  // in specs/01-fix-sequential-video-unlock-order.md — carried forward here.
+  const maxOrder = await prisma.video.aggregate({
+    where: { moduleId: module, isDeleted: false },
+    _max: { videoOrder: true },
+  });
+  const nextOrder = (maxOrder._max.videoOrder ?? -1) + 1;
 
-  payload.videoUrl = videoUrl;
-  payload.videoOrder = nextOrder;
+  const courseId = moduleData.course.id;
+  const coursePublished = moduleData.course.published;
 
-  const enrolledCourseUsers: TEnrolledCourseUsers[] =
-    await courseEnrollmentModel.find({
-      course: courseId,
+  const enrolledCourseUsers = coursePublished
+    ? await prisma.courseEnrollment.findMany({
+        where: { courseId },
+        select: { userId: true },
+      })
+    : [];
+
+  // No denormalized Module.videos array to push into anymore — Video is
+  // derived automatically via Video.moduleId.
+  const video = await prisma.$transaction(async (tx) => {
+    const createdVideo = await tx.video.create({
+      data: {
+        title: payload.title,
+        moduleId: module,
+        instructorId: instructor,
+        videoUrl,
+        videoOrder: nextOrder,
+      },
     });
 
-  const session = await mongoose.startSession();
-
-  try {
-    session.startTransaction();
-
-    // * create new video
-    const videoData = await videoModel.create([payload], { session });
-
-    // * update module data with new video reference
-    await moduleModel.findByIdAndUpdate(
-      module,
-      { $push: { videos: videoData[0]?._id } },
-      { session }
-    );
-
-    // * insert new video in video progress if course is pulished
     if (coursePublished) {
       await addVideoCoursePublish({
         enrolledCourseUsers,
         courseId,
-        videoId: videoData[0]?._id?.toString(),
+        videoId: createdVideo.id,
         videoCount: nextOrder,
-        moduleId: module?.toString(),
-        session,
+        moduleId: module,
+        tx,
       });
     }
 
-    await session.commitTransaction();
-    return videoData;
-  } catch (error: any) {
-    console.log(error);
-    await session.abortTransaction();
-    await session.endSession();
-    throw new Error(error);
-  }
+    return createdVideo;
+  });
+
+  // Matches the original's response shape exactly: Mongoose's array-form
+  // `.create([payload], { session })` (required for transaction support)
+  // returned a 1-element array, which the controller passed straight
+  // through as the response body.
+  return [video];
 
   //
 };
 
 // ! for getting all the module video
 const getAllVideo = async (moduleId: string) => {
-  const moduleData = await moduleModel.findById(moduleId);
+  const moduleData = await prisma.module.findFirst({
+    where: { id: moduleId, isDeleted: false },
+  });
 
   if (!moduleData) {
     throw new AppError(httpStatus.BAD_REQUEST, "This module don't exist !!!");
   }
 
-  const allVideo = await videoModel.find({ module: moduleId });
+  const allVideo = await prisma.video.findMany({
+    where: { moduleId, isDeleted: false },
+  });
 
   return allVideo;
 };
 
 // ! for getting individual module video
 const getSingleVideo = async (videoId: string) => {
-  const videoData = await videoModel.findOne({
-    _id: videoId,
-
-    isDeleted: false,
+  const videoData = await prisma.video.findFirst({
+    where: {
+      id: videoId,
+      isDeleted: false,
+    },
   });
 
   if (!videoData) {
@@ -123,36 +130,36 @@ const deleteModuleVideo = async (payload: {
 }) => {
   const { videoId, moduleId } = payload;
 
-  const videoData = await videoModel.findOne({
-    _id: videoId,
-    module: moduleId,
-    isDeleted: false,
+  const videoData = await prisma.video.findFirst({
+    where: {
+      id: videoId,
+      moduleId,
+      isDeleted: false,
+    },
   });
 
   if (!videoData) {
     throw new AppError(httpStatus.BAD_REQUEST, "This Video don't exist !!!");
   }
 
-  const deleteVideo = await videoModel.findOneAndUpdate(
-    {
-      _id: videoId,
-      module: moduleId,
-      isDeleted: false,
-    },
-    { isDeleted: true },
-    { new: true }
-  );
+  const deleteVideo = await prisma.video.update({
+    where: { id: videoId },
+    data: { isDeleted: true },
+  });
 
   return deleteVideo;
 };
 
 // ! for updating a video
 const updateVideo = async (
-  payload: Partial<TVideo>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  payload: any,
   videoId: string,
   videoUrl: string
 ) => {
-  const videoData = await videoModel.findById(videoId);
+  const videoData = await prisma.video.findFirst({
+    where: { id: videoId, isDeleted: false },
+  });
 
   if (!videoData) {
     throw new AppError(httpStatus.BAD_REQUEST, "This Video don't exist !!!");
@@ -162,9 +169,9 @@ const updateVideo = async (
     payload.videoUrl = videoUrl;
   }
 
-  const updatedData = await videoModel.findByIdAndUpdate(videoId, payload, {
-    new: true,
-    runValidators: true,
+  const updatedData = await prisma.video.update({
+    where: { id: videoId },
+    data: payload as Prisma.VideoUpdateInput,
   });
 
   return updatedData;

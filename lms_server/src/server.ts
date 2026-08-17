@@ -1,11 +1,11 @@
 /* eslint-disable no-console */
 import app from "./app";
-import mongoose from "mongoose";
 import config from "./app/config";
+import prisma from "./app/util/prisma";
 
 async function Main() {
   try {
-    await mongoose.connect(config.database_url as string);
+    await prisma.$connect();
     app.listen(config.port, () => {
       console.log(`listening from port ${config.port}`);
     });

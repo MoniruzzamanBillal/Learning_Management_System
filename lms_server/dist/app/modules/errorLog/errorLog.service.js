@@ -15,11 +15,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.errorLogServices = void 0;
 const http_status_1 = __importDefault(require("http-status"));
 const AppError_1 = __importDefault(require("../../Error/AppError"));
-const errorLog_model_1 = require("./errorLog.model");
+const prisma_1 = __importDefault(require("../../util/prisma"));
 // ! for storing an error, called internally from globalErrorHandler only
 const logError = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        yield errorLog_model_1.errorLogModel.create(payload);
+        yield prisma_1.default.errorLog.create({
+            data: Object.assign(Object.assign({}, payload), { errorSources: payload.errorSources }),
+        });
     }
     catch (error) {
         console.error("Failed to persist error log:", error);
@@ -27,23 +29,34 @@ const logError = (payload) => __awaiter(void 0, void 0, void 0, function* () {
 });
 // ! for getting all error logs (admin only)
 const getAllErrorLogs = () => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield errorLog_model_1.errorLogModel
-        .find()
-        .sort({ createdAt: -1 })
-        .limit(200)
-        .populate("userId", "name email");
+    const result = yield prisma_1.default.errorLog.findMany({
+        orderBy: { createdAt: "desc" },
+        take: 200,
+        include: { user: { select: { name: true, email: true } } },
+    });
     return result;
 });
 // ! for getting a single error log's detail (admin only)
 const getErrorLogById = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield errorLog_model_1.errorLogModel.findById(id);
+    const result = yield prisma_1.default.errorLog.findUnique({ where: { id } });
     if (!result) {
         throw new AppError_1.default(http_status_1.default.NOT_FOUND, "This error log doesn't exist!!!");
     }
     return result;
 });
+// ! for deleting error logs older than 30 days — replaces the Mongo TTL
+// index, which has no Postgres/Prisma equivalent. Called from the Vercel
+// Cron route only (see errorLog.route.ts).
+const cleanupOldErrorLogs = () => __awaiter(void 0, void 0, void 0, function* () {
+    const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+    const result = yield prisma_1.default.errorLog.deleteMany({
+        where: { createdAt: { lt: thirtyDaysAgo } },
+    });
+    return { deletedCount: result.count };
+});
 exports.errorLogServices = {
     logError,
     getAllErrorLogs,
     getErrorLogById,
+    cleanupOldErrorLogs,
 };

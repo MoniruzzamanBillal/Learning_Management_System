@@ -1,14 +1,3 @@
-import { ObjectId } from "mongoose";
+import { Course } from "@prisma/client";
 
-export type TCourse = {
-  name: string;
-  description: string;
-  courseCover: string;
-  price: number;
-  category: string;
-  published: boolean;
-  instructors: ObjectId[];
-  modules?: ObjectId[];
-  aiReviewSummary?: string;
-  aiReviewSummaryReviewCount?: number;
-};
+export type TCourse = Course;

@@ -14,80 +14,94 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.videoServices = void 0;
 const http_status_1 = __importDefault(require("http-status"));
-const mongoose_1 = __importDefault(require("mongoose"));
 const AppError_1 = __importDefault(require("../../Error/AppError"));
-const CourseEnrollment_model_1 = require("../CourseEnrollment/CourseEnrollment.model");
-const module_model_1 = require("../courseModule/module.model");
-const user_model_1 = require("../user/user.model");
+const prisma_1 = __importDefault(require("../../util/prisma"));
 const videoProgress_functions_1 = require("../VideoProgress/videoProgress.functions");
-const video_model_1 = require("./video.model");
 // ! for adding a video
 const addVideo = (payload, videoUrl) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b, _c, _d;
+    var _a;
     const { module, instructor } = payload;
-    const moduleData = yield module_model_1.moduleModel
-        .findOne({ _id: module, instructor })
-        .populate("course", " _id published");
-    const courseInfo = moduleData === null || moduleData === void 0 ? void 0 : moduleData.course;
-    const courseId = (_a = courseInfo === null || courseInfo === void 0 ? void 0 : courseInfo._id) === null || _a === void 0 ? void 0 : _a.toString();
-    const coursePublished = courseInfo === null || courseInfo === void 0 ? void 0 : courseInfo.published;
+    // findFirst, not findUnique: combining the unique `id` lookup with
+    // instructorId/isDeleted isn't allowed on findUnique.
+    const moduleData = yield prisma_1.default.module.findFirst({
+        where: { id: module, instructorId: instructor, isDeleted: false },
+        include: { course: { select: { id: true, published: true } } },
+    });
     if (!moduleData) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "This module don't exist !!!");
     }
-    const instructorData = yield user_model_1.userModel.findById(instructor);
+    const instructorData = yield prisma_1.default.user.findFirst({
+        where: { id: instructor, isDeleted: false },
+    });
     if (!instructorData) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "This instructor don't exist !!!");
     }
-    const lastVideo = yield video_model_1.videoModel.findOne({ module }).sort({ videoOrder: -1 });
-    const nextOrder = lastVideo ? lastVideo.videoOrder + 1 : 0;
-    payload.videoUrl = videoUrl;
-    payload.videoOrder = nextOrder;
-    const enrolledCourseUsers = yield CourseEnrollment_model_1.courseEnrollmentModel.find({
-        course: courseId,
+    // videoOrder derived from max(existing active videoOrder) + 1, per the fix
+    // in specs/01-fix-sequential-video-unlock-order.md — carried forward here.
+    const maxOrder = yield prisma_1.default.video.aggregate({
+        where: { moduleId: module, isDeleted: false },
+        _max: { videoOrder: true },
     });
-    const session = yield mongoose_1.default.startSession();
-    try {
-        session.startTransaction();
-        // * create new video
-        const videoData = yield video_model_1.videoModel.create([payload], { session });
-        // * update module data with new video reference
-        yield module_model_1.moduleModel.findByIdAndUpdate(module, { $push: { videos: (_b = videoData[0]) === null || _b === void 0 ? void 0 : _b._id } }, { session });
-        // * insert new video in video progress if course is pulished
+    const nextOrder = ((_a = maxOrder._max.videoOrder) !== null && _a !== void 0 ? _a : -1) + 1;
+    const courseId = moduleData.course.id;
+    const coursePublished = moduleData.course.published;
+    const enrolledCourseUsers = coursePublished
+        ? yield prisma_1.default.courseEnrollment.findMany({
+            where: { courseId },
+            select: { userId: true },
+        })
+        : [];
+    // No denormalized Module.videos array to push into anymore — Video is
+    // derived automatically via Video.moduleId.
+    const video = yield prisma_1.default.$transaction((tx) => __awaiter(void 0, void 0, void 0, function* () {
+        const createdVideo = yield tx.video.create({
+            data: {
+                title: payload.title,
+                moduleId: module,
+                instructorId: instructor,
+                videoUrl,
+                videoOrder: nextOrder,
+            },
+        });
         if (coursePublished) {
             yield (0, videoProgress_functions_1.addVideoCoursePublish)({
                 enrolledCourseUsers,
                 courseId,
-                videoId: (_d = (_c = videoData[0]) === null || _c === void 0 ? void 0 : _c._id) === null || _d === void 0 ? void 0 : _d.toString(),
+                videoId: createdVideo.id,
                 videoCount: nextOrder,
-                moduleId: module === null || module === void 0 ? void 0 : module.toString(),
-                session,
+                moduleId: module,
+                tx,
             });
         }
-        yield session.commitTransaction();
-        return videoData;
-    }
-    catch (error) {
-        console.log(error);
-        yield session.abortTransaction();
-        yield session.endSession();
-        throw new Error(error);
-    }
+        return createdVideo;
+    }));
+    // Matches the original's response shape exactly: Mongoose's array-form
+    // `.create([payload], { session })` (required for transaction support)
+    // returned a 1-element array, which the controller passed straight
+    // through as the response body.
+    return [video];
     //
 });
 // ! for getting all the module video
 const getAllVideo = (moduleId) => __awaiter(void 0, void 0, void 0, function* () {
-    const moduleData = yield module_model_1.moduleModel.findById(moduleId);
+    const moduleData = yield prisma_1.default.module.findFirst({
+        where: { id: moduleId, isDeleted: false },
+    });
     if (!moduleData) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "This module don't exist !!!");
     }
-    const allVideo = yield video_model_1.videoModel.find({ module: moduleId });
+    const allVideo = yield prisma_1.default.video.findMany({
+        where: { moduleId, isDeleted: false },
+    });
     return allVideo;
 });
 // ! for getting individual module video
 const getSingleVideo = (videoId) => __awaiter(void 0, void 0, void 0, function* () {
-    const videoData = yield video_model_1.videoModel.findOne({
-        _id: videoId,
-        isDeleted: false,
+    const videoData = yield prisma_1.default.video.findFirst({
+        where: {
+            id: videoId,
+            isDeleted: false,
+        },
     });
     if (!videoData) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "This Video don't exist !!!");
@@ -97,33 +111,38 @@ const getSingleVideo = (videoId) => __awaiter(void 0, void 0, void 0, function* 
 // ! for deleting a video
 const deleteModuleVideo = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const { videoId, moduleId } = payload;
-    const videoData = yield video_model_1.videoModel.findOne({
-        _id: videoId,
-        module: moduleId,
-        isDeleted: false,
+    const videoData = yield prisma_1.default.video.findFirst({
+        where: {
+            id: videoId,
+            moduleId,
+            isDeleted: false,
+        },
     });
     if (!videoData) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "This Video don't exist !!!");
     }
-    const deleteVideo = yield video_model_1.videoModel.findOneAndUpdate({
-        _id: videoId,
-        module: moduleId,
-        isDeleted: false,
-    }, { isDeleted: true }, { new: true });
+    const deleteVideo = yield prisma_1.default.video.update({
+        where: { id: videoId },
+        data: { isDeleted: true },
+    });
     return deleteVideo;
 });
 // ! for updating a video
-const updateVideo = (payload, videoId, videoUrl) => __awaiter(void 0, void 0, void 0, function* () {
-    const videoData = yield video_model_1.videoModel.findById(videoId);
+const updateVideo = (
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+payload, videoId, videoUrl) => __awaiter(void 0, void 0, void 0, function* () {
+    const videoData = yield prisma_1.default.video.findFirst({
+        where: { id: videoId, isDeleted: false },
+    });
     if (!videoData) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "This Video don't exist !!!");
     }
     if (videoUrl) {
         payload.videoUrl = videoUrl;
     }
-    const updatedData = yield video_model_1.videoModel.findByIdAndUpdate(videoId, payload, {
-        new: true,
-        runValidators: true,
+    const updatedData = yield prisma_1.default.video.update({
+        where: { id: videoId },
+        data: payload,
     });
     return updatedData;
 });

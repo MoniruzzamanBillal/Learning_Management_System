@@ -1,11 +1,6 @@
-import mongoose from "mongoose";
 import { z } from "zod";
 
-const objectIdSchema = z
-  .string()
-  .refine((val) => mongoose.Types.ObjectId.isValid(val), {
-    message: "Invalid object id !!!",
-  });
+const objectIdSchema = z.string().uuid({ message: "Invalid id !!!" });
 
 // ! for adding video
 const addVideoValidationSchema = z.object({
