@@ -1,3 +1,3 @@
-import { CourseEnrollment } from "@prisma/client";
+import { CourseEnrollment } from "../../../generated/prisma/client";
 
 export type TEnrollment = CourseEnrollment;

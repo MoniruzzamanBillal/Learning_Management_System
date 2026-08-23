@@ -1,17 +1,17 @@
-// Pinned to Prisma 6 (not the latest major, 7) — Prisma 7 removed schema-level
-// `url`/`directUrl` and the classic `@prisma/client` import in favor of a
-// driver-adapter model (`prisma.config.ts` + `@prisma/adapter-pg`), which
-// context/specs/19-postgres-prisma-migration.md does not specify. Pinning to
-// 6.x keeps this migration's setup steps executable exactly as documented.
+// Prisma 7 driver-adapter setup: the connection URL lives in `prisma.config.ts`
+// (project root) for the CLI/Migrate, and in `src/app/util/prisma.ts` (via
+// `@prisma/adapter-pg`) for the runtime client — not here. No `binaryTargets`
+// either: the driver-adapter query engine has no per-platform Rust binary to
+// select.
 generator client {
-  provider      = "prisma-client-js"
-  binaryTargets = ["native", "rhel-openssl-3.0.x"]
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "cjs"
+  runtime      = "nodejs"
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
- 
+  provider = "postgresql"
 }
 
 enum UserRole {

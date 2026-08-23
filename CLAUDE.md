@@ -39,6 +39,7 @@ Read the relevant app's `context/` docs before making non-trivial changes, and k
 - `yarn lint` / `yarn lint:fix` — ESLint over `src`
 - `yarn prettier:fix` — format `src`
 - No test suite is configured (`yarn test` is a stub that exits 1).
+- Prisma has no `package.json` scripts — invoke via `npx` from `lms_server/`: `npx prisma migrate dev --name <name>` (create + apply a migration against your local DB), `npx prisma generate` (regenerate the client — also runs automatically via `postinstall`), `npx prisma studio` (GUI for inspecting/editing data). Avoid `npx prisma migrate reset` — it replays all migrations and will drop the hand-added partial unique index described below unless it's re-added.
 
 ### lms_client (run from `lms_client/`)
 
@@ -59,11 +60,13 @@ Everything domain-specific lives under `src/app/modules/<name>/`, one module per
 - `*.route.ts` / `*.routes.ts` — Express router, wires middleware + controller
 - `*.controller.ts` — thin, wraps service calls with `catchAsync` + `sendResponse`
 - `*.service.ts` — business logic, Prisma queries (`import prisma from "../../util/prisma"`)
-- `*.interface.ts` — TypeScript types for the domain object; most just re-export the generated Prisma type (e.g. `export type TUser = User;` from `@prisma/client`)
+- `*.interface.ts` — TypeScript types for the domain object; most just re-export the generated Prisma type (e.g. `export type TUser = User;` from the generated client — see the Prisma 7 note below, not `@prisma/client` directly)
 - `*.validation.ts` — Zod schemas, used via `validateRequest` middleware; any ID field is `z.string().uuid(...)`
 - `*.constants.ts` — enums/constants (e.g. `user/user.constants.ts` defines `UserRole = { admin, instructor, user }`, kept in sync with the matching `enum` in `prisma/schema.prisma`)
 
-There is no more per-module `*.model.ts` — the entire schema lives in one root-level `lms_server/prisma/schema.prisma` (9 models, a `CourseInstructor` join model, 3 enums), applied via Prisma Migrate.
+There is no more per-module `*.model.ts` — the entire schema lives in one root-level `lms_server/prisma/schema.prisma` (9 models, a `CourseInstructor` join model, 3 enums), applied via Prisma Migrate. One constraint isn't expressible in the schema DSL and so isn't visible there: `Video`'s real uniqueness guarantee (`UNIQUE ("moduleId","videoOrder") WHERE "isDeleted" = false`) is a hand-added `CREATE UNIQUE INDEX` statement inside `prisma/migrations/20260817100918_init/migration.sql`. It survives normal `migrate dev` runs but must be manually reapplied if that migration is ever reset/replayed.
+
+**Prisma 7 driver-adapter setup:** `schema.prisma`'s `datasource` block has no `url` — the connection string lives in two separate places instead. `prisma.config.ts` (repo root of `lms_server/`, next to `package.json`) supplies it to the CLI (`migrate`/`studio`/`db`) via `env("DATABASE_URL")`. `src/app/util/prisma.ts` supplies it to the runtime client by wrapping `config.database_url` in a `PrismaPg` adapter (`@prisma/adapter-pg` + `pg`) and passing `{ adapter }` to `new PrismaClient(...)`. The generator (`prisma-client`, not the legacy `prisma-client-js`) outputs to `src/generated/prisma/` — gitignored, regenerated via `postinstall`/`yarn build` (`prisma generate && tsc`), never edited by hand — with `moduleFormat = "cjs"` so it matches this project's existing CommonJS/`ts-node-dev` setup rather than forcing an ESM migration. Anything importing Prisma types/the `Prisma` namespace imports from that generated path (`../../../generated/prisma/client` from a module's `*.interface.ts`/`*.service.ts`, one directory shallower — `../../generated/prisma/client` — from `util/prisma.ts`), not from `@prisma/client` itself.
 
 All module routers are aggregated in `src/app/router/index.ts` and mounted under their own path prefix (e.g. `/api/course`, `/api/enroll`, `/api/payment`).
 
@@ -78,7 +81,7 @@ Cross-cutting pieces:
 - `helmet()` is applied first in `src/app.ts`'s middleware stack (before `cors`) for baseline security headers.
 - `src/app/util/catchAsync.ts` — wraps async route handlers so thrown errors reach `next(error)`.
 - `src/app/util/sendResponse.ts` — standard `{ success, message, data, token? }` response envelope.
-- `src/app/util/prisma.ts` — the Prisma Client singleton (serverless-safe `globalThis` pattern outside production); import this rather than instantiating `new PrismaClient()`.
+- `src/app/util/prisma.ts` — the Prisma Client singleton (serverless-safe `globalThis` pattern outside production), constructed with a `PrismaPg` driver adapter per the Prisma 7 note above; import this rather than instantiating `new PrismaClient()`.
 - `src/app/util/SendImageCloudinary.ts` — Multer + Cloudinary storage config (`upload.single(...)`) used for course covers, etc.
 - `src/app/util/VideoUpload.ts` — video upload handling, paired with the `VideoModule`/`VideoProgress` modules for course content and per-user watch progress.
 - `src/app/config/index.ts` — single place all `process.env` values are read (`DATABASE_URL` — same env var name Mongoose used, its value was repurposed from a Mongo URI to a Postgres connection string in place, not renamed — JWT secret, Cloudinary, nodemailer, SSLCOMMERZ store credentials/URLs, `CRON_SECRET`); reference this instead of `process.env` directly in new code.

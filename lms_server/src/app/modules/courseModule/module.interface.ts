@@ -1,3 +1,3 @@
-import { Module } from "@prisma/client";
+import { Module } from "../../../generated/prisma/client";
 
 export type TModule = Module;

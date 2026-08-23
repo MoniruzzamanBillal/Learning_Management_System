@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { publishCourseFunction } from "@/components/main/(Admin)/ManageCourse/functions/course.functions";
-import { useFetchData, useUpdateData } from "@/hooks/useApi";
+import { useFetchData, usePatch } from "@/hooks/useApi";
 import { useParams, useRouter } from "next/navigation";
 import {
   CourseDetailModuleColumn,
@@ -27,7 +27,7 @@ const CourseDetail = () => {
   }
 
   const { mutateAsync: publishCourse, isPending: coursepublishingLoading } =
-    useUpdateData([["admin-course-detail", courseId], ["all-courses-admin"]]);
+    usePatch([["admin-course-detail", courseId], ["all-courses-admin"]]);
 
   const {
     data: courseData,

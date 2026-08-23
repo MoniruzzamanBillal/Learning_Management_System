@@ -1,3 +1,3 @@
-import { Review } from "@prisma/client";
+import { Review } from "../../../generated/prisma/client";
 
 export type TReview = Review;

@@ -1,4 +1,4 @@
-import { ErrorLog } from "@prisma/client";
+import { ErrorLog } from "../../../generated/prisma/client";
 import { TerrorSource } from "../../interface/error";
 
 export type TErrorLog = ErrorLog;

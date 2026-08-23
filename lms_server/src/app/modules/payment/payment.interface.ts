@@ -1,3 +1,3 @@
-import { Payment } from "@prisma/client";
+import { Payment } from "../../../generated/prisma/client";
 
 export type TPayment = Payment;

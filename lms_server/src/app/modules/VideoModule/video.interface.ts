@@ -1,3 +1,3 @@
-import { Video } from "@prisma/client";
+import { Video } from "../../../generated/prisma/client";
 
 export type TVideo = Video;

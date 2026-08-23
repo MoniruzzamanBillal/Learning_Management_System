@@ -13,7 +13,7 @@ import TextEditorTipTap from "@/components/shared/input/ControlledTipTapTextEdit
 import FormSubmitLoading from "@/components/shared/FormSubmitLoading";
 import { Button } from "@/components/ui/button";
 import { updateCourseFunction } from "@/components/main/(Admin)/ManageCourse/functions/course.functions";
-import { useFetchData, useUpdateData } from "@/hooks/useApi";
+import { useFetchData, usePatch } from "@/hooks/useApi";
 import { updateCourseValidationSchema } from "@/components/main/(Admin)/ManageCourse/schema/Course.schemas";
 import { TCourseData } from "@/types/course.types";
 import { TInstructor } from "@/types/user.types";
@@ -59,7 +59,7 @@ const UpdateCourse = () => {
   });
 
   const { mutateAsync: updateCourse, isPending: courseUpdatingLoading } =
-    useUpdateData([["all-courses-admin"], ["admin-course-detail", courseId]]);
+    usePatch([["all-courses-admin"], ["admin-course-detail", courseId]]);
 
   const { data: instructorData, isLoading: instructorDataLoading } =
     useFetchData<TInstructor[]>(["all-instructors"], "/user/get-instructors");

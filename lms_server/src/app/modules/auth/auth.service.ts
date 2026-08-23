@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { Prisma } from "../../../generated/prisma/client";
 import bcrypt from "bcrypt";
 import httpStatus from "http-status";
 import config from "../../config";

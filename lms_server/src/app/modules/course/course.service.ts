@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { Prisma } from "../../../generated/prisma/client";
 import { startOfDay, subDays } from "date-fns";
 import httpStatus from "http-status";
 import AppError from "../../Error/AppError";
