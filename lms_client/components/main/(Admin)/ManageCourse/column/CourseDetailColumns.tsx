@@ -1,16 +1,8 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import TableRowActions from "@/components/shared/table/TableRowActions";
 import { ColumnDef } from "@tanstack/react-table";
-import { MoreHorizontal } from "lucide-react";
-import Link from "next/link";
+import { Eye } from "lucide-react";
 
 export type TInstructor = {
   id: string;
@@ -74,22 +66,15 @@ export const CourseDetailModuleColumn: ColumnDef<TModule>[] = [
       const rowData = row.original;
 
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem>
-              <Link href={`/dashboard/admin/module-detail/${rowData?.id}`}>
-                View Details
-              </Link>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <TableRowActions
+          actions={[
+            {
+              label: "View Details",
+              icon: Eye,
+              href: `/dashboard/admin/module-detail/${rowData?.id}`,
+            },
+          ]}
+        />
       );
     },
   },

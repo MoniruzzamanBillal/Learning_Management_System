@@ -1,17 +1,9 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
-import Link from "next/link";
+import { ArrowUpDown, Eye, SquarePen } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import TableRowActions from "@/components/shared/table/TableRowActions";
 
 export type TVideo = {
   id: string;
@@ -75,30 +67,21 @@ export const ManageVideoColumns: ColumnDef<TVideo>[] = [
     cell: ({ row }) => {
       const video = row.original;
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem asChild>
-              <Link href={`/dashboard/instructor/video-detail/${video.id}`}>
-                View Details
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            {!video.module?.course?.published && (
-              <DropdownMenuItem asChild>
-                <Link href={`/dashboard/instructor/update-video/${video.id}`}>
-                  Update Video
-                </Link>
-              </DropdownMenuItem>
-            )}
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <TableRowActions
+          actions={[
+            {
+              label: "View Details",
+              icon: Eye,
+              href: `/dashboard/instructor/video-detail/${video.id}`,
+            },
+            {
+              label: "Update Video",
+              icon: SquarePen,
+              href: `/dashboard/instructor/update-video/${video.id}`,
+              hidden: video.module?.course?.published,
+            },
+          ]}
+        />
       );
     },
   },
