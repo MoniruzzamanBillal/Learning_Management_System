@@ -1,7 +1,7 @@
 "use client";
 
-import TableDataLoading from "@/components/shared/table/TableLoading";
 import GenericTableComponent from "@/components/shared/table/GenericTableComponent";
+import TableDataLoading from "@/components/shared/table/TableLoading";
 import { useFetchData } from "@/hooks/useApi";
 import {
   EnrollmentStudentsColumn,
@@ -23,7 +23,7 @@ const Enrollment = () => {
 
         {/* table section  */}
         {courseEnrollmentData?.data && (
-          <div className="Tablecontainer mx-auto py-10">
+          <div className="Tablecontainer mx-auto ">
             <GenericTableComponent
               columns={EnrollmentStudentsColumn}
               data={courseEnrollmentData?.data}

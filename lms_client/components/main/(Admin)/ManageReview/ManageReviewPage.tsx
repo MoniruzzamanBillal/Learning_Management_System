@@ -1,11 +1,11 @@
 "use client";
 
+import { TAdminReview } from "@/components/main/(Admin)/ManageReview/type/review.types";
 import DeleteModal from "@/components/shared/Modal/DeleteModal";
 import PageHeader from "@/components/shared/PageHeader/PageHeader";
 import GenericTableComponent from "@/components/shared/table/GenericTableComponent";
 import TableDataLoading from "@/components/shared/table/TableLoading";
 import { useDeleteData, useFetchData } from "@/hooks/useApi";
-import { TAdminReview } from "@/components/main/(Admin)/ManageReview/type/review.types";
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
 import { Star, Trash2 } from "lucide-react";
@@ -124,7 +124,7 @@ export default function ManageReviewPage() {
   return (
     <div className="ManageReviewContainer">
       <div className="ManageReviewWrapper bg-gray-100/90 border border-gray-300 shadow rounded-md p-3">
-        <div className="mb-6">
+        <div className="mb-2">
           <PageHeader headerTitle="Manage Reviews" showAddButton={false} />
         </div>
 

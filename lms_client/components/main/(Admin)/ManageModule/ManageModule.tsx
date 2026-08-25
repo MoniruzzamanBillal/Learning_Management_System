@@ -1,15 +1,17 @@
 "use client";
 
+import ModulesByCourseAccordion, {
+  TModuleWithCourse,
+} from "@/components/shared/table/ModulesByCourseAccordion";
 import TableDataLoading from "@/components/shared/table/TableLoading";
-import GenericTableComponent from "@/components/shared/table/GenericTableComponent";
+import TableRowActions from "@/components/shared/table/TableRowActions";
 import { useFetchData } from "@/hooks/useApi";
-import { ManageModuleColumns } from "./column/ManageModuleColumns";
+import { Eye } from "lucide-react";
 
 const ManageModule = () => {
-  const { data: moduleDataWithCourse, isLoading } = useFetchData<any>(
-    ["all-modules"],
-    "/module/all-module"
-  );
+  const { data: moduleDataWithCourse, isLoading } = useFetchData<
+    TModuleWithCourse[]
+  >(["all-modules"], "/module/all-module");
 
   let content = null;
 
@@ -17,10 +19,19 @@ const ManageModule = () => {
     content = <TableDataLoading />;
   } else if (moduleDataWithCourse?.data) {
     content = (
-      <GenericTableComponent
-        columns={ManageModuleColumns}
-        data={moduleDataWithCourse?.data}
-        showToolbar={false}
+      <ModulesByCourseAccordion
+        modules={moduleDataWithCourse.data}
+        renderActions={(module) => (
+          <TableRowActions
+            actions={[
+              {
+                label: "View Details",
+                icon: Eye,
+                href: `/dashboard/admin/module-detail/${module.id}`,
+              },
+            ]}
+          />
+        )}
       />
     );
   }
@@ -29,8 +40,8 @@ const ManageModule = () => {
     <div className="ManageModuleContainer">
       <div className="ManageModuleWrapper bg-gray-100/90 border border-gray-300  shadow rounded-md p-3">
         <h3 className="brand text-2xl font-medium mb-4 "> Manage Module </h3>
-        {/* table section  */}
-        <div className="Tablecontainer mx-auto py-10">{content}</div>
+        {/* module list section  */}
+        <div className="Tablecontainer mx-auto  ">{content}</div>
       </div>
     </div>
   );

@@ -61,10 +61,16 @@ const addModule = async (payload: TAddModulePayload) => {
 const getAllModuleData = async () => {
   const moduleData = await prisma.module.findMany({
     where: { isDeleted: false },
-    include: { course: { select: { id: true, name: true, published: true } } },
+    include: {
+      course: { select: { id: true, name: true, published: true } },
+      videos: { where: { isDeleted: false }, select: { id: true } },
+    },
   });
 
-  return moduleData;
+  return moduleData.map((module) => ({
+    ...module,
+    videos: module.videos.map((video) => video.id),
+  }));
 };
 
 // ! get module data based on course id
@@ -77,10 +83,16 @@ const getModuleFromCourseId = async (courseId: string) => {
 
   const result = await prisma.module.findMany({
     where: { courseId, isDeleted: false },
-    include: { course: { select: { id: true, name: true, published: true } } },
+    include: {
+      course: { select: { id: true, name: true, published: true } },
+      videos: { where: { isDeleted: false }, select: { id: true } },
+    },
   });
 
-  return result;
+  return result.map((module) => ({
+    ...module,
+    videos: module.videos.map((video) => video.id),
+  }));
 };
 
 // ! for getting module data

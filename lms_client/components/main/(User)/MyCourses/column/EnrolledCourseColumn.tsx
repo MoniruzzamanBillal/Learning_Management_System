@@ -1,9 +1,8 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import TableRowActions from "@/components/shared/table/TableRowActions";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, Eye } from "lucide-react";
+import { Eye } from "lucide-react";
 import Image from "next/image";
 
 type TCourse = {
@@ -24,17 +23,7 @@ export const EnrolledCourseColumn: ColumnDef<TEnrollment>[] = [
   {
     accessorFn: (row: TEnrollment) => row.course?.name,
     id: "name",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Name
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
+    header: "Name",
     cell: ({ row }) => {
       return <p className="font-medium">{row.original?.course?.name}</p>;
     },
@@ -42,17 +31,7 @@ export const EnrolledCourseColumn: ColumnDef<TEnrollment>[] = [
   {
     accessorFn: (row: TEnrollment) => row.course?.category,
     id: "category",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Category
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
+    header: "Category",
     cell: ({ row }) => {
       return <p>{row.original?.course?.category}</p>;
     },

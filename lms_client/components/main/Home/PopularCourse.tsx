@@ -8,9 +8,9 @@ import CourseCard from "../Course/CourseCard";
 import CourseCardSkeleton from "../Course/CourseCardSkeleton";
 
 export default function PopularCourse() {
-  const { data: allCourseData, isLoading: courseDataLoading } = useFetchData<{
-    data: TCourse[];
-  }>(["popular-courses"], "/course/all-courses?limit=3");
+  const { data: allCourseData, isLoading: courseDataLoading } = useFetchData<
+    TCourse[]
+  >(["popular-courses"], "/course/all-courses?limit=3");
 
   let content = null;
 
@@ -18,8 +18,8 @@ export default function PopularCourse() {
     content = Array.from({ length: 3 }).map((_, i) => (
       <CourseCardSkeleton key={i} />
     ));
-  } else if (allCourseData?.data?.data) {
-    content = allCourseData.data.data.map((course: TCourse) => (
+  } else if (allCourseData?.data) {
+    content = allCourseData.data.map((course: TCourse) => (
       <CourseCard key={course.id} course={course} />
     ));
   }

@@ -1,8 +1,7 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, Eye, SquarePen, Plus } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Eye, SquarePen, Plus } from "lucide-react";
 import TableRowActions from "@/components/shared/table/TableRowActions";
 
 export type TModule = {
@@ -40,32 +39,12 @@ export const AssignCourseDetailColmn: ColumnDef<TModule>[] = [
 
   {
     accessorKey: "title",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Module Name
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
+    header: "Module Name",
   },
 
   {
     accessorKey: "videos",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Videos
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
+    header: "Videos",
     cell: ({ getValue }) => {
       const videoData = getValue() as string[];
 

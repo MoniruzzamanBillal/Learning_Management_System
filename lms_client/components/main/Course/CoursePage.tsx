@@ -46,9 +46,9 @@ export default function CoursePage() {
     maxPrice: debounceMaxPrice,
   });
 
-  const { data: allCourseData, isLoading: courseDataLoading } = useFetchData<{
-    data: TCourse[];
-  }>(
+  const { data: allCourseData, isLoading: courseDataLoading } = useFetchData<
+    TCourse[]
+  >(
     [
       "all-courses",
       `${debounceTerm}`,
@@ -70,7 +70,7 @@ export default function CoursePage() {
         ))}
       </>
     );
-  } else if (!allCourseData?.data?.data?.length) {
+  } else if (!allCourseData?.data?.length) {
     content = (
       <div className="col-span-full flex flex-col items-center justify-center py-20 text-center">
         <BookOpen className="h-16 w-16 text-gray-300 mb-4" />
@@ -82,8 +82,8 @@ export default function CoursePage() {
         </p>
       </div>
     );
-  } else if (allCourseData?.data?.data?.length) {
-    content = allCourseData.data.data.map((course: TCourse) => (
+  } else if (allCourseData?.data?.length) {
+    content = allCourseData.data.map((course: TCourse) => (
       <CourseCard key={course.id} course={course} />
     ));
   }

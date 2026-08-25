@@ -74,7 +74,10 @@ const addCourse = async (
       },
     });
 
-    return result;
+    return {
+      ...result,
+      instructors: result.instructors.map((ci) => ci.instructor),
+    };
   } catch (error) {
     if (
       error instanceof Prisma.PrismaClientKnownRequestError &&

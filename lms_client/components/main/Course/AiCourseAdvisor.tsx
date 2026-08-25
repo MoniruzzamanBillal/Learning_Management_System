@@ -133,7 +133,7 @@ const AiCourseAdvisor = () => {
                   <Link
                     key={rec.courseId}
                     href={`/courses/${rec.courseId}`}
-                    className="group bg-white border border-gray-100 rounded-xl p-4 hover:border-prime-200 hover:shadow-md transition-all duration-200 flex flex-col h-full"
+                    className="group bg-white border border-gray-300/80 rounded-xl p-4 hover:border-prime-200 hover:shadow-md transition-all duration-200 flex flex-col h-full  "
                   >
                     <div className="flex items-start gap-3 mb-2">
                       <div className="p-2 bg-indigo-50 rounded-lg shrink-0">

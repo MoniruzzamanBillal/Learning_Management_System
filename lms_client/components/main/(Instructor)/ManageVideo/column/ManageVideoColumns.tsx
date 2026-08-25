@@ -1,8 +1,7 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, Eye, SquarePen } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Eye, SquarePen } from "lucide-react";
 import TableRowActions from "@/components/shared/table/TableRowActions";
 
 export type TVideo = {
@@ -24,39 +23,15 @@ export type TVideo = {
 export const ManageVideoColumns: ColumnDef<TVideo>[] = [
   {
     accessorKey: "module.course.name",
-    header: ({ column }) => (
-      <Button
-        variant="ghost"
-        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-      >
-        Course Name
-        <ArrowUpDown className="ml-2 h-4 w-4" />
-      </Button>
-    ),
+    header: "Course Name",
   },
   {
     accessorKey: "module.title",
-    header: ({ column }) => (
-      <Button
-        variant="ghost"
-        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-      >
-        Module Name
-        <ArrowUpDown className="ml-2 h-4 w-4" />
-      </Button>
-    ),
+    header: "Module Name",
   },
   {
     accessorKey: "title",
-    header: ({ column }) => (
-      <Button
-        variant="ghost"
-        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-      >
-        Video Title
-        <ArrowUpDown className="ml-2 h-4 w-4" />
-      </Button>
-    ),
+    header: "Video Title",
   },
   {
     accessorKey: "videoOrder",

@@ -1,9 +1,7 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
-import { ArrowUpDown } from "lucide-react";
 import CertificateDownloadButton from "../CertificateDownloadButton";
 
 type TUser = {
@@ -28,17 +26,7 @@ export const CertificateTableColumn: ColumnDef<TCertificateData>[] = [
   {
     accessorFn: (row: TCertificateData) => row?.course?.name,
     id: "name",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Course Name
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
+    header: "Course Name",
     cell: ({ row }) => {
       return <p className="font-medium">{row.original?.course?.name}</p>;
     },
@@ -47,17 +35,7 @@ export const CertificateTableColumn: ColumnDef<TCertificateData>[] = [
   {
     accessorFn: (row: TCertificateData) => row?.course?.category,
     id: "category",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Category
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
+    header: "Category",
     cell: ({ row }) => {
       return <p>{row.original?.course?.category}</p>;
     },
