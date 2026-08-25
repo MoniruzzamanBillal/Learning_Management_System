@@ -4,6 +4,8 @@ import dynamic from "next/dynamic";
 
 export const metadata: Metadata = {
   title: "MATS Academy | My Course",
+  description: "Continue watching your enrolled course content on MATS Academy.",
+  robots: { index: false, follow: false },
 };
 
 type TpageProps = {

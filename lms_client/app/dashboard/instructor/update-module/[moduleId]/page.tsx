@@ -3,6 +3,7 @@ import UpdateModule from "@/components/main/(Instructor)/ManageModule/UpdateModu
 export const metadata = {
   title: "Update Module | Instructor Dashboard",
   description: "Update an existing module.",
+  robots: { index: false, follow: false },
 };
 
 const UpdateModulePage = () => {

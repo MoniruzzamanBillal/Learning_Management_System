@@ -3,6 +3,7 @@ import MyEnrolledCourses from "@/components/main/(User)/MyCourses/MyEnrolledCour
 export const metadata = {
   title: "My Enrolled Courses | User Dashboard",
   description: "View all your enrolled courses.",
+  robots: { index: false, follow: false },
 };
 
 const MyEnrolledCoursesPage = () => {

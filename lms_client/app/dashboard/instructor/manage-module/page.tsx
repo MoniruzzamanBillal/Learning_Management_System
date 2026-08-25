@@ -3,6 +3,7 @@ import ManageModule from "@/components/main/(Instructor)/ManageModule/ManageModu
 export const metadata = {
   title: "Manage Modules | Instructor Dashboard",
   description: "View and manage all modules.",
+  robots: { index: false, follow: false },
 };
 
 const ManageModulePage = () => {

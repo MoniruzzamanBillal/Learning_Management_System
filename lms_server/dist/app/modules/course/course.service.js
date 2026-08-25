@@ -24,6 +24,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.courseServices = void 0;
+const client_1 = require("../../../generated/prisma/client");
 const date_fns_1 = require("date-fns");
 const http_status_1 = __importDefault(require("http-status"));
 const AppError_1 = __importDefault(require("../../Error/AppError"));
@@ -54,24 +55,33 @@ file) => __awaiter(void 0, void 0, void 0, function* () {
             }
         })));
     }
-    const result = yield prisma_1.default.course.create({
-        data: {
-            name: payload.name,
-            description: payload.description,
-            price: payload.price,
-            category: payload.category,
-            courseCover: payload.courseCover,
-            instructors: (instructors === null || instructors === void 0 ? void 0 : instructors.length)
-                ? { create: instructors.map((userId) => ({ userId })) }
-                : undefined,
-        },
-        include: {
-            instructors: {
-                include: { instructor: { select: { id: true, name: true } } },
+    try {
+        const result = yield prisma_1.default.course.create({
+            data: {
+                name: payload.name,
+                description: payload.description,
+                price: payload.price,
+                category: payload.category,
+                courseCover: payload.courseCover,
+                instructors: (instructors === null || instructors === void 0 ? void 0 : instructors.length)
+                    ? { create: instructors.map((userId) => ({ userId })) }
+                    : undefined,
             },
-        },
-    });
-    return result;
+            include: {
+                instructors: {
+                    include: { instructor: { select: { id: true, name: true } } },
+                },
+            },
+        });
+        return result;
+    }
+    catch (error) {
+        if (error instanceof client_1.Prisma.PrismaClientKnownRequestError &&
+            error.code === "P2002") {
+            throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "A course with this name already exists !!!");
+        }
+        throw error;
+    }
 });
 // ! sort option -> Prisma orderBy, used by getAllCourses (rating_desc is
 // handled separately below since it's a computed aggregate, not a column)
@@ -176,13 +186,17 @@ const getAllCoursesWithModules = () => __awaiter(void 0, void 0, void 0, functio
                 },
             },
             modules: {
+                where: { isDeleted: false },
                 select: {
                     id: true,
                     courseId: true,
                     instructorId: true,
                     title: true,
                     isDeleted: true,
-                    videos: { select: { id: true } },
+                    videos: {
+                        where: { isDeleted: false },
+                        select: { id: true },
+                    },
                 },
             },
         },
@@ -242,12 +256,16 @@ const getCourseDetailsForAdmin = (courseId) => __awaiter(void 0, void 0, void 0,
                 },
             },
             modules: {
+                where: { isDeleted: false },
                 select: {
                     id: true,
                     courseId: true,
                     title: true,
                     instructorId: true,
-                    videos: { select: { id: true } },
+                    videos: {
+                        where: { isDeleted: false },
+                        select: { id: true },
+                    },
                 },
             },
         },
@@ -266,7 +284,7 @@ const getCourseDetailForInstructor = (courseId) => __awaiter(void 0, void 0, voi
             name: true,
             category: true,
             published: true,
-            modules: { select: { id: true } },
+            modules: { where: { isDeleted: false }, select: { id: true } },
         },
     });
     if (!result) {

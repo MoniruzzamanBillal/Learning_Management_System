@@ -3,6 +3,7 @@ import InstructorModule from "@/components/main/(Instructor)/InstructorModule/In
 export const metadata = {
   title: "Module Detail | Instructor Dashboard",
   description: "View details of your assigned module.",
+  robots: { index: false, follow: false },
 };
 
 const InstructorModulePage = () => {

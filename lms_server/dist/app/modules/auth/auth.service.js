@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.authServices = void 0;
+const client_1 = require("../../../generated/prisma/client");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const http_status_1 = __importDefault(require("http-status"));
 const config_1 = __importDefault(require("../../config"));
@@ -32,10 +33,19 @@ const createUserIntoDB = (payload, file) => __awaiter(void 0, void 0, void 0, fu
     }
     // No Mongoose pre("save") hook in Prisma — hash explicitly.
     const hashedPassword = yield bcrypt_1.default.hash(payload === null || payload === void 0 ? void 0 : payload.password, Number(config_1.default.bcrypt_salt_rounds));
-    const result = yield prisma_1.default.user.create({
-        data: Object.assign(Object.assign({}, payload), { password: hashedPassword }),
-    });
-    return result;
+    try {
+        const result = yield prisma_1.default.user.create({
+            data: Object.assign(Object.assign({}, payload), { password: hashedPassword }),
+        });
+        return result;
+    }
+    catch (error) {
+        if (error instanceof client_1.Prisma.PrismaClientKnownRequestError &&
+            error.code === "P2002") {
+            throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "A user with this email already exists !!!");
+        }
+        throw error;
+    }
 });
 // ! for creating an instructor
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -53,10 +63,19 @@ const createInstructor = (payload, file) => __awaiter(void 0, void 0, void 0, fu
     // existing behavior exactly: the hardcoded default password is still
     // stored hashed, same as the old pre-save hook did).
     const hashedPassword = yield bcrypt_1.default.hash(payload.password, Number(config_1.default.bcrypt_salt_rounds));
-    const result = yield prisma_1.default.user.create({
-        data: Object.assign(Object.assign({}, payload), { password: hashedPassword }),
-    });
-    return result;
+    try {
+        const result = yield prisma_1.default.user.create({
+            data: Object.assign(Object.assign({}, payload), { password: hashedPassword }),
+        });
+        return result;
+    }
+    catch (error) {
+        if (error instanceof client_1.Prisma.PrismaClientKnownRequestError &&
+            error.code === "P2002") {
+            throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "A user with this email already exists !!!");
+        }
+        throw error;
+    }
 });
 // ! for login
 const signInFromDb = (payload) => __awaiter(void 0, void 0, void 0, function* () {
