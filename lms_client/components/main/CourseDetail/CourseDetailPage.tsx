@@ -29,10 +29,16 @@ export default function CourseDetailPage({ id }: { id: string }) {
 
   const { data: checkEnrolledData } = useFetchData<{
     enrolledIncourse: boolean;
-  }>([`user-enroll-course-${id}`], `/enroll/check-user-enrolled/${id}`, {
-    enabled:
-      !!id && !!userData?.userId && userData?.userRole === userRoleConts.user,
-  });
+  }>(
+    [`user-enroll-course-${id}`],
+    `/enroll/check-user-enrolled?courseId=${id}&userId=${userData?.userId}`,
+    {
+      enabled:
+        !!id &&
+        !!userData?.userId &&
+        userData?.userRole === userRoleConts.user,
+    },
+  );
 
   // console.log("checkEnrolledData = ", checkEnrolledData);
 
@@ -53,7 +59,7 @@ export default function CourseDetailPage({ id }: { id: string }) {
   const { data: reviewEligibility, isLoading: reviewEligibleDataLoading } =
     useFetchData<boolean | null>(
       [`review-eligibility-${id}`],
-      `/review/check-review-eligibility/${id}`,
+      `/review/check-review-eligibility?courseId=${id}&userId=${userData?.userId}`,
       {
         enabled:
           !!id &&
@@ -89,18 +95,22 @@ export default function CourseDetailPage({ id }: { id: string }) {
       comment: review,
     };
 
-    console.log("review payload = ", payload);
+    try {
+      const result = await giveReview({
+        url: `/review/give-review`,
+        payload,
+      });
 
-    const result = await giveReview({
-      url: `/review/give-review`,
-      payload,
-    });
-    console.log(result);
-
-    // if (result?.data?.success) {
-    //   reviewDataRefetch();
-    //   eligibilityRefetch();
-    // }
+      if (result?.success) {
+        toast.success(result?.message ?? "Review submitted successfully!");
+        setReview(null);
+        setRating(0);
+      }
+    } catch (error) {
+      toast.error(
+        (error as { message?: string })?.message ?? "Failed to submit review",
+      );
+    }
   };
 
   let content = null;

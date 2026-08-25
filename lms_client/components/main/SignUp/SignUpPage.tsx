@@ -38,9 +38,12 @@ export default function SignUpPage() {
 
   const onSubmit: SubmitHandler<SignUpFormData> = async (data) => {
     try {
+      const formData = new FormData();
+      formData.append("data", JSON.stringify(data));
+
       const result = await registerMutation.mutateAsync({
         url: "/auth/register",
-        payload: data,
+        payload: formData,
       });
 
       if (result?.success) {

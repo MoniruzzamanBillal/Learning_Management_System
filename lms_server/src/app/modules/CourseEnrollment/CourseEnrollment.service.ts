@@ -194,10 +194,11 @@ const getUserEnrolledCourse = async (userId: string, courseId: string) => {
           name: true,
           category: true,
           modules: {
+            where: { isDeleted: false },
             select: {
               id: true,
               title: true,
-              videos: { select: { id: true } },
+              videos: { where: { isDeleted: false }, select: { id: true } },
             },
           },
         },
