@@ -1,14 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
+import { updateModuleFunction } from "@/components/main/(Instructor)/ManageModule/functions/module.function";
 import FormSubmitLoading from "@/components/shared/FormSubmitLoading";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { updateModuleFunction } from "@/components/main/(Instructor)/ManageModule/functions/module.function";
 import { useFetchData, usePatch } from "@/hooks/useApi";
 import { useGetUser } from "@/hooks/useGetUser";
 import { TCourseData } from "@/types/course.types";
+import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -92,6 +93,8 @@ const UpdateModule = () => {
     }
   }, [moduleData?.data, reset]);
 
+  const isOwner = moduleData?.data?.instructorId === userInfo?.userId;
+
   return (
     <>
       {(updateModuleMutation.isPending ||
@@ -104,6 +107,23 @@ const UpdateModule = () => {
             Update Module
           </h1>
 
+          {!moduleDataLoading && moduleData?.data && !isOwner ? (
+            <div className="p-6 text-center max-w-lg m-auto">
+              <p className="text-red-600 font-semibold mb-2">
+                You don&apos;t have access to update this module.
+              </p>
+              <p className="text-gray-500 text-sm mb-4">
+                This module belongs to a course assigned to a different
+                instructor.
+              </p>
+              <Link
+                href="/dashboard/instructor/manage-module"
+                className="text-prime-100 hover:text-prime-200 font-medium"
+              >
+                Back to Manage Modules
+              </Link>
+            </div>
+          ) : (
           <div className="addModuleForm p-1 w-[98%] xsm:w-[92%] sm:w-[85%] md:w-[80%] xmd:w-[75%] lg:w-[65%] m-auto">
             <form
               onSubmit={handleSubmit(handleUpdateModule)}
@@ -170,6 +190,7 @@ const UpdateModule = () => {
               </Button>
             </form>
           </div>
+          )}
         </div>
       </div>
     </>

@@ -19,7 +19,11 @@ router.post(
 );
 
 // ! for getting module data
-router.get("/module-detail/:moduleId", moduleController.getModuleData);
+router.get(
+  "/module-detail/:moduleId",
+  authCheck(UserRole.admin, UserRole.instructor),
+  moduleController.getModuleData
+);
 
 // ! get module data based on course id
 router.get(

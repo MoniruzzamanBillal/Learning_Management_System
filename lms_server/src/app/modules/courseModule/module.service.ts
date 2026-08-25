@@ -126,7 +126,8 @@ const getModulData = async (moduleId: string) => {
 const updateModule = async (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   payload: any,
-  moduleId: string
+  moduleId: string,
+  instructorId: string
 ) => {
   const moduleData = await prisma.module.findFirst({
     where: { id: moduleId, isDeleted: false },
@@ -134,6 +135,13 @@ const updateModule = async (
 
   if (!moduleData) {
     throw new AppError(httpStatus.BAD_REQUEST, "This module don't exist !!!");
+  }
+
+  if (moduleData.instructorId !== instructorId) {
+    throw new AppError(
+      httpStatus.FORBIDDEN,
+      "You are not authorized to update this module !!!"
+    );
   }
 
   const updatedData = await prisma.module.update({

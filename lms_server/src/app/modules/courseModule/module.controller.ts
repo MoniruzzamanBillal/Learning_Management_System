@@ -60,6 +60,7 @@ const updateModule = catchAsync(async (req, res) => {
   const result = await moduleServices.updateModule(
     req?.body,
     req?.params?.moduleId as string,
+    req?.user?.userId as string,
   );
 
   sendResponse(res, {
