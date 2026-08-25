@@ -40,14 +40,15 @@ export const adminLinks = [
     path: "/dashboard/admin/enroll-courses",
     icon: <ClipboardList className="w-5 h-5" />,
   },
-  {
-    name: "Error Logs",
-    path: "/dashboard/admin/error-logs",
-    icon: <AlertTriangle className="w-5 h-5" />,
-  },
+
   {
     name: "Manage Reviews",
     path: "/dashboard/admin/manage-reviews",
     icon: <Star className="w-5 h-5" />,
+  },
+  {
+    name: "Error Logs",
+    path: "/dashboard/admin/error-logs",
+    icon: <AlertTriangle className="w-5 h-5" />,
   },
 ];

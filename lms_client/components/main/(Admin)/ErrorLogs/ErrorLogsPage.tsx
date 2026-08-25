@@ -1,10 +1,10 @@
 "use client";
 
+import { TErrorLog } from "@/components/main/(Admin)/ErrorLogs/type/errorLog.types";
 import PageHeader from "@/components/shared/PageHeader/PageHeader";
 import GenericTableComponent from "@/components/shared/table/GenericTableComponent";
 import TableDataLoading from "@/components/shared/table/TableLoading";
 import { useFetchData } from "@/hooks/useApi";
-import { TErrorLog } from "@/components/main/(Admin)/ErrorLogs/type/errorLog.types";
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
 import { Eye } from "lucide-react";
@@ -27,7 +27,10 @@ export default function ErrorLogsPage() {
         enableSorting: true,
         cell: ({ row }) => (
           <p className="whitespace-nowrap">
-            {format(new Date(row.original.createdAt), "dd-MMM-yyyy HH:mm:ss")}
+            {format(
+              new Date(row.original.createdAt),
+              "dd-MMM-yyyy : (hh:mm:ss a)",
+            )}
           </p>
         ),
       },

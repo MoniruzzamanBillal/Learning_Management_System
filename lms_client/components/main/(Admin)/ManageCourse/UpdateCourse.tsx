@@ -71,7 +71,7 @@ const UpdateCourse = () => {
     useFetchData<TInstructor[]>(["all-instructors"], "/user/get-instructors");
 
   const { data: courseDataRes, isLoading: courseDataLoading } =
-    useFetchData<TCourseData>(
+    useFetchData<TCourseData<TInstructor>>(
       ["admin-course-detail", courseId],
       `/course/admin-course-detail/${courseId}`,
     );
@@ -150,7 +150,7 @@ const UpdateCourse = () => {
         description: course?.description,
         price: course?.price,
         category: course?.category,
-        instructors: course?.instructors,
+        instructors: course?.instructors?.map((instructor) => instructor.id),
       });
 
       if (course?.courseCover) {
