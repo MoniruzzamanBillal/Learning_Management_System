@@ -23,7 +23,7 @@ export const updateProfileFunction = async (
   } catch (error: any) {
     console.log(error);
     const errorMessage =
-      error?.response?.data?.message ||
+      error?.message ||
       "Something went wrong while updating profile !!!";
     toast.error(errorMessage, {
       id: taostId,

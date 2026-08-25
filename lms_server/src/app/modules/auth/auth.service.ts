@@ -29,14 +29,27 @@ const createUserIntoDB = async (payload: Partial<TUser>, file: any) => {
     Number(config.bcrypt_salt_rounds)
   );
 
-  const result = await prisma.user.create({
-    data: {
-      ...payload,
-      password: hashedPassword,
-    } as Prisma.UserCreateInput,
-  });
+  try {
+    const result = await prisma.user.create({
+      data: {
+        ...payload,
+        password: hashedPassword,
+      } as Prisma.UserCreateInput,
+    });
 
-  return result;
+    return result;
+  } catch (error) {
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === "P2002"
+    ) {
+      throw new AppError(
+        httpStatus.BAD_REQUEST,
+        "A user with this email already exists !!!"
+      );
+    }
+    throw error;
+  }
 };
 
 // ! for creating an instructor
@@ -65,14 +78,27 @@ const createInstructor = async (payload: Partial<TUser>, file: any) => {
     Number(config.bcrypt_salt_rounds)
   );
 
-  const result = await prisma.user.create({
-    data: {
-      ...payload,
-      password: hashedPassword,
-    } as Prisma.UserCreateInput,
-  });
+  try {
+    const result = await prisma.user.create({
+      data: {
+        ...payload,
+        password: hashedPassword,
+      } as Prisma.UserCreateInput,
+    });
 
-  return result;
+    return result;
+  } catch (error) {
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === "P2002"
+    ) {
+      throw new AppError(
+        httpStatus.BAD_REQUEST,
+        "A user with this email already exists !!!"
+      );
+    }
+    throw error;
+  }
 };
 
 type Tlogin = {

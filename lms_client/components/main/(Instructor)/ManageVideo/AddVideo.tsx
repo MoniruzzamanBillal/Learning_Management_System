@@ -31,6 +31,14 @@ const AddVideo = () => {
     formState: { errors, isSubmitting },
   } = useForm<TAddVideo>();
 
+  // Captured once so its real onChange (which updates react-hook-form's
+  // internal state) can still run alongside the preview handler below —
+  // a separate onChange prop after {...register(...)} would otherwise
+  // silently replace it, and the selected file would never reach `data.video`.
+  const videoField = register("video", {
+    required: "video is required !!!",
+  });
+
   const handleNavigate = () => {
     router.back();
   };
@@ -107,10 +115,11 @@ const AddVideo = () => {
                   type="file"
                   accept="video/*"
                   placeholder="Enter Video"
-                  {...register("video", {
-                    required: "video is required !!!",
-                  })}
-                  onChange={(e) => handleChangeVideoUrl(e)}
+                  {...videoField}
+                  onChange={(e) => {
+                    videoField.onChange(e);
+                    handleChangeVideoUrl(e);
+                  }}
                 />
 
                 {videoPreview && (

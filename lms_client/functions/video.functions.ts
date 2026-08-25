@@ -22,7 +22,7 @@ export const addVideoFunction = async (
       navigate();
     }, 700);
   } catch (error: any) {
-    const errorMessage = error?.response?.data?.message || "Something went wrong while adding video !!!";
+    const errorMessage = error?.message || "Something went wrong while adding video !!!";
     toast.error(errorMessage, {
       id: taostId,
       duration: 1400,
@@ -51,7 +51,7 @@ export const updateVideoFunction = async (
       navigate();
     }, 700);
   } catch (error: any) {
-    const errorMessage = error?.response?.data?.message || "Something went wrong while updating video !!!";
+    const errorMessage = error?.message || "Something went wrong while updating video !!!";
     toast.error(errorMessage, {
       id: taostId,
       duration: 1400,
@@ -72,7 +72,7 @@ export const deleteVideoFunction = async (params: any, deleteVideo: any) => {
     });
     return { data: { success: true } };
   } catch (error: any) {
-    const errorMessage = error?.response?.data?.message || "Something went wrong while Deleting video !!!";
+    const errorMessage = error?.message || "Something went wrong while Deleting video !!!";
     toast.error(errorMessage, {
       id: taostId,
       duration: 1400,

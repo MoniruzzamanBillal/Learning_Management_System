@@ -1,5 +1,6 @@
 "use client";
 
+import { publishCourseFunction } from "@/components/main/(Admin)/ManageCourse/functions/course.functions";
 import GenericTableComponent from "@/components/shared/table/GenericTableComponent";
 import TableDataLoading from "@/components/shared/table/TableLoading";
 import {
@@ -9,7 +10,6 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-import { publishCourseFunction } from "@/components/main/(Admin)/ManageCourse/functions/course.functions";
 import { useFetchData, usePatch } from "@/hooks/useApi";
 import { useParams, useRouter } from "next/navigation";
 import {
@@ -70,7 +70,7 @@ const CourseDetail = () => {
             {!courseData?.data?.published && (
               <Button
                 disabled={coursepublishingLoading}
-                className=" bg-prime100 hover:bg-prime200 "
+                className=" bg-prime-100 hover:bg-prime-200 "
                 onClick={() => publishAdminCourse()}
               >
                 {coursepublishingLoading

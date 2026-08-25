@@ -23,7 +23,7 @@ export const addCourseFunction = async (
   } catch (error: any) {
     console.log(error);
     const errorMessage =
-      error?.response?.data?.message || "Something went wrong while adding course !!!";
+      error?.message || "Something went wrong while adding course !!!";
     toast.error(errorMessage, {
       id: taostId,
       duration: 1400,
@@ -54,7 +54,7 @@ export const updateCourseFunction = async (
   } catch (error: any) {
     console.log(error);
     const errorMessage =
-      error?.response?.data?.message || "Something went wrong while updating course !!!";
+      error?.message || "Something went wrong while updating course !!!";
     toast.error(errorMessage, {
       id: taostId,
       duration: 1400,
@@ -83,7 +83,7 @@ export const publishCourseFunction = async (
   } catch (error: any) {
     console.log(error);
     const errorMessage =
-      error?.response?.data?.message || "Something went wrong while publishing course !!!";
+      error?.message || "Something went wrong while publishing course !!!";
     toast.error(errorMessage, {
       id: taostId,
       duration: 1400,

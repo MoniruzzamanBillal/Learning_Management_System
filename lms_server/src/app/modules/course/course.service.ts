@@ -55,25 +55,38 @@ const addCourse = async (
     );
   }
 
-  const result = await prisma.course.create({
-    data: {
-      name: payload.name,
-      description: payload.description,
-      price: payload.price,
-      category: payload.category,
-      courseCover: payload.courseCover,
-      instructors: instructors?.length
-        ? { create: instructors.map((userId) => ({ userId })) }
-        : undefined,
-    },
-    include: {
-      instructors: {
-        include: { instructor: { select: { id: true, name: true } } },
+  try {
+    const result = await prisma.course.create({
+      data: {
+        name: payload.name,
+        description: payload.description,
+        price: payload.price,
+        category: payload.category,
+        courseCover: payload.courseCover,
+        instructors: instructors?.length
+          ? { create: instructors.map((userId) => ({ userId })) }
+          : undefined,
       },
-    },
-  });
+      include: {
+        instructors: {
+          include: { instructor: { select: { id: true, name: true } } },
+        },
+      },
+    });
 
-  return result;
+    return result;
+  } catch (error) {
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === "P2002"
+    ) {
+      throw new AppError(
+        httpStatus.BAD_REQUEST,
+        "A course with this name already exists !!!"
+      );
+    }
+    throw error;
+  }
 };
 
 // ! sort option -> Prisma orderBy, used by getAllCourses (rating_desc is
@@ -217,13 +230,17 @@ const getAllCoursesWithModules = async () => {
         },
       },
       modules: {
+        where: { isDeleted: false },
         select: {
           id: true,
           courseId: true,
           instructorId: true,
           title: true,
           isDeleted: true,
-          videos: { select: { id: true } },
+          videos: {
+            where: { isDeleted: false },
+            select: { id: true },
+          },
         },
       },
     },
@@ -297,12 +314,16 @@ const getCourseDetailsForAdmin = async (courseId: string) => {
         },
       },
       modules: {
+        where: { isDeleted: false },
         select: {
           id: true,
           courseId: true,
           title: true,
           instructorId: true,
-          videos: { select: { id: true } },
+          videos: {
+            where: { isDeleted: false },
+            select: { id: true },
+          },
         },
       },
     },
@@ -328,7 +349,7 @@ const getCourseDetailForInstructor = async (courseId: string) => {
       name: true,
       category: true,
       published: true,
-      modules: { select: { id: true } },
+      modules: { where: { isDeleted: false }, select: { id: true } },
     },
   });
 

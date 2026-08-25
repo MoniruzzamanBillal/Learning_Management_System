@@ -28,6 +28,12 @@ const AddInstructor = () => {
     resolver: zodResolver(addInstructorSchema),
   });
 
+  // Captured once so its real onChange (which updates react-hook-form's
+  // internal state) can still run alongside the preview handler below —
+  // a separate onChange prop after {...register(...)} would otherwise
+  // silently replace it, and the selected file would never reach `data.image`.
+  const imageField = register("image");
+
   const { mutateAsync: instructorRegistration, isPending: isLoading } = usePost(
     [["all-instructors"]],
   );
@@ -131,12 +137,15 @@ const AddInstructor = () => {
                 <Input
                   id="image"
                   type="file"
-                  {...register("image")}
+                  {...imageField}
                   ref={(e) => {
-                    register("image").ref(e);
+                    imageField.ref(e);
                     imageInputRef.current = e;
                   }}
-                  onChange={(e) => changeImagePreviewUrl(e)}
+                  onChange={(e) => {
+                    imageField.onChange(e);
+                    changeImagePreviewUrl(e);
+                  }}
                 />
 
                 {imagePreview && (
