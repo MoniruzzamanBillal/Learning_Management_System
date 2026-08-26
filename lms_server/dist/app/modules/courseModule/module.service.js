@@ -54,9 +54,12 @@ const addModule = (payload) => __awaiter(void 0, void 0, void 0, function* () {
 const getAllModuleData = () => __awaiter(void 0, void 0, void 0, function* () {
     const moduleData = yield prisma_1.default.module.findMany({
         where: { isDeleted: false },
-        include: { course: { select: { id: true, name: true, published: true } } },
+        include: {
+            course: { select: { id: true, name: true, published: true } },
+            videos: { where: { isDeleted: false }, select: { id: true } },
+        },
     });
-    return moduleData;
+    return moduleData.map((module) => (Object.assign(Object.assign({}, module), { videos: module.videos.map((video) => video.id) })));
 });
 // ! get module data based on course id
 const getModuleFromCourseId = (courseId) => __awaiter(void 0, void 0, void 0, function* () {
@@ -66,9 +69,12 @@ const getModuleFromCourseId = (courseId) => __awaiter(void 0, void 0, void 0, fu
     }
     const result = yield prisma_1.default.module.findMany({
         where: { courseId, isDeleted: false },
-        include: { course: { select: { id: true, name: true, published: true } } },
+        include: {
+            course: { select: { id: true, name: true, published: true } },
+            videos: { where: { isDeleted: false }, select: { id: true } },
+        },
     });
-    return result;
+    return result.map((module) => (Object.assign(Object.assign({}, module), { videos: module.videos.map((video) => video.id) })));
 });
 // ! for getting module data
 const getModulData = (moduleId) => __awaiter(void 0, void 0, void 0, function* () {
@@ -97,12 +103,15 @@ const getModulData = (moduleId) => __awaiter(void 0, void 0, void 0, function* (
 // ! for updating module
 const updateModule = (
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-payload, moduleId) => __awaiter(void 0, void 0, void 0, function* () {
+payload, moduleId, instructorId) => __awaiter(void 0, void 0, void 0, function* () {
     const moduleData = yield prisma_1.default.module.findFirst({
         where: { id: moduleId, isDeleted: false },
     });
     if (!moduleData) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "This module don't exist !!!");
+    }
+    if (moduleData.instructorId !== instructorId) {
+        throw new AppError_1.default(http_status_1.default.FORBIDDEN, "You are not authorized to update this module !!!");
     }
     const updatedData = yield prisma_1.default.module.update({
         where: { id: moduleId },

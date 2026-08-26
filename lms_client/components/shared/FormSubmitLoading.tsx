@@ -1,10 +1,10 @@
 const FormSubmitLoading = () => {
   return (
-    <div className="loadingContainer fixed inset-0 bg-prime50/5 backdrop-blur-sm h-screen flex justify-center items-center z-[9999]  ">
+    <div className="loadingContainer fixed inset-0 bg-prime-100/5 backdrop-blur-sm h-screen flex justify-center items-center z-[9999]  ">
       <div role="status">
         <svg
           aria-hidden="true"
-          className="inline size-14 text-gray-200 animate-spin dark:text-gray-600 fill-prime100 "
+          className="inline size-14 text-gray-200 animate-spin dark:text-gray-600 fill-prime-100 "
           viewBox="0 0 100 101"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"

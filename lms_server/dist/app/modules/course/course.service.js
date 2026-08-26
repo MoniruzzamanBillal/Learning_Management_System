@@ -73,7 +73,7 @@ file) => __awaiter(void 0, void 0, void 0, function* () {
                 },
             },
         });
-        return result;
+        return Object.assign(Object.assign({}, result), { instructors: result.instructors.map((ci) => ci.instructor) });
     }
     catch (error) {
         if (error instanceof client_1.Prisma.PrismaClientKnownRequestError &&

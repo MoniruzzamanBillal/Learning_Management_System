@@ -61,8 +61,8 @@ const getModuleFromCourseId = (0, catchAsync_1.default)((req, res) => __awaiter(
 }));
 // ! for updating module
 const updateModule = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
-    const result = yield module_service_1.moduleServices.updateModule(req === null || req === void 0 ? void 0 : req.body, (_a = req === null || req === void 0 ? void 0 : req.params) === null || _a === void 0 ? void 0 : _a.moduleId);
+    var _a, _b;
+    const result = yield module_service_1.moduleServices.updateModule(req === null || req === void 0 ? void 0 : req.body, (_a = req === null || req === void 0 ? void 0 : req.params) === null || _a === void 0 ? void 0 : _a.moduleId, (_b = req === null || req === void 0 ? void 0 : req.user) === null || _b === void 0 ? void 0 : _b.userId);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
