@@ -52,6 +52,7 @@ model User {
   payments            Payment[]
   reviews             Review[]
   errorLogs           ErrorLog[]
+  videoNotes          VideoNote[]
 }
 
 model Course {
@@ -74,6 +75,7 @@ model Course {
   payments      Payment[]
   reviews       Review[]
   videoProgress VideoProgress[]
+  videoNotes    VideoNote[]
 }
 
 // New explicit join model, Course<->User many-to-many. Replaces Mongo's
@@ -106,6 +108,7 @@ model Module {
   instructor    User            @relation("ModuleInstructor", fields: [instructorId], references: [id])
   videos        Video[]
   videoProgress VideoProgress[]
+  videoNotes    VideoNote[]
 }
 
 // Backend module dir stays `VideoModule`.
@@ -123,6 +126,7 @@ model Video {
   module        Module          @relation(fields: [moduleId], references: [id])
   instructor    User            @relation("VideoInstructor", fields: [instructorId], references: [id])
   videoProgress VideoProgress[]
+  videoNotes    VideoNote[]
 
   // Prisma's schema DSL can't express `WHERE isDeleted = false`, so this plain
   // index is for query performance only. The real uniqueness guarantee is a
@@ -208,6 +212,25 @@ model Review {
   course Course @relation(fields: [courseId], references: [id])
 
   @@unique([userId, courseId])
+}
+
+model VideoNote {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String   @db.Uuid
+  courseId  String   @db.Uuid
+  moduleId  String   @db.Uuid
+  videoId   String   @db.Uuid
+  content   String
+  isDeleted Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user   User   @relation(fields: [userId], references: [id])
+  course Course @relation(fields: [courseId], references: [id])
+  module Module @relation(fields: [moduleId], references: [id])
+  video  Video  @relation(fields: [videoId], references: [id])
+
+  @@unique([userId, videoId])
 }
 
 model ErrorLog {

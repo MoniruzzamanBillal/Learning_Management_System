@@ -11,6 +11,7 @@ const errorLog_route_1 = require("../modules/errorLog/errorLog.route");
 const payment_routes_1 = require("../modules/payment/payment.routes");
 const review_route_1 = require("../modules/review/review.route");
 const user_route_1 = require("../modules/user/user.route");
+const VideoNote_route_1 = require("../modules/VideoNote/VideoNote.route");
 const video_routes_1 = require("../modules/VideoModule/video.routes");
 const router = (0, express_1.Router)();
 const routeArray = [
@@ -53,6 +54,10 @@ const routeArray = [
     {
         path: "/error-log",
         route: errorLog_route_1.errorLogRouter,
+    },
+    {
+        path: "/video-note",
+        route: VideoNote_route_1.videoNoteRouter,
     },
 ];
 routeArray.forEach((item) => {

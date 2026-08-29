@@ -48,7 +48,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.JsonNullValueFilter = exports.NullsOrder = exports.QueryMode = exports.JsonNullValueInput = exports.SortOrder = exports.ErrorLogScalarFieldEnum = exports.ReviewScalarFieldEnum = exports.PaymentScalarFieldEnum = exports.CourseEnrollmentScalarFieldEnum = exports.VideoProgressScalarFieldEnum = exports.VideoScalarFieldEnum = exports.ModuleScalarFieldEnum = exports.CourseInstructorScalarFieldEnum = exports.CourseScalarFieldEnum = exports.UserScalarFieldEnum = exports.TransactionIsolationLevel = exports.ModelName = exports.AnyNull = exports.JsonNull = exports.DbNull = exports.NullTypes = exports.Decimal = void 0;
+exports.JsonNullValueFilter = exports.NullsOrder = exports.QueryMode = exports.JsonNullValueInput = exports.SortOrder = exports.ErrorLogScalarFieldEnum = exports.VideoNoteScalarFieldEnum = exports.ReviewScalarFieldEnum = exports.PaymentScalarFieldEnum = exports.CourseEnrollmentScalarFieldEnum = exports.VideoProgressScalarFieldEnum = exports.VideoScalarFieldEnum = exports.ModuleScalarFieldEnum = exports.CourseInstructorScalarFieldEnum = exports.CourseScalarFieldEnum = exports.UserScalarFieldEnum = exports.TransactionIsolationLevel = exports.ModelName = exports.AnyNull = exports.JsonNull = exports.DbNull = exports.NullTypes = exports.Decimal = void 0;
 const runtime = __importStar(require("@prisma/client/runtime/index-browser"));
 exports.Decimal = runtime.Decimal;
 exports.NullTypes = {
@@ -84,6 +84,7 @@ exports.ModelName = {
     CourseEnrollment: 'CourseEnrollment',
     Payment: 'Payment',
     Review: 'Review',
+    VideoNote: 'VideoNote',
     ErrorLog: 'ErrorLog'
 };
 /*
@@ -185,6 +186,17 @@ exports.ReviewScalarFieldEnum = {
     courseId: 'courseId',
     rating: 'rating',
     comment: 'comment',
+    isDeleted: 'isDeleted',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+};
+exports.VideoNoteScalarFieldEnum = {
+    id: 'id',
+    userId: 'userId',
+    courseId: 'courseId',
+    moduleId: 'moduleId',
+    videoId: 'videoId',
+    content: 'content',
     isDeleted: 'isDeleted',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'

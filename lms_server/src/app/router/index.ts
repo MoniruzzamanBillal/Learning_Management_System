@@ -9,6 +9,7 @@ import { errorLogRouter } from "../modules/errorLog/errorLog.route";
 import { paymentRoute } from "../modules/payment/payment.routes";
 import { reviewRouter } from "../modules/review/review.route";
 import { userRouter } from "../modules/user/user.route";
+import { videoNoteRouter } from "../modules/VideoNote/VideoNote.route";
 import { videoRouter } from "../modules/VideoModule/video.routes";
 
 const router = Router();
@@ -53,6 +54,10 @@ const routeArray = [
   {
     path: "/error-log",
     route: errorLogRouter,
+  },
+  {
+    path: "/video-note",
+    route: videoNoteRouter,
   },
 ];
 
