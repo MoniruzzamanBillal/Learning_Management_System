@@ -15,6 +15,7 @@ import ModuleShowData from "./ModuleShowData";
 import NoVideoPlaceholder from "./NoVideoPlaceholder";
 import { TEnrollCourseDetail } from "./type/EnrolledCourseDetail.type";
 import VideoLoadingSkeleton from "./VideoLoadingSkeleton";
+import VideoNotesPanel from "./VideoNotesPanel";
 
 type TCompleteEnrollment = {
   id: string;
@@ -40,6 +41,7 @@ export default function EnrollCourseDetail({ id }: { id: string }) {
     );
 
   const [videoDataObj, setVideoDataObj] = useState<{
+    id: string;
     title: string;
     videoUrl: string;
   } | null>(null);
@@ -150,6 +152,10 @@ export default function EnrollCourseDetail({ id }: { id: string }) {
                 {content}
               </div>
             </div>
+
+            {videoDataObj && (
+              <VideoNotesPanel courseId={id} videoId={videoDataObj.id} />
+            )}
           </div>
           {/*  */}
 

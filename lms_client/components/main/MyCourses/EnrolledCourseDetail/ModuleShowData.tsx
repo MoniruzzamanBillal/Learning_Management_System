@@ -38,13 +38,13 @@ type TModuleVideo = {
 
 type TProps = {
   modules: TModule[];
-  videoDataObj: { title: string; videoUrl: string } | null;
+  videoDataObj: { id: string; title: string; videoUrl: string } | null;
   setVideoLoading: React.Dispatch<SetStateAction<boolean>>;
   courseId: string;
   setCourseProgress: React.Dispatch<SetStateAction<number | null>>;
 
   setVideoDataObj: React.Dispatch<
-    SetStateAction<{ title: string; videoUrl: string } | null>
+    SetStateAction<{ id: string; title: string; videoUrl: string } | null>
   >;
 };
 
@@ -90,6 +90,7 @@ const ModuleShowData = ({
       setVideoLoading(false);
 
       const videoPayload = {
+        id: result?.data?.id,
         title: result?.data?.title,
         videoUrl: result?.data?.videoUrl,
       };
