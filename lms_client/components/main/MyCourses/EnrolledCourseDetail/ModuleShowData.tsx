@@ -9,7 +9,7 @@ import { useFetchData } from "@/hooks/useApi";
 import { TApiResponse } from "@/types/globalTypes";
 import { apiGet } from "@/lib/api";
 import { videoProgressStatusConsts } from "@/utils/constants";
-import { CircleCheckBig, Lock, LockOpen } from "lucide-react";
+import { CircleCheckBig, HelpCircle, Lock, LockOpen } from "lucide-react";
 import React, { SetStateAction, useState } from "react";
 import { toast } from "sonner";
 import ModuleItemSkeleton from "./ModuleItemSkeleton";
@@ -46,6 +46,8 @@ type TProps = {
   setVideoDataObj: React.Dispatch<
     SetStateAction<{ id: string; title: string; videoUrl: string } | null>
   >;
+  onSelectQuiz: (moduleId: string, quizId: string) => void;
+  clearActiveQuiz: () => void;
 };
 
 const ModuleShowData = ({
@@ -55,6 +57,8 @@ const ModuleShowData = ({
   setCourseProgress,
   setVideoDataObj,
   videoDataObj,
+  onSelectQuiz,
+  clearActiveQuiz,
 }: TProps) => {
   const [selectedModuleId, setSelectedModuleId] = useState<string | null>(null);
 
@@ -80,6 +84,7 @@ const ModuleShowData = ({
   // ! for getting video data
   const handleGetVideo = async (videoId: string) => {
     setVideoLoading(true);
+    clearActiveQuiz();
 
     try {
       const result = (await apiGet(
@@ -171,6 +176,18 @@ const ModuleShowData = ({
                       </p>
                     </AccordionContent>
                   ))}
+
+                {module?.quiz && (
+                  <AccordionContent
+                    className="text-sm lg:text-lg py-3 pl-4 font-medium border-y border-y-gray-300 flex items-center gap-x-2 cursor-pointer"
+                    onClick={() =>
+                      onSelectQuiz(module?.id, module?.quiz?.id as string)
+                    }
+                  >
+                    <HelpCircle className="text-prime-100 font-bold size-5 lg:size-6" />
+                    <p>Quiz</p>
+                  </AccordionContent>
+                )}
               </AccordionItem>
             ))}
         </Accordion>

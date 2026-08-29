@@ -2,6 +2,7 @@ export type TModule = {
   id: string;
   title: string;
   videos: string[];
+  quiz: { id: string } | null;
 };
 
 export type TCourse = {

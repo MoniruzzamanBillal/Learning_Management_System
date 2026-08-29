@@ -7,6 +7,7 @@ import { courseEnrollmentRouter } from "../modules/CourseEnrollment/CourseEnroll
 import { moduleRouter } from "../modules/courseModule/module.routes";
 import { errorLogRouter } from "../modules/errorLog/errorLog.route";
 import { paymentRoute } from "../modules/payment/payment.routes";
+import { quizRouter } from "../modules/quiz/quiz.route";
 import { reviewRouter } from "../modules/review/review.route";
 import { userRouter } from "../modules/user/user.route";
 import { videoNoteRouter } from "../modules/VideoNote/VideoNote.route";
@@ -58,6 +59,10 @@ const routeArray = [
   {
     path: "/video-note",
     route: videoNoteRouter,
+  },
+  {
+    path: "/quiz",
+    route: quizRouter,
   },
 ];
 

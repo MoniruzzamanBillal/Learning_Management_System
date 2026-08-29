@@ -7,7 +7,7 @@ import TableDataLoading from "@/components/shared/table/TableLoading";
 import TableRowActions from "@/components/shared/table/TableRowActions";
 import { Button } from "@/components/ui/button";
 import { useFetchData } from "@/hooks/useApi";
-import { Eye, Plus, SquarePen } from "lucide-react";
+import { Eye, HelpCircle, Plus, SquarePen } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 const ManageModule = () => {
@@ -49,6 +49,12 @@ const ManageModule = () => {
                     label: "Add New Video",
                     icon: Plus,
                     href: `/dashboard/instructor/add-video/${module.id}`,
+                    hidden: isPublished,
+                  },
+                  {
+                    label: "Manage Quiz",
+                    icon: HelpCircle,
+                    href: `/dashboard/instructor/manage-quiz/${module.id}`,
                     hidden: isPublished,
                   },
                 ]}

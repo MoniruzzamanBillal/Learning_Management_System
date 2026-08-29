@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import AiStudyAssistant from "./AiStudyAssistant";
 import ModuleShowData from "./ModuleShowData";
 import NoVideoPlaceholder from "./NoVideoPlaceholder";
+import QuizPanel from "./QuizPanel";
 import { TEnrollCourseDetail } from "./type/EnrolledCourseDetail.type";
 import VideoLoadingSkeleton from "./VideoLoadingSkeleton";
 import VideoNotesPanel from "./VideoNotesPanel";
@@ -47,6 +48,11 @@ export default function EnrollCourseDetail({ id }: { id: string }) {
   } | null>(null);
   const [videoUrlLoading, setVideoLoading] = useState<boolean>(false);
 
+  const [activeQuiz, setActiveQuiz] = useState<{
+    moduleId: string;
+    quizId: string;
+  } | null>(null);
+
   const [courseProgress, setCourseProgress] = useState<number | null>(
     enrolledCourseData?.data?.courseProgressData ?? null,
   );
@@ -79,7 +85,11 @@ export default function EnrollCourseDetail({ id }: { id: string }) {
   let content = null;
 
   // ! video content for different state
-  if (videoUrlLoading) {
+  if (activeQuiz) {
+    content = (
+      <QuizPanel courseId={id} moduleId={activeQuiz.moduleId} />
+    );
+  } else if (videoUrlLoading) {
     content = <VideoLoadingSkeleton />;
   } else if (!videoDataObj && !videoUrlLoading && !isLoading) {
     content = <NoVideoPlaceholder />;
@@ -142,7 +152,7 @@ export default function EnrollCourseDetail({ id }: { id: string }) {
           <div className="leftVideoSection">
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden p-4">
               <div className="videoPreviewContainer">
-                {videoDataObj && (
+                {videoDataObj && !activeQuiz && (
                   <p className=" text-xl font-medium mb-2 ">
                     {videoDataObj?.title}
                   </p>
@@ -153,7 +163,7 @@ export default function EnrollCourseDetail({ id }: { id: string }) {
               </div>
             </div>
 
-            {videoDataObj && (
+            {videoDataObj && !activeQuiz && (
               <VideoNotesPanel courseId={id} videoId={videoDataObj.id} />
             )}
           </div>
@@ -171,6 +181,10 @@ export default function EnrollCourseDetail({ id }: { id: string }) {
                     setCourseProgress={setCourseProgress}
                     setVideoDataObj={setVideoDataObj}
                     videoDataObj={videoDataObj}
+                    onSelectQuiz={(moduleId, quizId) =>
+                      setActiveQuiz({ moduleId, quizId })
+                    }
+                    clearActiveQuiz={() => setActiveQuiz(null)}
                   />
                 )}
             </div>

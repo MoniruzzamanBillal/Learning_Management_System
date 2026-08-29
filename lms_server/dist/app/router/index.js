@@ -9,6 +9,7 @@ const CourseEnrollment_routes_1 = require("../modules/CourseEnrollment/CourseEnr
 const module_routes_1 = require("../modules/courseModule/module.routes");
 const errorLog_route_1 = require("../modules/errorLog/errorLog.route");
 const payment_routes_1 = require("../modules/payment/payment.routes");
+const quiz_route_1 = require("../modules/quiz/quiz.route");
 const review_route_1 = require("../modules/review/review.route");
 const user_route_1 = require("../modules/user/user.route");
 const VideoNote_route_1 = require("../modules/VideoNote/VideoNote.route");
@@ -58,6 +59,10 @@ const routeArray = [
     {
         path: "/video-note",
         route: VideoNote_route_1.videoNoteRouter,
+    },
+    {
+        path: "/quiz",
+        route: quiz_route_1.quizRouter,
     },
 ];
 routeArray.forEach((item) => {

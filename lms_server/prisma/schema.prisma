@@ -53,6 +53,8 @@ model User {
   reviews             Review[]
   errorLogs           ErrorLog[]
   videoNotes          VideoNote[]
+  quizzesAsInstructor Quiz[]             @relation("QuizInstructor")
+  quizAttempts        QuizAttempt[]
 }
 
 model Course {
@@ -76,6 +78,7 @@ model Course {
   reviews       Review[]
   videoProgress VideoProgress[]
   videoNotes    VideoNote[]
+  quizAttempts  QuizAttempt[]
 }
 
 // New explicit join model, Course<->User many-to-many. Replaces Mongo's
@@ -109,6 +112,7 @@ model Module {
   videos        Video[]
   videoProgress VideoProgress[]
   videoNotes    VideoNote[]
+  quiz          Quiz?
 }
 
 // Backend module dir stays `VideoModule`.
@@ -231,6 +235,72 @@ model VideoNote {
   video  Video  @relation(fields: [videoId], references: [id])
 
   @@unique([userId, videoId])
+}
+
+model Quiz {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  moduleId     String   @unique @db.Uuid
+  instructorId String   @db.Uuid
+  title        String
+  description  String?
+  isDeleted    Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  module     Module         @relation(fields: [moduleId], references: [id])
+  instructor User           @relation("QuizInstructor", fields: [instructorId], references: [id])
+  questions  QuizQuestion[]
+  attempts   QuizAttempt[]
+}
+
+model QuizQuestion {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  quizId        String   @db.Uuid
+  questionText  String
+  questionOrder Int
+  isDeleted     Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  quiz    Quiz         @relation(fields: [quizId], references: [id])
+  options QuizOption[]
+
+  @@index([quizId, questionOrder])
+}
+
+model QuizOption {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  questionId  String   @db.Uuid
+  optionText  String
+  isCorrect   Boolean  @default(false)
+  optionOrder Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  question QuizQuestion @relation(fields: [questionId], references: [id])
+
+  @@index([questionId])
+}
+
+// No retakes: @@unique([userId, quizId]) is the actual enforcement — a
+// student gets exactly one row per quiz, ever. See spec 29 decision.
+model QuizAttempt {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  quizId         String   @db.Uuid
+  userId         String   @db.Uuid
+  courseId       String   @db.Uuid
+  score          Int
+  totalQuestions Int
+  answers        Json     // { [questionId]: optionId } snapshot of what the student picked
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  quiz   Quiz   @relation(fields: [quizId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
+  course Course @relation(fields: [courseId], references: [id])
+
+  @@unique([userId, quizId])
+  @@index([userId, quizId])
 }
 
 model ErrorLog {

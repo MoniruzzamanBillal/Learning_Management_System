@@ -162,6 +162,7 @@ const getUserEnrolledCourse = (userId, courseId) => __awaiter(void 0, void 0, vo
                             id: true,
                             title: true,
                             videos: { where: { isDeleted: false }, select: { id: true } },
+                            quiz: { where: { isDeleted: false }, select: { id: true } },
                         },
                     },
                 },
