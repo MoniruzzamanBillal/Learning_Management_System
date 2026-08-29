@@ -31,6 +31,7 @@ Tracks work items defined in `context/specs/`. Update the moment implementation 
 | [`25-course-list-meta-envelope-shape.md`](specs/25-course-list-meta-envelope-shape.md)                     | ✅ Complete |
 | [`26-response-shape-audit.md`](specs/26-response-shape-audit.md)                                           | ✅ Complete |
 | [`27-module-detail-update-authorization-gap.md`](specs/27-module-detail-update-authorization-gap.md)       | ✅ Complete |
+| [`28-video-notes.md`](specs/28-video-notes.md)                                                             | 📝 Proposed — awaiting review, not implemented |
 | [`lms_client/context/specs/18-update-profile-page.md`](../../lms_client/context/specs/18-update-profile-page.md) | ✅ Complete |
 | [`lms_client/context/specs/19-error-message-passthrough-fix.md`](../../lms_client/context/specs/19-error-message-passthrough-fix.md) | ✅ Complete |
 | [`lms_client/context/specs/21-signup-registration-payload-format-bug.md`](../../lms_client/context/specs/21-signup-registration-payload-format-bug.md) | ✅ Complete |
