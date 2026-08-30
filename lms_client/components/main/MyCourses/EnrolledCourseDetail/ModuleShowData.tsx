@@ -9,7 +9,13 @@ import { useFetchData } from "@/hooks/useApi";
 import { TApiResponse } from "@/types/globalTypes";
 import { apiGet } from "@/lib/api";
 import { videoProgressStatusConsts } from "@/utils/constants";
-import { CircleCheckBig, HelpCircle, Lock, LockOpen } from "lucide-react";
+import {
+  CircleCheckBig,
+  ClipboardList,
+  HelpCircle,
+  Lock,
+  LockOpen,
+} from "lucide-react";
 import React, { SetStateAction, useState } from "react";
 import { toast } from "sonner";
 import ModuleItemSkeleton from "./ModuleItemSkeleton";
@@ -48,6 +54,8 @@ type TProps = {
   >;
   onSelectQuiz: (moduleId: string, quizId: string) => void;
   clearActiveQuiz: () => void;
+  onSelectAssignment: (moduleId: string) => void;
+  clearActiveAssignment: () => void;
 };
 
 const ModuleShowData = ({
@@ -59,6 +67,8 @@ const ModuleShowData = ({
   videoDataObj,
   onSelectQuiz,
   clearActiveQuiz,
+  onSelectAssignment,
+  clearActiveAssignment,
 }: TProps) => {
   const [selectedModuleId, setSelectedModuleId] = useState<string | null>(null);
 
@@ -85,6 +95,7 @@ const ModuleShowData = ({
   const handleGetVideo = async (videoId: string) => {
     setVideoLoading(true);
     clearActiveQuiz();
+    clearActiveAssignment();
 
     try {
       const result = (await apiGet(
@@ -186,6 +197,16 @@ const ModuleShowData = ({
                   >
                     <HelpCircle className="text-prime-100 font-bold size-5 lg:size-6" />
                     <p>Quiz</p>
+                  </AccordionContent>
+                )}
+
+                {module?.assignment && (
+                  <AccordionContent
+                    className="text-sm lg:text-lg py-3 pl-4 font-medium border-y border-y-gray-300 flex items-center gap-x-2 cursor-pointer"
+                    onClick={() => onSelectAssignment(module?.id)}
+                  >
+                    <ClipboardList className="text-prime-100 font-bold size-5 lg:size-6" />
+                    <p>Assignment</p>
                   </AccordionContent>
                 )}
               </AccordionItem>

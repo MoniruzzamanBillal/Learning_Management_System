@@ -119,16 +119,16 @@ const deleteAssignment = (assignmentId, instructorId) => __awaiter(void 0, void 
     });
     return result;
 });
-// ! for the instructor/admin grading list of an assignment's submissions
-const getAssignmentSubmissions = (assignmentId, instructorId) => __awaiter(void 0, void 0, void 0, function* () {
+// ! for the instructor/admin grading list of an assignment's submissions —
+// deliberately unrestricted, same as getAssignmentForManage/quiz's
+// getQuizForManage (see spec 31's Design section) — only the writes
+// (grade/reopen/create/update/delete) are ownership-gated.
+const getAssignmentSubmissions = (assignmentId) => __awaiter(void 0, void 0, void 0, function* () {
     const assignment = yield prisma_1.default.assignment.findFirst({
         where: { id: assignmentId, isDeleted: false },
     });
     if (!assignment) {
         throw new AppError_1.default(http_status_1.default.NOT_FOUND, "This assignment don't exist !!!");
-    }
-    if (assignment.instructorId !== instructorId) {
-        throw new AppError_1.default(http_status_1.default.FORBIDDEN, "You are not authorized to view submissions for this assignment !!!");
     }
     const result = yield prisma_1.default.assignmentSubmission.findMany({
         where: { assignmentId },

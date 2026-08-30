@@ -67,7 +67,6 @@ const deleteAssignment = catchAsync(async (req, res) => {
 const getAssignmentSubmissions = catchAsync(async (req, res) => {
   const result = await assignmentServices.getAssignmentSubmissions(
     req?.params?.assignmentId as string,
-    req?.user?.userId as string,
   );
 
   sendResponse(res, {

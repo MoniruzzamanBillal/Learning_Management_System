@@ -7,7 +7,7 @@ import TableDataLoading from "@/components/shared/table/TableLoading";
 import TableRowActions from "@/components/shared/table/TableRowActions";
 import { Button } from "@/components/ui/button";
 import { useFetchData } from "@/hooks/useApi";
-import { Eye, HelpCircle, Plus, SquarePen } from "lucide-react";
+import { ClipboardList, Eye, HelpCircle, Plus, SquarePen } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 const ManageModule = () => {
@@ -55,6 +55,12 @@ const ManageModule = () => {
                     label: "Manage Quiz",
                     icon: HelpCircle,
                     href: `/dashboard/instructor/manage-quiz/${module.id}`,
+                    hidden: isPublished,
+                  },
+                  {
+                    label: "Manage Assignment",
+                    icon: ClipboardList,
+                    href: `/dashboard/instructor/manage-assignment/${module.id}`,
                     hidden: isPublished,
                   },
                 ]}

@@ -63,8 +63,8 @@ const deleteAssignment = (0, catchAsync_1.default)((req, res) => __awaiter(void 
 }));
 // ! for the instructor/admin grading list of an assignment's submissions
 const getAssignmentSubmissions = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b;
-    const result = yield assignment_service_1.assignmentServices.getAssignmentSubmissions((_a = req === null || req === void 0 ? void 0 : req.params) === null || _a === void 0 ? void 0 : _a.assignmentId, (_b = req === null || req === void 0 ? void 0 : req.user) === null || _b === void 0 ? void 0 : _b.userId);
+    var _a;
+    const result = yield assignment_service_1.assignmentServices.getAssignmentSubmissions((_a = req === null || req === void 0 ? void 0 : req.params) === null || _a === void 0 ? void 0 : _a.assignmentId);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,

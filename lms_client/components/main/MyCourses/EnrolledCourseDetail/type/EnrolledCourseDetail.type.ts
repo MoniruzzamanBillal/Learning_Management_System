@@ -3,6 +3,7 @@ export type TModule = {
   title: string;
   videos: string[];
   quiz: { id: string } | null;
+  assignment: { id: string } | null;
 };
 
 export type TCourse = {

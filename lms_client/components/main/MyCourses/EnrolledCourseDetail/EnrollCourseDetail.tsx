@@ -11,6 +11,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { toast } from "sonner";
 import AiStudyAssistant from "./AiStudyAssistant";
+import AssignmentPanel from "./AssignmentPanel";
 import ModuleShowData from "./ModuleShowData";
 import NoVideoPlaceholder from "./NoVideoPlaceholder";
 import QuizPanel from "./QuizPanel";
@@ -53,6 +54,10 @@ export default function EnrollCourseDetail({ id }: { id: string }) {
     quizId: string;
   } | null>(null);
 
+  const [activeAssignment, setActiveAssignment] = useState<{
+    moduleId: string;
+  } | null>(null);
+
   const [courseProgress, setCourseProgress] = useState<number | null>(
     enrolledCourseData?.data?.courseProgressData ?? null,
   );
@@ -88,6 +93,10 @@ export default function EnrollCourseDetail({ id }: { id: string }) {
   if (activeQuiz) {
     content = (
       <QuizPanel courseId={id} moduleId={activeQuiz.moduleId} />
+    );
+  } else if (activeAssignment) {
+    content = (
+      <AssignmentPanel courseId={id} moduleId={activeAssignment.moduleId} />
     );
   } else if (videoUrlLoading) {
     content = <VideoLoadingSkeleton />;
@@ -152,7 +161,7 @@ export default function EnrollCourseDetail({ id }: { id: string }) {
           <div className="leftVideoSection">
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden p-4">
               <div className="videoPreviewContainer">
-                {videoDataObj && !activeQuiz && (
+                {videoDataObj && !activeQuiz && !activeAssignment && (
                   <p className=" text-xl font-medium mb-2 ">
                     {videoDataObj?.title}
                   </p>
@@ -163,7 +172,7 @@ export default function EnrollCourseDetail({ id }: { id: string }) {
               </div>
             </div>
 
-            {videoDataObj && !activeQuiz && (
+            {videoDataObj && !activeQuiz && !activeAssignment && (
               <VideoNotesPanel courseId={id} videoId={videoDataObj.id} />
             )}
           </div>
@@ -181,10 +190,16 @@ export default function EnrollCourseDetail({ id }: { id: string }) {
                     setCourseProgress={setCourseProgress}
                     setVideoDataObj={setVideoDataObj}
                     videoDataObj={videoDataObj}
-                    onSelectQuiz={(moduleId, quizId) =>
-                      setActiveQuiz({ moduleId, quizId })
-                    }
+                    onSelectQuiz={(moduleId, quizId) => {
+                      setActiveQuiz({ moduleId, quizId });
+                      setActiveAssignment(null);
+                    }}
                     clearActiveQuiz={() => setActiveQuiz(null)}
+                    onSelectAssignment={(moduleId) => {
+                      setActiveAssignment({ moduleId });
+                      setActiveQuiz(null);
+                    }}
+                    clearActiveAssignment={() => setActiveAssignment(null)}
                   />
                 )}
             </div>
