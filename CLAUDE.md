@@ -29,6 +29,8 @@ Both `lms_server/context/` and `lms_client/context/` contain actively-maintained
 
 Read the relevant app's `context/` docs before making non-trivial changes, and keep them in sync (per `ai-workflow-rules.md`) when a change alters something they document. Each app also has an `AGENTS.md` pointing at this same `context/` reading order, for tools that read that file instead.
 
+The repo-root `future-update-notes-quiz-assignment-plan.md` is a pre-implementation design doc for three features — Video Notes, Module Quiz, Assignment. The first two are now implemented (`lms_server/context/specs/28-video-notes.md`, `29-module-quiz.md`, `30-quiz-recreate-after-delete-crash.md`, and the `VideoNote`/`Quiz`/`QuizQuestion`/`QuizOption`/`QuizAttempt` models below) — treat that doc as historical for those two. Assignment (its Feature 3) is not implemented; no `Assignment` model exists in `schema.prisma` yet, so that section is still a live proposal if picked up.
+
 ## Commands
 
 ### lms_server (run from `lms_server/`)
@@ -137,3 +139,7 @@ JWT-based; roles are `admin`, `instructor`, `user` (`UserRole` in `lms_server/sr
 - New frontend data fetching/mutations: use `hooks/useApi.ts` (TanStack Query) rather than calling `axiosInstance` directly from components; put multi-step create/update/delete orchestration (toast + navigate) in `functions/*.functions.ts`.
 - Env vars are centralized: backend via `src/app/config/index.ts`, frontend base URL via `config/envConfig.ts` — don't read `process.env` ad hoc elsewhere.
 - After any meaningful change, update the relevant app's `context/progress-tracker.md` (and `architecture.md`/`code-standards.md` if the change alters something they document) — see "Living documentation" above.
+
+## Manual API testing
+
+`LMS_system.postman_collection.json` at the repo root is a Postman collection covering the REST API — import it when manually exercising endpoints instead of hand-writing requests. There's no seeded/guaranteed-current set of test credentials to rely on; instructor accounts created via `auth.service.ts::createInstructor` get the hardcoded default password (`123456`, forcing `needsPasswordChange`) until changed, but don't assume any specific account still has it — verify against the DB (e.g. `needsPasswordChange` still `true`) before assuming a login will work.
