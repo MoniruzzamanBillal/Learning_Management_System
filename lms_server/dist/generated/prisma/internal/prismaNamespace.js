@@ -48,7 +48,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.defineExtension = exports.JsonNullValueFilter = exports.NullsOrder = exports.QueryMode = exports.JsonNullValueInput = exports.SortOrder = exports.ErrorLogScalarFieldEnum = exports.QuizAttemptScalarFieldEnum = exports.QuizOptionScalarFieldEnum = exports.QuizQuestionScalarFieldEnum = exports.QuizScalarFieldEnum = exports.VideoNoteScalarFieldEnum = exports.ReviewScalarFieldEnum = exports.PaymentScalarFieldEnum = exports.CourseEnrollmentScalarFieldEnum = exports.VideoProgressScalarFieldEnum = exports.VideoScalarFieldEnum = exports.ModuleScalarFieldEnum = exports.CourseInstructorScalarFieldEnum = exports.CourseScalarFieldEnum = exports.UserScalarFieldEnum = exports.TransactionIsolationLevel = exports.ModelName = exports.AnyNull = exports.JsonNull = exports.DbNull = exports.NullTypes = exports.prismaVersion = exports.getExtensionContext = exports.Decimal = exports.Sql = exports.raw = exports.join = exports.empty = exports.sql = exports.PrismaClientValidationError = exports.PrismaClientInitializationError = exports.PrismaClientRustPanicError = exports.PrismaClientUnknownRequestError = exports.PrismaClientKnownRequestError = void 0;
+exports.defineExtension = exports.JsonNullValueFilter = exports.NullsOrder = exports.QueryMode = exports.JsonNullValueInput = exports.SortOrder = exports.ErrorLogScalarFieldEnum = exports.AssignmentSubmissionScalarFieldEnum = exports.AssignmentScalarFieldEnum = exports.QuizAttemptScalarFieldEnum = exports.QuizOptionScalarFieldEnum = exports.QuizQuestionScalarFieldEnum = exports.QuizScalarFieldEnum = exports.VideoNoteScalarFieldEnum = exports.ReviewScalarFieldEnum = exports.PaymentScalarFieldEnum = exports.CourseEnrollmentScalarFieldEnum = exports.VideoProgressScalarFieldEnum = exports.VideoScalarFieldEnum = exports.ModuleScalarFieldEnum = exports.CourseInstructorScalarFieldEnum = exports.CourseScalarFieldEnum = exports.UserScalarFieldEnum = exports.TransactionIsolationLevel = exports.ModelName = exports.AnyNull = exports.JsonNull = exports.DbNull = exports.NullTypes = exports.prismaVersion = exports.getExtensionContext = exports.Decimal = exports.Sql = exports.raw = exports.join = exports.empty = exports.sql = exports.PrismaClientValidationError = exports.PrismaClientInitializationError = exports.PrismaClientRustPanicError = exports.PrismaClientUnknownRequestError = exports.PrismaClientKnownRequestError = void 0;
 const runtime = __importStar(require("@prisma/client/runtime/client"));
 /**
  * Prisma Errors
@@ -117,6 +117,8 @@ exports.ModelName = {
     QuizQuestion: 'QuizQuestion',
     QuizOption: 'QuizOption',
     QuizAttempt: 'QuizAttempt',
+    Assignment: 'Assignment',
+    AssignmentSubmission: 'AssignmentSubmission',
     ErrorLog: 'ErrorLog'
 };
 /**
@@ -269,6 +271,33 @@ exports.QuizAttemptScalarFieldEnum = {
     score: 'score',
     totalQuestions: 'totalQuestions',
     answers: 'answers',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+};
+exports.AssignmentScalarFieldEnum = {
+    id: 'id',
+    moduleId: 'moduleId',
+    instructorId: 'instructorId',
+    title: 'title',
+    instructions: 'instructions',
+    dueDate: 'dueDate',
+    isDeleted: 'isDeleted',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+};
+exports.AssignmentSubmissionScalarFieldEnum = {
+    id: 'id',
+    assignmentId: 'assignmentId',
+    userId: 'userId',
+    courseId: 'courseId',
+    content: 'content',
+    submissionVersion: 'submissionVersion',
+    status: 'status',
+    score: 'score',
+    feedback: 'feedback',
+    gradedByInstructorId: 'gradedByInstructorId',
+    submittedAt: 'submittedAt',
+    gradedAt: 'gradedAt',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
 };

@@ -200,6 +200,10 @@ const getUserEnrolledCourse = async (userId: string, courseId: string) => {
               title: true,
               videos: { where: { isDeleted: false }, select: { id: true } },
               quiz: { where: { isDeleted: false }, select: { id: true } },
+              assignment: {
+                where: { isDeleted: false },
+                select: { id: true },
+              },
             },
           },
         },

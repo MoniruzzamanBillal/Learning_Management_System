@@ -9,7 +9,7 @@
 * 🟢 You can import this file directly.
 */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.VideoStatus = exports.PaymentStatus = exports.UserRole = void 0;
+exports.AssignmentSubmissionStatus = exports.VideoStatus = exports.PaymentStatus = exports.UserRole = void 0;
 exports.UserRole = {
     admin: 'admin',
     instructor: 'instructor',
@@ -24,4 +24,8 @@ exports.VideoStatus = {
     locked: 'locked',
     unlocked: 'unlocked',
     watched: 'watched'
+};
+exports.AssignmentSubmissionStatus = {
+    submitted: 'submitted',
+    graded: 'graded'
 };

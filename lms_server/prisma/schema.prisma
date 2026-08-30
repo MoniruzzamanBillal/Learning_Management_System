@@ -32,6 +32,11 @@ enum VideoStatus {
   watched
 }
 
+enum AssignmentSubmissionStatus {
+  submitted
+  graded
+}
+
 model User {
   id                  String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name                String
@@ -44,17 +49,20 @@ model User {
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
 
-  coursesAsInstructor CourseInstructor[]
-  modulesAsInstructor Module[]           @relation("ModuleInstructor")
-  videosAsInstructor  Video[]            @relation("VideoInstructor")
-  videoProgress       VideoProgress[]
-  courseEnrollments   CourseEnrollment[]
-  payments            Payment[]
-  reviews             Review[]
-  errorLogs           ErrorLog[]
-  videoNotes          VideoNote[]
-  quizzesAsInstructor Quiz[]             @relation("QuizInstructor")
-  quizAttempts        QuizAttempt[]
+  coursesAsInstructor         CourseInstructor[]
+  modulesAsInstructor         Module[]               @relation("ModuleInstructor")
+  videosAsInstructor          Video[]                @relation("VideoInstructor")
+  videoProgress               VideoProgress[]
+  courseEnrollments           CourseEnrollment[]
+  payments                    Payment[]
+  reviews                     Review[]
+  errorLogs                   ErrorLog[]
+  videoNotes                  VideoNote[]
+  quizzesAsInstructor         Quiz[]                 @relation("QuizInstructor")
+  quizAttempts                QuizAttempt[]
+  assignmentsAsInstructor     Assignment[]           @relation("AssignmentInstructor")
+  assignmentSubmissions       AssignmentSubmission[] @relation("SubmissionStudent")
+  assignmentSubmissionsGraded AssignmentSubmission[] @relation("SubmissionGrader")
 }
 
 model Course {
@@ -71,14 +79,15 @@ model Course {
   updatedAt                  DateTime @updatedAt
 
   // No `isDeleted` — matches current Mongo schema (hard delete only), don't add it.
-  instructors   CourseInstructor[]
-  modules       Module[]
-  enrollments   CourseEnrollment[]
-  payments      Payment[]
-  reviews       Review[]
-  videoProgress VideoProgress[]
-  videoNotes    VideoNote[]
-  quizAttempts  QuizAttempt[]
+  instructors           CourseInstructor[]
+  modules               Module[]
+  enrollments           CourseEnrollment[]
+  payments              Payment[]
+  reviews               Review[]
+  videoProgress         VideoProgress[]
+  videoNotes            VideoNote[]
+  quizAttempts          QuizAttempt[]
+  assignmentSubmissions AssignmentSubmission[]
 }
 
 // New explicit join model, Course<->User many-to-many. Replaces Mongo's
@@ -113,6 +122,7 @@ model Module {
   videoProgress VideoProgress[]
   videoNotes    VideoNote[]
   quiz          Quiz?
+  assignment    Assignment?
 }
 
 // Backend module dir stays `VideoModule`.
@@ -291,7 +301,7 @@ model QuizAttempt {
   courseId       String   @db.Uuid
   score          Int
   totalQuestions Int
-  answers        Json     // { [questionId]: optionId } snapshot of what the student picked
+  answers        Json // { [questionId]: optionId } snapshot of what the student picked
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
@@ -301,6 +311,50 @@ model QuizAttempt {
 
   @@unique([userId, quizId])
   @@index([userId, quizId])
+}
+
+// One optional assignment per module — isDeleted here only (instructor-authored,
+// like Module/Video/Quiz); AssignmentSubmission is a student record and is
+// never soft-deleted, its lifecycle is the `status` field instead.
+model Assignment {
+  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  moduleId     String    @unique @db.Uuid
+  instructorId String    @db.Uuid
+  title        String
+  instructions String // TipTap HTML — may contain a GitHub (or any) link, rendered as a normal <a>
+  dueDate      DateTime? // informational only, not enforced — no "late" status/logic
+  isDeleted    Boolean   @default(false)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  module      Module                 @relation(fields: [moduleId], references: [id])
+  instructor  User                   @relation("AssignmentInstructor", fields: [instructorId], references: [id])
+  submissions AssignmentSubmission[]
+}
+
+model AssignmentSubmission {
+  id                   String                     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  assignmentId         String                     @db.Uuid
+  userId               String                     @db.Uuid
+  courseId             String                     @db.Uuid
+  content              String // student's link or free text
+  submissionVersion    Int                        @default(1)
+  status               AssignmentSubmissionStatus @default(submitted)
+  score                Int? // 0–10, set only when status = graded
+  feedback             String?
+  gradedByInstructorId String?                    @db.Uuid
+  submittedAt          DateTime                   @default(now())
+  gradedAt             DateTime?
+  createdAt            DateTime                   @default(now())
+  updatedAt            DateTime                   @updatedAt
+
+  assignment Assignment @relation(fields: [assignmentId], references: [id])
+  user       User       @relation("SubmissionStudent", fields: [userId], references: [id])
+  course     Course     @relation(fields: [courseId], references: [id])
+  gradedBy   User?      @relation("SubmissionGrader", fields: [gradedByInstructorId], references: [id])
+
+  @@unique([assignmentId, userId])
+  @@index([assignmentId, status])
 }
 
 model ErrorLog {

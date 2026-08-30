@@ -1,6 +1,7 @@
 import { Router } from "express";
 
 import { aiRouter } from "../modules/ai/ai.route";
+import { assignmentRouter } from "../modules/assignment/assignment.route";
 import { authRouter } from "../modules/auth/auth.route";
 import { courseRouter } from "../modules/course/course.routes";
 import { courseEnrollmentRouter } from "../modules/CourseEnrollment/CourseEnrollment.routes";
@@ -63,6 +64,10 @@ const routeArray = [
   {
     path: "/quiz",
     route: quizRouter,
+  },
+  {
+    path: "/assignment",
+    route: assignmentRouter,
   },
 ];
 

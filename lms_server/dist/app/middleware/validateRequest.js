@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const catchAsync_1 = __importDefault(require("../util/catchAsync"));
 const validateRequest = (Schema) => {
     return (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-        yield Schema.parseAsync(req.body);
+        req.body = yield Schema.parseAsync(req.body);
         next();
     }));
 };
