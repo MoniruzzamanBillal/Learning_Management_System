@@ -7,7 +7,14 @@ import TableDataLoading from "@/components/shared/table/TableLoading";
 import TableRowActions from "@/components/shared/table/TableRowActions";
 import { Button } from "@/components/ui/button";
 import { useFetchData } from "@/hooks/useApi";
-import { ClipboardList, Eye, HelpCircle, Plus, SquarePen } from "lucide-react";
+import {
+  ClipboardCheck,
+  ClipboardList,
+  Eye,
+  HelpCircle,
+  Plus,
+  SquarePen,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 
 const ManageModule = () => {
@@ -60,6 +67,12 @@ const ManageModule = () => {
                     label: "Manage Assignment",
                     icon: ClipboardList,
                     href: `/dashboard/instructor/manage-assignment/${module.id}`,
+                    hidden: isPublished,
+                  },
+                  {
+                    label: "Grade Assignment",
+                    icon: ClipboardCheck,
+                    href: `/dashboard/instructor/grade-assignment/${module.id}`,
                   },
                 ]}
               />

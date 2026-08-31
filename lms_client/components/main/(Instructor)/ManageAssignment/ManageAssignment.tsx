@@ -8,10 +8,10 @@ import {
   updateAssignmentFunction,
 } from "@/functions/assignment.functions";
 import { useDeleteData, useFetchData, usePatch, usePost } from "@/hooks/useApi";
+import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import AssignmentForm from "./AssignmentForm";
-import SubmissionsTable from "./SubmissionsTable";
 import { TAssignmentFormData, TAssignmentManage } from "./type/Assignment.type";
 
 const ManageAssignment = () => {
@@ -113,7 +113,14 @@ const ManageAssignment = () => {
         submitLabel={assignment ? "Update Assignment" : "Create Assignment"}
       />
 
-      {assignment && <SubmissionsTable assignmentId={assignment.id} />}
+      {assignment && (
+        <Link
+          href={`/dashboard/instructor/grade-assignment/${moduleId}`}
+          className="text-prime-100 hover:underline text-sm font-medium mt-4 inline-block"
+        >
+          View &amp; grade submissions →
+        </Link>
+      )}
 
       {assignment && (
         <DeleteModal
