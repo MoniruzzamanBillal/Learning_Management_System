@@ -1,7 +1,7 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { Eye, SquarePen, Plus } from "lucide-react";
+import { ClipboardList, Eye, HelpCircle, Plus, SquarePen } from "lucide-react";
 import TableRowActions from "@/components/shared/table/TableRowActions";
 
 export type TModule = {
@@ -77,6 +77,17 @@ export const AssignCourseDetailColmn: ColumnDef<TModule>[] = [
               icon: Plus,
               href: `/dashboard/instructor/add-video/${rowData?.id}`,
               hidden: isPublished,
+            },
+            {
+              label: "Manage Quiz",
+              icon: HelpCircle,
+              href: `/dashboard/instructor/manage-quiz/${rowData?.id}`,
+              hidden: isPublished,
+            },
+            {
+              label: "Manage Assignment",
+              icon: ClipboardList,
+              href: `/dashboard/instructor/manage-assignment/${rowData?.id}`,
             },
           ]}
         />

@@ -27,9 +27,8 @@ const ManageModule = () => {
         <ModulesByCourseAccordion
           modules={moduleDataWithCourse.data}
           renderActions={(module) => {
-            const isPublished = (
-              module.course as { published: boolean }
-            ).published;
+            const isPublished = (module.course as { published: boolean })
+              .published;
 
             return (
               <TableRowActions
@@ -61,7 +60,6 @@ const ManageModule = () => {
                     label: "Manage Assignment",
                     icon: ClipboardList,
                     href: `/dashboard/instructor/manage-assignment/${module.id}`,
-                    hidden: isPublished,
                   },
                 ]}
               />
