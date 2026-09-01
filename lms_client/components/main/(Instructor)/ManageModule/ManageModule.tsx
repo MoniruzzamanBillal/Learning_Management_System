@@ -67,7 +67,6 @@ const ManageModule = () => {
                     label: "Manage Assignment",
                     icon: ClipboardList,
                     href: `/dashboard/instructor/manage-assignment/${module.id}`,
-                    hidden: isPublished,
                   },
                   {
                     label: "Grade Assignment",

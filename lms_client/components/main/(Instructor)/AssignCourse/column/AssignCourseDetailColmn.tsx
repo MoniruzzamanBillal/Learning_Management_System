@@ -95,7 +95,6 @@ export const AssignCourseDetailColmn: ColumnDef<TModule>[] = [
               label: "Manage Assignment",
               icon: ClipboardList,
               href: `/dashboard/instructor/manage-assignment/${rowData?.id}`,
-              hidden: isPublished,
             },
             {
               label: "Grade Assignment",
