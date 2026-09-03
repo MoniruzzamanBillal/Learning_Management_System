@@ -26,12 +26,11 @@ const openRouterClient = new OpenAI({
 
 // ! free models to try in order - if one is rate limited/down, fall back to the next
 const FREE_MODELS = [
-  "nvidia/nemotron-3-ultra-550b-a55b:free",
-  "nvidia/nemotron-3-nano-30b-a3b:free",
-
-  "meta-llama/llama-3.2-3b-instruct:free",
-
-  "qwen/qwen3-next-80b-a3b-instruct:free",
+  "nvidia/nemotron-3-super-120b-a12b:free",
+  "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+  "google/gemma-4-26b-a4b-it:free",
+  "minimax/minimax-m2.7:free",
+  "nvidia/nemotron-3.5-lightning:free",
 ];
 
 // ! single choke point every ai feature talks through
