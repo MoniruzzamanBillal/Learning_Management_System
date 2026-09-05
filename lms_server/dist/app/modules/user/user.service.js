@@ -17,14 +17,14 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const http_status_1 = __importDefault(require("http-status"));
 const config_1 = __importDefault(require("../../config"));
 const AppError_1 = __importDefault(require("../../Error/AppError"));
-const SendImageCloudinary_1 = require("../../util/SendImageCloudinary");
 const prisma_1 = __importDefault(require("../../util/prisma"));
-const user_constants_1 = require("./user.constants");
+const SendImageCloudinary_1 = require("../../util/SendImageCloudinary");
+const enums_1 = require("../../../generated/prisma/enums");
 // ! for getting all instructor
 const getAllInstructor = () => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield prisma_1.default.user.findMany({
         where: {
-            userRole: user_constants_1.UserRole.instructor,
+            userRole: enums_1.UserRole.instructor,
             isDeleted: false,
         },
         select: {

@@ -19,13 +19,13 @@ const testimonialData: TTestimonial[] = [
   {
     review:
       "This platform made learning so much easier! The video lessons are clear, well-structured, and I could track my progress seamlessly. Highly recommended for anyone serious about upskilling.",
-    name: "Abul Hasan",
+    name: "Abu Saleh",
     img: "https://i.postimg.cc/kGzbs8Jq/515439020-2147819785682162-260233122788938226-n.jpg",
   },
   {
     review:
       "The Web Development course exceeded my expectations. The instructors were top-notch and I loved the hands-on projects. I feel more confident applying for developer jobs now.",
-    name: "Ismail Hania",
+    name: "Ashraf Ahmed",
     img: "https://i.postimg.cc/yNR75bmx/504088512-4181158668874712-5104357887335128166-n.jpg",
   },
   {

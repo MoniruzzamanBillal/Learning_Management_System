@@ -129,7 +129,9 @@ const checkUserEnrolledInCourse = (courseId, userId) => __awaiter(void 0, void 0
             enrolledIncourse: false,
         };
     }
-    const courseData = yield prisma_1.default.course.findUnique({ where: { id: courseId } });
+    const courseData = yield prisma_1.default.course.findUnique({
+        where: { id: courseId },
+    });
     if (!courseData) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "This course don't exist !!!");
     }
@@ -301,7 +303,9 @@ const markCompleteCourse = (courseId, userId) => __awaiter(void 0, void 0, void 
     if (!userData) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "This user don't exist !!!");
     }
-    const courseData = yield prisma_1.default.course.findUnique({ where: { id: courseId } });
+    const courseData = yield prisma_1.default.course.findUnique({
+        where: { id: courseId },
+    });
     if (!courseData) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "This course don't exist !!!");
     }

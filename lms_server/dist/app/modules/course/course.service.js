@@ -24,12 +24,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.courseServices = void 0;
-const client_1 = require("../../../generated/prisma/client");
 const date_fns_1 = require("date-fns");
 const http_status_1 = __importDefault(require("http-status"));
+const client_1 = require("../../../generated/prisma/client");
 const AppError_1 = __importDefault(require("../../Error/AppError"));
-const SendImageCloudinary_1 = require("../../util/SendImageCloudinary");
 const prisma_1 = __importDefault(require("../../util/prisma"));
+const SendImageCloudinary_1 = require("../../util/SendImageCloudinary");
 const payment_constant_1 = require("../payment/payment.constant");
 const user_constants_1 = require("../user/user.constants");
 const VideoProgress_constants_1 = require("../VideoProgress/VideoProgress.constants");
@@ -139,11 +139,18 @@ const getAllCourses = (query) => __awaiter(void 0, void 0, void 0, function* () 
     if (sortBy === "rating_desc") {
         // averageRating is a computed aggregate, not a column — Prisma can't
         // order by it directly, so fetch every match and sort/paginate in JS.
-        const all = yield prisma_1.default.course.findMany({ where, select: courseListSelect });
+        const all = yield prisma_1.default.course.findMany({
+            where,
+            select: courseListSelect,
+        });
         const totalCourses = all.length;
         const shaped = all
             .map(shapeCourseListItem)
-            .sort((a, b) => { var _a, _b, _c, _d; return ((_b = (_a = b.reviewData) === null || _a === void 0 ? void 0 : _a.averageRating) !== null && _b !== void 0 ? _b : 0) - ((_d = (_c = a.reviewData) === null || _c === void 0 ? void 0 : _c.averageRating) !== null && _d !== void 0 ? _d : 0); });
+            .sort((a, b) => {
+            var _a, _b, _c, _d;
+            return ((_b = (_a = b.reviewData) === null || _a === void 0 ? void 0 : _a.averageRating) !== null && _b !== void 0 ? _b : 0) -
+                ((_d = (_c = a.reviewData) === null || _c === void 0 ? void 0 : _c.averageRating) !== null && _d !== void 0 ? _d : 0);
+        });
         return {
             data: shaped.slice(skip, skip + numaricLimit),
             meta: { totalCourses },
@@ -154,7 +161,13 @@ const getAllCourses = (query) => __awaiter(void 0, void 0, void 0, function* () 
     // count always agree — fixes the pre-existing mismatch bug where the two
     // queries could use inconsistent filters.
     const [rows, totalCourses] = yield Promise.all([
-        prisma_1.default.course.findMany({ where, select: courseListSelect, orderBy, skip, take: numaricLimit }),
+        prisma_1.default.course.findMany({
+            where,
+            select: courseListSelect,
+            orderBy,
+            skip,
+            take: numaricLimit,
+        }),
         prisma_1.default.course.count({ where }),
     ]);
     return { data: rows.map(shapeCourseListItem), meta: { totalCourses } };
@@ -166,7 +179,7 @@ const getAllCoursesForAdmin = () => __awaiter(void 0, void 0, void 0, function* 
             instructors: {
                 include: {
                     instructor: {
-                        select: { id: true, name: true, email: true, profilePicture: true },
+                        select: { id: true, name: true, email: true },
                     },
                 },
             },
@@ -296,7 +309,9 @@ const getCourseDetailForInstructor = (courseId) => __awaiter(void 0, void 0, voi
 const updateCourseData = (payload, 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 file, courseId) => __awaiter(void 0, void 0, void 0, function* () {
-    const courseData = yield prisma_1.default.course.findUnique({ where: { id: courseId } });
+    const courseData = yield prisma_1.default.course.findUnique({
+        where: { id: courseId },
+    });
     if (!courseData) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "This Course don't exist!!!");
     }
@@ -325,7 +340,9 @@ file, courseId) => __awaiter(void 0, void 0, void 0, function* () {
 });
 // ! for publishing a course
 const publishCourse = (courseId) => __awaiter(void 0, void 0, void 0, function* () {
-    const courseData = yield prisma_1.default.course.findUnique({ where: { id: courseId } });
+    const courseData = yield prisma_1.default.course.findUnique({
+        where: { id: courseId },
+    });
     if (!courseData) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "This Course don't exist!!!");
     }
@@ -392,7 +409,10 @@ const adminStatistics = () => __awaiter(void 0, void 0, void 0, function* () {
         where: { videoStatus: VideoProgress_constants_1.videoProgressStatus.watched },
         _count: { _all: true },
     });
-    const watchedMap = new Map(watchedByPair.map((row) => [`${row.userId}:${row.courseId}`, row._count._all]));
+    const watchedMap = new Map(watchedByPair.map((row) => [
+        `${row.userId}:${row.courseId}`,
+        row._count._all,
+    ]));
     const completionPercentages = totalsByPair.map((row) => {
         var _a;
         const key = `${row.userId}:${row.courseId}`;

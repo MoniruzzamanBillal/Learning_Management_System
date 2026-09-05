@@ -2,9 +2,11 @@ import bcrypt from "bcrypt";
 import httpStatus from "http-status";
 import config from "../../config";
 import AppError from "../../Error/AppError";
-import { SendImageCloudinary } from "../../util/SendImageCloudinary";
+
 import prisma from "../../util/prisma";
-import { UserRole } from "./user.constants";
+import { SendImageCloudinary } from "../../util/SendImageCloudinary";
+
+import { UserRole } from "../../../generated/prisma/enums";
 import { TUser } from "./user.interface";
 
 // ! for getting all instructor
@@ -28,7 +30,7 @@ const getAllInstructor = async () => {
 // ! for changing password
 const changePassword = async (
   payload: { oldPassword: string; newPassword: string },
-  userId: string
+  userId: string,
 ) => {
   // findFirst, not findUnique: combining the unique `id` lookup with
   // `isDeleted: false` isn't allowed on findUnique.
@@ -42,7 +44,7 @@ const changePassword = async (
 
   const isPasswordMatch = await bcrypt.compare(
     payload?.oldPassword,
-    userData?.password
+    userData?.password,
   );
 
   if (!isPasswordMatch) {
@@ -51,7 +53,7 @@ const changePassword = async (
 
   const hashedPassword = await bcrypt.hash(
     payload?.newPassword,
-    Number(config.bcrypt_salt_rounds)
+    Number(config.bcrypt_salt_rounds),
   );
 
   const result = await prisma.user.update({
@@ -102,7 +104,7 @@ const updateUser = async (
   payload: Partial<TUser>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   file: any,
-  userId: string
+  userId: string,
 ) => {
   if (file) {
     const name = (payload?.name as string).trim();
@@ -110,7 +112,7 @@ const updateUser = async (
 
     const cloudinaryResponse = await SendImageCloudinary(
       path as string,
-      name as string
+      name as string,
     );
     const profilePicture = cloudinaryResponse?.secure_url;
     payload.profilePicture = profilePicture;

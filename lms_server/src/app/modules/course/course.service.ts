@@ -1,9 +1,9 @@
-import { Prisma } from "../../../generated/prisma/client";
 import { startOfDay, subDays } from "date-fns";
 import httpStatus from "http-status";
+import { Prisma } from "../../../generated/prisma/client";
 import AppError from "../../Error/AppError";
-import { SendImageCloudinary } from "../../util/SendImageCloudinary";
 import prisma from "../../util/prisma";
+import { SendImageCloudinary } from "../../util/SendImageCloudinary";
 import { PAYMENTSTATUS } from "../payment/payment.constant";
 import { UserRole } from "../user/user.constants";
 import { videoProgressStatus } from "../VideoProgress/VideoProgress.constants";
@@ -21,7 +21,7 @@ type TAddCoursePayload = {
 const addCourse = async (
   payload: TAddCoursePayload,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  file: any
+  file: any,
 ) => {
   const { instructors } = payload;
 
@@ -31,7 +31,7 @@ const addCourse = async (
 
     const cloudinaryResponse = await SendImageCloudinary(
       path as string,
-      name as string
+      name as string,
     );
 
     const courseCover = cloudinaryResponse?.secure_url as string;
@@ -48,10 +48,10 @@ const addCourse = async (
         if (!instructorData) {
           throw new AppError(
             httpStatus.BAD_REQUEST,
-            "Instructor don't exist !!!"
+            "Instructor don't exist !!!",
           );
         }
-      })
+      }),
     );
   }
 
@@ -85,7 +85,7 @@ const addCourse = async (
     ) {
       throw new AppError(
         httpStatus.BAD_REQUEST,
-        "A course with this name already exists !!!"
+        "A course with this name already exists !!!",
       );
     }
     throw error;
@@ -94,11 +94,12 @@ const addCourse = async (
 
 // ! sort option -> Prisma orderBy, used by getAllCourses (rating_desc is
 // handled separately below since it's a computed aggregate, not a column)
-const courseOrderByMap: Record<string, Prisma.CourseOrderByWithRelationInput> = {
-  createdAt_desc: { createdAt: "desc" },
-  price_asc: { price: "asc" },
-  price_desc: { price: "desc" },
-};
+const courseOrderByMap: Record<string, Prisma.CourseOrderByWithRelationInput> =
+  {
+    createdAt_desc: { createdAt: "desc" },
+    price_asc: { price: "asc" },
+    price_desc: { price: "desc" },
+  };
 
 const courseListSelect = {
   id: true,
@@ -114,7 +115,9 @@ const courseListSelect = {
   reviews: { select: { rating: true } },
 } satisfies Prisma.CourseSelect;
 
-type TCourseListRow = Prisma.CourseGetPayload<{ select: typeof courseListSelect }>;
+type TCourseListRow = Prisma.CourseGetPayload<{
+  select: typeof courseListSelect;
+}>;
 
 // ! shapes a raw course+reviews row into the public list-item shape (mirrors
 // the old $lookup/$addFields/$project aggregation pipeline stages)
@@ -174,13 +177,17 @@ const getAllCourses = async (query: Record<string, unknown>) => {
   if (sortBy === "rating_desc") {
     // averageRating is a computed aggregate, not a column — Prisma can't
     // order by it directly, so fetch every match and sort/paginate in JS.
-    const all = await prisma.course.findMany({ where, select: courseListSelect });
+    const all = await prisma.course.findMany({
+      where,
+      select: courseListSelect,
+    });
     const totalCourses = all.length;
     const shaped = all
       .map(shapeCourseListItem)
       .sort(
         (a, b) =>
-          (b.reviewData?.averageRating ?? 0) - (a.reviewData?.averageRating ?? 0)
+          (b.reviewData?.averageRating ?? 0) -
+          (a.reviewData?.averageRating ?? 0),
       );
     return {
       data: shaped.slice(skip, skip + numaricLimit),
@@ -194,7 +201,13 @@ const getAllCourses = async (query: Record<string, unknown>) => {
   // count always agree — fixes the pre-existing mismatch bug where the two
   // queries could use inconsistent filters.
   const [rows, totalCourses] = await Promise.all([
-    prisma.course.findMany({ where, select: courseListSelect, orderBy, skip, take: numaricLimit }),
+    prisma.course.findMany({
+      where,
+      select: courseListSelect,
+      orderBy,
+      skip,
+      take: numaricLimit,
+    }),
     prisma.course.count({ where }),
   ]);
 
@@ -208,7 +221,7 @@ const getAllCoursesForAdmin = async () => {
       instructors: {
         include: {
           instructor: {
-            select: { id: true, name: true, email: true, profilePicture: true },
+            select: { id: true, name: true, email: true },
           },
         },
       },
@@ -252,7 +265,10 @@ const getAllCoursesWithModules = async () => {
   return courses.map((course) => ({
     ...course,
     instructors: course.instructors.map((ci) => ci.instructor),
-    modules: course.modules.map((m) => ({ ...m, videos: m.videos.map((v) => v.id) })),
+    modules: course.modules.map((m) => ({
+      ...m,
+      videos: m.videos.map((v) => v.id),
+    })),
   }));
 };
 
@@ -339,7 +355,10 @@ const getCourseDetailsForAdmin = async (courseId: string) => {
   return {
     ...result,
     instructors: result.instructors.map((ci) => ci.instructor),
-    modules: result.modules.map((m) => ({ ...m, videos: m.videos.map((v) => v.id) })),
+    modules: result.modules.map((m) => ({
+      ...m,
+      videos: m.videos.map((v) => v.id),
+    })),
   };
 };
 
@@ -368,9 +387,11 @@ const updateCourseData = async (
   payload: Partial<TAddCoursePayload>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   file: any,
-  courseId: string
+  courseId: string,
 ) => {
-  const courseData = await prisma.course.findUnique({ where: { id: courseId } });
+  const courseData = await prisma.course.findUnique({
+    where: { id: courseId },
+  });
 
   if (!courseData) {
     throw new AppError(httpStatus.BAD_REQUEST, "This Course don't exist!!!");
@@ -382,7 +403,7 @@ const updateCourseData = async (
 
     const cloudinaryResponse = await SendImageCloudinary(
       path as string,
-      name as string
+      name as string,
     );
 
     const courseCover = cloudinaryResponse?.secure_url as string;
@@ -409,7 +430,9 @@ const updateCourseData = async (
 
 // ! for publishing a course
 const publishCourse = async (courseId: string) => {
-  const courseData = await prisma.course.findUnique({ where: { id: courseId } });
+  const courseData = await prisma.course.findUnique({
+    where: { id: courseId },
+  });
 
   if (!courseData) {
     throw new AppError(httpStatus.BAD_REQUEST, "This Course don't exist!!!");
@@ -418,7 +441,7 @@ const publishCourse = async (courseId: string) => {
   if (courseData?.published) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
-      "This Course is already published !!!"
+      "This Course is already published !!!",
     );
   }
 
@@ -499,7 +522,10 @@ const adminStatistics = async () => {
   });
 
   const watchedMap = new Map(
-    watchedByPair.map((row) => [`${row.userId}:${row.courseId}`, row._count._all])
+    watchedByPair.map((row) => [
+      `${row.userId}:${row.courseId}`,
+      row._count._all,
+    ]),
   );
 
   const completionPercentages = totalsByPair.map((row) => {

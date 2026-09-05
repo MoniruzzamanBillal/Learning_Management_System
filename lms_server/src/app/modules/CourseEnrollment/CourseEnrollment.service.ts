@@ -25,7 +25,7 @@ const enrollInCourse = async (payload: { user: string; course: string }) => {
   if (!courseData?.published) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
-      "This course is not published yet!!!"
+      "This course is not published yet!!!",
     );
   }
 
@@ -36,7 +36,7 @@ const enrollInCourse = async (payload: { user: string; course: string }) => {
   if (previousEnrolledData) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
-      "This course is already enrolled by the user !!!"
+      "This course is already enrolled by the user !!!",
     );
   }
 
@@ -130,14 +130,14 @@ const getAllUserEnrolledCourse = async (userId: string) => {
     courseEnrolledData.map(async (enrollmentData) => {
       const progressData = await courseProgressPercentage(
         enrollmentData.course.id,
-        userId
+        userId,
       );
 
       return {
         ...enrollmentData,
         courseProgress: progressData,
       };
-    })
+    }),
   );
 
   return progressResult;
@@ -146,7 +146,7 @@ const getAllUserEnrolledCourse = async (userId: string) => {
 // ! for checking user enrolled a coure or not
 const checkUserEnrolledInCourse = async (
   courseId: string,
-  userId: string | undefined
+  userId: string | undefined,
 ) => {
   const userData = userId
     ? await prisma.user.findFirst({ where: { id: userId, isDeleted: false } })
@@ -158,7 +158,9 @@ const checkUserEnrolledInCourse = async (
     };
   }
 
-  const courseData = await prisma.course.findUnique({ where: { id: courseId } });
+  const courseData = await prisma.course.findUnique({
+    where: { id: courseId },
+  });
 
   if (!courseData) {
     throw new AppError(httpStatus.BAD_REQUEST, "This course don't exist !!!");
@@ -167,7 +169,7 @@ const checkUserEnrolledInCourse = async (
   if (!courseData?.published) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
-      "This course is not published yet!!!"
+      "This course is not published yet!!!",
     );
   }
 
@@ -239,7 +241,7 @@ const getModuleDataEnrlledCourse = async (userId: string, courseId: string) => {
   if (!previousEnrolledData) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
-      "You have no access of this course content!!!"
+      "You have no access of this course content!!!",
     );
   }
 
@@ -279,14 +281,14 @@ const watchVideo = async (videoId: string, userId: string) => {
   if (!currentProgressData) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
-      "Video progress not found for this user!"
+      "Video progress not found for this user!",
     );
   }
 
   if (currentProgressData?.videoStatus === videoProgressStatus?.locked) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
-      "This video is locked , complete previous video to unlock this video !!!"
+      "This video is locked , complete previous video to unlock this video !!!",
     );
   }
 
@@ -366,7 +368,7 @@ const enrollmentsPerCourse = async () => {
 // ! based on module id , find video data for enrolled user
 const getUserEnrolledModuleVideos = async (
   moduleId: string,
-  userId: string
+  userId: string,
 ) => {
   const videoData = await prisma.videoProgress.findMany({
     where: { moduleId, userId },
@@ -392,7 +394,9 @@ const markCompleteCourse = async (courseId: string, userId: string) => {
     throw new AppError(httpStatus.BAD_REQUEST, "This user don't exist !!!");
   }
 
-  const courseData = await prisma.course.findUnique({ where: { id: courseId } });
+  const courseData = await prisma.course.findUnique({
+    where: { id: courseId },
+  });
 
   if (!courseData) {
     throw new AppError(httpStatus.BAD_REQUEST, "This course don't exist !!!");
@@ -401,7 +405,7 @@ const markCompleteCourse = async (courseId: string, userId: string) => {
   if (!courseData?.published) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
-      "This course is not published yet!!!"
+      "This course is not published yet!!!",
     );
   }
 
@@ -412,19 +416,19 @@ const markCompleteCourse = async (courseId: string, userId: string) => {
   if (!previousEnrolledData) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
-      "You did not enrolled into this course !!!"
+      "You did not enrolled into this course !!!",
     );
   }
 
   const coursePercentageProgress = await courseProgressPercentage(
     courseId,
-    userId
+    userId,
   );
 
   if (coursePercentageProgress !== 100) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
-      "You did not complete the full course !!!"
+      "You did not complete the full course !!!",
     );
   }
 
