@@ -1,7 +1,12 @@
 import { jwtDecode } from "jwt-decode";
 
 export const decodedToken = (token: string) => {
-  return jwtDecode(token);
+  try {
+    return jwtDecode(token);
+  } catch (error) {
+    console.error("Failed to decode JWT:", error);
+    return null;
+  }
 };
 
 // Alternative decoding function (manual base64 decoding)
