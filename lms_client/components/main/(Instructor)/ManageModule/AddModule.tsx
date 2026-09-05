@@ -68,7 +68,7 @@ const AddModuleForm = () => {
       const courseOptionsData = instructorAssignedCourses?.data
         ?.filter((course: TCourseData) => !course?.published)
         ?.map((course: TCourseData) => ({
-          value: course?._id,
+          value: course?.id,
           label: course?.name,
         }));
 

@@ -1,11 +1,4 @@
-export type TUserRole = "admin" | "user" | "instructor";
+import { User } from "../../../generated/prisma/client";
 
-export type TUser = {
-  name: string;
-  email: string;
-  password: string;
-  profilePicture?: string;
-  isDeleted: boolean;
-  userRole: TUserRole;
-  needsPasswordChange?: boolean;
-};
+export type TUser = User;
+export type TUserRole = User["userRole"];

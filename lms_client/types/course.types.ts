@@ -1,5 +1,5 @@
 export type TCourseData<TInstructorType = string, TModuleType = string> = {
-  _id: string;
+  id: string;
   name: string;
   description: string;
   price: number;

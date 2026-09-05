@@ -3,14 +3,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.MainRouter = void 0;
 const express_1 = require("express");
 const ai_route_1 = require("../modules/ai/ai.route");
+const assignment_route_1 = require("../modules/assignment/assignment.route");
 const auth_route_1 = require("../modules/auth/auth.route");
 const course_routes_1 = require("../modules/course/course.routes");
 const CourseEnrollment_routes_1 = require("../modules/CourseEnrollment/CourseEnrollment.routes");
 const module_routes_1 = require("../modules/courseModule/module.routes");
 const errorLog_route_1 = require("../modules/errorLog/errorLog.route");
 const payment_routes_1 = require("../modules/payment/payment.routes");
+const quiz_route_1 = require("../modules/quiz/quiz.route");
 const review_route_1 = require("../modules/review/review.route");
 const user_route_1 = require("../modules/user/user.route");
+const VideoNote_route_1 = require("../modules/VideoNote/VideoNote.route");
 const video_routes_1 = require("../modules/VideoModule/video.routes");
 const router = (0, express_1.Router)();
 const routeArray = [
@@ -53,6 +56,18 @@ const routeArray = [
     {
         path: "/error-log",
         route: errorLog_route_1.errorLogRouter,
+    },
+    {
+        path: "/video-note",
+        route: VideoNote_route_1.videoNoteRouter,
+    },
+    {
+        path: "/quiz",
+        route: quiz_route_1.quizRouter,
+    },
+    {
+        path: "/assignment",
+        route: assignment_route_1.assignmentRouter,
     },
 ];
 routeArray.forEach((item) => {

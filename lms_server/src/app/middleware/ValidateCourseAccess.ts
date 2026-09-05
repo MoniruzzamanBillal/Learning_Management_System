@@ -1,17 +1,15 @@
 import httpStatus from "http-status";
 import AppError from "../Error/AppError";
-import { courseEnrollmentModel } from "../modules/CourseEnrollment/CourseEnrollment.model";
 import { PAYMENTSTATUS } from "../modules/payment/payment.constant";
-import { paymentModel } from "../modules/payment/payment.model";
+import prisma from "../util/prisma";
 import catchAsync from "../util/catchAsync";
 
 const ValidateCourseAccess = catchAsync(async (req, res, next) => {
   const userId = req?.user?.userId;
-  const courseId = req?.params?.courseId;
+  const courseId = req?.params?.courseId as string;
 
-  const enrollment = await courseEnrollmentModel.findOne({
-    user: userId,
-    course: courseId,
+  const enrollment = await prisma.courseEnrollment.findFirst({
+    where: { userId, courseId },
   });
 
   if (!enrollment) {
@@ -21,10 +19,8 @@ const ValidateCourseAccess = catchAsync(async (req, res, next) => {
     );
   }
 
-  const payment = await paymentModel.findOne({
-    user: userId,
-    course: courseId,
-    paymentStatus: PAYMENTSTATUS.Completed,
+  const payment = await prisma.payment.findFirst({
+    where: { userId, courseId, paymentStatus: PAYMENTSTATUS.Completed },
   });
 
   if (!payment) {

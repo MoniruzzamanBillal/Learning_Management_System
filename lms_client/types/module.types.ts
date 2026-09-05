@@ -3,7 +3,7 @@ export type TModuleData<
   TInstructor = string,
   TVideo = string
 > = {
-  _id: string;
+  id: string;
   course: TCourse;
   title: string;
   videos?: TVideo[];

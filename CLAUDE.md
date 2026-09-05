@@ -6,10 +6,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 MATS Academy — a full-stack LMS with three roles (admin, instructor, user/student). Two independent apps in one repo, each with its own `package.json`, deployed separately to Vercel:
 
-- `lms_server/` — Express + TypeScript + Mongoose REST API
+- `lms_server/` — Express + TypeScript + Prisma/PostgreSQL REST API
 - `lms_client/` — Next.js 16 (App Router) + React 19 + TypeScript frontend
 
 There is no root-level package.json or workspace tooling — always `cd` into the relevant app directory before running commands.
+
+### MongoDB → PostgreSQL/Prisma migration (backend complete)
+
+The backend was migrated from MongoDB/Mongoose to PostgreSQL + Prisma per [`lms_server/context/specs/19-postgres-prisma-migration.md`](lms_server/context/specs/19-postgres-prisma-migration.md) (the original plan at `PostgressMigrationPlan/backend-migration-plan.md`/`frontend-migration-plan.md` at the repo root is now superseded by that spec). It was a clean schema rebuild with no data ETL, done as a single big-bang cutover (no dual-DB phase) — every backend module now reads/writes exclusively through `prisma` (`lms_server/src/app/util/prisma.ts`), and `mongoose.connect` was removed from `src/server.ts` entirely. IDs are Prisma `id` (UUID, Postgres-native `gen_random_uuid()`), not Mongo `_id`. Soft-delete filtering (`isDeleted: false`) is added explicitly per query only on the models that had the old Mongoose hook (`User`, `Module`, `Video`, `Review` — not `CourseEnrollment`/`Payment`). **The frontend migration is also complete** (`lms_client/context/specs/17-postgres-id-migration.md`) — a compiler-driven `_id` → `id` sweep across 102 occurrences in 43 files, plus a follow-on fix for several FK field names that changed as an intentional side effect of the backend's Prisma schema (e.g. old Mongoose `user`/`course`/`Payment`/`module`/`instructor` scalar refs are now `userId`/`courseId`/`paymentId`/`moduleId`/`instructorId`), which the original frontend plan hadn't anticipated. `id` (not `_id`) is now the entity ID field name everywhere in this codebase, frontend and backend alike.
 
 ### Living documentation in `context/`
 
@@ -25,6 +29,8 @@ Both `lms_server/context/` and `lms_client/context/` contain actively-maintained
 
 Read the relevant app's `context/` docs before making non-trivial changes, and keep them in sync (per `ai-workflow-rules.md`) when a change alters something they document. Each app also has an `AGENTS.md` pointing at this same `context/` reading order, for tools that read that file instead.
 
+The repo-root `future-update-notes-quiz-assignment-plan.md` is a pre-implementation design doc for three features — Video Notes, Module Quiz, Assignment. All three are now implemented (`lms_server/context/specs/28-video-notes.md`, `29-module-quiz.md`, `30-quiz-recreate-after-delete-crash.md`, `31-assignment.md`, `32-assignment-duedate-coercion-not-applied.md`, `33-assignment-recreate-after-delete-crash.md`, and the `VideoNote`/`Quiz`/`QuizQuestion`/`QuizOption`/`QuizAttempt`/`Assignment`/`AssignmentSubmission` models below) — treat that doc as historical.
+
 ## Commands
 
 ### lms_server (run from `lms_server/`)
@@ -35,6 +41,7 @@ Read the relevant app's `context/` docs before making non-trivial changes, and k
 - `yarn lint` / `yarn lint:fix` — ESLint over `src`
 - `yarn prettier:fix` — format `src`
 - No test suite is configured (`yarn test` is a stub that exits 1).
+- Prisma has no `package.json` scripts — invoke via `npx` from `lms_server/`: `npx prisma migrate dev --name <name>` (create + apply a migration against your local DB), `npx prisma generate` (regenerate the client — also runs automatically via `postinstall`), `npx prisma studio` (GUI for inspecting/editing data). Avoid `npx prisma migrate reset` — it replays all migrations and will drop the hand-added partial unique index described below unless it's re-added.
 
 ### lms_client (run from `lms_client/`)
 
@@ -48,17 +55,20 @@ Read the relevant app's `context/` docs before making non-trivial changes, and k
 
 ### Backend (`lms_server/src`)
 
-Express app entry is `src/server.ts` (connects Mongoose, then `app.listen`); the Express app itself is assembled in `src/app.ts` (CORS allowlist, JSON/body-parser, morgan, cookie-parser, mounts `MainRouter` at `/api`, global error handler, 404 handler last).
+Express app entry is `src/server.ts` (connects the Prisma singleton via `prisma.$connect()`, then `app.listen`); the Express app itself is assembled in `src/app.ts` (CORS allowlist, JSON/body-parser, morgan, cookie-parser, mounts `MainRouter` at `/api`, global error handler, 404 handler last).
 
-Everything domain-specific lives under `src/app/modules/<name>/`, one module per REST resource: `auth`, `user`, `course`, `courseModule`, `VideoModule`, `VideoProgress`, `CourseEnrollment`, `payment`, `SSL`, `review`, `ai`, `errorLog`. Each module follows the same file split — **not every module has every file**, but the naming is consistent:
+Everything domain-specific lives under `src/app/modules/<name>/`, one module per REST resource: `auth`, `user`, `course`, `courseModule`, `VideoModule`, `VideoNote`, `VideoProgress`, `CourseEnrollment`, `payment`, `SSL`, `review`, `quiz`, `assignment`, `ai`, `errorLog`. Each module follows the same file split — **not every module has every file**, but the naming is consistent:
 
 - `*.route.ts` / `*.routes.ts` — Express router, wires middleware + controller
 - `*.controller.ts` — thin, wraps service calls with `catchAsync` + `sendResponse`
-- `*.service.ts` — business logic, Mongoose queries
-- `*.model.ts` — Mongoose schema/model
-- `*.interface.ts` — TypeScript types for the domain object
-- `*.validation.ts` — Zod schemas, used via `validateRequest` middleware
-- `*.constants.ts` — enums/constants (e.g. `user/user.constants.ts` defines `UserRole = { admin, instructor, user }`)
+- `*.service.ts` — business logic, Prisma queries (`import prisma from "../../util/prisma"`)
+- `*.interface.ts` — TypeScript types for the domain object; most just re-export the generated Prisma type (e.g. `export type TUser = User;` from the generated client — see the Prisma 7 note below, not `@prisma/client` directly)
+- `*.validation.ts` — Zod schemas, used via `validateRequest` middleware; any ID field is `z.string().uuid(...)`
+- `*.constants.ts` — enums/constants (e.g. `user/user.constants.ts` defines `UserRole = { admin, instructor, user }`, kept in sync with the matching `enum` in `prisma/schema.prisma`)
+
+There is no more per-module `*.model.ts` — the entire schema lives in one root-level `lms_server/prisma/schema.prisma` (16 models plus a `CourseInstructor` join model, 4 enums), applied via Prisma Migrate. One constraint isn't expressible in the schema DSL and so isn't visible there: `Video`'s real uniqueness guarantee (`UNIQUE ("moduleId","videoOrder") WHERE "isDeleted" = false`) is a hand-added `CREATE UNIQUE INDEX` statement inside `prisma/migrations/20260817100918_init/migration.sql`. It survives normal `migrate dev` runs but must be manually reapplied if that migration is ever reset/replayed.
+
+**Prisma 7 driver-adapter setup:** `schema.prisma`'s `datasource` block has no `url` — the connection string lives in two separate places instead. `prisma.config.ts` (repo root of `lms_server/`, next to `package.json`) supplies it to the CLI (`migrate`/`studio`/`db`) via `env("DATABASE_URL")`. `src/app/util/prisma.ts` supplies it to the runtime client by wrapping `config.database_url` in a `PrismaPg` adapter (`@prisma/adapter-pg` + `pg`) and passing `{ adapter }` to `new PrismaClient(...)`. The generator (`prisma-client`, not the legacy `prisma-client-js`) outputs to `src/generated/prisma/` — gitignored, regenerated via `postinstall`/`yarn build` (`prisma generate && tsc`), never edited by hand — with `moduleFormat = "cjs"` so it matches this project's existing CommonJS/`ts-node-dev` setup rather than forcing an ESM migration. Anything importing Prisma types/the `Prisma` namespace imports from that generated path (`../../../generated/prisma/client` from a module's `*.interface.ts`/`*.service.ts`, one directory shallower — `../../generated/prisma/client` — from `util/prisma.ts`), not from `@prisma/client` itself.
 
 All module routers are aggregated in `src/app/router/index.ts` and mounted under their own path prefix (e.g. `/api/course`, `/api/enroll`, `/api/payment`).
 
@@ -68,19 +78,21 @@ Cross-cutting pieces:
 - `src/app/middleware/ValidateCourseAccess.ts` — checks the user has both a `CourseEnrollment` and a completed `payment` record for a course before allowing access to protected course content.
 - `src/app/middleware/validateRequest.ts` — runs a Zod schema against `req.body`.
 - `src/app/middleware/rateLimiter.ts` — `aiLimiter` (10 req/10 min per IP, on both AI endpoints) and `loginLimiter` (10 req/15 min per IP, on `/auth/login`), built on `express-rate-limit`; always the first middleware in its route's chain so rate-limited requests never reach DB/LLM work. In-memory store, per-instance only.
-- `src/app/middleware/globalErrorHandler.ts` — normalizes `ZodError`, Mongoose `ValidationError`/`CastError`, duplicate-key (11000), and `AppError` into a consistent JSON error shape; must be registered after routes, before the 404 handler.
+- `src/app/middleware/globalErrorHandler.ts` — normalizes `ZodError`, duplicate-key, and `AppError` into a consistent JSON error shape; must be registered after routes, before the 404 handler. Its Mongoose `ValidationError`/`CastError` branches are now dead code post-migration (nothing can throw them anymore) but were left in place as out of scope for the Postgres migration; Prisma errors are **not** normalized generically here — handle a specific one (e.g. a unique-constraint violation) at its call site if a friendly message matters, per `review.service.ts::addReview`'s `Prisma.PrismaClientKnownRequestError`/`P2002` handling.
+- `src/app/middleware/verifyCronSecret.ts` — checks `Authorization: Bearer <CRON_SECRET>` against `config.cron_secret`; gates `GET /error-log/cleanup` (Vercel Cron invocation only, not a user-JWT flow).
 - `helmet()` is applied first in `src/app.ts`'s middleware stack (before `cors`) for baseline security headers.
 - `src/app/util/catchAsync.ts` — wraps async route handlers so thrown errors reach `next(error)`.
 - `src/app/util/sendResponse.ts` — standard `{ success, message, data, token? }` response envelope.
+- `src/app/util/prisma.ts` — the Prisma Client singleton (serverless-safe `globalThis` pattern outside production), constructed with a `PrismaPg` driver adapter per the Prisma 7 note above; import this rather than instantiating `new PrismaClient()`.
 - `src/app/util/SendImageCloudinary.ts` — Multer + Cloudinary storage config (`upload.single(...)`) used for course covers, etc.
 - `src/app/util/VideoUpload.ts` — video upload handling, paired with the `VideoModule`/`VideoProgress` modules for course content and per-user watch progress.
-- `src/app/config/index.ts` — single place all `process.env` values are read (Mongo URI, JWT secret, Cloudinary, nodemailer, SSLCOMMERZ store credentials/URLs); reference this instead of `process.env` directly in new code.
+- `src/app/config/index.ts` — single place all `process.env` values are read (`DATABASE_URL` — same env var name Mongoose used, its value was repurposed from a Mongo URI to a Postgres connection string in place, not renamed — JWT secret, Cloudinary, nodemailer, SSLCOMMERZ store credentials/URLs, `CRON_SECRET`); reference this instead of `process.env` directly in new code.
 
 Payments go through SSLCOMMERZ (`payment` + `SSL` modules); enrollment access is gated on `payment.paymentStatus === Completed` (see `ValidateCourseAccess`).
 
 AI features: `src/app/util/openRouterClient.ts` exports `askOpenRouter(messages, options)`, a single choke point that calls OpenRouter's free-tier models with automatic fallback across a `FREE_MODELS` list, reading `config.openRouterApiKey`. The `ai` module (`src/app/modules/ai/`) has three endpoints, all rate-limited by `aiLimiter` where public: `GET /api/ai/review-summary/:courseId` (cached AI digest of a course's reviews, caching on `Course.aiReviewSummary`/`aiReviewSummaryReviewCount`, per `specs/02-ai-review-summarizer.md`), `POST /api/ai/course-advisor` (public endpoint accepting a plain-English learning goal, returns 2-3 recommended published courses with hallucination-guarded server-side cross-checking against the fetched course list, per `specs/03-ai-course-advisor.md`), and `POST /api/ai/study-assistant/:courseId` (enrolled+paid-only via `authCheck(UserRole.user)` + `ValidateCourseAccess`, stateless per-course chat grounded in the student's real module/video outline and progress, per `specs/04-ai-study-assistant.md`). Check `progress-tracker.md`'s spec status table before starting new AI work — several follow-on specs exist under `context/specs/`.
 
-Error logging: `src/app/modules/errorLog/` persists every error that reaches `globalErrorHandler` (all 4xx/5xx, not just unexpected bugs) into MongoDB — message, status, method, path, IP, and the requesting user when authenticated. Reads are admin-only (`GET /api/error-log`, `GET /api/error-log/:id`, both behind `authCheck(UserRole.admin)`); there's no public write endpoint, rows are only ever created internally from `globalErrorHandler`. `errorLog.model.ts` carries this codebase's only TTL index (`{ createdAt: 1 }, { expireAfterSeconds: 60 * 60 * 24 * 30 }`), so rows auto-expire 30 days after creation with no cron/cleanup job needed. See `context/specs/09-observability-logging-and-error-tracking.md`.
+Error logging: `src/app/modules/errorLog/` persists every error that reaches `globalErrorHandler` (all 4xx/5xx, not just unexpected bugs) — message, status, method, path, IP, and the requesting user when authenticated. Reads are admin-only (`GET /api/error-log`, `GET /api/error-log/:id`, both behind `authCheck(UserRole.admin)`); there's no public write endpoint, rows are only ever created internally from `globalErrorHandler`. Mongo's 30-day TTL index (auto-expiry, no cron needed) has no Postgres/Prisma equivalent — 30-day retention is now enforced by a Vercel Cron job (`vercel.json`'s `crons` entry, daily at 3am UTC) hitting `GET /api/error-log/cleanup`, gated by `verifyCronSecret` rather than `authCheck`. See `context/specs/09-observability-logging-and-error-tracking.md` and `context/specs/19-postgres-prisma-migration.md`.
 
 Route files often JSON-parse a `data` field out of multipart bodies before validation (see the inline middleware in `course.routes.ts` that does `req.body = JSON.parse(req.body?.data)` between `upload.single(...)` and `validateRequest`) — follow this pattern for any new endpoint that accepts a file alongside structured JSON fields.
 
@@ -123,7 +135,11 @@ JWT-based; roles are `admin`, `instructor`, `user` (`UserRole` in `lms_server/sr
 
 ## Conventions to follow
 
-- New backend endpoints: add files following the existing `route/controller/service/model/interface/validation` split inside `src/app/modules/<name>/`, register the router in `src/app/router/index.ts`, and use `authCheck(...)` + `validateRequest(...)` + `catchAsync` + `sendResponse` consistently with existing modules.
+- New backend endpoints: add files following the existing `route/controller/service/interface/validation` split inside `src/app/modules/<name>/` (schema changes go in the shared `prisma/schema.prisma`, not a per-module file), register the router in `src/app/router/index.ts`, and use `authCheck(...)` + `validateRequest(...)` + `catchAsync` + `sendResponse` consistently with existing modules.
 - New frontend data fetching/mutations: use `hooks/useApi.ts` (TanStack Query) rather than calling `axiosInstance` directly from components; put multi-step create/update/delete orchestration (toast + navigate) in `functions/*.functions.ts`.
 - Env vars are centralized: backend via `src/app/config/index.ts`, frontend base URL via `config/envConfig.ts` — don't read `process.env` ad hoc elsewhere.
 - After any meaningful change, update the relevant app's `context/progress-tracker.md` (and `architecture.md`/`code-standards.md` if the change alters something they document) — see "Living documentation" above.
+
+## Manual API testing
+
+`LMS_system.postman_collection.json` at the repo root is a Postman collection covering the REST API — import it when manually exercising endpoints instead of hand-writing requests. There's no seeded/guaranteed-current set of test credentials to rely on; instructor accounts created via `auth.service.ts::createInstructor` get the hardcoded default password (`123456`, forcing `needsPasswordChange`) until changed, but don't assume any specific account still has it — verify against the DB (e.g. `needsPasswordChange` still `true`) before assuming a login will work.

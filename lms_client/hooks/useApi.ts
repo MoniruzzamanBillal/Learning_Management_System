@@ -8,6 +8,7 @@ import {
 
 type TgenericResponse<TData> = {
   data: TData;
+  meta?: unknown;
   statusCode?: number;
   success: boolean;
   message: string;

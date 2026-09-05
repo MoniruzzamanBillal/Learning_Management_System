@@ -1,28 +1,20 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import TableRowActions from "@/components/shared/table/TableRowActions";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { Eye } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 
 type TCourse = {
-  _id: string;
+  id: string;
   name: string;
   category: string;
   courseCover: string;
 };
 
 type TEnrollment = {
-  _id: string;
-  user: string;
+  id: string;
+  userId: string;
   course: TCourse;
   completed: boolean;
 };
@@ -31,17 +23,7 @@ export const EnrolledCourseColumn: ColumnDef<TEnrollment>[] = [
   {
     accessorFn: (row: TEnrollment) => row.course?.name,
     id: "name",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Name
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
+    header: "Name",
     cell: ({ row }) => {
       return <p className="font-medium">{row.original?.course?.name}</p>;
     },
@@ -49,17 +31,7 @@ export const EnrolledCourseColumn: ColumnDef<TEnrollment>[] = [
   {
     accessorFn: (row: TEnrollment) => row.course?.category,
     id: "category",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Category
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
+    header: "Category",
     cell: ({ row }) => {
       return <p>{row.original?.course?.category}</p>;
     },
@@ -93,22 +65,15 @@ export const EnrolledCourseColumn: ColumnDef<TEnrollment>[] = [
       const rowData = row.original;
 
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem asChild>
-              <Link href={`/my-courses/${rowData?.course?._id}`}>
-                View Details
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <TableRowActions
+          actions={[
+            {
+              label: "View Details",
+              icon: Eye,
+              href: `/my-courses/${rowData?.course?.id}`,
+            },
+          ]}
+        />
       );
     },
   },

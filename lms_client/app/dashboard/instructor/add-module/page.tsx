@@ -3,6 +3,7 @@ import AddModule from "@/components/main/(Instructor)/ManageModule/AddModule";
 export const metadata = {
   title: "Add Module | Instructor Dashboard",
   description: "Add a new module to a course.",
+  robots: { index: false, follow: false },
 };
 
 const AddModulePage = () => {

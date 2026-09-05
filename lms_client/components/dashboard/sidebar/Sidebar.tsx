@@ -5,7 +5,7 @@ import { useGetUser } from "@/hooks/useGetUser";
 import { userRoleConts } from "@/utils/constants";
 import Cookies from "js-cookie";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { ReactNode } from "react";
 import { CiLogin } from "react-icons/ci";
 import { LuUser } from "react-icons/lu";
@@ -20,7 +20,7 @@ type Tsidebar = {
 };
 
 const Sidebar = () => {
-  const router = useRouter();
+  // const router = useRouter();
   const pathname = usePathname();
 
   const userInfo = useGetUser();

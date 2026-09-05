@@ -1,14 +1,14 @@
 export type TAdminReview = {
-  _id: string;
+  id: string;
   comment: string;
   rating: number;
   createdAt: string;
   userId: {
-    _id: string;
+    id: string;
     name: string;
   } | null;
   courseId: {
-    _id: string;
+    id: string;
     name: string;
   } | null;
 };

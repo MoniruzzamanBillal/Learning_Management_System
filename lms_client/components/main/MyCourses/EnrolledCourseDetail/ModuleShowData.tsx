@@ -9,43 +9,53 @@ import { useFetchData } from "@/hooks/useApi";
 import { TApiResponse } from "@/types/globalTypes";
 import { apiGet } from "@/lib/api";
 import { videoProgressStatusConsts } from "@/utils/constants";
-import { CircleCheckBig, Lock, LockOpen } from "lucide-react";
+import {
+  CircleCheckBig,
+  ClipboardList,
+  HelpCircle,
+  Lock,
+  LockOpen,
+} from "lucide-react";
 import React, { SetStateAction, useState } from "react";
 import { toast } from "sonner";
 import ModuleItemSkeleton from "./ModuleItemSkeleton";
 import { TModule } from "./type/EnrolledCourseDetail.type";
 
 type TVideoDetail = {
-  _id: string;
+  id: string;
   title: string;
   videoUrl: string;
   videoOrder: number;
-  module: string;
-  instructor: string;
+  moduleId: string;
+  instructorId: string;
   createdAt: string;
   updatedAt: string;
   isDeleted: boolean;
   __v: number;
 };
 
-type TVideo = { _id: string; title: string; videoOrder: number };
+type TVideo = { id: string; title: string; videoOrder: number };
 
 type TModuleVideo = {
-  _id: string;
+  id: string;
   video: TVideo;
   videoStatus: keyof typeof videoProgressStatusConsts;
 };
 
 type TProps = {
   modules: TModule[];
-  videoDataObj: { title: string; videoUrl: string } | null;
+  videoDataObj: { id: string; title: string; videoUrl: string } | null;
   setVideoLoading: React.Dispatch<SetStateAction<boolean>>;
   courseId: string;
   setCourseProgress: React.Dispatch<SetStateAction<number | null>>;
 
   setVideoDataObj: React.Dispatch<
-    SetStateAction<{ title: string; videoUrl: string } | null>
+    SetStateAction<{ id: string; title: string; videoUrl: string } | null>
   >;
+  onSelectQuiz: (moduleId: string, quizId: string) => void;
+  clearActiveQuiz: () => void;
+  onSelectAssignment: (moduleId: string) => void;
+  clearActiveAssignment: () => void;
 };
 
 const ModuleShowData = ({
@@ -55,6 +65,10 @@ const ModuleShowData = ({
   setCourseProgress,
   setVideoDataObj,
   videoDataObj,
+  onSelectQuiz,
+  clearActiveQuiz,
+  onSelectAssignment,
+  clearActiveAssignment,
 }: TProps) => {
   const [selectedModuleId, setSelectedModuleId] = useState<string | null>(null);
 
@@ -74,12 +88,14 @@ const ModuleShowData = ({
 
   // ! for getting module video , after clicking a module name
   const handleClickModule = async (module: TModule) => {
-    setSelectedModuleId(module._id);
+    setSelectedModuleId(module.id);
   };
 
   // ! for getting video data
   const handleGetVideo = async (videoId: string) => {
     setVideoLoading(true);
+    clearActiveQuiz();
+    clearActiveAssignment();
 
     try {
       const result = (await apiGet(
@@ -90,6 +106,7 @@ const ModuleShowData = ({
       setVideoLoading(false);
 
       const videoPayload = {
+        id: result?.data?.id,
         title: result?.data?.title,
         videoUrl: result?.data?.videoUrl,
       };
@@ -104,7 +121,7 @@ const ModuleShowData = ({
         setCourseProgress(courseProgressResult?.data);
       }
 
-      const moduleId = result?.data?.module;
+      const moduleId = result?.data?.moduleId;
 
       setSelectedModuleId(moduleId);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -124,8 +141,8 @@ const ModuleShowData = ({
           {modules &&
             modules?.map((module: TModule) => (
               <AccordionItem
-                key={module?._id}
-                value={module?._id}
+                key={module?.id}
+                value={module?.id}
                 className=" bg-gray-50 rounded-lg border border-gray-100 p-2 my-3 "
               >
                 {/* module name  */}
@@ -144,7 +161,7 @@ const ModuleShowData = ({
                     .sort((a, b) => a.video?.videoOrder - b.video?.videoOrder)
                     .map((video: TModuleVideo) => (
                     <AccordionContent
-                      key={video?._id}
+                      key={video?.id}
                       className={` text-sm lg:text-lg py-3 pl-4 font-medium border-y border-y-gray-300 flex items-center gap-x-2 cursor-pointer   ${
                         video?.video?.title === videoDataObj?.title &&
                         "bg-prime-50/25 rounded "
@@ -165,11 +182,33 @@ const ModuleShowData = ({
                         <LockOpen className=" text-prime-100 font-bold size-5 lg:size-6 " />
                       )}
 
-                      <p onClick={() => handleGetVideo(video?.video?._id)}>
+                      <p onClick={() => handleGetVideo(video?.video?.id)}>
                         {video?.video?.title}
                       </p>
                     </AccordionContent>
                   ))}
+
+                {module?.quiz && (
+                  <AccordionContent
+                    className="text-sm lg:text-lg py-3 pl-4 font-medium border-y border-y-gray-300 flex items-center gap-x-2 cursor-pointer"
+                    onClick={() =>
+                      onSelectQuiz(module?.id, module?.quiz?.id as string)
+                    }
+                  >
+                    <HelpCircle className="text-prime-100 font-bold size-5 lg:size-6" />
+                    <p>Quiz</p>
+                  </AccordionContent>
+                )}
+
+                {module?.assignment && (
+                  <AccordionContent
+                    className="text-sm lg:text-lg py-3 pl-4 font-medium border-y border-y-gray-300 flex items-center gap-x-2 cursor-pointer"
+                    onClick={() => onSelectAssignment(module?.id)}
+                  >
+                    <ClipboardList className="text-prime-100 font-bold size-5 lg:size-6" />
+                    <p>Assignment</p>
+                  </AccordionContent>
+                )}
               </AccordionItem>
             ))}
         </Accordion>

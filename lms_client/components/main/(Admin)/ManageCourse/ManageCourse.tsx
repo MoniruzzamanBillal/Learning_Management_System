@@ -42,7 +42,7 @@ const ManageCourse = () => {
         </Button>
 
         {/* table section  */}
-        <div className="Tablecontainer mx-auto py-10">{content}</div>
+        <div className="Tablecontainer mx-auto ">{content}</div>
       </div>
     </div>
   );

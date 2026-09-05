@@ -1,14 +1,13 @@
+import { Prisma } from "../../../generated/prisma/client";
 import { videoProgressStatus } from "./VideoProgress.constants";
-import { TEnrolledCourseUsers } from "./VideoProgress.interface";
-import { videoProgressModel } from "./VideoProgress.model";
 
 type TaddVideoCoursePublish = {
-  enrolledCourseUsers: TEnrolledCourseUsers[];
+  enrolledCourseUsers: { userId: string }[];
   courseId: string;
   videoId: string;
   videoCount: number;
   moduleId: string;
-  session: any;
+  tx: Prisma.TransactionClient;
 };
 
 // ! add video in course progress , if new video added after course is published
@@ -18,18 +17,22 @@ export const addVideoCoursePublish = async ({
   videoId,
   videoCount,
   moduleId,
-  session,
+  tx,
 }: TaddVideoCoursePublish): Promise<void> => {
-  const videoProgressPayload = enrolledCourseUsers?.map((enrollment) => ({
-    user: enrollment?.user?.toString(),
-    course: courseId,
-    module: moduleId,
-    video: videoId,
-    videoStatus:
-      videoCount === 0
-        ? videoProgressStatus?.unlocked
-        : videoProgressStatus?.locked,
-  }));
+  if (!enrolledCourseUsers.length) {
+    return;
+  }
 
-  await videoProgressModel.insertMany(videoProgressPayload, { session });
+  await tx.videoProgress.createMany({
+    data: enrolledCourseUsers.map((enrollment) => ({
+      userId: enrollment.userId,
+      courseId,
+      moduleId,
+      videoId,
+      videoStatus:
+        videoCount === 0
+          ? videoProgressStatus.unlocked
+          : videoProgressStatus.locked,
+    })),
+  });
 };

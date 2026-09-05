@@ -64,7 +64,7 @@ export default function ProfilePage() {
               </div>
 
               <Link
-                href={`/dashboard/update-profile/${userData?.data?._id}`}
+                href={`/dashboard/update-profile/${userData?.data?.id}`}
                 className="mt-4 md:mt-0"
               >
                 <Button className="bg-teal-600 hover:bg-teal-700 font-semibold text-sm sm:text-base">

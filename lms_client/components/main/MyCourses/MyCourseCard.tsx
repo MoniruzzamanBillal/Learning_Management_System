@@ -50,7 +50,7 @@ const MyCourseCard = ({ courseData }: { courseData: TUserEnrolledCourse }) => {
 
         <div className="mt-auto pt-3 border-t border-gray-100">
           <Link
-            href={`/my-courses/${courseData?.course?._id}`}
+            href={`/my-courses/${courseData?.course?.id}`}
             className="w-fit"
           >
             <Button

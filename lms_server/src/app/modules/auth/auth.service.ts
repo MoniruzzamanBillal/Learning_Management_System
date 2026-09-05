@@ -1,10 +1,11 @@
+import { Prisma } from "../../../generated/prisma/client";
 import bcrypt from "bcrypt";
 import httpStatus from "http-status";
 import config from "../../config";
 import AppError from "../../Error/AppError";
 import { SendImageCloudinary } from "../../util/SendImageCloudinary";
+import prisma from "../../util/prisma";
 import { TUser } from "../user/user.interface";
-import { userModel } from "../user/user.model";
 import { createToken } from "./auth.util";
 
 // ! crate user
@@ -22,12 +23,37 @@ const createUserIntoDB = async (payload: Partial<TUser>, file: any) => {
     payload.profilePicture = profilePicture;
   }
 
-  const result = await userModel.create({ ...payload });
+  // No Mongoose pre("save") hook in Prisma — hash explicitly.
+  const hashedPassword = await bcrypt.hash(
+    payload?.password as string,
+    Number(config.bcrypt_salt_rounds)
+  );
 
-  return result;
+  try {
+    const result = await prisma.user.create({
+      data: {
+        ...payload,
+        password: hashedPassword,
+      } as Prisma.UserCreateInput,
+    });
+
+    return result;
+  } catch (error) {
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === "P2002"
+    ) {
+      throw new AppError(
+        httpStatus.BAD_REQUEST,
+        "A user with this email already exists !!!"
+      );
+    }
+    throw error;
+  }
 };
 
 // ! for creating an instructor
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const createInstructor = async (payload: Partial<TUser>, file: any) => {
   if (file) {
     const name = (payload?.name as string).trim();
@@ -44,9 +70,35 @@ const createInstructor = async (payload: Partial<TUser>, file: any) => {
   payload.password = "123456";
   payload.needsPasswordChange = true;
 
-  const result = await userModel.create({ ...payload });
+  // No Mongoose pre("save") hook in Prisma — hash explicitly (preserves
+  // existing behavior exactly: the hardcoded default password is still
+  // stored hashed, same as the old pre-save hook did).
+  const hashedPassword = await bcrypt.hash(
+    payload.password,
+    Number(config.bcrypt_salt_rounds)
+  );
 
-  return result;
+  try {
+    const result = await prisma.user.create({
+      data: {
+        ...payload,
+        password: hashedPassword,
+      } as Prisma.UserCreateInput,
+    });
+
+    return result;
+  } catch (error) {
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === "P2002"
+    ) {
+      throw new AppError(
+        httpStatus.BAD_REQUEST,
+        "A user with this email already exists !!!"
+      );
+    }
+    throw error;
+  }
 };
 
 type Tlogin = {
@@ -56,7 +108,11 @@ type Tlogin = {
 
 // ! for login
 const signInFromDb = async (payload: Tlogin) => {
-  const userData = await userModel.findOne({ email: payload?.email });
+  // findFirst, not findUnique: combining the unique `email` lookup with
+  // `isDeleted: false` isn't allowed on findUnique.
+  const userData = await prisma.user.findFirst({
+    where: { email: payload?.email, isDeleted: false },
+  });
 
   if (!userData) {
     throw new AppError(
@@ -74,8 +130,8 @@ const signInFromDb = async (payload: Tlogin) => {
     throw new AppError(httpStatus.FORBIDDEN, "Password don't match !!");
   }
 
-  const userId = userData?._id?.toHexString();
-  const userRole = userData?.userRole;
+  const userId = userData.id;
+  const userRole = userData.userRole;
 
   const jwtPayload = {
     userId,
@@ -90,7 +146,9 @@ const signInFromDb = async (payload: Tlogin) => {
 
 // ! for update password
 const updatePassword = async (payload: Tlogin) => {
-  const userData = await userModel.findOne({ email: payload?.email });
+  const userData = await prisma.user.findFirst({
+    where: { email: payload?.email, isDeleted: false },
+  });
 
   if (!userData) {
     throw new AppError(
@@ -104,11 +162,10 @@ const updatePassword = async (payload: Tlogin) => {
     Number(config.bcrypt_salt_rounds)
   );
 
-  await userModel.findByIdAndUpdate(
-    userData?._id,
-    { password: hashedPassword },
-    { new: true }
-  );
+  await prisma.user.update({
+    where: { id: userData.id },
+    data: { password: hashedPassword },
+  });
 };
 
 //

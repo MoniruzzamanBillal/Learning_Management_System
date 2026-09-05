@@ -13,8 +13,13 @@ const createInstructorValidationSchema = zod_1.z.object({
     name: zod_1.z.string().min(1, "Name is required"),
     email: zod_1.z.string().email("Invalid email format").min(4, "Email is required"),
 });
+// ! for updating a user's own profile
+const updateUserValidationSchema = zod_1.z.object({
+    name: zod_1.z.string().min(1, "Name is required"),
+});
 //
 exports.userValidationSchemas = {
     createUserValidationSchema,
     createInstructorValidationSchema,
+    updateUserValidationSchema,
 };

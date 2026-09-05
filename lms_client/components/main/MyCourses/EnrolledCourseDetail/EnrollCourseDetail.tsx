@@ -11,16 +11,19 @@ import Link from "next/link";
 import { useState } from "react";
 import { toast } from "sonner";
 import AiStudyAssistant from "./AiStudyAssistant";
+import AssignmentPanel from "./AssignmentPanel";
 import ModuleShowData from "./ModuleShowData";
 import NoVideoPlaceholder from "./NoVideoPlaceholder";
+import QuizPanel from "./QuizPanel";
 import { TEnrollCourseDetail } from "./type/EnrolledCourseDetail.type";
 import VideoLoadingSkeleton from "./VideoLoadingSkeleton";
+import VideoNotesPanel from "./VideoNotesPanel";
 
 type TCompleteEnrollment = {
-  _id: string;
-  user: string;
-  course: string;
-  Payment: string;
+  id: string;
+  userId: string;
+  courseId: string;
+  paymentId: string;
   completed: boolean;
   isReviewed: boolean;
   isDeleted: boolean;
@@ -40,10 +43,20 @@ export default function EnrollCourseDetail({ id }: { id: string }) {
     );
 
   const [videoDataObj, setVideoDataObj] = useState<{
+    id: string;
     title: string;
     videoUrl: string;
   } | null>(null);
   const [videoUrlLoading, setVideoLoading] = useState<boolean>(false);
+
+  const [activeQuiz, setActiveQuiz] = useState<{
+    moduleId: string;
+    quizId: string;
+  } | null>(null);
+
+  const [activeAssignment, setActiveAssignment] = useState<{
+    moduleId: string;
+  } | null>(null);
 
   const [courseProgress, setCourseProgress] = useState<number | null>(
     enrolledCourseData?.data?.courseProgressData ?? null,
@@ -77,7 +90,15 @@ export default function EnrollCourseDetail({ id }: { id: string }) {
   let content = null;
 
   // ! video content for different state
-  if (videoUrlLoading) {
+  if (activeQuiz) {
+    content = (
+      <QuizPanel courseId={id} moduleId={activeQuiz.moduleId} />
+    );
+  } else if (activeAssignment) {
+    content = (
+      <AssignmentPanel courseId={id} moduleId={activeAssignment.moduleId} />
+    );
+  } else if (videoUrlLoading) {
     content = <VideoLoadingSkeleton />;
   } else if (!videoDataObj && !videoUrlLoading && !isLoading) {
     content = <NoVideoPlaceholder />;
@@ -140,7 +161,7 @@ export default function EnrollCourseDetail({ id }: { id: string }) {
           <div className="leftVideoSection">
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden p-4">
               <div className="videoPreviewContainer">
-                {videoDataObj && (
+                {videoDataObj && !activeQuiz && !activeAssignment && (
                   <p className=" text-xl font-medium mb-2 ">
                     {videoDataObj?.title}
                   </p>
@@ -150,6 +171,10 @@ export default function EnrollCourseDetail({ id }: { id: string }) {
                 {content}
               </div>
             </div>
+
+            {videoDataObj && !activeQuiz && !activeAssignment && (
+              <VideoNotesPanel courseId={id} videoId={videoDataObj.id} />
+            )}
           </div>
           {/*  */}
 
@@ -157,14 +182,24 @@ export default function EnrollCourseDetail({ id }: { id: string }) {
           <div className="rightSection">
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
               {enrolledCourseData?.data?.course?.modules &&
-                enrolledCourseData?.data?.course?._id && (
+                enrolledCourseData?.data?.course?.id && (
                   <ModuleShowData
                     modules={enrolledCourseData?.data?.course?.modules}
                     setVideoLoading={setVideoLoading}
-                    courseId={enrolledCourseData?.data?.course?._id}
+                    courseId={enrolledCourseData?.data?.course?.id}
                     setCourseProgress={setCourseProgress}
                     setVideoDataObj={setVideoDataObj}
                     videoDataObj={videoDataObj}
+                    onSelectQuiz={(moduleId, quizId) => {
+                      setActiveQuiz({ moduleId, quizId });
+                      setActiveAssignment(null);
+                    }}
+                    clearActiveQuiz={() => setActiveQuiz(null)}
+                    onSelectAssignment={(moduleId) => {
+                      setActiveAssignment({ moduleId });
+                      setActiveQuiz(null);
+                    }}
+                    clearActiveAssignment={() => setActiveAssignment(null)}
                   />
                 )}
             </div>

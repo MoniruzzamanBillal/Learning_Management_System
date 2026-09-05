@@ -1,8 +1,6 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 export type TCourseEnrollmentSummary = {
   courseId: string;
@@ -13,30 +11,10 @@ export type TCourseEnrollmentSummary = {
 export const EnrollmentStudentsColumn: ColumnDef<TCourseEnrollmentSummary>[] = [
   {
     accessorKey: "courseTitle",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant={"ghost"}
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Course Name
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
+    header: "Course Name",
   },
   {
     accessorKey: "totalEnrollments",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant={"ghost"}
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Enrolled Students
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
+    header: "Enrolled Students",
   },
 ];

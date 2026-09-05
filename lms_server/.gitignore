@@ -12,6 +12,9 @@
 # testing
 /coverage
 
+# generated Prisma client (regenerated via `postinstall`/`build`)
+/src/generated
+
 
 
 .env*

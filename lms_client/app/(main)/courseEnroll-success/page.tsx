@@ -1,6 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { CheckCircle } from "lucide-react";
+import { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "MATS Academy | Enrollment Successful",
+  description: "Your course enrollment payment was completed successfully.",
+  robots: { index: false, follow: false },
+};
 
 export default function EnrollSuccessPage() {
   return (

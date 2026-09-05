@@ -17,7 +17,7 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 
 type TVideo = {
-  _id: string;
+  id: string;
   title: string;
   videoUrl: string;
 };
@@ -40,7 +40,7 @@ const InstructorModule = () => {
 
   const handleDeleteVideo = async (videoData: TVideo) => {
     const payload = {
-      videoId: videoData?._id,
+      videoId: videoData?.id,
       moduleId,
     };
 
@@ -62,7 +62,7 @@ const InstructorModule = () => {
         <Accordion type="single" collapsible className="w-full">
           {moduleData?.data?.videos &&
             moduleData?.data?.videos?.map((videoData: TVideo) => (
-              <AccordionItem key={videoData?._id} value={videoData?._id}>
+              <AccordionItem key={videoData?.id} value={videoData?.id}>
                 <AccordionTrigger> {videoData?.title} : </AccordionTrigger>
                 <AccordionContent>
                   <div className="videoPreviewContainer mt-4">
@@ -85,7 +85,7 @@ const InstructorModule = () => {
                     {userRole === userRoleConts?.instructor && (
                       <div className="btnGroup flex gap-x-3">
                         <Link
-                          href={`/dashboard/instructor/update-video/${videoData?._id}`}
+                          href={`/dashboard/instructor/update-video/${videoData?.id}`}
                         >
                           <Button className="bg-green-700/95 hover:bg-green-800/95">
                             Update Video

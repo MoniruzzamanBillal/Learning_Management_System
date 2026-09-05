@@ -1,11 +1,11 @@
 export type TUserEnrolledCourse = {
-  _id: string;
+  id: string;
   completed: boolean;
   courseProgress: number;
-  user: string;
+  userId: string;
 
   course: {
-    _id: string;
+    id: string;
     name: string;
     category: string;
     courseCover: string;

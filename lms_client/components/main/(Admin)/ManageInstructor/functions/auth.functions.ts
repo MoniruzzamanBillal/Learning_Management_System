@@ -81,7 +81,7 @@ export const registerInstructorFunction = async (
     setTimeout(() => navigate(), 700);
   } catch (error: any) {
     const errorMessage =
-      error?.response?.data?.message ||
+      error?.message ||
       "Something went wrong while registering an instructor !! ";
     toast.error(errorMessage, {
       id: toastId,

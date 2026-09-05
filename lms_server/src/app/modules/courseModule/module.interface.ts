@@ -1,9 +1,3 @@
-import { ObjectId } from "mongoose";
+import { Module } from "../../../generated/prisma/client";
 
-export type TModule = {
-  course: ObjectId;
-  title: string;
-  videos?: ObjectId[];
-  instructor?: ObjectId[];
-  isDeleted?: boolean;
-};
+export type TModule = Module;

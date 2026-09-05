@@ -1,14 +1,17 @@
 import { Router } from "express";
 
 import { aiRouter } from "../modules/ai/ai.route";
+import { assignmentRouter } from "../modules/assignment/assignment.route";
 import { authRouter } from "../modules/auth/auth.route";
 import { courseRouter } from "../modules/course/course.routes";
 import { courseEnrollmentRouter } from "../modules/CourseEnrollment/CourseEnrollment.routes";
 import { moduleRouter } from "../modules/courseModule/module.routes";
 import { errorLogRouter } from "../modules/errorLog/errorLog.route";
 import { paymentRoute } from "../modules/payment/payment.routes";
+import { quizRouter } from "../modules/quiz/quiz.route";
 import { reviewRouter } from "../modules/review/review.route";
 import { userRouter } from "../modules/user/user.route";
+import { videoNoteRouter } from "../modules/VideoNote/VideoNote.route";
 import { videoRouter } from "../modules/VideoModule/video.routes";
 
 const router = Router();
@@ -53,6 +56,18 @@ const routeArray = [
   {
     path: "/error-log",
     route: errorLogRouter,
+  },
+  {
+    path: "/video-note",
+    route: videoNoteRouter,
+  },
+  {
+    path: "/quiz",
+    route: quizRouter,
+  },
+  {
+    path: "/assignment",
+    route: assignmentRouter,
   },
 ];
 

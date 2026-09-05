@@ -13,12 +13,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.authServices = void 0;
+const client_1 = require("../../../generated/prisma/client");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const http_status_1 = __importDefault(require("http-status"));
 const config_1 = __importDefault(require("../../config"));
 const AppError_1 = __importDefault(require("../../Error/AppError"));
 const SendImageCloudinary_1 = require("../../util/SendImageCloudinary");
-const user_model_1 = require("../user/user.model");
+const prisma_1 = __importDefault(require("../../util/prisma"));
 const auth_util_1 = require("./auth.util");
 // ! crate user
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -30,10 +31,24 @@ const createUserIntoDB = (payload, file) => __awaiter(void 0, void 0, void 0, fu
         const profilePicture = cloudinaryResponse === null || cloudinaryResponse === void 0 ? void 0 : cloudinaryResponse.secure_url;
         payload.profilePicture = profilePicture;
     }
-    const result = yield user_model_1.userModel.create(Object.assign({}, payload));
-    return result;
+    // No Mongoose pre("save") hook in Prisma — hash explicitly.
+    const hashedPassword = yield bcrypt_1.default.hash(payload === null || payload === void 0 ? void 0 : payload.password, Number(config_1.default.bcrypt_salt_rounds));
+    try {
+        const result = yield prisma_1.default.user.create({
+            data: Object.assign(Object.assign({}, payload), { password: hashedPassword }),
+        });
+        return result;
+    }
+    catch (error) {
+        if (error instanceof client_1.Prisma.PrismaClientKnownRequestError &&
+            error.code === "P2002") {
+            throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "A user with this email already exists !!!");
+        }
+        throw error;
+    }
 });
 // ! for creating an instructor
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const createInstructor = (payload, file) => __awaiter(void 0, void 0, void 0, function* () {
     if (file) {
         const name = (payload === null || payload === void 0 ? void 0 : payload.name).trim();
@@ -44,13 +59,31 @@ const createInstructor = (payload, file) => __awaiter(void 0, void 0, void 0, fu
     }
     payload.password = "123456";
     payload.needsPasswordChange = true;
-    const result = yield user_model_1.userModel.create(Object.assign({}, payload));
-    return result;
+    // No Mongoose pre("save") hook in Prisma — hash explicitly (preserves
+    // existing behavior exactly: the hardcoded default password is still
+    // stored hashed, same as the old pre-save hook did).
+    const hashedPassword = yield bcrypt_1.default.hash(payload.password, Number(config_1.default.bcrypt_salt_rounds));
+    try {
+        const result = yield prisma_1.default.user.create({
+            data: Object.assign(Object.assign({}, payload), { password: hashedPassword }),
+        });
+        return result;
+    }
+    catch (error) {
+        if (error instanceof client_1.Prisma.PrismaClientKnownRequestError &&
+            error.code === "P2002") {
+            throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "A user with this email already exists !!!");
+        }
+        throw error;
+    }
 });
 // ! for login
 const signInFromDb = (payload) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
-    const userData = yield user_model_1.userModel.findOne({ email: payload === null || payload === void 0 ? void 0 : payload.email });
+    // findFirst, not findUnique: combining the unique `email` lookup with
+    // `isDeleted: false` isn't allowed on findUnique.
+    const userData = yield prisma_1.default.user.findFirst({
+        where: { email: payload === null || payload === void 0 ? void 0 : payload.email, isDeleted: false },
+    });
     if (!userData) {
         throw new AppError_1.default(http_status_1.default.NOT_FOUND, "User dont exist with this email !!!");
     }
@@ -58,8 +91,8 @@ const signInFromDb = (payload) => __awaiter(void 0, void 0, void 0, function* ()
     if (!isPasswordMatch) {
         throw new AppError_1.default(http_status_1.default.FORBIDDEN, "Password don't match !!");
     }
-    const userId = (_a = userData === null || userData === void 0 ? void 0 : userData._id) === null || _a === void 0 ? void 0 : _a.toHexString();
-    const userRole = userData === null || userData === void 0 ? void 0 : userData.userRole;
+    const userId = userData.id;
+    const userRole = userData.userRole;
     const jwtPayload = {
         userId,
         userRole,
@@ -70,12 +103,17 @@ const signInFromDb = (payload) => __awaiter(void 0, void 0, void 0, function* ()
 });
 // ! for update password
 const updatePassword = (payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const userData = yield user_model_1.userModel.findOne({ email: payload === null || payload === void 0 ? void 0 : payload.email });
+    const userData = yield prisma_1.default.user.findFirst({
+        where: { email: payload === null || payload === void 0 ? void 0 : payload.email, isDeleted: false },
+    });
     if (!userData) {
         throw new AppError_1.default(http_status_1.default.NOT_FOUND, "User dont exist with this email !!!");
     }
     const hashedPassword = yield bcrypt_1.default.hash(payload === null || payload === void 0 ? void 0 : payload.password, Number(config_1.default.bcrypt_salt_rounds));
-    yield user_model_1.userModel.findByIdAndUpdate(userData === null || userData === void 0 ? void 0 : userData._id, { password: hashedPassword }, { new: true });
+    yield prisma_1.default.user.update({
+        where: { id: userData.id },
+        data: { password: hashedPassword },
+    });
 });
 //
 exports.authServices = {

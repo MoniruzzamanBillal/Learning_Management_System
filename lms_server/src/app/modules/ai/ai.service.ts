@@ -1,11 +1,9 @@
 import httpStatus from "http-status";
 import AppError from "../../Error/AppError";
 import { askOpenRouter, TChatMessage } from "../../util/openRouterClient";
-import { courseModel } from "../course/course.model";
+import prisma from "../../util/prisma";
 import { courseEnrollmentService } from "../CourseEnrollment/CourseEnrollment.service";
-import { moduleModel } from "../courseModule/module.model";
 import { reviewServices } from "../review/review.service";
-import { videoProgressModel } from "../VideoProgress/VideoProgress.model";
 import {
   TCourseAdvisorRecommendation,
   TCourseAdvisorResponse,
@@ -17,7 +15,7 @@ const NOT_ENOUGH_REVIEWS_MESSAGE = "Not enough reviews yet to summarize.";
 
 // ! for getting (or generating + caching) a course's AI review summary
 const getReviewSummary = async (
-  courseId: string,
+  courseId: string
 ): Promise<TReviewSummaryResponse> => {
   const averageData = await reviewServices.getAverageReviewOfCourse(courseId);
   const totalReviews = averageData?.totalReviews ?? 0;
@@ -32,9 +30,10 @@ const getReviewSummary = async (
     };
   }
 
-  const course = await courseModel
-    .findById(courseId)
-    .select("aiReviewSummary aiReviewSummaryReviewCount");
+  const course = await prisma.course.findUnique({
+    where: { id: courseId },
+    select: { aiReviewSummary: true, aiReviewSummaryReviewCount: true },
+  });
 
   if (
     course?.aiReviewSummary &&
@@ -68,9 +67,12 @@ const getReviewSummary = async (
 
   const summary = await askOpenRouter(messages);
 
-  await courseModel.findByIdAndUpdate(courseId, {
-    aiReviewSummary: summary,
-    aiReviewSummaryReviewCount: totalReviews,
+  await prisma.course.update({
+    where: { id: courseId },
+    data: {
+      aiReviewSummary: summary,
+      aiReviewSummaryReviewCount: totalReviews,
+    },
   });
 
   return {
@@ -83,24 +85,30 @@ const getReviewSummary = async (
 
 // ! for getting AI course recommendations based on a user's learning goal
 const getCourseAdvice = async (
-  query: string,
+  query: string
 ): Promise<TCourseAdvisorResponse> => {
-  const courses = await courseModel
-    .find({ published: true })
-    .select("_id name description category price")
-    .limit(50)
-    .lean();
+  const courses = await prisma.course.findMany({
+    where: { published: true },
+    select: {
+      id: true,
+      name: true,
+      description: true,
+      category: true,
+      price: true,
+    },
+    take: 50,
+  });
 
   if (!courses.length) {
     return { recommendations: [] };
   }
 
   const courseList = courses.map((c) => ({
-    _id: c._id.toString(),
+    id: c.id,
     name: c.name,
     description: c.description,
     category: c.category,
-    price: c.price,
+    price: Number(c.price),
   }));
 
   const systemPrompt = `You are a helpful course advisor. A student will describe what they want to learn, and you must recommend at most 3 courses from the provided list.
@@ -133,16 +141,16 @@ ${JSON.stringify(courseList, null, 2)}`;
     return { recommendations: [] };
   }
 
-  const validCourseIds = new Set(courseList.map((c) => c._id));
+  const validCourseIds = new Set(courseList.map((c) => c.id));
 
   const filtered = (parsed.recommendations ?? [])
     .filter((r) => validCourseIds.has(r.courseId))
     .slice(0, 3);
 
   const recommendations: TCourseAdvisorRecommendation[] = filtered.map((r) => {
-    const course = courseList.find((c) => c._id === r.courseId)!;
+    const course = courseList.find((c) => c.id === r.courseId)!;
     return {
-      courseId: course._id,
+      courseId: course.id,
       reason: r.reason,
       name: course.name,
       category: course.category,
@@ -157,59 +165,53 @@ ${JSON.stringify(courseList, null, 2)}`;
 const getStudyAssistantReply = async (
   courseId: string,
   userId: string,
-  messages: TChatMessage[],
+  messages: TChatMessage[]
 ): Promise<TStudyAssistantResponse> => {
-  const course = await courseModel
-    .findById(courseId)
-    .select("name description");
+  const course = await prisma.course.findUnique({
+    where: { id: courseId },
+    select: { name: true, description: true },
+  });
 
   if (!course) {
     throw new AppError(httpStatus.BAD_REQUEST, "This course don't exist !!!");
   }
 
-  const modules = await moduleModel
-    .find({ course: courseId, isDeleted: false })
-    .populate({
-      path: "videos",
-      model: "Video",
-      select: "_id title videoOrder",
-    })
-    .select("_id title videos");
-
-  type TModuleVideo = { _id: string; title: string; videoOrder: number };
-
-  const outline = modules.map((moduleData) => {
-    const videos = (moduleData.videos as unknown as TModuleVideo[])
-      .slice()
-      .sort((a, b) => a.videoOrder - b.videoOrder);
-
-    return {
-      title: moduleData.title,
-      videoTitles: videos.map((video) => video.title),
-    };
+  const modules = await prisma.module.findMany({
+    where: { courseId, isDeleted: false },
+    select: {
+      title: true,
+      videos: {
+        where: { isDeleted: false },
+        select: { title: true, videoOrder: true },
+        orderBy: { videoOrder: "asc" },
+      },
+    },
   });
+
+  const outline = modules.map((moduleData) => ({
+    title: moduleData.title,
+    videoTitles: moduleData.videos.map((video) => video.title),
+  }));
 
   const overallProgress = await courseEnrollmentService.courseProgressPercentage(
     courseId,
-    userId,
+    userId
   );
 
-  const progressRecords = await videoProgressModel
-    .find({ course: courseId, user: userId })
-    .populate("video", "_id title videoOrder")
-    .select("videoStatus");
-
-  type TProgressVideo = { _id: string; title: string; videoOrder: number };
+  const progressRecords = await prisma.videoProgress.findMany({
+    where: { courseId, userId },
+    select: {
+      videoStatus: true,
+      video: { select: { title: true, videoOrder: true } },
+    },
+  });
 
   const videoBreakdown = progressRecords
-    .map((record) => {
-      const video = record.video as unknown as TProgressVideo;
-      return {
-        title: video?.title,
-        videoOrder: video?.videoOrder,
-        status: record.videoStatus,
-      };
-    })
+    .map((record) => ({
+      title: record.video.title,
+      videoOrder: record.video.videoOrder,
+      status: record.videoStatus,
+    }))
     .sort((a, b) => a.videoOrder - b.videoOrder)
     .map(({ title, status }) => `${title}: ${status}`);
 
@@ -223,7 +225,7 @@ ${outline
     (module, index) =>
       `${index + 1}. ${module.title}\n${module.videoTitles
         .map((title, videoIndex) => `   ${videoIndex + 1}. ${title}`)
-        .join("\n")}`,
+        .join("\n")}`
   )
   .join("\n")}
 

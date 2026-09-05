@@ -1,7 +1,7 @@
 "use client";
 
-import BaseModal from "@/components/shared/Modal/BaseModal";
 import { TErrorLog } from "@/components/main/(Admin)/ErrorLogs/type/errorLog.types";
+import BaseModal from "@/components/shared/Modal/BaseModal";
 import { format } from "date-fns";
 
 type TErrorLogDetailModalProps = {
@@ -22,14 +22,14 @@ export default function ErrorLogDetailModal({
       open={open}
       onClose={onClose}
       title="Error Details"
-      className="max-w-[95vw] w-[90vw] "
+      className="  max-w-[95vw] sm:max-w-[80vw]  "
     >
       <div className="space-y-4 text-sm">
         <div className="grid grid-cols-2 gap-3">
           <div>
             <p className="text-neutral-400">Time</p>
             <p className="font-medium">
-              {format(new Date(errorLog.createdAt), "dd-MMM-yyyy HH:mm:ss")}
+              {format(new Date(errorLog.createdAt), "dd-MMM-yyyy hh:mm:ss a")}
             </p>
           </div>
           <div>

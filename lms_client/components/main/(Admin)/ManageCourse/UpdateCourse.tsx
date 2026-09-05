@@ -13,7 +13,7 @@ import TextEditorTipTap from "@/components/shared/input/ControlledTipTapTextEdit
 import FormSubmitLoading from "@/components/shared/FormSubmitLoading";
 import { Button } from "@/components/ui/button";
 import { updateCourseFunction } from "@/components/main/(Admin)/ManageCourse/functions/course.functions";
-import { useFetchData, useUpdateData } from "@/hooks/useApi";
+import { useFetchData, usePatch } from "@/hooks/useApi";
 import { updateCourseValidationSchema } from "@/components/main/(Admin)/ManageCourse/schema/Course.schemas";
 import { TCourseData } from "@/types/course.types";
 import { TInstructor } from "@/types/user.types";
@@ -58,14 +58,20 @@ const UpdateCourse = () => {
     resolver: zodResolver(updateCourseValidationSchema),
   });
 
+  // Captured once so its real onChange (which updates react-hook-form's
+  // internal state) can still run alongside the preview handler below —
+  // a separate onChange prop after {...register(...)} would otherwise
+  // silently replace it, and the selected file would never reach `data.image`.
+  const imageField = register("image");
+
   const { mutateAsync: updateCourse, isPending: courseUpdatingLoading } =
-    useUpdateData([["all-courses-admin"], ["admin-course-detail", courseId]]);
+    usePatch([["all-courses-admin"], ["admin-course-detail", courseId]]);
 
   const { data: instructorData, isLoading: instructorDataLoading } =
     useFetchData<TInstructor[]>(["all-instructors"], "/user/get-instructors");
 
   const { data: courseDataRes, isLoading: courseDataLoading } =
-    useFetchData<TCourseData>(
+    useFetchData<TCourseData<TInstructor>>(
       ["admin-course-detail", courseId],
       `/course/admin-course-detail/${courseId}`,
     );
@@ -126,7 +132,7 @@ const UpdateCourse = () => {
     if (instructorData?.data) {
       const instructorOptionsData = instructorData?.data?.map(
         (instructor: TInstructor) => ({
-          value: instructor?._id,
+          value: instructor?.id,
           label: instructor?.name,
         }),
       );
@@ -144,7 +150,7 @@ const UpdateCourse = () => {
         description: course?.description,
         price: course?.price,
         category: course?.category,
-        instructors: course?.instructors,
+        instructors: course?.instructors?.map((instructor) => instructor.id),
       });
 
       if (course?.courseCover) {
@@ -192,12 +198,15 @@ const UpdateCourse = () => {
                 <Input
                   id="image"
                   type="file"
-                  {...register("image")}
+                  {...imageField}
                   ref={(e) => {
-                    register("image").ref(e);
+                    imageField.ref(e);
                     imageInputRef.current = e;
                   }}
-                  onChange={(e) => changeImagePreviewUrl(e)}
+                  onChange={(e) => {
+                    imageField.onChange(e);
+                    changeImagePreviewUrl(e);
+                  }}
                 />
 
                 {imagePreview && (

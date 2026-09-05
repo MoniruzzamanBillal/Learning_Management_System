@@ -1,5 +1,6 @@
 "use client";
 
+import { publishCourseFunction } from "@/components/main/(Admin)/ManageCourse/functions/course.functions";
 import GenericTableComponent from "@/components/shared/table/GenericTableComponent";
 import TableDataLoading from "@/components/shared/table/TableLoading";
 import {
@@ -9,8 +10,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-import { publishCourseFunction } from "@/components/main/(Admin)/ManageCourse/functions/course.functions";
-import { useFetchData, useUpdateData } from "@/hooks/useApi";
+import { useFetchData, usePatch } from "@/hooks/useApi";
 import { useParams, useRouter } from "next/navigation";
 import {
   CourseDetailModuleColumn,
@@ -27,7 +27,7 @@ const CourseDetail = () => {
   }
 
   const { mutateAsync: publishCourse, isPending: coursepublishingLoading } =
-    useUpdateData([["admin-course-detail", courseId], ["all-courses-admin"]]);
+    usePatch([["admin-course-detail", courseId], ["all-courses-admin"]]);
 
   const {
     data: courseData,
@@ -70,7 +70,7 @@ const CourseDetail = () => {
             {!courseData?.data?.published && (
               <Button
                 disabled={coursepublishingLoading}
-                className=" bg-prime100 hover:bg-prime200 "
+                className=" bg-prime-100 hover:bg-prime-200 "
                 onClick={() => publishAdminCourse()}
               >
                 {coursepublishingLoading
@@ -83,7 +83,7 @@ const CourseDetail = () => {
               disabled={courseData?.data?.published}
               onClick={() =>
                 router.push(
-                  `/dashboard/admin/update-course/${courseData?.data?._id}`,
+                  `/dashboard/admin/update-course/${courseData?.data?.id}`,
                 )
               }
               className={`    ${

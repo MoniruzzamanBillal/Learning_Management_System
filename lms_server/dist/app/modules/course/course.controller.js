@@ -29,12 +29,13 @@ const createCourse = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, v
 }));
 // ! for getting all course data
 const getAllCourses = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield course_service_1.courseServices.getAllCourses(req === null || req === void 0 ? void 0 : req.query);
+    const { data, meta } = yield course_service_1.courseServices.getAllCourses(req === null || req === void 0 ? void 0 : req.query);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
         message: "Course data retrives successfully !!!",
-        data: result,
+        data,
+        meta,
     });
 }));
 // ! for getting all course data for admin

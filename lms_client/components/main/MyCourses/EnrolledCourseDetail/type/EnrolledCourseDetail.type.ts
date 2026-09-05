@@ -1,21 +1,23 @@
 export type TModule = {
-  _id: string;
+  id: string;
   title: string;
   videos: string[];
+  quiz: { id: string } | null;
+  assignment: { id: string } | null;
 };
 
 export type TCourse = {
-  _id: string;
+  id: string;
   name: string;
   category: string;
   modules: TModule[];
 };
 
 export type TEnrollCourseDetail = {
-  _id: string;
-  user: string;
+  id: string;
+  userId: string;
   course: TCourse;
-  Payment: string;
+  paymentId: string;
   completed: boolean;
   courseProgressData: number;
 };

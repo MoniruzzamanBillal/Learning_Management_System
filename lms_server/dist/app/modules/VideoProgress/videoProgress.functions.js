@@ -11,21 +11,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.addVideoCoursePublish = void 0;
 const VideoProgress_constants_1 = require("./VideoProgress.constants");
-const VideoProgress_model_1 = require("./VideoProgress.model");
 // ! add video in course progress , if new video added after course is published
-const addVideoCoursePublish = (_a) => __awaiter(void 0, [_a], void 0, function* ({ enrolledCourseUsers, courseId, videoId, videoCount, moduleId, session, }) {
-    const videoProgressPayload = enrolledCourseUsers === null || enrolledCourseUsers === void 0 ? void 0 : enrolledCourseUsers.map((enrollment) => {
-        var _a;
-        return ({
-            user: (_a = enrollment === null || enrollment === void 0 ? void 0 : enrollment.user) === null || _a === void 0 ? void 0 : _a.toString(),
-            course: courseId,
-            module: moduleId,
-            video: videoId,
+const addVideoCoursePublish = (_a) => __awaiter(void 0, [_a], void 0, function* ({ enrolledCourseUsers, courseId, videoId, videoCount, moduleId, tx, }) {
+    if (!enrolledCourseUsers.length) {
+        return;
+    }
+    yield tx.videoProgress.createMany({
+        data: enrolledCourseUsers.map((enrollment) => ({
+            userId: enrollment.userId,
+            courseId,
+            moduleId,
+            videoId,
             videoStatus: videoCount === 0
-                ? VideoProgress_constants_1.videoProgressStatus === null || VideoProgress_constants_1.videoProgressStatus === void 0 ? void 0 : VideoProgress_constants_1.videoProgressStatus.unlocked
-                : VideoProgress_constants_1.videoProgressStatus === null || VideoProgress_constants_1.videoProgressStatus === void 0 ? void 0 : VideoProgress_constants_1.videoProgressStatus.locked,
-        });
+                ? VideoProgress_constants_1.videoProgressStatus.unlocked
+                : VideoProgress_constants_1.videoProgressStatus.locked,
+        })),
     });
-    yield VideoProgress_model_1.videoProgressModel.insertMany(videoProgressPayload, { session });
 });
 exports.addVideoCoursePublish = addVideoCoursePublish;

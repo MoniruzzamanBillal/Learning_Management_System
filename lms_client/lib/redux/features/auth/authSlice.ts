@@ -5,7 +5,7 @@ import { IInitialState } from "./authTypes";
 const initialState: IInitialState = {
   loading: false,
   userInformation: {
-    _id: "",
+    id: "",
     fullName: "",
     firstName: "",
     lastName: "",
@@ -35,7 +35,7 @@ const authSlice = createSlice({
       };
     },
     setUserId: (state, action) => {
-      state.userInformation._id = action.payload;
+      state.userInformation.id = action.payload;
     },
     setData: (state, action) => {
       state.data = action.payload;

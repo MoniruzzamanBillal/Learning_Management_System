@@ -1,16 +1,19 @@
+import { Prisma } from "../../../generated/prisma/client";
 import httpStatus from "http-status";
-import mongoose from "mongoose";
 import AppError from "../../Error/AppError";
-import { courseModel } from "../course/course.model";
-import { userModel } from "../user/user.model";
-import { TModule } from "./module.interface";
-import { moduleModel } from "./module.model";
+import prisma from "../../util/prisma";
+
+type TAddModulePayload = {
+  course: string;
+  title: string;
+  instructor?: string;
+};
 
 // ! for crating a module
-const addModule = async (payload: TModule) => {
+const addModule = async (payload: TAddModulePayload) => {
   const { course, instructor } = payload;
 
-  const courseData = await courseModel.findById(course);
+  const courseData = await prisma.course.findUnique({ where: { id: course } });
 
   if (!courseData) {
     throw new AppError(httpStatus.BAD_REQUEST, "This Course don't exist!!!");
@@ -23,7 +26,15 @@ const addModule = async (payload: TModule) => {
     );
   }
 
-  const instructorData = await userModel.findById(instructor);
+  // instructorId is a required FK on Module (fixes the old TModule.instructor
+  // typing bug where it was incorrectly an optional array — the Mongoose
+  // schema itself already enforced a single required instructor at runtime,
+  // only the TS interface lied). Validation still allows `instructor` to be
+  // omitted, so this check preserves the original's exact error behavior
+  // rather than letting Prisma throw an unrelated FK/validation error.
+  const instructorData = instructor
+    ? await prisma.user.findFirst({ where: { id: instructor, isDeleted: false } })
+    : null;
 
   if (!instructorData) {
     throw new AppError(
@@ -32,62 +43,77 @@ const addModule = async (payload: TModule) => {
     );
   }
 
-  const session = await mongoose.startSession();
-
-  try {
-    session.startTransaction();
-
-    const moduleData = await moduleModel.create([payload], { session });
-
-    await courseModel.findByIdAndUpdate(
-      course,
-      {
-        $push: { modules: moduleData[0]?._id },
-      },
-      { session }
-    );
-
-    await session.commitTransaction();
-    return moduleData;
-  } catch (error: any) {
-    console.log(error);
-    await session.abortTransaction();
-    await session.endSession();
-    throw new Error(error);
-  }
-};
-
-// ! for getting all module
-const getAllModuleData = async () => {
-  const moduleData = await moduleModel
-    .find({ isDeleted: false })
-    .populate("course", " _id name published ");
+  // No denormalized Course.modules array to push into anymore — Module is
+  // derived automatically via Module.courseId, so this is a single write
+  // (the old Mongoose transaction existed only to keep that array in sync).
+  const moduleData = await prisma.module.create({
+    data: {
+      title: payload.title,
+      courseId: course,
+      instructorId: instructor as string,
+    },
+  });
 
   return moduleData;
 };
 
+// ! for getting all module
+const getAllModuleData = async () => {
+  const moduleData = await prisma.module.findMany({
+    where: { isDeleted: false },
+    include: {
+      course: { select: { id: true, name: true, published: true } },
+      videos: { where: { isDeleted: false }, select: { id: true } },
+    },
+  });
+
+  return moduleData.map((module) => ({
+    ...module,
+    videos: module.videos.map((video) => video.id),
+  }));
+};
+
 // ! get module data based on course id
 const getModuleFromCourseId = async (courseId: string) => {
-  const courseData = await courseModel.findById(courseId);
+  const courseData = await prisma.course.findUnique({ where: { id: courseId } });
 
   if (!courseData) {
     throw new AppError(httpStatus.BAD_REQUEST, "This Course don't exist!!!");
   }
 
-  const result = await moduleModel
-    .find({ course: courseId })
-    .populate("course", " _id name published ");
+  const result = await prisma.module.findMany({
+    where: { courseId, isDeleted: false },
+    include: {
+      course: { select: { id: true, name: true, published: true } },
+      videos: { where: { isDeleted: false }, select: { id: true } },
+    },
+  });
 
-  return result;
+  return result.map((module) => ({
+    ...module,
+    videos: module.videos.map((video) => video.id),
+  }));
 };
 
 // ! for getting module data
 const getModulData = async (moduleId: string) => {
-  const moduleData = await moduleModel
-    .findById(moduleId)
-    .populate("course", "name description category published ")
-    .populate("videos", "title  videoUrl")
-    .populate("instructor", " name email profilePicture");
+  // findFirst, not findUnique: combining the unique `id` lookup with
+  // `isDeleted: false` isn't allowed on findUnique.
+  const moduleData = await prisma.module.findFirst({
+    where: { id: moduleId, isDeleted: false },
+    include: {
+      course: {
+        select: { id: true, name: true, description: true, category: true, published: true },
+      },
+      videos: {
+        where: { isDeleted: false },
+        select: { id: true, title: true, videoUrl: true },
+      },
+      instructor: {
+        select: { id: true, name: true, email: true, profilePicture: true },
+      },
+    },
+  });
 
   if (!moduleData) {
     throw new AppError(httpStatus.BAD_REQUEST, "This module don't exist !!!");
@@ -97,16 +123,30 @@ const getModulData = async (moduleId: string) => {
 };
 
 // ! for updating module
-const updateModule = async (payload: Partial<TModule>, moduleId: string) => {
-  const moduleData = await moduleModel.findById(moduleId);
+const updateModule = async (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  payload: any,
+  moduleId: string,
+  instructorId: string
+) => {
+  const moduleData = await prisma.module.findFirst({
+    where: { id: moduleId, isDeleted: false },
+  });
 
   if (!moduleData) {
     throw new AppError(httpStatus.BAD_REQUEST, "This module don't exist !!!");
   }
 
-  const updatedData = await moduleModel.findByIdAndUpdate(moduleId, payload, {
-    new: true,
-    runValidators: true,
+  if (moduleData.instructorId !== instructorId) {
+    throw new AppError(
+      httpStatus.FORBIDDEN,
+      "You are not authorized to update this module !!!"
+    );
+  }
+
+  const updatedData = await prisma.module.update({
+    where: { id: moduleId },
+    data: payload as Prisma.ModuleUpdateInput,
   });
 
   return updatedData;

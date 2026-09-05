@@ -1,8 +1,10 @@
 import { NextFunction, Request, Response, Router } from "express";
 import authCheck from "../../middleware/authCheck";
+import validateRequest from "../../middleware/validateRequest";
 import { upload } from "../../util/SendImageCloudinary";
 import { UserRole } from "../user/user.constants";
 import { userController } from "./user.controller";
+import { userValidationSchemas } from "./user.validation";
 
 const router = Router();
 
@@ -24,6 +26,7 @@ router.patch(
     req.body = JSON.parse(req.body?.data);
     next();
   },
+  validateRequest(userValidationSchemas.updateUserValidationSchema),
   authCheck(UserRole.admin, UserRole.instructor, UserRole.user),
   userController.updateUser
 );

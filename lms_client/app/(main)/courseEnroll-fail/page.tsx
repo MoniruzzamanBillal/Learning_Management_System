@@ -1,6 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { XCircle } from "lucide-react";
+import { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "MATS Academy | Payment Failed",
+  description: "Your course enrollment payment could not be completed.",
+  robots: { index: false, follow: false },
+};
 
 export default function EnrollFailPage() {
   return (

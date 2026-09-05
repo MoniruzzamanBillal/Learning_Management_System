@@ -1,31 +1,82 @@
 "use client";
 
-import GenericTableComponent from "@/components/shared/table/GenericTableComponent";
+import ModulesByCourseAccordion, {
+  TModuleWithCourse,
+} from "@/components/shared/table/ModulesByCourseAccordion";
 import TableDataLoading from "@/components/shared/table/TableLoading";
+import TableRowActions from "@/components/shared/table/TableRowActions";
 import { Button } from "@/components/ui/button";
 import { useFetchData } from "@/hooks/useApi";
+import {
+  ClipboardCheck,
+  ClipboardList,
+  Eye,
+  HelpCircle,
+  Plus,
+  SquarePen,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
-import { ManageModuleColumns } from "./column/ManageModuleColumns";
 
 const ManageModule = () => {
   const router = useRouter();
 
-  const { data: moduleDataWithCourse, isLoading } = useFetchData<any>(
-    ["all-modules"],
-    "/module/all-module",
-  );
+  const { data: moduleDataWithCourse, isLoading } = useFetchData<
+    TModuleWithCourse[]
+  >(["all-modules"], "/module/all-module");
 
   let content = null;
 
   if (isLoading) {
     content = <TableDataLoading />;
-  } else if (moduleDataWithCourse) {
-    content = moduleDataWithCourse && moduleDataWithCourse?.data && (
+  } else if (moduleDataWithCourse?.data) {
+    content = (
       <div className="Tablecontainer mx-auto py-10">
-        <GenericTableComponent
-          columns={ManageModuleColumns}
-          data={moduleDataWithCourse?.data}
-          showToolbar={false}
+        <ModulesByCourseAccordion
+          modules={moduleDataWithCourse.data}
+          renderActions={(module) => {
+            const isPublished = (module.course as { published: boolean })
+              .published;
+
+            return (
+              <TableRowActions
+                actions={[
+                  {
+                    label: "View Details",
+                    icon: Eye,
+                    href: `/dashboard/instructor/module-detail/${module.id}`,
+                  },
+                  {
+                    label: "Update Module",
+                    icon: SquarePen,
+                    href: `/dashboard/instructor/update-module/${module.id}`,
+                    hidden: isPublished,
+                  },
+                  {
+                    label: "Add New Video",
+                    icon: Plus,
+                    href: `/dashboard/instructor/add-video/${module.id}`,
+                    hidden: isPublished,
+                  },
+                  {
+                    label: "Manage Quiz",
+                    icon: HelpCircle,
+                    href: `/dashboard/instructor/manage-quiz/${module.id}`,
+                    hidden: isPublished,
+                  },
+                  {
+                    label: "Manage Assignment",
+                    icon: ClipboardList,
+                    href: `/dashboard/instructor/manage-assignment/${module.id}`,
+                  },
+                  {
+                    label: "Grade Assignment",
+                    icon: ClipboardCheck,
+                    href: `/dashboard/instructor/grade-assignment/${module.id}`,
+                  },
+                ]}
+              />
+            );
+          }}
         />
       </div>
     );
@@ -43,7 +94,7 @@ const ManageModule = () => {
           Add Module
         </Button>
 
-        {/* table section  */}
+        {/* module list section  */}
         {content}
       </div>
     </div>

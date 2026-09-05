@@ -21,7 +21,7 @@ export const addModuleFunction = async (
       navigate();
     }, 700);
   } catch (error: any) {
-    const errorMessage = error?.response?.data?.message || "Something went wrong while adding module !!!";
+    const errorMessage = error?.message || "Something went wrong while adding module !!!";
     toast.error(errorMessage, {
       id: taostId,
       duration: 1400,
@@ -50,7 +50,7 @@ export const updateModuleFunction = async (
       navigate();
     }, 700);
   } catch (error: any) {
-    const errorMessage = error?.response?.data?.message || "Something went wrong while updating module !!!";
+    const errorMessage = error?.message || "Something went wrong while updating module !!!";
     toast.error(errorMessage, {
       id: taostId,
       duration: 1400,

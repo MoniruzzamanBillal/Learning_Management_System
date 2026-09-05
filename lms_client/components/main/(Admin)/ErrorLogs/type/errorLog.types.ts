@@ -4,7 +4,7 @@ export type TErrorSource = {
 };
 
 export type TErrorLog = {
-  _id: string;
+  id: string;
   message: string;
   statusCode: number;
   errorSources: TErrorSource[];
@@ -13,7 +13,7 @@ export type TErrorLog = {
   path: string;
   ip?: string;
   userId?: {
-    _id: string;
+    id: string;
     name: string;
     email: string;
   } | null;

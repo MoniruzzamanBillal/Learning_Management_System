@@ -2,19 +2,27 @@ import bcrypt from "bcrypt";
 import httpStatus from "http-status";
 import config from "../../config";
 import AppError from "../../Error/AppError";
+
+import prisma from "../../util/prisma";
 import { SendImageCloudinary } from "../../util/SendImageCloudinary";
-import { UserRole } from "./user.constants";
+
+import { UserRole } from "../../../generated/prisma/enums";
 import { TUser } from "./user.interface";
-import { userModel } from "./user.model";
 
 // ! for getting all instructor
 const getAllInstructor = async () => {
-  const result = await userModel
-    .find({
-      userRole: UserRole?.instructor,
+  const result = await prisma.user.findMany({
+    where: {
+      userRole: UserRole.instructor,
       isDeleted: false,
-    })
-    .select(" _id name email profilePicture  ");
+    },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      profilePicture: true,
+    },
+  });
 
   return result;
 };
@@ -22,9 +30,13 @@ const getAllInstructor = async () => {
 // ! for changing password
 const changePassword = async (
   payload: { oldPassword: string; newPassword: string },
-  userId: string
+  userId: string,
 ) => {
-  const userData = await userModel.findById(userId);
+  // findFirst, not findUnique: combining the unique `id` lookup with
+  // `isDeleted: false` isn't allowed on findUnique.
+  const userData = await prisma.user.findFirst({
+    where: { id: userId, isDeleted: false },
+  });
 
   if (!userData) {
     throw new AppError(httpStatus.NOT_FOUND, "User dont exist!!!");
@@ -32,7 +44,7 @@ const changePassword = async (
 
   const isPasswordMatch = await bcrypt.compare(
     payload?.oldPassword,
-    userData?.password
+    userData?.password,
   );
 
   if (!isPasswordMatch) {
@@ -41,14 +53,13 @@ const changePassword = async (
 
   const hashedPassword = await bcrypt.hash(
     payload?.newPassword,
-    Number(config.bcrypt_salt_rounds)
+    Number(config.bcrypt_salt_rounds),
   );
 
-  const result = await userModel.findByIdAndUpdate(
-    userId,
-    { password: hashedPassword, needsPasswordChange: false },
-    { new: true }
-  );
+  const result = await prisma.user.update({
+    where: { id: userId },
+    data: { password: hashedPassword, needsPasswordChange: false },
+  });
 
   return result;
   //
@@ -56,18 +67,34 @@ const changePassword = async (
 
 // ! for getting logged in user data
 const getLoggedInUser = async (userId: string) => {
-  const result = await userModel
-    .findById(userId)
-    .select(" _id name profilePicture userRole createdAt email ");
+  const result = await prisma.user.findFirst({
+    where: { id: userId, isDeleted: false },
+    select: {
+      id: true,
+      name: true,
+      profilePicture: true,
+      userRole: true,
+      createdAt: true,
+      email: true,
+    },
+  });
 
   return result;
 };
 
 // ! for getting user based on user id
 const getSpecificUser = async (userId: string) => {
-  const result = await userModel
-    .findById(userId)
-    .select(" _id name profilePicture userRole createdAt email ");
+  const result = await prisma.user.findFirst({
+    where: { id: userId, isDeleted: false },
+    select: {
+      id: true,
+      name: true,
+      profilePicture: true,
+      userRole: true,
+      createdAt: true,
+      email: true,
+    },
+  });
 
   return result;
 };
@@ -75,8 +102,9 @@ const getSpecificUser = async (userId: string) => {
 // ! for updating a user
 const updateUser = async (
   payload: Partial<TUser>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   file: any,
-  userId: string
+  userId: string,
 ) => {
   if (file) {
     const name = (payload?.name as string).trim();
@@ -84,14 +112,15 @@ const updateUser = async (
 
     const cloudinaryResponse = await SendImageCloudinary(
       path as string,
-      name as string
+      name as string,
     );
     const profilePicture = cloudinaryResponse?.secure_url;
     payload.profilePicture = profilePicture;
   }
 
-  const result = await userModel.findByIdAndUpdate(userId, payload, {
-    new: true,
+  const result = await prisma.user.update({
+    where: { id: userId },
+    data: payload,
   });
 
   return result;

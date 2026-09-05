@@ -41,8 +41,7 @@ const createInstructor = (0, catchAsync_1.default)((req, res) => __awaiter(void 
 const loginUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield auth_service_1.authServices.signInFromDb(req.body);
     const { token, userData } = result;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const modifiedUser = userData.toObject();
+    const modifiedUser = Object.assign({}, userData);
     delete modifiedUser.password;
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,

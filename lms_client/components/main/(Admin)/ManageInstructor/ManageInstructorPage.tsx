@@ -11,7 +11,7 @@ import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 
 type TInstructorData = {
-  _id: string;
+  id: string;
   email: string;
   name: string;
   profilePicture: string;
@@ -94,7 +94,7 @@ export default function ManageInstructorPage() {
       //         <button
       //           onClick={() => {
       //             setIsDeleteModalOpen(true);
-      //             setDeleteItemId(instructor._id);
+      //             setDeleteItemId(instructor.id);
       //           }}
       //           className="text-red-600 hover:underline text-sm"
       //         >

@@ -16,7 +16,7 @@ router.get("/all-module", module_controller_1.moduleController.getAllModuleData)
 // ! for adding a module
 router.post("/add-module", (0, authCheck_1.default)(user_constants_1.UserRole.admin, user_constants_1.UserRole.instructor), (0, validateRequest_1.default)(module_validation_1.moduleValidations.createModuleValidationSchema), module_controller_1.moduleController.addModule);
 // ! for getting module data
-router.get("/module-detail/:moduleId", module_controller_1.moduleController.getModuleData);
+router.get("/module-detail/:moduleId", (0, authCheck_1.default)(user_constants_1.UserRole.admin, user_constants_1.UserRole.instructor), module_controller_1.moduleController.getModuleData);
 // ! get module data based on course id
 router.get("/course-module-detail/:courseId", module_controller_1.moduleController.getModuleFromCourseId);
 // ! for updating module

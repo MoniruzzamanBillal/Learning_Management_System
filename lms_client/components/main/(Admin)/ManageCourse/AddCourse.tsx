@@ -57,6 +57,12 @@ const AddCourse = () => {
     resolver: zodResolver(addCourseValidationSchema),
   });
 
+  // Captured once so its real onChange (which updates react-hook-form's
+  // internal state) can still run alongside the preview handler below —
+  // a separate onChange prop after {...register(...)} would otherwise
+  // silently replace it, and the selected file would never reach `data.image`.
+  const imageField = register("image");
+
   const changeImagePreviewUrl = (e: React.ChangeEvent<HTMLInputElement>) => {
     const imageFile = e?.target?.files?.[0];
     if (imageFile) {
@@ -106,7 +112,7 @@ const AddCourse = () => {
     if (instructorData?.data) {
       const instructorOptionsData = instructorData?.data?.map(
         (instructor: TInstructor) => ({
-          value: instructor?._id,
+          value: instructor?.id,
           label: instructor?.name,
         }),
       );
@@ -152,12 +158,15 @@ const AddCourse = () => {
                 <Input
                   id="image"
                   type="file"
-                  {...register("image")}
+                  {...imageField}
                   ref={(e) => {
-                    register("image").ref(e);
+                    imageField.ref(e);
                     imageInputRef.current = e;
                   }}
-                  onChange={(e) => changeImagePreviewUrl(e)}
+                  onChange={(e) => {
+                    imageField.onChange(e);
+                    changeImagePreviewUrl(e);
+                  }}
                 />
 
                 {imagePreview && (
