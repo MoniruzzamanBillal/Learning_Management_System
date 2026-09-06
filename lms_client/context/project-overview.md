@@ -60,4 +60,4 @@ All three roles share `app/dashboard/profile` for account/profile management and
 - A student can browse, enroll, pay, watch videos, track progress, and get a certificate on completion.
 - An instructor can build out modules/videos for their assigned course(s).
 - An admin can create/publish a course and manage instructors and enrollments.
-- Role-based route protection correctly restricts `admin`/`user` dashboard areas per `middleware.ts`.
+- Role-based route protection correctly restricts `admin`/`user` dashboard areas per `proxy.ts`.

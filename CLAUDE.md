@@ -45,8 +45,8 @@ The repo-root `future-update-notes-quiz-assignment-plan.md` is a pre-implementat
 
 ### lms_client (run from `lms_client/`)
 
-- `yarn dev` — Next.js dev server (http://localhost:3000)
-- `yarn build` — production build
+- `yarn dev` — Next.js dev server (http://localhost:3000), Turbopack (Next.js 16 default)
+- `yarn build` — production build, plain `next build` (Turbopack, Next.js 16's default). **Previously pinned to `next build --webpack`** to work around a Turbopack bug (vercel/next.js#53968, #86476) leaving a bare `__dirname` reference in bundled internal deps (`next/dist/compiled/cookie`, `ua-parser-js`) pulled in via `next/server`'s `NextRequest`, which crashed every production request under the old Edge-runtime-default `middleware.ts` with `ReferenceError: __dirname is not defined` → `MIDDLEWARE_INVOCATION_FAILED`. The pin was removed after migrating to `proxy.ts` (`context/specs/35-middleware-to-proxy-migration.md`), which defaults to the **Node.js runtime** instead of Edge — verified locally: 0 `__dirname` references in the Turbopack-bundled proxy output, and `next start` correctly serves every proxy-matched route (`/`, `/login`, `/admin/:path*`, `/user/:path*`) with no crash.
 - `yarn start` — serve production build
 - `yarn lint` — ESLint (flat config, `eslint-config-next`)
 - No test suite is configured.
@@ -105,7 +105,7 @@ Next.js App Router. Route groups:
 
 Every `page.tsx`/`layout.tsx` is a thin wrapper that just renders a component from `components/main/` (or `components/dashboard/` for chrome) — the folder structure under `components/` does **not** mirror `app/`'s routing; it's organized by feature/domain instead (see below).
 
-`middleware.ts` (repo root of `lms_client`) gates `/admin/:path*` and `/user/:path*` plus `/login` and `/`: it reads the `accessToken` cookie, decodes the JWT (`lib/jwt.ts`), and redirects based on `role` (`admin` vs `user`) — keep new protected routes' path prefixes in sync with the `matcher` config and the role checks here. **Known gap:** every real dashboard route lives under `/dashboard/admin/...` or `/dashboard/user/...`, not `/admin/...`/`/user/...`, so this matcher never actually matches them — edge-level gating is effectively a no-op for the whole dashboard today. In practice, protection comes from the API rejecting unauthorized requests with `401` and the axios response interceptor force-logging-out on `401` (see below), not from this middleware. Don't assume adding a new `/dashboard/...` page is edge-protected just because it's under `/dashboard/admin/`.
+`proxy.ts` (repo root of `lms_client`; renamed from `middleware.ts` per `context/specs/35-middleware-to-proxy-migration.md` — Next.js 16 deprecated the `middleware` file convention in favor of `proxy`, and Proxy defaults to the Node.js runtime rather than Edge) gates `/admin/:path*` and `/user/:path*` plus `/login` and `/`: it reads the `accessToken` cookie, decodes the JWT (`lib/jwt.ts`), and redirects based on `role` (`admin` vs `user`) — keep new protected routes' path prefixes in sync with the `matcher` config and the role checks here. **Known gap:** every real dashboard route lives under `/dashboard/admin/...` or `/dashboard/user/...`, not `/admin/...`/`/user/...`, so this matcher never actually matches them — this gating is effectively a no-op for the whole dashboard today. In practice, protection comes from the API rejecting unauthorized requests with `401` and the axios response interceptor force-logging-out on `401` (see below), not from this file. Don't assume adding a new `/dashboard/...` page is protected by it just because it's under `/dashboard/admin/`.
 
 Component organization (`components/`), reorganized per `context/specs/16-frontend-folder-structure-migration.md` to colocate each feature's own files rather than scattering them across global folders:
 
@@ -131,7 +131,7 @@ UI stack: Tailwind CSS v4 + shadcn/ui (Radix primitives, `components.json` for t
 
 ### Auth model
 
-JWT-based; roles are `admin`, `instructor`, `user` (`UserRole` in `lms_server/src/app/modules/user/user.constants.ts`). The client stores the access token in a cookie under the `accessToken` key (`constants/storageKey.ts`) and decodes it client-side (`jwt-decode`) to read `role` for route gating — both `lms_client/middleware.ts` (edge) and page-level checks rely on this decoded role rather than a server round-trip.
+JWT-based; roles are `admin`, `instructor`, `user` (`UserRole` in `lms_server/src/app/modules/user/user.constants.ts`). The client stores the access token in a cookie under the `accessToken` key (`constants/storageKey.ts`) and decodes it client-side (`jwt-decode`) to read `role` for route gating — both `lms_client/proxy.ts` and page-level checks rely on this decoded role rather than a server round-trip.
 
 ## Conventions to follow
 
