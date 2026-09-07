@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { authKey } from "./constants/storageKey";
 import { decodedToken } from "./lib/jwt";
 
-export function proxy(request: NextRequest) {
+export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Define route patterns

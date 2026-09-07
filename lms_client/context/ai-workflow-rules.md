@@ -23,7 +23,7 @@ This is a live, already-built codebase — the priority is fitting new work into
 ## Protected Files
 
 - Don't modify `components/ui/*` (shadcn-generated) unless explicitly asked to customize globally.
-- Don't alter `proxy.ts`'s matcher or role-redirect logic without confirming — it's the actual route-protection boundary (see `context/architecture.md`).
+- Don't alter `middleware.ts`'s matcher or role-redirect logic without confirming — it's the actual route-protection boundary (see `context/architecture.md`).
 - Don't add a new global state library — Redux Toolkit (client state) and TanStack Query (server state) already cover this; ask before introducing something else (e.g. Zustand, Jotai).
 
 ## Documentation Sync
