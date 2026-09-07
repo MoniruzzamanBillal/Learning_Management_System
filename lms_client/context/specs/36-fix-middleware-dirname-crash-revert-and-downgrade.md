@@ -2,7 +2,7 @@
 
 ## Status
 
-✅ Implemented (local verification complete; live Vercel verification pending redeploy — see Verify).
+⚠️ **Superseded — this spec's theory was wrong.** The revert/downgrade below was implemented and deployed for real, but production crashed with the identical error. The actual root cause (a genuine, confirmed upstream Next.js bug in `next/dist/compiled/ua-parser-js`, unrelated to Turbopack/webpack, the Next patch version, or the `middleware.ts`/`proxy.ts` naming) plus a separate Vercel project misconfiguration are documented and fixed in [`37-real-fix-ua-parser-dirname-and-vercel-framework-detection.md`](37-real-fix-ua-parser-dirname-and-vercel-framework-detection.md). The `reiment-l2-client` comparison this spec relied on was also invalid — its live deployment turned out to be serving a stale pre-migration SPA build that never exercises its Next.js middleware at all. The file/version changes below were left in place (no reason to revert them), but they are not what fixed the crash.
 
 ## Goal
 
