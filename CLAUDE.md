@@ -45,8 +45,8 @@ The repo-root `future-update-notes-quiz-assignment-plan.md` is a pre-implementat
 
 ### lms_client (run from `lms_client/`)
 
-- `yarn dev` — Next.js dev server (http://localhost:3000)
-- `yarn build` — production build
+- `yarn dev` — Next.js dev server (http://localhost:3000), Turbopack (Next.js 16 default)
+- `yarn build` — production build, plain `next build` (Turbopack, Next.js 16's default). **History:** `next/dist/compiled/ua-parser-js/ua-parser.js` — an internal Next.js dependency pulled in unconditionally by any `next/server` import — executes a bare `__dirname` reference at module top level (a genuine, confirmed upstream Next.js bug, independent of Turbopack/webpack or the Next patch version). On Vercel's Edge Function sandbox (no Node globals) this throws `ReferenceError: __dirname is not defined` → `MIDDLEWARE_INVOCATION_FAILED` on every request. Two things were tried and failed to actually fix it in real production (each looked fixed locally but wasn't): pinning `next build --webpack`, and reverting `proxy.ts` → `middleware.ts` + downgrading to `next@16.1.5` to mirror the sibling `reiment-l2-client` project (which turned out to be an invalid comparison — its live deployment serves a stale pre-migration SPA that never runs its Next.js middleware at all). **Real fix (`context/specs/37-real-fix-ua-parser-dirname-and-vercel-framework-detection.md`):** a `patch-package` patch (`lms_client/patches/next+16.1.5.patch`, reapplied via `postinstall`) neutralizes the `__dirname` reference directly in the installed `next` package. Verified by inspecting the actual `vercel build --prod` output (not local `next build`/`next start`, which can't reproduce Edge-sandbox failures) and confirmed live on `devmats.vercel.app`. A separate, unrelated bug was found and fixed in the same investigation: the linked Vercel project had no framework preset configured (`framework: null`), causing silent fallback to a generic builder that dropped every page route — fixed via a committed `lms_client/vercel.json` (`{"framework": "nextjs"}`).
 - `yarn start` — serve production build
 - `yarn lint` — ESLint (flat config, `eslint-config-next`)
 - No test suite is configured.
@@ -105,7 +105,7 @@ Next.js App Router. Route groups:
 
 Every `page.tsx`/`layout.tsx` is a thin wrapper that just renders a component from `components/main/` (or `components/dashboard/` for chrome) — the folder structure under `components/` does **not** mirror `app/`'s routing; it's organized by feature/domain instead (see below).
 
-`middleware.ts` (repo root of `lms_client`) gates `/admin/:path*` and `/user/:path*` plus `/login` and `/`: it reads the `accessToken` cookie, decodes the JWT (`lib/jwt.ts`), and redirects based on `role` (`admin` vs `user`) — keep new protected routes' path prefixes in sync with the `matcher` config and the role checks here. **Known gap:** every real dashboard route lives under `/dashboard/admin/...` or `/dashboard/user/...`, not `/admin/...`/`/user/...`, so this matcher never actually matches them — edge-level gating is effectively a no-op for the whole dashboard today. In practice, protection comes from the API rejecting unauthorized requests with `401` and the axios response interceptor force-logging-out on `401` (see below), not from this middleware. Don't assume adding a new `/dashboard/...` page is edge-protected just because it's under `/dashboard/admin/`.
+`middleware.ts` (repo root of `lms_client`; see `context/specs/36-fix-middleware-dirname-crash-revert-and-downgrade.md` for why a prior `proxy.ts` rename was reverted) gates `/admin/:path*` and `/user/:path*` plus `/login` and `/`: it reads the `accessToken` cookie, decodes the JWT (`lib/jwt.ts`), and redirects based on `role` (`admin` vs `user`) — keep new protected routes' path prefixes in sync with the `matcher` config and the role checks here. **Known gap:** every real dashboard route lives under `/dashboard/admin/...` or `/dashboard/user/...`, not `/admin/...`/`/user/...`, so this matcher never actually matches them — this gating is effectively a no-op for the whole dashboard today. In practice, protection comes from the API rejecting unauthorized requests with `401` and the axios response interceptor force-logging-out on `401` (see below), not from this file. Don't assume adding a new `/dashboard/...` page is protected by it just because it's under `/dashboard/admin/`.
 
 Component organization (`components/`), reorganized per `context/specs/16-frontend-folder-structure-migration.md` to colocate each feature's own files rather than scattering them across global folders:
 
@@ -131,7 +131,7 @@ UI stack: Tailwind CSS v4 + shadcn/ui (Radix primitives, `components.json` for t
 
 ### Auth model
 
-JWT-based; roles are `admin`, `instructor`, `user` (`UserRole` in `lms_server/src/app/modules/user/user.constants.ts`). The client stores the access token in a cookie under the `accessToken` key (`constants/storageKey.ts`) and decodes it client-side (`jwt-decode`) to read `role` for route gating — both `lms_client/middleware.ts` (edge) and page-level checks rely on this decoded role rather than a server round-trip.
+JWT-based; roles are `admin`, `instructor`, `user` (`UserRole` in `lms_server/src/app/modules/user/user.constants.ts`). The client stores the access token in a cookie under the `accessToken` key (`constants/storageKey.ts`) and decodes it client-side (`jwt-decode`) to read `role` for route gating — both `lms_client/middleware.ts` and page-level checks rely on this decoded role rather than a server round-trip.
 
 ## Conventions to follow
 

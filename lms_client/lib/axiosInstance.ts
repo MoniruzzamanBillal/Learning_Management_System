@@ -1,10 +1,10 @@
 import { authKey } from "@/constants/storageKey";
 
 import { getBaseUrl } from "@/config/envConfig";
+import { getCookies } from "@/utils/GetCookies";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { toast } from "sonner";
-import { getCookies } from "@/utils/GetCookies";
 
 const instance = axios.create({
   baseURL: getBaseUrl(),
