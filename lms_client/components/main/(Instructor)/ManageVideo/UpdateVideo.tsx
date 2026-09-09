@@ -4,7 +4,10 @@ import FormSubmitLoading from "@/components/shared/FormSubmitLoading";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { updateVideoFunction } from "@/functions/video.functions";
+import {
+  updateVideoFunction,
+  uploadVideoToCloudinary,
+} from "@/functions/video.functions";
 import { useFetchData, usePatch } from "@/hooks/useApi";
 import { TUpdateVideo } from "@/components/main/(Instructor)/ManageVideo/type/video.types";
 import MuxPlayer from "@mux/mux-player-react";
@@ -59,16 +62,23 @@ const UpdateVideo = () => {
   };
 
   const handleUpdateVideo = async (data: Partial<TUpdateVideo>) => {
-    const formData = new FormData();
-    formData.append("data", JSON.stringify(data));
+    const payload: Partial<TUpdateVideo> & { videoUrl?: string } = {
+      title: data?.title,
+    };
 
     if (data?.video && data.video.length > 0) {
-      const videoFile = data?.video[0];
-      formData.append("video", videoFile as Blob);
+      const videoFile = data.video[0];
+
+      const { videoUrl, error } = await uploadVideoToCloudinary(videoFile);
+      if (error || !videoUrl) {
+        return;
+      }
+
+      payload.videoUrl = videoUrl;
     }
 
     await updateVideoFunction(
-      formData,
+      payload,
       updateVideoMutation.mutateAsync,
       videoId as string,
       handleNavigate,

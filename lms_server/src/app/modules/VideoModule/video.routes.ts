@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response, Router } from "express";
+import { Router } from "express";
 import authCheck from "../../middleware/authCheck";
 import validateRequest from "../../middleware/validateRequest";
 import { uploadVideo } from "../../util/VideoUpload";
@@ -11,16 +11,19 @@ const router = Router();
 // ! for getting all video
 router.get("/module-video", videoController.getAllVideo);
 
+// ! for getting a signed direct-to-Cloudinary upload credential (video
+// files upload straight from the browser to Cloudinary, never through this
+// backend — see context/specs/40-video-upload-413-vercel-body-limit.md)
+router.post(
+  "/upload-signature",
+  authCheck(UserRole.admin, UserRole.instructor),
+  videoController.getUploadSignature
+);
+
 // ! for adding a video
 router.post(
   "/add-video",
   authCheck(UserRole.admin, UserRole.instructor),
-  uploadVideo.single("video"),
-  (req: Request, res: Response, next: NextFunction) => {
-    req.body = JSON.parse(req?.body?.data);
-
-    next();
-  },
   validateRequest(videoValidationSchemas.addVideoValidationSchema),
   videoController.addVideo
 );
@@ -53,12 +56,6 @@ router.get("/individual-video/:videoId", videoController.getIndividualvideo);
 router.patch(
   "/update-video/:id",
   authCheck(UserRole.admin, UserRole.instructor),
-  uploadVideo.single("video"),
-  (req: Request, res: Response, next: NextFunction) => {
-    req.body = JSON.parse(req?.body?.data);
-
-    next();
-  },
   videoController.updateVideo
 );
 

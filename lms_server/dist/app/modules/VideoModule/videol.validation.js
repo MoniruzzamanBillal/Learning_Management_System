@@ -8,6 +8,7 @@ const addVideoValidationSchema = zod_1.z.object({
     module: objectIdSchema,
     title: zod_1.z.string().min(1, "Title is required"),
     instructor: objectIdSchema,
+    videoUrl: zod_1.z.string().url("Invalid video URL"),
 });
 //
 exports.videoValidationSchemas = {

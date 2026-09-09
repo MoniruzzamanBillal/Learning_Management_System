@@ -39,9 +39,8 @@ const addCourse = (payload,
 file) => __awaiter(void 0, void 0, void 0, function* () {
     const { instructors } = payload;
     if (file) {
-        const name = (payload === null || payload === void 0 ? void 0 : payload.name).trim();
         const path = (file === null || file === void 0 ? void 0 : file.path).trim();
-        const cloudinaryResponse = yield (0, SendImageCloudinary_1.SendImageCloudinary)(path, name);
+        const cloudinaryResponse = yield (0, SendImageCloudinary_1.SendImageCloudinary)(path, payload.name);
         const courseCover = cloudinaryResponse === null || cloudinaryResponse === void 0 ? void 0 : cloudinaryResponse.secure_url;
         payload.courseCover = courseCover;
     }
@@ -102,16 +101,19 @@ const courseListSelect = {
         select: { instructor: { select: { id: true, name: true } } },
     },
     reviews: { select: { rating: true } },
+    _count: {
+        select: { modules: { where: { isDeleted: false } } },
+    },
 };
 // ! shapes a raw course+reviews row into the public list-item shape (mirrors
 // the old $lookup/$addFields/$project aggregation pipeline stages)
 const shapeCourseListItem = (course) => {
-    const { instructors, reviews } = course, rest = __rest(course, ["instructors", "reviews"]);
+    const { instructors, reviews, _count } = course, rest = __rest(course, ["instructors", "reviews", "_count"]);
     const totalReviews = reviews.length;
     const averageRating = totalReviews
         ? reviews.reduce((sum, r) => sum + r.rating, 0) / totalReviews
         : 0;
-    return Object.assign(Object.assign(Object.assign({}, rest), { instructors: instructors.map((ci) => ci.instructor) }), (totalReviews > 0
+    return Object.assign(Object.assign(Object.assign({}, rest), { instructors: instructors.map((ci) => ci.instructor), totalModules: _count.modules }), (totalReviews > 0
         ? { reviewData: { averageRating, totalReviews, id: rest.id } }
         : {}));
 };
@@ -249,12 +251,16 @@ const getSingleCoureData = (courseId) => __awaiter(void 0, void 0, void 0, funct
             instructors: {
                 select: { instructor: { select: { id: true, name: true } } },
             },
+            _count: {
+                select: { modules: { where: { isDeleted: false } } },
+            },
         },
     });
     if (!result) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "This Course don't exist!!!");
     }
-    return Object.assign(Object.assign({}, result), { instructors: result.instructors.map((ci) => ci.instructor) });
+    const { _count } = result, rest = __rest(result, ["_count"]);
+    return Object.assign(Object.assign({}, rest), { instructors: result.instructors.map((ci) => ci.instructor), totalModules: _count.modules });
 });
 // ! for getting single course data , admin manage course
 const getCourseDetailsForAdmin = (courseId) => __awaiter(void 0, void 0, void 0, function* () {
@@ -315,17 +321,23 @@ file, courseId) => __awaiter(void 0, void 0, void 0, function* () {
     if (!courseData) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "This Course don't exist!!!");
     }
+    const { instructors } = payload;
+    if (instructors === null || instructors === void 0 ? void 0 : instructors.length) {
+        yield Promise.all(instructors.map((instructor) => __awaiter(void 0, void 0, void 0, function* () {
+            const instructorData = yield prisma_1.default.user.findFirst({
+                where: { id: instructor, isDeleted: false },
+            });
+            if (!instructorData) {
+                throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "Instructor don't exist !!!");
+            }
+        })));
+    }
     if (file) {
-        const name = (payload === null || payload === void 0 ? void 0 : payload.name).trim();
         const path = (file === null || file === void 0 ? void 0 : file.path).trim();
-        const cloudinaryResponse = yield (0, SendImageCloudinary_1.SendImageCloudinary)(path, name);
+        const cloudinaryResponse = yield (0, SendImageCloudinary_1.SendImageCloudinary)(path, payload.name);
         const courseCover = cloudinaryResponse === null || cloudinaryResponse === void 0 ? void 0 : cloudinaryResponse.secure_url;
         payload.courseCover = courseCover;
     }
-    // `instructors` isn't part of the update validation schema — never present
-    // on this payload — so no join-table manipulation is needed here; only
-    // scalar fields are passed through (undefined ones are simply skipped by
-    // Prisma, matching partial-update semantics).
     const updatedResult = yield prisma_1.default.course.update({
         where: { id: courseId },
         data: {
@@ -334,9 +346,20 @@ file, courseId) => __awaiter(void 0, void 0, void 0, function* () {
             price: payload.price,
             category: payload.category,
             courseCover: payload.courseCover,
+            instructors: instructors !== undefined
+                ? {
+                    deleteMany: {},
+                    create: instructors.map((userId) => ({ userId })),
+                }
+                : undefined,
+        },
+        include: {
+            instructors: {
+                include: { instructor: { select: { id: true, name: true } } },
+            },
         },
     });
-    return updatedResult;
+    return Object.assign(Object.assign({}, updatedResult), { instructors: updatedResult.instructors.map((ci) => ci.instructor) });
 });
 // ! for publishing a course
 const publishCourse = (courseId) => __awaiter(void 0, void 0, void 0, function* () {

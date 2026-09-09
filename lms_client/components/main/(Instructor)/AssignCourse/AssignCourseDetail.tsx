@@ -89,6 +89,7 @@ const AssignCourseDetail = () => {
         <GenericTableComponent
           columns={AssignCourseDetailColmn}
           data={courseDetailWithModule?.data}
+          showToolbar={false}
         />
       </div>
     );

@@ -2,7 +2,7 @@ import { z } from "zod";
 
 //  ! for adding new course schema
 export const addCourseValidationSchema = z.object({
-  name: z.string().min(1, "Course Name is required !!!"),
+  name: z.string().trim().min(1, "Course Name is required !!!"),
   description: z.string().min(1, "Course Description is required !!!"),
   price: z
     .number({ message: "Course Price is required !!!" })
@@ -13,7 +13,7 @@ export const addCourseValidationSchema = z.object({
 });
 
 export const updateCourseValidationSchema = z.object({
-  name: z.string().optional(),
+  name: z.string().trim().optional(),
   description: z.string().optional(),
   price: z
     .number({ message: "Price must be a number" })

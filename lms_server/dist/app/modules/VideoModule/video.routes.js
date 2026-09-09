@@ -14,12 +14,12 @@ const videol_validation_1 = require("./videol.validation");
 const router = (0, express_1.Router)();
 // ! for getting all video
 router.get("/module-video", video_controller_1.videoController.getAllVideo);
+// ! for getting a signed direct-to-Cloudinary upload credential (video
+// files upload straight from the browser to Cloudinary, never through this
+// backend — see context/specs/40-video-upload-413-vercel-body-limit.md)
+router.post("/upload-signature", (0, authCheck_1.default)(user_constants_1.UserRole.admin, user_constants_1.UserRole.instructor), video_controller_1.videoController.getUploadSignature);
 // ! for adding a video
-router.post("/add-video", (0, authCheck_1.default)(user_constants_1.UserRole.admin, user_constants_1.UserRole.instructor), VideoUpload_1.uploadVideo.single("video"), (req, res, next) => {
-    var _a;
-    req.body = JSON.parse((_a = req === null || req === void 0 ? void 0 : req.body) === null || _a === void 0 ? void 0 : _a.data);
-    next();
-}, (0, validateRequest_1.default)(videol_validation_1.videoValidationSchemas.addVideoValidationSchema), video_controller_1.videoController.addVideo);
+router.post("/add-video", (0, authCheck_1.default)(user_constants_1.UserRole.admin, user_constants_1.UserRole.instructor), (0, validateRequest_1.default)(videol_validation_1.videoValidationSchemas.addVideoValidationSchema), video_controller_1.videoController.addVideo);
 // ! testing video upload
 router.post("/add-video2", VideoUpload_1.uploadVideo.single("video"), video_controller_1.videoController.testVideoUpload);
 // ! testing multiple video upload
@@ -29,10 +29,6 @@ router.patch("/delete-video", (0, authCheck_1.default)(user_constants_1.UserRole
 // ! for getting single vidoo
 router.get("/individual-video/:videoId", video_controller_1.videoController.getIndividualvideo);
 // ! for updating  a video
-router.patch("/update-video/:id", (0, authCheck_1.default)(user_constants_1.UserRole.admin, user_constants_1.UserRole.instructor), VideoUpload_1.uploadVideo.single("video"), (req, res, next) => {
-    var _a;
-    req.body = JSON.parse((_a = req === null || req === void 0 ? void 0 : req.body) === null || _a === void 0 ? void 0 : _a.data);
-    next();
-}, video_controller_1.videoController.updateVideo);
+router.patch("/update-video/:id", (0, authCheck_1.default)(user_constants_1.UserRole.admin, user_constants_1.UserRole.instructor), video_controller_1.videoController.updateVideo);
 //
 exports.videoRouter = router;

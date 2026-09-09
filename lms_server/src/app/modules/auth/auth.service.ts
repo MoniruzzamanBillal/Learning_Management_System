@@ -12,12 +12,11 @@ import { createToken } from "./auth.util";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const createUserIntoDB = async (payload: Partial<TUser>, file: any) => {
   if (file) {
-    const name = (payload?.name as string).trim();
     const path = (file?.path as string).trim();
 
     const cloudinaryResponse = await SendImageCloudinary(
       path as string,
-      name as string
+      payload?.name as string
     );
     const profilePicture = cloudinaryResponse?.secure_url;
     payload.profilePicture = profilePicture;
@@ -56,12 +55,11 @@ const createUserIntoDB = async (payload: Partial<TUser>, file: any) => {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const createInstructor = async (payload: Partial<TUser>, file: any) => {
   if (file) {
-    const name = (payload?.name as string).trim();
     const path = (file?.path as string).trim();
 
     const cloudinaryResponse = await SendImageCloudinary(
       path as string,
-      name as string
+      payload?.name as string
     );
     const profilePicture = cloudinaryResponse?.secure_url;
     payload.profilePicture = profilePicture;
