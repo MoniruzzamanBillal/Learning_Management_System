@@ -21,6 +21,7 @@ const updateCourseValidationSchema = zod_1.z.object({
         .nonnegative("Price must be a non-negative number")
         .optional(),
     category: zod_1.z.string().min(1, "Category is required").optional(),
+    instructors: zod_1.z.array(objectIdSchema).optional(),
 });
 //
 exports.courseValidations = {

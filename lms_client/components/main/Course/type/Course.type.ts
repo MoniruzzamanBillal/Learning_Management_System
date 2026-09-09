@@ -17,7 +17,7 @@ export type TCourse = {
   instructors: TInstructor[];
   price: number;
   reviewData?: TReview;
-  modules: string[];
+  totalModules?: number;
 
   description: string;
   updatedAt: string;

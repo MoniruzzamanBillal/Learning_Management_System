@@ -113,6 +113,9 @@ const courseListSelect = {
     select: { instructor: { select: { id: true, name: true } } },
   },
   reviews: { select: { rating: true } },
+  _count: {
+    select: { modules: { where: { isDeleted: false } } },
+  },
 } satisfies Prisma.CourseSelect;
 
 type TCourseListRow = Prisma.CourseGetPayload<{
@@ -122,7 +125,7 @@ type TCourseListRow = Prisma.CourseGetPayload<{
 // ! shapes a raw course+reviews row into the public list-item shape (mirrors
 // the old $lookup/$addFields/$project aggregation pipeline stages)
 const shapeCourseListItem = (course: TCourseListRow) => {
-  const { instructors, reviews, ...rest } = course;
+  const { instructors, reviews, _count, ...rest } = course;
   const totalReviews = reviews.length;
   const averageRating = totalReviews
     ? reviews.reduce((sum, r) => sum + r.rating, 0) / totalReviews
@@ -131,6 +134,7 @@ const shapeCourseListItem = (course: TCourseListRow) => {
   return {
     ...rest,
     instructors: instructors.map((ci) => ci.instructor),
+    totalModules: _count.modules,
     ...(totalReviews > 0
       ? { reviewData: { averageRating, totalReviews, id: rest.id } }
       : {}),
@@ -397,6 +401,25 @@ const updateCourseData = async (
     throw new AppError(httpStatus.BAD_REQUEST, "This Course don't exist!!!");
   }
 
+  const { instructors } = payload;
+
+  if (instructors?.length) {
+    await Promise.all(
+      instructors.map(async (instructor) => {
+        const instructorData = await prisma.user.findFirst({
+          where: { id: instructor, isDeleted: false },
+        });
+
+        if (!instructorData) {
+          throw new AppError(
+            httpStatus.BAD_REQUEST,
+            "Instructor don't exist !!!",
+          );
+        }
+      }),
+    );
+  }
+
   if (file) {
     const name = (payload?.name as string).trim();
     const path = (file?.path as string).trim();
@@ -410,10 +433,6 @@ const updateCourseData = async (
     payload.courseCover = courseCover;
   }
 
-  // `instructors` isn't part of the update validation schema — never present
-  // on this payload — so no join-table manipulation is needed here; only
-  // scalar fields are passed through (undefined ones are simply skipped by
-  // Prisma, matching partial-update semantics).
   const updatedResult = await prisma.course.update({
     where: { id: courseId },
     data: {
@@ -422,10 +441,25 @@ const updateCourseData = async (
       price: payload.price,
       category: payload.category,
       courseCover: payload.courseCover,
+      instructors:
+        instructors !== undefined
+          ? {
+              deleteMany: {},
+              create: instructors.map((userId) => ({ userId })),
+            }
+          : undefined,
+    },
+    include: {
+      instructors: {
+        include: { instructor: { select: { id: true, name: true } } },
+      },
     },
   });
 
-  return updatedResult;
+  return {
+    ...updatedResult,
+    instructors: updatedResult.instructors.map((ci) => ci.instructor),
+  };
 };
 
 // ! for publishing a course

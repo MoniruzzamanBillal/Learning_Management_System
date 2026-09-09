@@ -65,7 +65,7 @@ const CourseCard = ({ course }: TCourseDataProps) => {
           </span>
           <span className="text-gray-300">·</span>
           <BookOpen className="h-3 w-3 text-gray-400 shrink-0" />
-          <span>{course.modules?.length ?? 0} Modules</span>
+          <span>{course.totalModules ?? 0} Modules</span>
         </div>
 
         {/* Price + CTA */}
