@@ -25,9 +25,8 @@ const auth_util_1 = require("./auth.util");
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const createUserIntoDB = (payload, file) => __awaiter(void 0, void 0, void 0, function* () {
     if (file) {
-        const name = (payload === null || payload === void 0 ? void 0 : payload.name).trim();
         const path = (file === null || file === void 0 ? void 0 : file.path).trim();
-        const cloudinaryResponse = yield (0, SendImageCloudinary_1.SendImageCloudinary)(path, name);
+        const cloudinaryResponse = yield (0, SendImageCloudinary_1.SendImageCloudinary)(path, payload === null || payload === void 0 ? void 0 : payload.name);
         const profilePicture = cloudinaryResponse === null || cloudinaryResponse === void 0 ? void 0 : cloudinaryResponse.secure_url;
         payload.profilePicture = profilePicture;
     }
@@ -51,9 +50,8 @@ const createUserIntoDB = (payload, file) => __awaiter(void 0, void 0, void 0, fu
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const createInstructor = (payload, file) => __awaiter(void 0, void 0, void 0, function* () {
     if (file) {
-        const name = (payload === null || payload === void 0 ? void 0 : payload.name).trim();
         const path = (file === null || file === void 0 ? void 0 : file.path).trim();
-        const cloudinaryResponse = yield (0, SendImageCloudinary_1.SendImageCloudinary)(path, name);
+        const cloudinaryResponse = yield (0, SendImageCloudinary_1.SendImageCloudinary)(path, payload === null || payload === void 0 ? void 0 : payload.name);
         const profilePicture = cloudinaryResponse === null || cloudinaryResponse === void 0 ? void 0 : cloudinaryResponse.secure_url;
         payload.profilePicture = profilePicture;
     }

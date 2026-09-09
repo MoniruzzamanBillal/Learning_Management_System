@@ -40,7 +40,6 @@ Add `showToolbar={false}` to the `GenericTableComponent` call in `AssignCourseDe
 
 ## Verify-when-done
 
-- [ ] `/dashboard/instructor/assign-course-detail/:id` no longer shows a search/filter toolbar above the module table.
-- [ ] The module table itself still renders correctly (columns, data, pagination if applicable).
-- [ ] No other page that intentionally wants the toolbar (e.g. `ManageCourse`, `ManageVideo`) is affected — this change is scoped to one file/one usage.
-- [ ] `yarn lint` clean.
+- [x] `showToolbar={false}` added to the `GenericTableComponent` usage in `AssignCourseDetail.tsx`, matching `CourseDetail.tsx`/`ErrorLogsPage.tsx`'s existing convention exactly — single-file, single-line change, no other page touched.
+- [x] `yarn lint` unchanged at the established 28-error/17-warning baseline, zero new issues in the touched file.
+- [ ] Live/visual verification (loading the page in a browser and confirming the toolbar is gone while the module table/pagination still render correctly) — left for the user, not performed this session.

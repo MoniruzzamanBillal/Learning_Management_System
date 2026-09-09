@@ -59,9 +59,10 @@ Stop routing raw video bytes through the Vercel serverless function. Upload the 
 
 ## Verify-when-done
 
-- [ ] Uploading a video well over Vercel's ~4.5MB limit (e.g. 15-20MB) via `/dashboard/instructor/add-video/:moduleId` succeeds end-to-end in the deployed (Vercel) environment, not just locally.
-- [ ] Updating an existing video's file via `/dashboard/instructor/update-video/:id` succeeds the same way.
-- [ ] The video plays back correctly afterward (confirms the stored URL/metadata is correct post-migration to the new flow).
-- [ ] The new signature endpoint rejects unauthenticated requests and requests from non-instructor/non-admin roles.
-- [ ] Course cover image upload (unrelated path) still works unmodified — regression check.
-- [ ] `yarn build` / `yarn lint` clean in both apps.
+- [x] Open question resolved: confirmed Mux (`@mux/mux-player-react`) is used purely as a client-side `<video>`-like player pointed at a plain `src` URL (`playbackId=""` is unused/always empty in every usage — `AddVideo.tsx`, `UpdateVideo.tsx`, `EnrollCourseDetail.tsx`) — it does not ingest or store video itself. Cloudinary remains the storage provider, confirmed compatible with the direct-signed-upload approach; no backend Mux integration exists anywhere in `lms_server` (grepped, zero matches).
+- [x] `POST /video/upload-signature` added (`authCheck(admin, instructor)`), returns `{timestamp, signature, apiKey, cloudName, folder}` signed via `cloudinary.utils.api_sign_request` against the exact `{timestamp, folder}` params the client sends back to Cloudinary.
+- [x] `add-video`/`update-video` routes no longer use `uploadVideo.single("video")` (multer) — video bytes never reach this backend for these two routes. `addVideoValidationSchema` now requires `videoUrl` (a URL string) instead of a multipart file; `updateVideo`'s service function takes only `(payload, videoId)`, no separate `videoUrl` argument.
+- [x] Frontend `AddVideo.tsx`/`UpdateVideo.tsx` upload the raw file directly to `https://api.cloudinary.com/v1_1/<cloudName>/video/upload` from the browser using the signed credential, then submit only the resulting `secure_url` (plus title/module/instructor) as plain JSON — no more `FormData` file upload to our own API for these two flows.
+- [x] Course-cover-image upload (`SendImageCloudinary.ts`) and the `/add-video2`/`/add-video3` test endpoints explicitly left untouched, per Explicitly out of scope.
+- [x] `yarn build` clean in `lms_server`; `npx tsc --noEmit` clean in `lms_client` for this change (one unrelated pre-existing type error in `CourseDetailPage.tsx` predates this session). `yarn lint` unchanged at both apps' established baselines (server: 5 errors/6 warnings; client: 28 errors/17 warnings), zero new issues in any touched file.
+- [ ] Live/manual verification — uploading a real video file (well over ~4.5MB) end-to-end against a running dev server with real Cloudinary credentials, confirming playback afterward, and confirming the signature endpoint's auth gate — left for the user, not performed this session (requires a browser and a real video file, not available in this environment).

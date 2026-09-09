@@ -39,9 +39,8 @@ const addCourse = (payload,
 file) => __awaiter(void 0, void 0, void 0, function* () {
     const { instructors } = payload;
     if (file) {
-        const name = (payload === null || payload === void 0 ? void 0 : payload.name).trim();
         const path = (file === null || file === void 0 ? void 0 : file.path).trim();
-        const cloudinaryResponse = yield (0, SendImageCloudinary_1.SendImageCloudinary)(path, name);
+        const cloudinaryResponse = yield (0, SendImageCloudinary_1.SendImageCloudinary)(path, payload.name);
         const courseCover = cloudinaryResponse === null || cloudinaryResponse === void 0 ? void 0 : cloudinaryResponse.secure_url;
         payload.courseCover = courseCover;
     }
@@ -330,9 +329,8 @@ file, courseId) => __awaiter(void 0, void 0, void 0, function* () {
         })));
     }
     if (file) {
-        const name = (payload === null || payload === void 0 ? void 0 : payload.name).trim();
         const path = (file === null || file === void 0 ? void 0 : file.path).trim();
-        const cloudinaryResponse = yield (0, SendImageCloudinary_1.SendImageCloudinary)(path, name);
+        const cloudinaryResponse = yield (0, SendImageCloudinary_1.SendImageCloudinary)(path, payload.name);
         const courseCover = cloudinaryResponse === null || cloudinaryResponse === void 0 ? void 0 : cloudinaryResponse.secure_url;
         payload.courseCover = courseCover;
     }

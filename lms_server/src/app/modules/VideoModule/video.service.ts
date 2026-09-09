@@ -2,27 +2,44 @@ import { Prisma } from "../../../generated/prisma/client";
 import httpStatus from "http-status";
 import AppError from "../../Error/AppError";
 import prisma from "../../util/prisma";
+import { getVideoUploadSignature } from "../../util/VideoUpload";
 import { addVideoCoursePublish } from "../VideoProgress/videoProgress.functions";
 
 type TAddVideoPayload = {
   module: string;
   title: string;
   instructor: string;
+  videoUrl: string;
 };
 
 // ! for adding a video
-const addVideo = async (payload: TAddVideoPayload, videoUrl: string) => {
-  const { module, instructor } = payload;
+const addVideo = async (payload: TAddVideoPayload) => {
+  const { module, instructor, videoUrl } = payload;
 
   // findFirst, not findUnique: combining the unique `id` lookup with
-  // instructorId/isDeleted isn't allowed on findUnique.
+  // isDeleted isn't allowed on findUnique.
   const moduleData = await prisma.module.findFirst({
-    where: { id: module, instructorId: instructor, isDeleted: false },
+    where: { id: module, isDeleted: false },
     include: { course: { select: { id: true, published: true } } },
   });
 
   if (!moduleData) {
     throw new AppError(httpStatus.BAD_REQUEST, "This module don't exist !!!");
+  }
+
+  // Course-level authorization, not module-creator-only: a course can have
+  // multiple instructors (CourseInstructor), and any of them should be able
+  // to add videos to any of that course's modules, not just the module's
+  // original creator.
+  const isAssignedInstructor = await prisma.courseInstructor.findFirst({
+    where: { courseId: moduleData.courseId, userId: instructor },
+  });
+
+  if (!isAssignedInstructor) {
+    throw new AppError(
+      httpStatus.FORBIDDEN,
+      "You are not authorized to add a video to this module !!!"
+    );
   }
 
   const instructorData = await prisma.user.findFirst({
@@ -154,8 +171,7 @@ const deleteModuleVideo = async (payload: {
 const updateVideo = async (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   payload: any,
-  videoId: string,
-  videoUrl: string
+  videoId: string
 ) => {
   const videoData = await prisma.video.findFirst({
     where: { id: videoId, isDeleted: false },
@@ -163,10 +179,6 @@ const updateVideo = async (
 
   if (!videoData) {
     throw new AppError(httpStatus.BAD_REQUEST, "This Video don't exist !!!");
-  }
-
-  if (videoUrl) {
-    payload.videoUrl = videoUrl;
   }
 
   const updatedData = await prisma.video.update({
@@ -177,6 +189,9 @@ const updateVideo = async (
   return updatedData;
 };
 
+// ! for getting a signed direct-to-Cloudinary upload credential
+const getUploadSignature = () => getVideoUploadSignature();
+
 //
 
 export const videoServices = {
@@ -185,4 +200,5 @@ export const videoServices = {
   getSingleVideo,
   deleteModuleVideo,
   updateVideo,
+  getUploadSignature,
 };

@@ -26,12 +26,11 @@ const addCourse = async (
   const { instructors } = payload;
 
   if (file) {
-    const name = (payload?.name as string).trim();
     const path = (file?.path as string).trim();
 
     const cloudinaryResponse = await SendImageCloudinary(
       path as string,
-      name as string,
+      payload.name as string,
     );
 
     const courseCover = cloudinaryResponse?.secure_url as string;
@@ -421,12 +420,11 @@ const updateCourseData = async (
   }
 
   if (file) {
-    const name = (payload?.name as string).trim();
     const path = (file?.path as string).trim();
 
     const cloudinaryResponse = await SendImageCloudinary(
       path as string,
-      name as string,
+      payload.name as string,
     );
 
     const courseCover = cloudinaryResponse?.secure_url as string;

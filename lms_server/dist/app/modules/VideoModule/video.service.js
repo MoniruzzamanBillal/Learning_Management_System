@@ -16,19 +16,30 @@ exports.videoServices = void 0;
 const http_status_1 = __importDefault(require("http-status"));
 const AppError_1 = __importDefault(require("../../Error/AppError"));
 const prisma_1 = __importDefault(require("../../util/prisma"));
+const VideoUpload_1 = require("../../util/VideoUpload");
 const videoProgress_functions_1 = require("../VideoProgress/videoProgress.functions");
 // ! for adding a video
-const addVideo = (payload, videoUrl) => __awaiter(void 0, void 0, void 0, function* () {
+const addVideo = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
-    const { module, instructor } = payload;
+    const { module, instructor, videoUrl } = payload;
     // findFirst, not findUnique: combining the unique `id` lookup with
-    // instructorId/isDeleted isn't allowed on findUnique.
+    // isDeleted isn't allowed on findUnique.
     const moduleData = yield prisma_1.default.module.findFirst({
-        where: { id: module, instructorId: instructor, isDeleted: false },
+        where: { id: module, isDeleted: false },
         include: { course: { select: { id: true, published: true } } },
     });
     if (!moduleData) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "This module don't exist !!!");
+    }
+    // Course-level authorization, not module-creator-only: a course can have
+    // multiple instructors (CourseInstructor), and any of them should be able
+    // to add videos to any of that course's modules, not just the module's
+    // original creator.
+    const isAssignedInstructor = yield prisma_1.default.courseInstructor.findFirst({
+        where: { courseId: moduleData.courseId, userId: instructor },
+    });
+    if (!isAssignedInstructor) {
+        throw new AppError_1.default(http_status_1.default.FORBIDDEN, "You are not authorized to add a video to this module !!!");
     }
     const instructorData = yield prisma_1.default.user.findFirst({
         where: { id: instructor, isDeleted: false },
@@ -130,15 +141,12 @@ const deleteModuleVideo = (payload) => __awaiter(void 0, void 0, void 0, functio
 // ! for updating a video
 const updateVideo = (
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-payload, videoId, videoUrl) => __awaiter(void 0, void 0, void 0, function* () {
+payload, videoId) => __awaiter(void 0, void 0, void 0, function* () {
     const videoData = yield prisma_1.default.video.findFirst({
         where: { id: videoId, isDeleted: false },
     });
     if (!videoData) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "This Video don't exist !!!");
-    }
-    if (videoUrl) {
-        payload.videoUrl = videoUrl;
     }
     const updatedData = yield prisma_1.default.video.update({
         where: { id: videoId },
@@ -146,6 +154,8 @@ payload, videoId, videoUrl) => __awaiter(void 0, void 0, void 0, function* () {
     });
     return updatedData;
 });
+// ! for getting a signed direct-to-Cloudinary upload credential
+const getUploadSignature = () => (0, VideoUpload_1.getVideoUploadSignature)();
 //
 exports.videoServices = {
     addVideo,
@@ -153,4 +163,5 @@ exports.videoServices = {
     getSingleVideo,
     deleteModuleVideo,
     updateVideo,
+    getUploadSignature,
 };

@@ -27,7 +27,7 @@ const SendImageCloudinary = (path, name) => __awaiter(void 0, void 0, void 0, fu
     // Upload an image
     const uploadResult = yield cloudinary_1.v2.uploader
         .upload(path, {
-        public_id: name,
+        public_id: name.trim(),
     })
         .catch((error) => {
         console.log(error);

@@ -46,8 +46,8 @@ Exact final class values are a design-polish decision to make during implementat
 
 ## Verify-when-done
 
-- [ ] `/dashboard/admin/error-logs` with >10 error log rows shows a pagination bar visually consistent with the table above it (same color family, no stray dark-gray bar).
-- [ ] No Tailwind class used in `TablePagination.tsx` is undefined/a no-op (spot check by temporarily removing a class and confirming the rendered style actually changes, or checking dev tools computed styles).
-- [ ] At least 2 other pages using `GenericTableComponent` with >10 rows (e.g. `ManageCourse`, `MyEnrolledCourses`) show the same fixed, consistent pagination styling.
-- [ ] Active page number, hover states, and disabled prev/next (on first/last page) are all visually distinguishable from each other.
-- [ ] `yarn lint` clean.
+- [x] `TablePagination.tsx` rewritten to use only real, existing Tailwind classes: `bg-prime-50/5`/`border-prime-50/30` on the outer bar (matching `TableContent.tsx`'s own container background), `text-gray-600` item-count text, `border-prime-50/40`/`hover:bg-prime-50/10` on prev/next and inactive page buttons, `text-prime-100` prev/next icons, `bg-prime-100`/`border-prime-100`/`text-white` on the active page number (mirroring `CourseCard.tsx`'s CTA button color) — every previously-undefined class (`primary-50`, `primary-500`, `table-border`, `bg-surface`, `tablePaginationNumber`, `tablePaginationGradientBorder`) removed.
+- [x] Single shared-component fix — no per-page changes needed; applies to all 11 `GenericTableComponent` consumers at once.
+- [x] Confirmed the app has no real dark-mode toggle in use (`ui-context.md` documents no dark palette; the only `dark:` classes found elsewhere in `components/shared/table/` repeat the same light-mode value, effectively no-ops) — dropping the original `dark:border-border` fallback is safe.
+- [x] `yarn lint` unchanged at the established 28-error/17-warning baseline, zero new issues in the touched file.
+- [ ] Live/visual verification (loading `/dashboard/admin/error-logs` and at least 2 other pages with >10 rows in a browser, confirming hover/active/disabled states look right) — left for the user, not performed this session (no browser available in this environment).

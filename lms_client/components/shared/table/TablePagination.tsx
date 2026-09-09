@@ -65,14 +65,14 @@ export function TablePagination({
     <div
       className={cn(
         "flex items-center justify-between px-6 py-5",
-        "border-t border-slate-200 dark:border-border",
-        "bg-neutral-600 ",
+        "border-t border-prime-50/30",
+        "bg-prime-50/5",
         className,
       )}
     >
       {/* Items count */}
       {showItemCount && (
-        <div className=" font-medium text-[0.875rem] leading-5.25 text-neutral-50  ">
+        <div className=" font-medium text-[0.875rem] leading-5.25 text-gray-600  ">
           Showing {totalItems > 0 ? startIndex : 0} to {endIndex} of{" "}
           {totalItems} items
         </div>
@@ -84,10 +84,10 @@ export function TablePagination({
         <button
           onClick={() => onPageChange(Math.max(1, currentPage - 1))}
           disabled={currentPage === 1}
-          className={`p-1.5   size-8 rounded-[8px]  disabled:opacity-50 disabled:cursor-not-allowed transition-all border  border-table-border flex justify-center items-center cursor-pointer tablePaginationNumber tablePaginationGradientBorder  `}
+          className={`p-1.5   size-8 rounded-[8px]  disabled:opacity-50 disabled:cursor-not-allowed transition-colors border  border-prime-50/40 hover:bg-prime-50/10 flex justify-center items-center cursor-pointer  `}
           aria-label="Previous page"
         >
-          <ChevronLeft size={18} className=" text-white " />
+          <ChevronLeft size={18} className=" text-prime-100 " />
         </button>
 
         {/* Page numbers */}
@@ -97,7 +97,7 @@ export function TablePagination({
               return (
                 <span
                   key={`dots-${index}`}
-                  className=" size-8 p-1.5 flex items-center justify-center rounded-[8px]  bg-primary-50 text-white  tablePaginationNumber tablePaginationGradientBorder "
+                  className=" size-8 p-1.5 flex items-center justify-center rounded-[8px]  text-gray-500 "
                 >
                   ⋯
                 </span>
@@ -109,7 +109,7 @@ export function TablePagination({
               <button
                 key={pageNumber}
                 onClick={() => onPageChange(pageNumber)}
-                className={`  p-1.5 rounded-[8px] size-8 font-semibold text-[0.875rem] leading-5.25 flex justify-center items-center border ${currentPage === pageNumber ? " bg-primary-500 text-white border-primary-500 " : " text-neutral-50 tablePaginationNumber tablePaginationGradientBorder  border-table-border "} `}
+                className={`  p-1.5 rounded-[8px] size-8 font-semibold text-[0.875rem] leading-5.25 flex justify-center items-center border transition-colors ${currentPage === pageNumber ? " bg-prime-100 text-white border-prime-100 " : " text-gray-700 bg-white border-prime-50/40 hover:bg-prime-50/10 "} `}
                 aria-label={`Go to page ${pageNumber}`}
                 aria-current={currentPage === pageNumber ? "page" : undefined}
               >
@@ -123,10 +123,10 @@ export function TablePagination({
         <button
           onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
           disabled={currentPage === totalPages}
-          className={`p-1.5   size-8 rounded-[8px]  disabled:opacity-50 disabled:cursor-not-allowed transition-all border  border-table-border flex justify-center items-center cursor-pointer tablePaginationNumber tablePaginationGradientBorder  `}
+          className={`p-1.5   size-8 rounded-[8px]  disabled:opacity-50 disabled:cursor-not-allowed transition-colors border  border-prime-50/40 hover:bg-prime-50/10 flex justify-center items-center cursor-pointer  `}
           aria-label="Next page"
         >
-          <ChevronRight size={18} className=" text-white " />
+          <ChevronRight size={18} className=" text-prime-100 " />
         </button>
       </div>
     </div>

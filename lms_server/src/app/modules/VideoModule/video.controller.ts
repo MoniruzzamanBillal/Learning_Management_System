@@ -5,14 +5,24 @@ import { videoServices } from "./video.service";
 
 // ! for adding a video
 const addVideo = catchAsync(async (req, res) => {
-  const videoUrl = req?.file?.path as string;
-
-  const result = await videoServices.addVideo(req.body, videoUrl);
+  const result = await videoServices.addVideo(req.body);
 
   sendResponse(res, {
     statusCode: httpStatus.CREATED,
     success: true,
     message: "Video added successfully !!!",
+    data: result,
+  });
+});
+
+// ! for getting a signed direct-to-Cloudinary upload credential
+const getUploadSignature = catchAsync(async (req, res) => {
+  const result = videoServices.getUploadSignature();
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Upload signature generated successfully !!!",
     data: result,
   });
 });
@@ -57,12 +67,9 @@ const deleteModuleVideo = catchAsync(async (req, res) => {
 
 // ! for updating a video
 const updateVideo = catchAsync(async (req, res) => {
-  const videoUrl = req?.file?.path as string;
-
   const result = await videoServices.updateVideo(
     req?.body,
     req?.params?.id as string,
-    videoUrl,
   );
 
   sendResponse(res, {
@@ -107,4 +114,5 @@ export const videoController = {
   updateVideo,
   testVideoUpload,
   uploadMultipleVideo,
+  getUploadSignature,
 };

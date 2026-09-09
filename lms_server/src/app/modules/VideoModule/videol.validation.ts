@@ -7,6 +7,7 @@ const addVideoValidationSchema = z.object({
   module: objectIdSchema,
   title: z.string().min(1, "Title is required"),
   instructor: objectIdSchema,
+  videoUrl: z.string().url("Invalid video URL"),
 });
 
 //

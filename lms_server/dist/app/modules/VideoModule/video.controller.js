@@ -19,13 +19,21 @@ const sendResponse_1 = __importDefault(require("../../util/sendResponse"));
 const video_service_1 = require("./video.service");
 // ! for adding a video
 const addVideo = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
-    const videoUrl = (_a = req === null || req === void 0 ? void 0 : req.file) === null || _a === void 0 ? void 0 : _a.path;
-    const result = yield video_service_1.videoServices.addVideo(req.body, videoUrl);
+    const result = yield video_service_1.videoServices.addVideo(req.body);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.CREATED,
         success: true,
         message: "Video added successfully !!!",
+        data: result,
+    });
+}));
+// ! for getting a signed direct-to-Cloudinary upload credential
+const getUploadSignature = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = video_service_1.videoServices.getUploadSignature();
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "Upload signature generated successfully !!!",
         data: result,
     });
 }));
@@ -63,9 +71,8 @@ const deleteModuleVideo = (0, catchAsync_1.default)((req, res) => __awaiter(void
 }));
 // ! for updating a video
 const updateVideo = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b;
-    const videoUrl = (_a = req === null || req === void 0 ? void 0 : req.file) === null || _a === void 0 ? void 0 : _a.path;
-    const result = yield video_service_1.videoServices.updateVideo(req === null || req === void 0 ? void 0 : req.body, (_b = req === null || req === void 0 ? void 0 : req.params) === null || _b === void 0 ? void 0 : _b.id, videoUrl);
+    var _a;
+    const result = yield video_service_1.videoServices.updateVideo(req === null || req === void 0 ? void 0 : req.body, (_a = req === null || req === void 0 ? void 0 : req.params) === null || _a === void 0 ? void 0 : _a.id);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
@@ -103,4 +110,5 @@ exports.videoController = {
     updateVideo,
     testVideoUpload,
     uploadMultipleVideo,
+    getUploadSignature,
 };

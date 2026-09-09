@@ -4,7 +4,7 @@ const objectIdSchema = z.string().uuid({ message: "Invalid id !!!" });
 
 // ! for crating course
 const crateCourseValidationSchema = z.object({
-  name: z.string().min(1, "Course name is required"),
+  name: z.string().trim().min(1, "Course name is required"),
   description: z.string().min(1, "Description is required"),
   price: z.number().nonnegative("Price must be a non-negative number"),
   category: z.string().min(1, "Category is required"),
@@ -14,7 +14,7 @@ const crateCourseValidationSchema = z.object({
 
 // ! for updating course
 const updateCourseValidationSchema = z.object({
-  name: z.string().min(1, "Course name is required").optional(),
+  name: z.string().trim().min(1, "Course name is required").optional(),
   description: z.string().min(1, "Description is required").optional(),
   price: z
     .number()

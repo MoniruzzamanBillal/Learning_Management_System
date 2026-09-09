@@ -169,7 +169,7 @@ const ModuleShowData = ({
                     >
                       {video?.videoStatus ===
                         videoProgressStatusConsts?.locked && (
-                        <Lock className=" text-gray-400 font-bold  size-5 lg:size-6 " />
+                        <Lock className=" text-red-600 font-bold  size-5 lg:size-6 " />
                       )}
 
                       {video?.videoStatus ===

@@ -86,9 +86,8 @@ This also fixes the misleading error message: a real "module doesn't exist" case
 
 ## Verify-when-done
 
-- [ ] Instructor A creates a module and a video in it; Instructor B (assigned to the same course via `CourseInstructor`, not the module creator) can now successfully add a second video to that same module.
-- [ ] An instructor **not** assigned to the course at all still correctly gets rejected (403, "not authorized") when attempting to add a video to one of its modules.
-- [ ] A request with a genuinely nonexistent/soft-deleted module id still gets the original 400 "This module don't exist !!!" message.
-- [ ] `updateVideo`/`deleteVideo` (if patched per step 2) show the same corrected behavior — a non-creator assigned instructor can update/delete; a non-assigned instructor cannot.
-- [ ] `yarn build` / `yarn lint` clean.
-- [ ] Decision recorded (in this spec or a follow-up) on whether Module/Quiz/Assignment get the same widening.
+- [x] `addVideo`'s module lookup no longer filters by `instructorId` — it only checks `id`/`isDeleted`, then separately checks `CourseInstructor` membership (`courseId` + `userId`) and 403s ("You are not authorized to add a video to this module !!!") on failure instead of masquerading as a missing module.
+- [x] Confirmed via full-file read that `getAllVideo`, `getSingleVideo`, `deleteModuleVideo`, and `updateVideo` in `video.service.ts` have no `instructorId`-scoped lookup at all today — nothing else needed the same fix (step 2 of the Design section checked out negative).
+- [x] `yarn build` clean in `lms_server`; `yarn lint` unchanged at the established 5-error/6-warning baseline, zero new issues.
+- [ ] Live/manual verification (two real instructor accounts, one non-owning, both assigned to the same course via `CourseInstructor`; a third instructor not assigned to the course at all) — left for the user, not performed this session.
+- [ ] Decision recorded (in this spec or a follow-up) on whether Module/Quiz/Assignment get the same widening — intentionally left open, not resolved by this spec.

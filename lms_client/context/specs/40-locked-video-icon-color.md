@@ -38,6 +38,7 @@ Change the locked icon's class from `text-gray-400` to `text-red-600` — matchi
 
 ## Verify-when-done
 
-- [ ] `/my-courses/:id` shows locked videos with a red lock icon.
-- [ ] Watched (`green-600` check) and unlocked (`prime-100` open lock) icons are unchanged — regression check.
-- [ ] `yarn lint` clean.
+- [x] `ModuleShowData.tsx`'s locked-state `Lock` icon changed from `text-gray-400` to `text-red-600` — the only line touched; watched (`text-green-600`) and unlocked (`text-prime-100`) icons unchanged.
+- [x] Grepped the codebase for any other `Lock` icon tied to a "locked" video/module status — none found, no follow-up needed.
+- [x] `yarn lint` unchanged at the established 28-error/17-warning baseline, zero new issues in the touched file.
+- [ ] Live/visual verification (loading `/my-courses/:id` in a browser and confirming the locked icon renders red) — left for the user, not performed this session.

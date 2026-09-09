@@ -107,10 +107,10 @@ Fix at both the right layers, not by re-patching call sites:
 
 ## Verify-when-done
 
-- [ ] Reproduce the original bug first against current code (create a course named `"test "` with a cover image) to confirm whether it still crashes today, before claiming this spec fixes a live issue vs. a latent one.
-- [ ] `POST /api/course/add-course` with `name: "test "` and a cover image succeeds (no Cloudinary error), and the persisted course's `name` is `"test"` (trimmed), not `"test "`.
-- [ ] Creating a second course named `"test"` (no trailing space) after the above now correctly hits the unique-name constraint / friendly duplicate-name error, proving Gap B is closed.
-- [ ] A whitespace-only name (e.g. `"   "`) is rejected by Zod validation with the "Course name is required" message, not silently accepted as valid.
-- [ ] `PATCH /api/course/update-course/:id` with a whitespace-padded `name` behaves the same way (trimmed on write, no crash).
-- [ ] Instructor creation (`createInstructor`) and user profile update (`updateUser`) with a whitespace-padded `name` + image no longer risk the same crash (spot-check at least one).
-- [ ] `yarn build` / `yarn lint` clean.
+- [x] `SendImageCloudinary.ts` trims `name` before using it as `public_id` — fixes the crash at its single choke point for every current and future caller.
+- [x] `crateCourseValidationSchema`/`updateCourseValidationSchema` (`course.validation.ts`) and `createUserValidationSchema`/`createInstructorValidationSchema`/`updateUserValidationSchema` (`user.validation.ts`) all trim `name` before the `.min(1, ...)` check, so a whitespace-only name is correctly rejected as empty rather than silently accepted, and the trimmed value is what reaches both the Cloudinary call and the DB write.
+- [x] Redundant local `.trim()` snippets removed from `course.service.ts` (`addCourse`, `updateCourseData`), `auth.service.ts` (`createUserIntoDB`, `createInstructor`), and `user.service.ts` (`updateUser`) — `payload.name` is now trimmed upstream by Zod before these functions ever run.
+- [x] Optional frontend layer: `.trim()` added to `name` in `lms_client`'s `addCourseValidationSchema`/`updateCourseValidationSchema`.
+- [x] `yarn build` clean in `lms_server` (Prisma generate + `tsc`); `npx tsc --noEmit` clean in `lms_client` for this change (one unrelated pre-existing type error in `CourseDetailPage.tsx` predates this session — confirmed via `git stash`, not touched by this spec).
+- [x] `yarn lint` in `lms_server` unchanged at the established 5-error/6-warning baseline, zero new issues in any touched file.
+- [ ] Live/manual verification (create a course named `"test "` with a cover image against a running server + real Cloudinary credentials; confirm persisted name is trimmed; confirm a duplicate-name collision after trimming) — left for the user, not performed this session.

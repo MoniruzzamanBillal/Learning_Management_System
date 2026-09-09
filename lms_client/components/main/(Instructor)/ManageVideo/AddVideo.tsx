@@ -4,7 +4,10 @@ import FormSubmitLoading from "@/components/shared/FormSubmitLoading";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { addVideoFunction } from "@/functions/video.functions";
+import {
+  addVideoFunction,
+  uploadVideoToCloudinary,
+} from "@/functions/video.functions";
 import { usePost } from "@/hooks/useApi";
 import { useGetUser } from "@/hooks/useGetUser";
 import { TAddVideo } from "@/components/main/(Instructor)/ManageVideo/type/video.types";
@@ -55,22 +58,22 @@ const AddVideo = () => {
   };
 
   const handleAddVideo = async (data: TAddVideo) => {
+    const videoFile = data?.video[0];
+
+    const { videoUrl, error } = await uploadVideoToCloudinary(videoFile);
+    if (error || !videoUrl) {
+      return;
+    }
+
     const payload = {
       module: moduleId,
       instructor: userInfo?.userId,
       title: data?.title,
+      videoUrl,
     };
 
-    const videoFile = data?.video[0];
-
-    const formData = new FormData();
-    formData.append("data", JSON.stringify(payload));
-    if (videoFile) {
-      formData.append("video", videoFile);
-    }
-
     await addVideoFunction(
-      formData,
+      payload,
       addNewVideoMutation.mutateAsync,
       handleNavigate,
     );
