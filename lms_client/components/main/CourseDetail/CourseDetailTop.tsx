@@ -20,7 +20,7 @@ export type CourseDetailType = {
   category: string;
   courseCover: string;
   instructors: InstructorType[];
-  modules: string[];
+  totalModules?: number;
   updatedAt: string;
 };
 
@@ -110,7 +110,7 @@ const CourseDetailTop = ({
 
             {/* Meta */}
             <div className="flex flex-wrap gap-4 text-gray-400 text-sm">
-              <span>{courseDetails?.modules?.length} Modules</span>
+              <span>{courseDetails?.totalModules ?? 0} Modules</span>
               <span>·</span>
               <span>
                 Updated{" "}

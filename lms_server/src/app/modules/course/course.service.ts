@@ -310,6 +310,9 @@ const getSingleCoureData = async (courseId: string) => {
       instructors: {
         select: { instructor: { select: { id: true, name: true } } },
       },
+      _count: {
+        select: { modules: { where: { isDeleted: false } } },
+      },
     },
   });
 
@@ -317,9 +320,12 @@ const getSingleCoureData = async (courseId: string) => {
     throw new AppError(httpStatus.BAD_REQUEST, "This Course don't exist!!!");
   }
 
+  const { _count, ...rest } = result;
+
   return {
-    ...result,
+    ...rest,
     instructors: result.instructors.map((ci) => ci.instructor),
+    totalModules: _count.modules,
   };
 };
 

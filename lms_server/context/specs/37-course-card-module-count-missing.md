@@ -101,7 +101,7 @@ Fixing the shared type + shared `CourseCard` component fixes both `CoursePage.ts
 
 ## Explicitly out of scope
 
-- `getSingleCoureData` (course detail page `/courses/[id]`) — its consumer (`CourseDetailPage.tsx`) doesn't render a module count today; adding one there is a separate feature, not this bug fix.
+- `getSingleCoureData` (course detail page `/courses/[id]`) — its consumer (`CourseDetailPage.tsx`) doesn't render a module count today; adding one there is a separate feature, not this bug fix. **Update:** this turned out to already render a module count (`CourseDetailTop.tsx`'s `courseDetails?.modules?.length`, against a `CourseDetailType.modules: string[]` field nothing ever populated) — the same underlying gap, just missed during this spec's original investigation. It also turned out to be build-blocking, not just cosmetic: `Course.type.ts`'s `modules` → `totalModules` change below made `TCourse` no longer satisfy `CourseDetailType`, breaking `yarn build`. Fixed in the same style as this spec (see `lms_client/context/progress-tracker.md`'s "Fixed the `yarn build` failure..." entry).
 - `getAllCoursesForAdmin` (admin's own course table) — separate endpoint/UI, doesn't use `CourseCard`.
 - `MyCourseCard.tsx` (enrolled-courses grid) — doesn't show a module count at all today; not part of this bug report.
 

@@ -251,12 +251,16 @@ const getSingleCoureData = (courseId) => __awaiter(void 0, void 0, void 0, funct
             instructors: {
                 select: { instructor: { select: { id: true, name: true } } },
             },
+            _count: {
+                select: { modules: { where: { isDeleted: false } } },
+            },
         },
     });
     if (!result) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "This Course don't exist!!!");
     }
-    return Object.assign(Object.assign({}, result), { instructors: result.instructors.map((ci) => ci.instructor) });
+    const { _count } = result, rest = __rest(result, ["_count"]);
+    return Object.assign(Object.assign({}, rest), { instructors: result.instructors.map((ci) => ci.instructor), totalModules: _count.modules });
 });
 // ! for getting single course data , admin manage course
 const getCourseDetailsForAdmin = (courseId) => __awaiter(void 0, void 0, void 0, function* () {
